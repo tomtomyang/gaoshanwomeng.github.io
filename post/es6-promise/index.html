@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  es6 promise </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" es6 promise ">
+    <meta name="keywords" itemprop="keywords" content=" [es6 promise] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/es6-promise/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/es6-promise/#%e5%ae%9e%e4%be%8b%e5%8c%96promise%e5%af%b9%e8%b1%a1" class="toc-link">实例化Promise对象</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-promise/#%e5%88%a9%e7%94%a8promise%e8%af%bb%e5%8f%96%e6%96%87%e4%bb%b6" class="toc-link">利用Promise读取文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-promise/#promise%e5%b0%81%e8%a3%85ajax" class="toc-link">Promise封装AJAX</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-promise/#promise%e9%93%be%e5%bc%8f%e6%93%8d%e4%bd%9c" class="toc-link">Promise链式操作</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">es6 promise</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-25</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1348字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>promise是ES6引入的异步编程的新解决方案，语法上promise是一个构造函数，用来封装异步操作并可以获取其成功或者失败的结果。</p>
+<ol>
+<li>Promise构造函数：Promise(excutor){ }</li>
+<li>Promise.prototype.then 方法</li>
+<li>Promise.prototype.catch 方法</li>
+</ol>
+<h3 id="实例化promise对象">实例化Promise对象</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//实例化 Promise 对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>(<span style="color:#8be9fd;font-style:italic">function</span>(resolve, reject){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    setTimeout(<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#6272a4">// let data = &#39;数据库中的用户数据&#39;;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// resolve
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// resolve(data);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#8be9fd;font-style:italic">let</span> err <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;数据读取失败&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        reject(err);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }, <span style="color:#bd93f9">1000</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">//调用 promise 对象的 then 方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>p.then(<span style="color:#8be9fd;font-style:italic">function</span>(value){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    console.log(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>}, <span style="color:#8be9fd;font-style:italic">function</span>(reason){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    console.error(reason);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>})
+</code></pre></div><h3 id="利用promise读取文件">利用Promise读取文件</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//1. 引入 fs 模块
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;fs&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">//2. 调用方法读取文件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// fs.readFile(&#39;./resources/为学.md&#39;, (err, data)=&gt;{
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">//     //如果失败, 则抛出错误
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">//     if(err) throw err;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">//     //如果没有出错, 则输出内容
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">//     console.log(data.toString());
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// });
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">//3. 使用 Promise 封装
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>(<span style="color:#8be9fd;font-style:italic">function</span>(resolve, reject){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    fs.readFile(<span style="color:#f1fa8c">&#34;./resources/为学.mda&#34;</span>, (err, data)=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        <span style="color:#6272a4">//判断如果失败
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span>(err) reject(err);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        <span style="color:#6272a4">//如果成功
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>        resolve(data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>p.then(<span style="color:#8be9fd;font-style:italic">function</span>(value){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    console.log(value.toString());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>}, <span style="color:#8be9fd;font-style:italic">function</span>(reason){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    console.log(<span style="color:#f1fa8c">&#34;读取失败!!&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>});
+</code></pre></div><h3 id="promise封装ajax">Promise封装AJAX</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 接口地址: https://api.apiopen.top/getJoke
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#6272a4">//1. 创建对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">const</span> xhr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> XMLHttpRequest();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#6272a4">//2. 初始化
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>    xhr.open(<span style="color:#f1fa8c">&#34;GET&#34;</span>, <span style="color:#f1fa8c">&#34;https://api.apiopen.top/getJ&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#6272a4">//3. 发送
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    xhr.send();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#6272a4">//4. 绑定事件, 处理响应结果
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    xhr.onreadystatechange <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        <span style="color:#6272a4">//判断
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> (xhr.readyState <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">4</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>            <span style="color:#6272a4">//判断响应状态码 200-299
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>            <span style="color:#ff79c6">if</span> (xhr.status <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">200</span> <span style="color:#ff79c6">&amp;&amp;</span> xhr.status <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">300</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                <span style="color:#6272a4">//表示成功
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>                resolve(xhr.response);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>            } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                <span style="color:#6272a4">//如果失败
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span>                reject(xhr.status);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">//指定回调
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>p.then(<span style="color:#8be9fd;font-style:italic">function</span>(value){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    console.log(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}, <span style="color:#8be9fd;font-style:italic">function</span>(reason){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    console.error(reason);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>});
+</code></pre></div><h3 id="promise链式操作">Promise链式操作</h3>
+<p>调用 then 方法 then方法的返回结果是 Promise 对象, 对象状态由回调函数的执行结果决定</p>
+<ol>
+<li>如果回调函数中返回的结果是 非 promise 类型的属性, then方法的返回的 Promise 对象状态为成功, 返回值为这个非 promise 类型的属性</li>
+<li>如果回调函数中返回的结果是 promise 对象， then方法的返回的 Promise 对象和这个promise对象一模一样。</li>
+<li>利用这个特性，就可以进行链式操作</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//创建 promise 对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject)=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    setTimeout(()=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        resolve(<span style="color:#f1fa8c">&#39;用户数据&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#6272a4">// reject(&#39;出错啦&#39;);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>    }, <span style="color:#bd93f9">1000</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">const</span> result <span style="color:#ff79c6">=</span> p.then(value =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    console.log(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#6272a4">//1. 非 promise 类型的属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// return &#39;iloveyou&#39;;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//2. 是 promise 对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// return new Promise((resolve, reject)=&gt;{
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//     // resolve(&#39;ok&#39;);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//     reject(&#39;error&#39;);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// });
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//3. 抛出错误
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// throw new Error(&#39;出错啦!&#39;);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">throw</span> <span style="color:#f1fa8c">&#39;出错啦!&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>}, reason=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    console.warn(reason);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">//链式调用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>p.then(value=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}).then(value=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>
+</code></pre></div><p><strong>Promise链式读取多个文件</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//引入 fs 模块
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;fs&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">// 回调地狱，不仅难以阅读，而且变量容易重名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// fs.readFile(&#39;./resources/为学.md&#39;, (err, data1)=&gt;{
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">//     fs.readFile(&#39;./resources/插秧诗.md&#39;, (err, data2)=&gt;{
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">//         fs.readFile(&#39;./resources/观书有感.md&#39;, (err, data3)=&gt;{
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">//             let result = data1 + &#39;\r\n&#39; +data2  +&#39;\r\n&#39;+ data3;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">//             console.log(result);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">//         });
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">//     });
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// });
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">//使用 promise 实现
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> p <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    fs.readFile(<span style="color:#f1fa8c">&#34;./resources/为学.md&#34;</span>, (err, data) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        resolve(data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>p.then(value =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        fs.readFile(<span style="color:#f1fa8c">&#34;./resources/插秧诗.md&#34;</span>, (err, data) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>            resolve([value, data]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>}).then(value =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        fs.readFile(<span style="color:#f1fa8c">&#34;./resources/观书有感.md&#34;</span>, (err, data) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>            <span style="color:#6272a4">//压入
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>            value.push(data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>            resolve(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>        });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>}).then(value =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    console.log(value.join(<span style="color:#f1fa8c">&#39;\r\n&#39;</span>));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>});
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/es6/">es6</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-set/" data-tooltip="es6 set">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-map/" data-tooltip="es6 map">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

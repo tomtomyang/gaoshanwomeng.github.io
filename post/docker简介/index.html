@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  docker简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" docker简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [docker 服务端] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#1%e4%b8%ba%e4%bb%80%e4%b9%88%e4%bd%bf%e7%94%a8docker" class="toc-link">1.为什么使用docker</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#2docker%e6%8a%80%e6%9c%af%e7%9a%84%e8%af%9e%e7%94%9f" class="toc-link">2.docker技术的诞生</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#3docker%e7%9a%84%e5%8e%9f%e7%90%86" class="toc-link">3.docker的原理</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#4docker%e9%87%8c%e9%9d%a2%e7%9a%84%e5%87%a0%e4%b8%aa%e5%90%8d%e8%af%8d" class="toc-link">4.docker里面的几个名词</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#1%e6%b3%a8%e5%86%8c%e4%b8%ad%e5%bf%83" class="toc-link">1.注册中心</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#2%e9%95%9c%e5%83%8f" class="toc-link">2.镜像</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/#3%e5%ae%b9%e5%99%a8" class="toc-link">3.容器</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">docker简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-08-01</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 954字</span>
+          <span class="readtime">⏱ 2分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1为什么使用docker">1.为什么使用docker</h3>
+<p>在实际的开发中，我们常常会遇到如下几个问题：</p>
+<ol>
+<li>一个项目，我本地运行没有问题，换一台电脑运行就不好用了。这就会引起开发人员和测试人员的冲突。</li>
+<li>在发生海量并发时，比如天猫双十一，我们需要堆积服务器，如果让运维人员手动的去一台一台的去部署服务器是不现实的，耗时耗力效率又低。</li>
+<li>学习一门技术，学习成本太高。我们要学习一门技术必须先花费大量的时间来安装和配置环境，增大了入门的难度。</li>
+</ol>
+<p>以上的3个问题，我们都可以通过docker这个技术来解决。</p>
+<h3 id="2docker技术的诞生">2.docker技术的诞生</h3>
+<p>开发docker的团队原来的主要业务是做PAAS平台，后来受到了来自各种大厂的挤压，导致他们无法继续本来的业务，一怒之下讲他们的主要技术docker进行开源，反而起死回生，获得了大量融资。从这之后他们开始把docker的开发维护作为自己的主要任务。</p>
+<h3 id="3docker的原理">3.docker的原理</h3>
+<p>docker的原理可以通过一张图来表示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200801_191151.png" alt=""></p>
+<p>其中，我的本机看作一个小码头，另一台电脑也看做一个小码头，我本机上部署好的环境看作是一个集装箱，docker的远程仓库看作是一个巨大的公共码头，而docker这项技术就看作是一个大海豚，用来运输集装箱。</p>
+<ol>
+<li>
+<p>首先，我将我本机部署好的环境（比如我本地的mysql数据库）做成集装箱，交给大海豚。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200801_191733.png" alt=""></p>
+</li>
+<li>
+<p>然后大海豚将我的集装箱运送到远端仓库，也就是那个巨大的公共码头。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200801_191853.png" alt=""></p>
+</li>
+<li>
+<p>如果另一台电脑也需要我刚刚那个环境，那么就可以派大海豚将我存放在公共码头的集装箱运输到你自己的码头。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200801_192027.png" alt=""></p>
+<p>这样你的电脑就得到了和我的电脑中的环境一模一样的环境。</p>
+</li>
+</ol>
+<p>docker的工作方式和maven是高度相似的。docker的思想可以概括为一下几点：</p>
+<blockquote>
+<ol>
+<li>
+<p>集装箱：</p>
+<p>将需要的不同内容放到不同的集装箱中，谁需要这样的环境，就去拿对应的集装箱即可。</p>
+</li>
+<li>
+<p>标准化：</p>
+<p>运输的标准化：所有上传的集装箱都集中docker的公共码头。</p>
+<p>命令的标准化：通过规定好的命令来指挥大海豚来帮你搬运集装箱。</p>
+</li>
+<li>
+<p>隔离化：</p>
+<p>docker在运行集装箱里的内容时，他会在linux的内核中开辟出一块独立的空间，从而避免了影响其他程序。</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="4docker里面的几个名词">4.docker里面的几个名词</h3>
+<h4 id="1注册中心">1.注册中心</h4>
+<p>注册中心就是我们刚才提到的超级码头，用来统一存放集装箱。</p>
+<h4 id="2镜像">2.镜像</h4>
+<p>镜像就是我们打包好的集装箱。</p>
+<h4 id="3容器">3.容器</h4>
+<p>我们把容器拉取到本地运行起来之后，运行起来的镜像就被称为容器。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/linux/">linux</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/docker/">docker</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/thinkphp%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/" data-tooltip="thinkphp数据库缓存问题">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" data-tooltip="docker基本操作">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

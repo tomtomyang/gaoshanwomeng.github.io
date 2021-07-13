@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue slot简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" vue slot简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [vue slot] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#1%e4%bb%80%e4%b9%88%e6%98%af%e6%8f%92%e6%a7%bd" class="toc-link">1.什么是插槽？</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#2%e6%80%8e%e4%b9%88%e7%94%a8%e6%8f%92%e6%a7%bd" class="toc-link">2.怎么用插槽？</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#1%e9%bb%98%e8%ae%a4%e6%8f%92%e6%a7%bd" class="toc-link">1.默认插槽</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#2%e5%85%b7%e5%90%8d%e6%8f%92%e6%a7%bd" class="toc-link">2.具名插槽</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#3%e6%8f%92%e6%a7%bd%e7%9a%84%e9%bb%98%e8%ae%a4%e5%86%85%e5%ae%b9" class="toc-link">3.插槽的默认内容</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#4%e7%bc%96%e8%af%91%e4%bd%9c%e7%94%a8%e5%9f%9f" class="toc-link">4.编译作用域</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-slot%E7%AE%80%E4%BB%8B/#5%e4%bd%9c%e7%94%a8%e5%9f%9f%e6%8f%92%e6%a7%bd" class="toc-link">5.作用域插槽</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">vue slot简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-10-24</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1120字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1什么是插槽">1.什么是插槽？</h3>
+<ul>
+<li>插槽（Slot）是Vue提出来的一个概念，正如名字一样，插槽用于决定将所携带的内容，插入到指定的某个位置，从而使模板分块，具有模块化的特质和更大的重用性。</li>
+<li>插槽显不显示、怎样显示是由父组件来控制的，而插槽在哪里显示就由子组件来进行控制</li>
+</ul>
+<h3 id="2怎么用插槽">2.怎么用插槽？</h3>
+<h4 id="1默认插槽">1.默认插槽</h4>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    我是父组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">slotOne1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>      &lt;<span style="color:#ff79c6">p</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;color:red&#34;</span>&gt;我是父组件插槽内容&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    &lt;/<span style="color:#ff79c6">slotOne1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>在父组件引用的子组件中写入想要显示的内容（可以使用标签，也可以不用）</p>
+</blockquote>
+<p>子组件(slotOne1)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;slotOne1&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    &lt;<span style="color:#ff79c6">div</span>&gt;我是slotOne1组件&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">slot</span>&gt;&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>在子组件中写入slot，slot所在的位置就是父组件要显示的内容</p>
+</blockquote>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    我是父组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">slotOne1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>      &lt;<span style="color:#ff79c6">p</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;color:red&#34;</span>&gt;我是父组件插槽内容&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>      &lt;<span style="color:#ff79c6">slot-one2</span>&gt;&lt;/<span style="color:#ff79c6">slot-one2</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    &lt;/<span style="color:#ff79c6">slotOne1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><p>子组件(slotOne2)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;slotOne2&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    我是slotOne2组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><h4 id="2具名插槽">2.具名插槽</h4>
+<p>子组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;slottwo&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    &lt;<span style="color:#ff79c6">div</span>&gt;slottwo&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">slot</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;header&#34;</span>&gt;&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    &lt;<span style="color:#ff79c6">slot</span>&gt;&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    &lt;<span style="color:#ff79c6">slot</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;footer&#34;</span>&gt;&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>在子组件中定义了三个slot标签，其中有两个分别添加了name属性header和footer</p>
+</blockquote>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    我是父组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">slot-two</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      &lt;<span style="color:#ff79c6">p</span>&gt;啦啦啦，啦啦啦，我是卖报的小行家&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      &lt;<span style="color:#ff79c6">template</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;header&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>          &lt;<span style="color:#ff79c6">p</span>&gt;我是name为header的slot&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      &lt;/<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      &lt;<span style="color:#ff79c6">p</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;footer&#34;</span>&gt;我是name为footer的slot&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    &lt;/<span style="color:#ff79c6">slot-two</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>在父组件中使用template并写入对应的slot值来指定该内容在子组件中现实的位置（当然也不用必须写到template），没有对应值的其他内容会被放到子组件中没有添加name属性的slot中</p>
+</blockquote>
+<h4 id="3插槽的默认内容">3.插槽的默认内容</h4>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    我是父组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">slot-two</span>&gt;&lt;/<span style="color:#ff79c6">slot-two</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><p>子组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;slottwo&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    &lt;<span style="color:#ff79c6">slot</span>&gt;我不是卖报的小行家&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>可以在子组件的slot标签中写入内容，当父组件没有写入内容时会显示子组件的默认内容，当父组件写入内容时，会替换子组件的默认内容</p>
+</blockquote>
+<h4 id="4编译作用域">4.编译作用域</h4>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    我是父组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">slot-two</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      &lt;<span style="color:#ff79c6">p</span>&gt;{{name}}&lt;/<span style="color:#ff79c6">p</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;/<span style="color:#ff79c6">slot-two</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>&lt;<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  data () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      name： <span style="color:#f1fa8c">&#39;Jack&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>子组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;slottwo&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    &lt;<span style="color:#ff79c6">slot</span>&gt;&lt;/<span style="color:#ff79c6">slot</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><h4 id="5作用域插槽">5.作用域插槽</h4>
+<p>子组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;</span>template<span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">&lt;</span>div<span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    我是作用域插槽的子组件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">&lt;</span>slot <span style="color:#ff79c6">:</span>data<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;user&#34;</span><span style="color:#ff79c6">&gt;&lt;</span>/slot&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">&lt;</span>/div&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ff79c6">&lt;</span>/template&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ff79c6">&lt;</span>script<span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;slotthree&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  data () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      user<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        {name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Jack&#39;</span>, sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;boy&#39;</span>},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        {name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Jone&#39;</span>, sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;girl&#39;</span>},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        {name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Tom&#39;</span>, sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;boy&#39;</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#ff79c6">&lt;</span>/script&gt;
+</code></pre></div><blockquote>
+<p>在子组件的slot标签上绑定需要的值</p>
+</blockquote>
+<p>父组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    我是作用域插槽
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">slot-three</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      &lt;<span style="color:#ff79c6">template</span> <span style="color:#50fa7b">slot-scope</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;user&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">v-for</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;(item, index) in user.data&#34;</span> <span style="color:#50fa7b">:key</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        {{item}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      &lt;/<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    &lt;/<span style="color:#ff79c6">slot-three</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+</code></pre></div><blockquote>
+<p>在父组件上使用slot-scope属性，user.data就是子组件传过来的值</p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/vue/">vue</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vue-vuex%E7%AE%80%E4%BB%8B/" data-tooltip="vue vuex简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vue-vuex%E4%B8%AD%E7%9A%84modules%E4%BD%BF%E7%94%A8/" data-tooltip="vue vuex中的modules使用">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  linux manjaro配置lnmp环境 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" linux manjaro配置lnmp ">
+    <meta name="keywords" itemprop="keywords" content=" [manjaro lnmp] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#1mariadbmysql" class="toc-link">1.MariaDB(mysql)</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#1%e5%ae%89%e8%a3%85mariadb" class="toc-link">1.安装MariaDB</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#2%e9%85%8d%e7%bd%aemariadb" class="toc-link">2.配置MariaDB</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#2php7" class="toc-link">2.php7</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#1%e5%ae%89%e8%a3%85php7" class="toc-link">1.安装php7</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#2%e9%85%8d%e7%bd%aephp" class="toc-link">2.配置php</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#3nginx" class="toc-link">3.nginx</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#1%e5%ae%89%e8%a3%85nginx" class="toc-link">1.安装nginx</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#2%e9%85%8d%e7%bd%aenginx" class="toc-link">2.配置nginx</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-manjaro%E9%85%8D%E7%BD%AElnmp%E7%8E%AF%E5%A2%83/#4%e6%9f%a5%e7%9c%8b%e6%98%af%e5%90%a6%e5%ae%89%e8%a3%85%e6%88%90%e5%8a%9f" class="toc-link">4.查看是否安装成功</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">linux manjaro配置lnmp环境</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-07-22</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 446字</span>
+          <span class="readtime">⏱ 1分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1mariadbmysql">1.MariaDB(mysql)</h3>
+<h4 id="1安装mariadb">1.安装MariaDB</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S mariadb
+</code></pre></div><h4 id="2配置mariadb">2.配置MariaDB</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo mysql_install_db --user<span style="color:#ff79c6">=</span>mysql --basedir<span style="color:#ff79c6">=</span>/usr --datadir<span style="color:#ff79c6">=</span>/var/lib/mysql
+</code></pre></div><h3 id="2php7">2.php7</h3>
+<h4 id="1安装php7">1.安装php7</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S php-fpm
+</code></pre></div><h4 id="2配置php">2.配置php</h4>
+<p>编辑 <code>/etc/php/php.ini</code>配置文件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo vim /etc/php/php.ini
+</code></pre></div><p>找到如下两行文字，去掉前面的#符号以启用mysqli和pdo_mysql。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>;extension=mysqli
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>;extension=pdo_mysql
+</code></pre></div><p>mysqli用来建立数据库连接。pdo_mysql是drupal内容管理系统所必要的PHP扩展。如果需要在WordPress,</p>
+<h3 id="3nginx">3.nginx</h3>
+<h4 id="1安装nginx">1.安装nginx</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S nginx
+</code></pre></div><h4 id="2配置nginx">2.配置nginx</h4>
+<p>安装后，我们要让Nginx使用php-fpm来运行php。编辑/etc/nginx/nginx.conf文件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo nano /etc/nginx/nginx.conf
+</code></pre></div><p>找到location ~ .php$这部分的配置，将这部分配置修改成如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>location ~ \.php$ {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>            root           /usr/share/nginx/html;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>            fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>            fastcgi_index  index.php;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>            include        fastcgi_params;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>        }
+</code></pre></div><h3 id="4查看是否安装成功">4.查看是否安装成功</h3>
+<p>在网站根目录创建一个test.php文件。默认的网站根目录是/usr/share/nginx/html。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo nano /usr/share/nginx/html/test.php
+</code></pre></div><p>在文件中添加如下PHP代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;?php
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  phpinfo();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>?&gt;
+</code></pre></div><p>打开浏览器，访问<code>localhost</code></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Selection_001.png" alt=""></p>
+<p>访问<code>localhost/test.php</code></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Selection_002.png" alt=""></p>
+<p>说明安装成功了！</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/linux/">linux</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/manjaro/">manjaro</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/linux-%E8%87%AA%E5%88%B6%E7%99%BE%E5%BA%A6%E8%84%91%E5%9B%BE%E5%AE%A2%E6%88%B7%E7%AB%AF/" data-tooltip="linux 自制百度脑图客户端">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/thinkphp%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98/" data-tooltip="thinkphp数据库缓存问题">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

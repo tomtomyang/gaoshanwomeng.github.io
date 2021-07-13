@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  svg简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" svg简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [svg] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#1%e5%ae%98%e6%96%b9%e8%a7%a3%e9%87%8a" class="toc-link">1.官方解释</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#2svg-%e5%9f%ba%e6%9c%ac%e5%85%83%e7%b4%a0%e5%8f%8a%e5%b1%9e%e6%80%a7" class="toc-link">2.SVG 基本元素及属性</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#1%e6%b8%b2%e6%9f%93%e9%a1%ba%e5%ba%8f" class="toc-link">1.渲染顺序</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#2svg-%e5%80%bc%e7%9a%84%e5%8d%95%e4%bd%8d" class="toc-link">2.SVG 值的单位</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#3svg-%e7%94%bb%e5%b8%83" class="toc-link">3.SVG 画布</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#1svg-%e8%a7%86%e7%aa%97" class="toc-link">1.SVG 视窗</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#2%e8%ae%be%e7%bd%ae%e8%a7%86%e7%aa%97%e5%a4%a7%e5%b0%8f" class="toc-link">2.设置视窗大小</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#3%e4%b8%ba%e4%bb%80%e4%b9%88%e8%b6%85%e8%bf%87%e8%a7%86%e7%aa%97%e7%9a%84%e5%85%83%e7%b4%a0%e4%b8%8d%e5%8f%af%e8%a7%81" class="toc-link">3.为什么超过视窗的元素不可见</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#4%e6%b7%b1%e5%85%a5%e7%90%86%e8%a7%a3%e7%94%bb%e5%b8%83%e5%92%8c%e8%a7%86%e7%aa%97" class="toc-link">4.深入理解画布和视窗</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#5svg%e5%9d%90%e6%a0%87%e7%b3%bb" class="toc-link">5.SVG坐标系</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#1%e5%9d%90%e6%a0%87%e7%b3%bb%e7%bd%91%e6%a0%bc" class="toc-link">1.坐标系网格</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#2%e5%88%9d%e5%a7%8b%e5%9d%90%e6%a0%87%e7%b3%bb" class="toc-link">2.初始坐标系</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#6viewbox" class="toc-link">6.viewBox</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#1viewbox-%e8%af%ad%e6%b3%95" class="toc-link">1.viewBox 语法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#2%e5%b9%b3%e7%a7%bb" class="toc-link">2.平移</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#3%e7%bc%a9%e6%94%be" class="toc-link">3.缩放</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/svg%E7%AE%80%E4%BB%8B/#4%e9%80%9a%e8%bf%87%e7%99%be%e5%88%86%e6%af%94%e5%92%8c-viewbox-%e8%ae%a9-svg-%e5%9b%be%e5%bd%a2%e8%bf%9b%e8%a1%8c%e7%bc%a9%e6%94%be" class="toc-link">4.通过百分比和 viewBox 让 SVG 图形进行缩放</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">svg简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-15</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 3035字</span>
+          <span class="readtime">⏱ 7分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1官方解释">1.官方解释</h3>
+<blockquote>
+<p>SVG是一种图像文件格式，它的英文全称为Scalable Vector Graphics，意思为可缩放的矢量图形。它是基于XML（Extensible Markup Language），由World Wide Web Consortium（W3C）联盟进行开发的。严格来说应该是一种开放标准的矢量图形语言，可让你设计激动人心的、高分辨率的Web图形页面。用户可以直接用代码来描绘图像，可以用任何文字处理工具打开SVG图像，通过改变部分代码来使图像具有交互功能，并可以随时插入到HTML中通过浏览器来观看。</p>
+</blockquote>
+<p>SVG是一种用XML定义的语言，用来描述二维矢量及矢量/栅格图形。SVG提供了3种类型的图形对象：矢量图形（vectorgraphicshape例如：由直线和曲线组成的路径）、图象(image)、文本(text)。图形对象还可进行分组、添加样式、变换、组合等操作，特征集包括嵌套变换（nestedtransformations）、剪切路径（clippingpaths）、alpha蒙板（alphamasks）、滤镜效果（filtereffects）、模板对象（templateobjects）和其它扩展（extensibility）。</p>
+<p>SVG图形是可交互的和动态的，可以在SVG文件中嵌入动画元素或通过脚本来定义动画。</p>
+<p>它提供了目前网络流行的PNG和JPEG格式无法具备的优势：可以任意放大图形显示，但绝不会以牺牲图像质量为代价；可在SVG图像中保留可编辑和可搜寻的状态；平均来讲，SVG文件比JPEG和PNG格式的文件要小很多，因而下载也很快。可以相信，SVG的开发将会为Web提供新的图像标准。</p>
+<p>●SVG 指可伸缩矢量图形 (Scalable Vector Graphics)</p>
+<p>●SVG 用来定义用于网络的基于矢量的图形</p>
+<p>●SVG 使用 XML 格式定义图形</p>
+<p>●SVG 图像在放大或改变尺寸的情况下其图形质量不会有所损失</p>
+<p>●SVG 是万维网联盟的标准</p>
+<p>●SVG 与诸如 DOM 和 XSL 之类的 W3C 标准是一个整体</p>
+<h3 id="2svg-基本元素及属性">2.SVG 基本元素及属性</h3>
+<h4 id="1渲染顺序">1.渲染顺序</h4>
+<p>元素的渲染顺序非常重要，这决定了一个 SVG 中哪些元素可见，哪些元素不可见。SVG 元素的一个规则是**<code>“后来居上”</code>**，也就是说越后面的元素越可见。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red;&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;rect</span> <span style="color:#50fa7b">x=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">y=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;blue&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&lt;rect</span> <span style="color:#50fa7b">x=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">y=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bVbdP2S" alt="图片描述"></p>
+<blockquote>
+<p>在同一个位置创建了 50 * 50 的两个矩形，由于越后面的元素越可见，因此我们只能看到绿色的矩形，蓝色的矩形被它遮住了。</p>
+</blockquote>
+<h4 id="2svg-值的单位">2.SVG 值的单位</h4>
+<p>在 SVG 中，你可以指定值的单位，也可以不指定值的单位。如果不指定值的单位，则默认使用像素 (px) 作为单位。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">&#34;50%&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><blockquote>
+<p>width 和 height 都没有指定单位，那么它们的单位就是 px，相当于宽 100px 高 100px。<code>circle</code> 的 r 使用百分比作为单位，因为 100px*50%=50px，则圆的半径 r 等于 50px。</p>
+</blockquote>
+<p>SVG 支持的长度单位包含了常见的 CSS 单位，如下:</p>
+<table>
+<thead>
+<tr>
+<th>单位</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>em</td>
+<td>相对于父元素的字体大小</td>
+</tr>
+<tr>
+<td>px</td>
+<td>相对于屏幕分辨率</td>
+</tr>
+<tr>
+<td>%</td>
+<td>相对于父元素</td>
+</tr>
+<tr>
+<td>cm</td>
+<td>即厘米</td>
+</tr>
+<tr>
+<td>mm</td>
+<td>即毫米</td>
+</tr>
+<tr>
+<td>in</td>
+<td>即英寸</td>
+</tr>
+<tr>
+<td>pt</td>
+<td>1/72 英寸</td>
+</tr>
+<tr>
+<td>pc</td>
+<td>1/21</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3svg-画布">3.SVG 画布</h3>
+<p>SVG 画布就是用来绘制 SVG 内容的一个区域。这个画布可以无限延伸，你可以在这个画布的任何位置绘制你想要的内容。</p>
+<h4 id="1svg-视窗">1.SVG 视窗</h4>
+<p>SVG 视窗（viewport）和浏览器视窗很像。你可以通过 SVG 视窗看到画布，但其实你只看到了画布的一部分，超过视窗的部分会被裁切并且隐藏。就像一个网页，它可能比浏览器的视窗宽，可能比浏览器的视窗长，但只有在视窗内的页面是可见的。</p>
+<h4 id="2设置视窗大小">2.设置视窗大小</h4>
+<p>你可以通过给 <code>&lt;svg&gt;</code> 元素设置 <code>width</code> 和 <code>height</code> 来给 SVG 视窗设置宽和高。</p>
+<p>当然，你也可以不给视窗设置宽和高，这就会交给用户代理程序去决定，一般默认是 300px * 150px。我们不推荐视窗使用默认的大小，最好还是根据自己的需求去定义。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">&lt;!-- 视窗大小为 200px * 200px --&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;200&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;200&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;red&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bVbdP4m" alt="图片描述"></p>
+<blockquote>
+<p>在 200px * 200px 的视窗内，以画布的 0,0 点(画布的原点和视窗的原点默认对齐)为圆心，半径为 100 画圆</p>
+</blockquote>
+<h4 id="3为什么超过视窗的元素不可见">3.为什么超过视窗的元素不可见</h4>
+<p>因为每个 SVG 元素都有一个默认的 <code>overflow: hidden</code> 样式，所以超过视窗的内容不可见。你也可以通过设置 <code>overflow: visible</code> 让超出视窗边界的内容变得可见。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bVbdP4n" alt="图片描述"></p>
+<h3 id="4深入理解画布和视窗">4.深入理解画布和视窗</h3>
+<p>画布和视窗是两个容易混淆的概念，它们各自独立却又相互关联。理解清楚它们之间的关系很有必要。</p>
+<p>为了更好的去理解这两个抽象概念，你可以把视窗想象成飞机上的窗户，把画布想象成无穷无尽的风景，只有在这个窗口内的风景才能被看到。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015652212" alt="viewport"></p>
+<ol>
+<li>每创建一个 <code>&lt;svg&gt;</code> 元素，就相当于创建了一个无穷大的画布，同时创建了一个视窗。</li>
+<li>画布和视窗分别对应两个坐标系统，一个用户坐标系，一个视窗坐标系，这两个坐标系统默认是对齐的。</li>
+</ol>
+<h3 id="5svg坐标系">5.SVG坐标系</h3>
+<h4 id="1坐标系网格">1.坐标系网格</h4>
+<p>和很多计算机绘图所使用的坐标系统一样，SVG 也使用了网格坐标系统。这种坐标系有如下几个特点:</p>
+<ol>
+<li>以左上角为坐标系的原点(0,0)</li>
+<li><code>X 轴</code>的正方向<code>向右</code>，从 0,0 点开始向右， x 逐渐增大。<code>Y 轴</code>的正方向<code>向下</code>，从 0,0 点开始向下， y 逐渐增大。</li>
+<li>坐标以像素为单位</li>
+</ol>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bVDcVo" alt="Canvas_default_grid.png"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;rect</span> <span style="color:#50fa7b">x=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">y=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;50&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#39;green&#39;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><blockquote>
+<p>以 0,0 为起始点，画一个 100 * 100 的矩形</p>
+</blockquote>
+<h4 id="2初始坐标系">2.初始坐标系</h4>
+<p>上面我们提到了画布和视窗分别对应两个坐标系，一个视窗坐标系，一个用户坐标系。这两个坐标系都具有我们上面提到的网格坐标系的几个特点。</p>
+<ul>
+<li><strong>视窗坐标系</strong>就是建立在<strong>视窗上</strong>的坐标系，</li>
+<li><strong>用户坐标系</strong>是建立在 SVG 画布上的坐标系，也称<strong>当前坐标系</strong>。</li>
+</ul>
+<p>这两个坐标系一开始是完全重合的，它们的原点和坐标都是完全一致的，也就是说初始用户坐标系的原点就位于视窗的左上角，也是 X 轴正向向右，Y 轴正向向下。</p>
+<p>虽然一开始它们是两个完全一样的坐标系，但既然是两个坐标系，就意味着它们可以是不一样的。你可以通过 viewBox 去改变这种默认对齐的方式，接下来的内容会讲到。</p>
+<h3 id="6viewbox">6.viewBox</h3>
+<p>我们所有的 SVG 内容看起来都像是基于视图坐标系来绘制的，因为初始视窗坐标系和初始用户坐标系完全相同，但在这一节中，我们会通过 viewBox 来声明自己的用户坐标系。</p>
+<p>**viewBox 是用来把 SVG 内容绘制到画布上的坐标系。**它的字面意思是视图盒子，只有出现在这个盒子区域里面的 SVG 内容才能被看到，你可以理解为 SVG 图形真正的可见区域。</p>
+<h4 id="1viewbox-语法">1.viewBox 语法</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>viewBox = <span style="color:#ff79c6">&lt;min-x&gt;</span> <span style="color:#ff79c6">&lt;min-y&gt;</span> <span style="color:#ff79c6">&lt;width&gt;</span> <span style="color:#ff79c6">&lt;height&gt;</span>
+</code></pre></div><p>viewBox 接收四个参数值，分别是 <code>min-x</code>，<code>min-y</code>，<code>width</code>，<code>height</code>。</p>
+<p><code>min-x</code> 和 <code>min-y</code> 决定了 viewBox 的左上角，<code>width</code> 和 <code>height</code> 决定了 viewBox 的宽和高。注意 width 或 height 如果设置成 <code>0</code> ，会禁止元素的渲染。</p>
+<h4 id="2平移">2.平移</h4>
+<p>通过改变 min-x 和 min-y 的值可以将 viewBox 声明的区域进行平移。</p>
+<p>以坐标点 0,0 为圆心，半径为 50px 画一个圆，我们只能看到圆的 1/4，如图一:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">50</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661112" alt="image"></p>
+<p>通过设置 <code>viewBox=&quot;-50 -50 100 100&quot;</code>，我们可以看到一整个圆。如下图:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">50</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661113" alt="image"></p>
+<p>通过 viewBox 的 <code>min-x</code> 和 <code>min-y</code> 两个参数，我们将 viewBox 声明的区域分别向左和上进行了平移，这时我们以 0,0 为圆心，半径为 50 画圆，正好能够将整个圆显示到 viwBox 声明的区域中，然后再将这个坐标系映射到 100px * 100px 的视窗中，就大功告成了。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661210" alt="image"></p>
+<h4 id="3缩放">3.缩放</h4>
+<p>通过改变 width 和 height 的值可以缩放 viewBox 声明的区域。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">50</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661114" alt="image"></p>
+<p>当 viewBox 的宽高小于视窗的宽高时，相当于放大。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">viewBox=</span><span style="color:#f1fa8c">&#34;0 0 50 50&#34;</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">50</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661115" alt="image"></p>
+<p>当 viewBox 的宽高大于视窗的宽高时，相当于缩小。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">100</span> <span style="color:#50fa7b">viewBox=</span><span style="color:#f1fa8c">&#34;0 0 200 200&#34;</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;circle</span> <span style="color:#50fa7b">cx=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">cy=</span><span style="color:#f1fa8c">0</span> <span style="color:#50fa7b">r=</span><span style="color:#f1fa8c">50</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">&lt;/svg&gt;</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000015661116" alt="image"></p>
+<h4 id="4通过百分比和-viewbox-让-svg-图形进行缩放">4.通过百分比和 viewBox 让 SVG 图形进行缩放</h4>
+<p>因为多设备适配的需求，很多时候我们期望 SVG 图形能够在不同的屏幕上放大或缩小，但是我们又不希望每次都去修改 <code>&lt;svg&gt;</code> 的 <code>width</code> 和 <code>height</code>，这时百分比就非常有用了。</p>
+<p>如果给视窗设置 <code>width: 100%</code> 和 <code>height: 100%</code>，那么视窗的宽高就由它父元素的宽高决定，我们可以通过调整其父元素的宽高来放大和缩小 SVG 视窗，而不用修改 <code>&lt;svg&gt;</code> 的 width 和 height。仅仅是这样还不够，我们还需要通过 viewBox 来将 SVG 图形放大到整个视窗区域。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;div</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;width:100px; height:100px;&#34;</span><span style="color:#ff79c6">&gt;</span> // 你可以试着通过修改 div 的宽高来改变 SVG 图形的大小
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&lt;svg</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100%&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100%&#34;</span> <span style="color:#50fa7b">style=</span><span style="color:#f1fa8c">&#34;outline: 2px solid red&#34;</span> <span style="color:#50fa7b">viewBox=</span><span style="color:#f1fa8c">&#34;0 0 100 100&#34;</span><span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#ff79c6">&lt;rect</span> <span style="color:#50fa7b">x=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">y=</span><span style="color:#f1fa8c">&#34;0&#34;</span> <span style="color:#50fa7b">width=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">height=</span><span style="color:#f1fa8c">&#34;100&#34;</span> <span style="color:#50fa7b">fill=</span><span style="color:#f1fa8c">&#34;green&#34;</span><span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#ff79c6">&lt;/svg&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">&lt;/div&gt;</span>
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/svg/">svg</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/w3c%E7%AE%80%E4%BB%8B/" data-tooltip="w3c简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/html5htmlh5/" data-tooltip="html5&amp;html&amp;h5">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

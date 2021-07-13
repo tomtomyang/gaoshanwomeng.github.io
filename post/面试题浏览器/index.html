@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  面试题——浏览器 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 面试题——浏览器 ">
+    <meta name="keywords" itemprop="keywords" content=" [面试题 浏览器] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#1-%e6%b5%8f%e8%a7%88%e5%99%a8%e7%9a%84%e5%b7%a5%e4%bd%9c%e6%b5%81%e7%a8%8b" class="toc-link">1. 浏览器的工作流程</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#2-%e4%bb%8e%e8%be%93%e5%85%a5url%e5%88%b0%e6%98%be%e7%a4%ba%e9%a1%b5%e9%9d%a2" class="toc-link">2. 从输入URL到显示页面</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#2-%e6%b5%8f%e8%a7%88%e5%99%a8%e7%bc%93%e5%ad%98" class="toc-link">2. 浏览器缓存</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#21-http%e7%bc%93%e5%ad%98" class="toc-link">2.1 http缓存</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#22-%e6%9c%ac%e5%9c%b0%e5%ad%98%e5%82%a8" class="toc-link">2.2 本地存储</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#3-%e6%b5%8f%e8%a7%88%e5%99%a8%e4%ba%8b%e4%bb%b6%e6%a8%a1%e5%9e%8b" class="toc-link">3. 浏览器事件模型</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#31-%e4%ba%8b%e4%bb%b6%e6%b5%81" class="toc-link">3.1 事件流</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#32-event%e5%af%b9%e8%b1%a1" class="toc-link">3.2 event对象</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#33-%e4%ba%8b%e4%bb%b6%e6%b3%a8%e5%86%8c" class="toc-link">3.3 事件注册</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#34-%e4%ba%8b%e4%bb%b6%e4%bb%a3%e7%90%86" class="toc-link">3.4 事件代理</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#4-%e8%b7%a8%e5%9f%9f" class="toc-link">4. 跨域</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#41-cors" class="toc-link">4.1 CORS</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#42-jsonp" class="toc-link">4.2 jsonp</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#43-documentdomain" class="toc-link">4.3 document.domain</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E6%B5%8F%E8%A7%88%E5%99%A8/#44-postmessage" class="toc-link">4.4 postMessage</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">面试题——浏览器</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-04-11</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 487字</span>
+          <span class="readtime">⏱ 1分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-浏览器的工作流程">1. 浏览器的工作流程</h3>
+<h3 id="2-从输入url到显示页面">2. 从输入URL到显示页面</h3>
+<ol>
+<li>DNS解析</li>
+<li>建立TCP连接</li>
+<li>客户端发动HTTP请求</li>
+<li>服务端接收到请求并返回相应资源</li>
+<li>浏览器渲染页面</li>
+<li>断开连接</li>
+</ol>
+<h3 id="2-浏览器缓存">2. 浏览器缓存</h3>
+<h4 id="21-http缓存">2.1 http缓存</h4>
+<p><strong>强缓存</strong></p>
+<p><strong>协商缓存</strong></p>
+<p><strong>缓存机制</strong></p>
+<h4 id="22-本地存储">2.2 本地存储</h4>
+<p>cookie、localStorage、sessionStorage</p>
+<h3 id="3-浏览器事件模型">3. 浏览器事件模型</h3>
+<h4 id="31-事件流">3.1 事件流</h4>
+<ol>
+<li>事件捕获</li>
+<li>目标对象获取到事件</li>
+<li>事件冒泡</li>
+</ol>
+<h4 id="32-event对象">3.2 event对象</h4>
+<h4 id="33-事件注册">3.3 事件注册</h4>
+<p><strong>addEventListener</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>target.addEventListener(type, listener, options);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>target.addEventListener(type, listener, useCapture);
+</code></pre></div><blockquote>
+<p>参数说明：</p>
+<ul>
+<li><code>type</code>：表示监听事件类型的字符串：&lsquo;click&rsquo;, &lsquo;load&rsquo;, &lsquo;blur&rsquo;, &lsquo;change&rsquo;</li>
+<li><code>listener</code>：当所监听的事件类型触发时的回调函数。</li>
+<li><code>useCapture</code>：<code>Boolean</code>，为true时触发事件捕获，为false时触发事件冒泡， <code>useCapture</code> 默认为 false 。</li>
+<li><code>options</code>：
+<ul>
+<li><code>capture</code>:  <code>Boolean</code>，表示 <code>listener</code> 会在该类型的事件捕获阶段传播到该 <code>EventTarget</code> 时触发。</li>
+<li><code>once</code>:  <code>Boolean</code>，表示 <code>listener</code> 在添加之后最多只调用一次。如果是 <code>true</code>， <code>listener</code> 会在其被调用之后自动移除。</li>
+<li><code>passive</code>: <code>Boolean</code>，设置为true时，表示 <code>listener</code> 永远不会调用 <code>preventDefault()</code>。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="34-事件代理">3.4 事件代理</h4>
+<h3 id="4-跨域">4. 跨域</h3>
+<h4 id="41-cors">4.1 CORS</h4>
+<h4 id="42-jsonp">4.2 jsonp</h4>
+<h4 id="43-documentdomain">4.3 document.domain</h4>
+<h4 id="44-postmessage">4.4 postMessage</h4>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E9%9D%A2%E8%AF%95/">面试</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-tooltip="面试题——算法与数据结构">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E5%85%B6%E4%BB%96/" data-tooltip="面试题——优化">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  opencv 腐蚀与膨胀 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" opencv 腐蚀与膨胀 ">
+    <meta name="keywords" itemprop="keywords" content=" [opencv 腐蚀与膨胀] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/#%e5%bd%a2%e6%80%81%e5%ad%a6%e6%93%8d%e4%bd%9c" class="toc-link">形态学操作</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/#%e8%86%a8%e8%83%80" class="toc-link">膨胀</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/#%e8%85%90%e8%9a%80" class="toc-link">腐蚀</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">opencv 腐蚀与膨胀</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-10-18</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1141字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="形态学操作">形态学操作</h3>
+<ul>
+<li>
+<p>简单来讲，形态学操作就是基于形状的一系列图像处理操作。通过将 <em>结构元素</em> 作用于输入图像来产生输出图像。</p>
+</li>
+<li>
+<p>最基本的形态学操作有二：腐蚀与膨胀(Erosion 与 Dilation)。 他们的运用广泛:</p>
+<ul>
+<li>消除噪声</li>
+<li>分割(isolate)独立的图像元素，以及连接(join)相邻的元素。</li>
+<li>寻找图像中的明显的极大值区域或极小值区域。</li>
+</ul>
+</li>
+<li>
+<p>通过以下图像，我们简要来讨论一下膨胀与腐蚀操作(译者注：注意这张图像中的字母为黑色，背景为白色，而不是一般意义的背景为黑色，前景为白色）:</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Morphology_1_Tutorial_Theory_Original_Image.png" alt="Original image"></p>
+</li>
+</ul>
+<h4 id="膨胀">膨胀</h4>
+<ul>
+<li>
+<p>此操作将图像与任意形状的内核，通常为正方形或圆形，进行卷积。</p>
+</li>
+<li>
+<p>内核有一个可定义的 <em>锚点</em>, 通常定义为内核中心点。</p>
+</li>
+<li>
+<p>进行膨胀操作时，将内核划过图像,将内核覆盖区域的最大相素值提取，并代替锚点位置的相素。显然，这一最大化操作将会导致图像中的亮区开始”扩展” (因此有了术语膨胀 <em>dilation</em> )。对上图采用膨胀操作我们得到:</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Morphology_1_Tutorial_Theory_Dilation.png" alt="Dilation result - Theory example"></p>
+</li>
+</ul>
+<p>背景(白色)膨胀，而黑色字母缩小了。</p>
+<h4 id="腐蚀">腐蚀</h4>
+<ul>
+<li>
+<p>腐蚀在形态学操作家族里是膨胀操作的孪生姐妹。它提取的是内核覆盖下的相素最小值。</p>
+</li>
+<li>
+<p>进行腐蚀操作时，将内核 <img src="http://www.opencv.org.cn/opencvdoc/2.3.2/html/_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"> 划过图像,将内核 <img src="http://www.opencv.org.cn/opencvdoc/2.3.2/html/_images/math/ff5fb3d775862e2123b007eb4373ff6cc1a34d4e.png" alt="B"> 覆盖区域的最小相素值提取，并代替锚点位置的相素。</p>
+</li>
+<li>
+<p>以与膨胀相同的图像作为样本,我们使用腐蚀操作。从下面的结果图我们看到亮区(背景)变细，而黑色区域(字母)则变大了。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Morphology_1_Tutorial_Theory_Erosion.png" alt="Erosion result - Theory example"></p>
+</li>
+</ul>
+<h2 id="解释">解释</h2>
+<ol>
+<li>
+<p>大部分代码应该不需要解释了 (如果有任何疑问，请回头参考前面的教程)。 让我们来回顾一下本程序的总体流程:</p>
+<ul>
+<li>装载图像 (可以是 RGB图像或者灰度图 )</li>
+<li>创建两个显示窗口 (一个用于膨胀输出,一个用于腐蚀输出)</li>
+<li>为每个操作创建两个 Trackbars:
+<ul>
+<li>第一个 trackbar “Element” 返回 <strong>erosion_elem</strong> 或者 <strong>dilation_elem</strong></li>
+<li>第二个 trackbar “Kernel size” 返回 <strong>erosion_size</strong> 或者 <strong>dilation_size</strong> 。</li>
+</ul>
+</li>
+<li>每次移动标尺, 用户函数 <strong>Erosion</strong> 或者 <strong>Dilation</strong> 就会被调用，函数将根据当前的trackbar位置更新输出图像。</li>
+</ul>
+<p>让我们分析一下这两个函数:</p>
+</li>
+<li>
+<p><strong>Erosion:</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**  @function Erosion  */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Erosion</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#8be9fd">int</span> erosion_type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { erosion_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( erosion_type,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                                       Point( erosion_size, erosion_size ) );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#6272a4">/// 腐蚀操作
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>  erode( src, erosion_dst, element );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  imshow( <span style="color:#f1fa8c">&#34;Erosion Demo&#34;</span>, erosion_dst );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div><ul>
+<li>进行 <em>腐蚀</em> 操作的函数是 <a href="http://opencv.jp/opencv-2.2_org/cpp/imgproc_image_filtering.html#cv-erode">erode</a> 。 它接受了三个参数:
+<ul>
+<li><em>src</em>: 原图像</li>
+<li><em>erosion_dst</em>: 输出图像</li>
+<li><em>element</em>: 腐蚀操作的内核。 如果不指定，默认为一个简单的 3x3 矩阵。否则，我们就要明确指定它的形状，可以使用函数 <a href="http://opencv.jp/opencv-2.2_org/cpp/imgproc_image_filtering.html#cv-getstructuringelement">getStructuringElement</a></li>
+<li>就这些了，我们现在可以对图像进行腐蚀操作了。</li>
+</ul>
+</li>
+</ul>
+<p>OpenCV的 <strong>erode</strong> 函数还有另外的参数，其中一个参数允许你一下对图像进行多次腐蚀操作。在这个简单的文档中没有用到它，但是你可以参考OpenCV的使用手册。</p>
+</li>
+<li>
+<p><strong>Dilation:</strong></p>
+</li>
+</ol>
+<p>下面是膨胀的代码，你可以看到，它和 <strong>Erosion</strong> 函数是多么相似。 这里我们同样可以指定内核的形状，锚点和大小。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/** @function Dilation */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Dilation</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#8be9fd">int</span> dilation_type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { dilation_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( dilation_type,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                                       Point( dilation_size, dilation_size ) );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#6272a4">/// 膨胀操作
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>  dilate( src, dilation_dst, element );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  imshow( <span style="color:#f1fa8c">&#34;Dilation Demo&#34;</span>, dilation_dst );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/opencv/">opencv</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/ecmascriptjavascript/" data-tooltip="ecmascript&amp;javascript">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vue-vuex%E7%AE%80%E4%BB%8B/" data-tooltip="vue vuex简介">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

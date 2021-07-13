@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 变量类型与类型转换 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" js 变量类型与类型转换 ">
+    <meta name="keywords" itemprop="keywords" content=" [js 变量类型 类型转换] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e4%b8%80%e6%95%b0%e5%ad%97number" class="toc-link">一、数字（Number）</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#1%e5%8c%85%e6%8b%ac%e6%b5%ae%e7%82%b9%e6%95%b0%e5%92%8c%e6%95%b4%e6%95%b0" class="toc-link">1.包括浮点数和整数</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#2%e7%89%b9%e6%ae%8a%e7%9a%84%e6%95%b0%e5%ad%97%e7%b1%bb%e5%9e%8bnan" class="toc-link">2.特殊的数字类型NaN</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#3infinity" class="toc-link">3.Infinity</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e4%ba%8c%e5%ad%97%e7%ac%a6%e4%b8%b2string" class="toc-link">二、字符串（String）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e4%b8%89%e5%b8%83%e5%b0%94%e5%80%bcboolean" class="toc-link">三、布尔值（Boolean）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e5%9b%9bundefined" class="toc-link">四、Undefined</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e4%ba%94null" class="toc-link">五、null</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e5%85%ad%e5%af%b9%e8%b1%a1object" class="toc-link">六、对象（Object）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e4%b8%83symbol" class="toc-link">七、Symbol</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/#%e5%85%abbigint" class="toc-link">八、BigInt</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">js 变量类型与类型转换</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-24</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2110字</span>
+          <span class="readtime">⏱ 5分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>数据类型分为基本类型(Primitives)和引用类型(Object)，引用类型可以引申出子类型：Array、Date、Function等等。</p>
+<p>**基本类型理解：**变量之间的互相赋值，是指开辟一块新的内存空间，将变量值赋给新变量保存到新开辟的内存里面；之后两个变量的值变动互不影响。</p>
+<p>**引用类型理解：**变量之间的互相赋值，只是指针的交换，而并非将对象（普通对象，函数对象，数组对象）复制一份给新的变量，对象依然还是只有一个，只是多了一个指引。</p>
+<p>基本类型包括：Number， String，Boolean，Undefined, Null, Symbol, BigInt</p>
+<p>引用类型包括：Object.</p>
+<h3 id="一数字number">一、数字（Number）</h3>
+<h4 id="1包括浮点数和整数">1.包括浮点数和整数</h4>
+<p>什么是浮点数：浮点数就是该数值中必须有一个小数点，并且小数点后面必须至少有一位数字。</p>
+<p>由于保存浮点数值的内存空间是保存整数值的两倍，所以js会不失时机的把浮点数转换为整数。小数点后面没有数值或者1.0就会被保存成整数。</p>
+<h4 id="2特殊的数字类型nan">2.特殊的数字类型NaN</h4>
+<ol>
+<li>表示不是数字，但是其实它是一个特殊的数字（NaN：Not a Number）</li>
+<li>当运算操作符错误的时候，一般会得到NaN</li>
+<li>NaN具有传染性，即NaN参与任何运算，结果都为NaN</li>
+<li>NaN与任何数值都不相等</li>
+<li>isNaN()函数是判断一个数是否为NaN的唯一方式，判断一个数是否是NaN，如果是NaN则返回true，否则返回false</li>
+</ol>
+<h4 id="3infinity">3.Infinity</h4>
+<ol>
+<li>Infinity：数据超过了JS可以表示的范围，是一个特殊的数字</li>
+<li>Infinity与其他数据类型进行操作运算，结果还是Infinity</li>
+<li>数字除以0得到Infinity</li>
+<li>isFinite()函数，如果是NaN或者Infinity返回false，否则返回true</li>
+</ol>
+<h3 id="二字符串string">二、字符串（String）</h3>
+<p>多个字符的有序序列，双引号和单引号引起来的都是字符串</p>
+<p>字符串特点：</p>
+<ol>
+<li>单引号和双引号引起来的都是字符串</li>
+<li>两个字符串相加，实际上是将两个字符串拼接</li>
+<li>两个字符串相加，是拼接而不是运算，其他运算结果为NaN，表示计算错误</li>
+<li>字符串加数字，首先将数字转化为响应的字符串然后再参与运算。同样不支持-, *, /等其他运算</li>
+</ol>
+<h3 id="三布尔值boolean">三、布尔值（Boolean）</h3>
+<p>包括true和false，通常用在流程控制语句，选择判断语句</p>
+<p>false值：</p>
+<ol>
+<li>数字0</li>
+<li>NaN</li>
+<li>空字符串</li>
+<li>false</li>
+<li>undefined</li>
+<li>null</li>
+</ol>
+<p>true值： 除了false值就是true值</p>
+<h3 id="四undefined">四、Undefined</h3>
+<p>如果使用一个未定义的变量，会得到一个undefined值，当定义了一个变量未初始化，默认的也会给它初始化成undefined值</p>
+<h3 id="五null">五、null</h3>
+<p>代表什么也没有</p>
+<p>注意：null和undefined的最大区别是如果变量值为null，说明变量是存在的，只不过它的值是空值null</p>
+<h3 id="六对象object">六、对象（Object）</h3>
+<p>对象是一组属性的集合。Javascript可以通过对象字面量创建对象，也可以使用构造函数创建对象。示例如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 对象字面量创建对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> {name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;jerry&#39;</span>, age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// 通过构造函数创建对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>({name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;jerry&#39;</span>, age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// 通过构造函数创建对象的另一种方式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>({name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;jerry&#39;</span>, age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>});
+</code></pre></div><p>String/Number/Boolean/Array/Date继承自Object, 也就是说String/Number/Boolean/Array/Date对象都是一种Object对象, 它们可以使用Object中的属性和方法。</p>
+<p>这里可能有些让人迷惑，我们前面说了String类型)/Number类型/Boolean类型，这里为什么又说String对象/Number对象/Boolean对象其实是一种Object对象。让我们先来看一个示例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 用字面量创建的，是原始类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#f1fa8c">&#34;jerry&#34;</span>; <span style="color:#6272a4">// &#34;string&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#bd93f9">1</span>;    <span style="color:#6272a4">// &#34;number&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#ff79c6">false</span>;    <span style="color:#6272a4">// &#34;boolean&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">// 用构造函数创建的，是Object类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">String</span>(<span style="color:#f1fa8c">&#34;jerry&#34;</span>);    <span style="color:#6272a4">// &#34;object&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#8be9fd;font-style:italic">Number</span>(<span style="color:#bd93f9">1</span>);    <span style="color:#6272a4">// &#34;object&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span><span style="color:#ff79c6">typeof</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Boolean</span>(<span style="color:#ff79c6">false</span>);    <span style="color:#6272a4">// &#34;object&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// String/Number/Boolean等对象，可以使用Object中的属性和方法(hasOwnProperty/valueOf/toString都是Object的方法)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">String</span>(<span style="color:#f1fa8c">&#34;jerry&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>a.hasOwnProperty(<span style="color:#f1fa8c">&#34;length&#34;</span>);        <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">Number</span>(<span style="color:#bd93f9">1</span>).valueOf();    <span style="color:#6272a4">// 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span><span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Boolean</span>(<span style="color:#ff79c6">false</span>).toString();    <span style="color:#6272a4">// &#34;false&#34;
+</span></code></pre></div><p>我们再来看个例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 原始类型调用Obejct的方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#f1fa8c">&#34;jerry&#34;</span>.hasOwnProperty(<span style="color:#f1fa8c">&#34;length&#34;</span>);    <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span><span style="color:#bd93f9">1.</span>valueOf();    <span style="color:#6272a4">// SyntaxError: Unexpected token ILLEGAL
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>(<span style="color:#bd93f9">1</span>).valueOf();  <span style="color:#6272a4">// 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span><span style="color:#ff79c6">false</span>.toString();    <span style="color:#6272a4">// &#34;false&#34;
+</span></code></pre></div><p>我们发现字面量创建的原始类型也能调用Object中的方法，这又是为什么呢？因为javascript引擎发现用原始类型调用Object的方法时，会把原始类型包装成Object类型, <code>&quot;jerry&quot;.hasOwnProperty(&quot;length&quot;)</code>等同于<code>new String(&quot;jerry&quot;).hasOwnProperty(&quot;length&quot;)</code>。那为什么<code>1.valueOf()</code>会语法错误呢？因为浏览器读到<code>1.</code>时会认为要创建个小数，但是<code>1.valueOf()</code>不是一个合法的小数。我们可以通过加括号的方式解决这个问题。</p>
+<h3 id="七symbol">七、Symbol</h3>
+<p>Symbol类型是新的原始数据类型，表示独一无二的值。它是JS语言的第七种数据类型，是一种类似于字符串的数据类型。</p>
+<p>Symbol的特点：</p>
+<ol>
+<li>Symbol的值是唯一的，用来解决命名冲突的问题</li>
+<li>Symbol的值不可以与其他数据进行运算</li>
+<li>Symbol定义的对象属性不能使用 for in 循环遍历，但是可以使用Reflect.ownKeys来获取对象的所有键名</li>
+</ol>
+<h3 id="八bigint">八、BigInt</h3>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/hugo-%E4%BB%8E0%E7%BC%96%E5%86%99%E4%B8%BB%E9%A2%98/" data-tooltip="hugo 从0编写主题">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6/" data-tooltip="es6 扩展运算符">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

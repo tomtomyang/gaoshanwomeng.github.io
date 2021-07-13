@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  ajax 预检请求 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" ajax 预检请求 ">
+    <meta name="keywords" itemprop="keywords" content=" [ajax 预检请求] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/#1%e4%bb%80%e4%b9%88%e6%98%af%e9%a2%84%e6%a3%80%e8%af%b7%e6%b1%82" class="toc-link">1.什么是预检请求</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/#2%e4%bb%80%e4%b9%88%e6%97%b6%e5%80%99%e4%bc%9a%e8%a7%a6%e5%8f%91%e9%a2%84%e6%a3%80%e8%af%b7%e6%b1%82" class="toc-link">2.什么时候会触发预检请求</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/#3%e5%ad%98%e5%9c%a8%e9%a2%84%e6%a3%80%e8%af%b7%e6%b1%82%e6%97%b6%e5%ba%94%e5%a6%82%e4%bd%95%e8%a7%a3%e5%86%b3" class="toc-link">3.存在预检请求时，应如何解决</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">ajax 预检请求</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-17</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1089字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1什么是预检请求">1.什么是预检请求</h3>
+<p>定义：预检请求（Preflighted requests ）是浏览器发起跨域请求时，通过OPTIONS方法询问服务器对跨域请求的支持情况（支持的包含请求方法、请求头、数据类型）。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/12110248_r3t7.png" alt="img"></p>
+<h3 id="2什么时候会触发预检请求">2.什么时候会触发预检请求</h3>
+<p>请求会划分为简单请求和非简单请求，简单请求是：</p>
+<ol>
+<li>请求方法只能为GET、HEAD、POST</li>
+<li>请求头中无自定义头</li>
+<li>Content-Type必须为text/plain、multipart/form-data、application/x-www-form-urlencoded</li>
+</ol>
+<p>符合以上条件的为简单请求，否则为非简单请求，也就是说当存在下面情况时，判定为非简单请求，浏览器会默认发送两条请求。</p>
+<ol>
+<li>默认情况下，跨域请求只支持GET,HEAD,POST方法，如果不是这三个请求方法（比如：PUT、DELETE、CONNECT、OPTIONS、TRACE和PATCH），那么将触发预检请求</li>
+<li>默认情况下，浏览器跨域请求时，会自动添加的请求头（HOST,Referer,Connection、Accept、User-Agent,Accept-Languange,Accept-Encoding,Accept-Charset和Content-Type）,这些请求中还有其他请求头时，那么将触发预检请求。</li>
+<li>如1、2所说的情况排除在外的条件下，跨域请求是，浏览器支持的Content-Type值为application/x-www-form-urlencoded，multipart/form-data和text/plain。如果是其他数据类型(如application/json,text/xml&hellip;)，那么将触发预检请求。</li>
+</ol>
+<h3 id="3存在预检请求时应如何解决">3.存在预检请求时，应如何解决</h3>
+<p>如果存在预检请求，浏览器会发送向同一地址发送两次请求，第一次是预检请求，第二次是真正的ajax请求。在前后端分离开发时，会发生的一种情况是，对于后端的接口，前端发送的第一次预检请求直接进到方法中，导致各种出错。</p>
+<p>那么要解决预检请求这一问题，我就想到了两种思路：</p>
+<ol>
+<li>将非简单请求改为简单请求，避免出发预检请求。</li>
+<li>在后端代码中对预检请求进行拦截，只接收真正的ajax请求。</li>
+</ol>
+<p>因此，需要在后端进行配置，将第一次发送的预检请求进行拦截。</p>
+<p><code>php</code>代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 设置能访问的域名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#8be9fd;font-style:italic">$originarr</span> <span style="color:#ff79c6">=</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>   <span style="color:#f1fa8c">&#39;https://test1.com&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   <span style="color:#f1fa8c">&#39;https://test2.com&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#f1fa8c">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#f1fa8c"> *  公共方法调用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#f1fa8c"> */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#ff79c6">function</span> <span style="color:#50fa7b">setheader</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>   <span style="color:#6272a4">// 获取当前跨域域名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>   <span style="color:#8be9fd;font-style:italic">$origin</span> <span style="color:#ff79c6">=</span> isset(<span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>]) <span style="color:#ff79c6">?</span> <span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>] <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>   <span style="color:#ff79c6">if</span> (in_array(<span style="color:#8be9fd;font-style:italic">$origin</span>, self<span style="color:#ff79c6">::</span><span style="color:#8be9fd;font-style:italic">$originarr</span>)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      <span style="color:#6272a4">// 允许 $originarr 数组内的 域名跨域访问
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:&#39;</span> <span style="color:#ff79c6">.</span> <span style="color:#8be9fd;font-style:italic">$origin</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#6272a4">// 响应类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Methods:POST,GET&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      <span style="color:#6272a4">// 带 cookie 的跨域访问
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Credentials: true&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      <span style="color:#6272a4">// 响应头设置
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Headers:x-requested-with,Content-Type,X-CSRF-Token&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>   }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>} 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+</code></pre></div><p><code>go</code>代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">crossOrigin</span>( w http.ResponseWriter, req <span style="color:#ff79c6">*</span>http.Request ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">if</span> origin <span style="color:#ff79c6">:=</span> req.Header.<span style="color:#50fa7b">Get</span>(<span style="color:#f1fa8c">&#34;Orgin&#34;</span>); origin <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Origin&#34;</span>, origin)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Methods&#34;</span>, <span style="color:#f1fa8c">&#34;POST, GET, HEAD&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Headers&#34;</span>, <span style="color:#f1fa8c">&#34;x-requested-with,content-type,token&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">if</span> req.Method <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;OPTIONS&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        result = <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/ajax/">ajax</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/ajax-xhr/" data-tooltip="ajax xhr">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/xss%E7%AE%80%E4%BB%8B/" data-tooltip="xss简介">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

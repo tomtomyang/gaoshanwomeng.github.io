@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  javase jvm </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" javase jvm ">
+    <meta name="keywords" itemprop="keywords" content=" [java jvm] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/javase-jvm/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%b8%80-%e4%bb%80%e4%b9%88%e6%98%afjvm" class="toc-link">一. 什么是jvm</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%ba%8c-jvm%e7%9a%84%e5%86%85%e5%ad%98%e6%a8%a1%e5%9e%8b" class="toc-link">二. jvm的内存模型</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%b8%89-%e8%99%9a%e6%8b%9f%e6%9c%ba%e4%b8%ad%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%9a%84%e8%bf%87%e7%a8%8b" class="toc-link">三. 虚拟机中垃圾回收的过程</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%b8%80-%e5%88%a4%e6%96%ad%e5%af%b9%e8%b1%a1%e6%98%af%e5%90%a6%e8%a6%81%e5%9b%9e%e6%94%b6%e7%9a%84%e6%96%b9%e6%b3%95%e5%8f%af%e8%be%be%e6%80%a7%e5%88%86%e6%9e%90%e6%b3%95" class="toc-link">一、 判断对象是否要回收的方法：可达性分析法</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#1-%e5%8f%af%e8%be%be%e6%80%a7%e5%88%86%e6%9e%90%e6%b3%95" class="toc-link">1、 可达性分析法：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#2-%e4%bb%a5%e4%b8%8b%e5%af%b9%e8%b1%a1%e4%bc%9a%e8%a2%ab%e8%ae%a4%e4%b8%ba%e6%98%afroot%e5%af%b9%e8%b1%a1" class="toc-link">2、 以下对象会被认为是root对象：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#3-%e5%af%b9%e8%b1%a1%e8%a2%ab%e5%88%a4%e5%ae%9a%e5%8f%af%e8%a2%ab%e5%9b%9e%e6%94%b6%e9%9c%80%e8%a6%81%e7%bb%8f%e5%8e%86%e4%b8%a4%e4%b8%aa%e9%98%b6%e6%ae%b5" class="toc-link">3、 对象被判定可被回收，需要经历两个阶段：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#4-%e6%96%b9%e6%b3%95%e5%8c%ba%e4%b8%ad%e7%9a%84%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6" class="toc-link">4、 方法区中的垃圾回收：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#5-finalize" class="toc-link">5、 finalize():</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%ba%8c-%e5%8f%91%e7%8e%b0%e8%99%9a%e6%8b%9f%e6%9c%ba%e9%a2%91%e7%b9%81full-gc%e6%97%b6%e5%ba%94%e8%af%a5%e6%80%8e%e4%b9%88%e5%8a%9e" class="toc-link">二、 发现虚拟机频繁full GC时应该怎么办：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%b8%89%e5%b8%b8%e8%a7%81%e7%9a%84%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%ae%97%e6%b3%95" class="toc-link">三、常见的垃圾回收算法：</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#1mark-sweep%e6%a0%87%e8%ae%b0-%e6%b8%85%e9%99%a4%e7%ae%97%e6%b3%95" class="toc-link">1、Mark-Sweep（标记-清除算法）：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#2copying%e5%a4%8d%e5%88%b6%e6%b8%85%e9%99%a4%e7%ae%97%e6%b3%95" class="toc-link">2、Copying（复制清除算法）：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#3mark-compact%e6%a0%87%e8%ae%b0-%e6%95%b4%e7%90%86%e7%ae%97%e6%b3%95" class="toc-link">3、Mark-Compact（标记-整理算法）：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#4%e5%88%86%e4%bb%a3%e6%94%b6%e9%9b%86%e7%ae%97%e6%b3%95%e7%9b%ae%e5%89%8d%e5%a4%a7%e9%83%a8%e5%88%86jvm%e7%9a%84%e5%9e%83%e5%9c%be%e6%94%b6%e9%9b%86%e5%99%a8%e6%89%80%e9%87%87%e7%94%a8%e7%9a%84%e7%ae%97%e6%b3%95" class="toc-link">4、分代收集算法：（目前大部分JVM的垃圾收集器所采用的算法）：</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#5gc%e4%bd%bf%e7%94%a8%e6%97%b6%e5%af%b9%e7%a8%8b%e5%ba%8f%e7%9a%84%e5%bd%b1%e5%93%8d" class="toc-link">5、GC使用时对程序的影响？</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#6%e5%87%a0%e7%a7%8d%e4%b8%8d%e5%90%8c%e7%9a%84%e5%9e%83%e5%9c%be%e5%9b%9e%e6%94%b6%e7%b1%bb%e5%9e%8b" class="toc-link">6、几种不同的垃圾回收类型：</a>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e5%9b%9b-jvm%e4%b8%ad%e7%b1%bb%e5%8a%a0%e8%bd%bd%e7%9a%84%e8%bf%87%e7%a8%8b" class="toc-link">四. jvm中类加载的过程</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/javase-jvm/#%e4%ba%94-jvm%e4%b8%ad%e5%af%b9%e8%b1%a1%e7%9a%84%e5%88%9b%e5%bb%ba%e8%bf%87%e7%a8%8b" class="toc-link">五. jvm中对象的创建过程</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">javase jvm</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-10-07</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 3258字</span>
+          <span class="readtime">⏱ 7分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="一-什么是jvm"><strong>一. 什么是jvm</strong></h3>
+<p>java中的jvm又称java虚拟机。java之所以是跨平台的编程语言，和jvm有很大的关系。一般的高级语言如果要在不同的平台上运行，至少需要编译成不同的目标代码。在引入了jvm后，java代码在不同的平台上运行不需要再重新编译，只需要编译成在jvm上运行的字节码文件，jvm会帮助我们把字节码文件翻译成在具体平台上的机器指令，这就是传说中的“一次编译，到处运行”。</p>
+<p>java语言的跨平台特性主要就是指java的字节码文件可以在任何具有java虚拟机的计算机或者电子设备上运行，java虚拟机中的java解释器负责将字节码文件解释成特定的机器码执行。在运行时，java源程序需要通过编译器编译成.class文件，.class文件被jvm解释成机器码执行。</p>
+<p>jvm是jre的一部分，是一个虚构出来的计算机，可以在实际计算机上仿真模拟出各种计算机功能。jvm有自己完善的硬件架构，比如处理器、堆栈、寄存器等、还有相应的指令系统。</p>
+<h3 id="二-jvm的内存模型">二. jvm的内存模型</h3>
+<p>jvm在执行java代码时，把它管理的内存区域分为5个不同的区域，分别为堆，方法区，java虚拟机栈，本地方法栈和程序计数器。其中，堆和方法区是所有的线程所共享的，后三者是线程私有的。jvm划分的这5个区域，各有各的作用，共同管理内存。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bV8yyQ" alt="clipboard.png"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20180420160416518" alt="img"></p>
+<ol>
+<li>程序计数器
+每个线程都有自己的程序计数器，它记录着当前线程执行到字节码文件的哪一行。如果执行的是本地方法，则它的值为null</li>
+<li>虚拟机栈
+虚拟机栈占用是操作系统的内存，一个线程的方法在执行的时候，就会创建一个栈帧，栈帧中储存的是局部变量表，方法出口等，当方法被调用时，栈帧入栈，当方法执行完毕后出栈。</li>
+<li>本地方法栈
+本地方法栈储存的是本地方法调用的状态，它于虚拟机栈唯一的区别就是，虚拟机栈是执行java方法的，而它是执行native方法的，在很多虚拟机中，会将本地方法栈和虚拟机栈放在一起使用。</li>
+<li>方法区
+方法区中存放了要加载的类的信息，如类的信息（类名，修饰符等），类中的静态变量，常量，属性和方法信息。它也被称为是“永久代”，但在一定的条件下，也会被gc回收。需要注意的是，运行时常量池也在方法区中。</li>
+<li>堆
+所有的对象实例和数组都要在堆上分配。它是垃圾回收器主要管理的区域。为了更好的回收，把堆分为新生代和老年代（1:2）。其中新生代又分为Eden空间和2个Survivor空间（8:1:1）。</li>
+</ol>
+<h3 id="三-虚拟机中垃圾回收的过程">三. 虚拟机中垃圾回收的过程</h3>
+<h4 id="一-判断对象是否要回收的方法可达性分析法">一、 判断对象是否要回收的方法：可达性分析法</h4>
+<h5 id="1-可达性分析法">1、 可达性分析法：</h5>
+<p>通过一系列“GC Roots”对象作为起点进行搜索，如果在“GC Roots”和一个对象之间没有可达路径，则称该对象是不可达的。不可达对象不一定会成为可回收对象。进入DEAD状态的线程还可以恢复，GC不会回收它的内存。（把一些对象当做root对象，JVM认为root对象是不可回收的，并且root对象引用的对象也是不可回收的）</p>
+<h5 id="2-以下对象会被认为是root对象">2、 以下对象会被认为是root对象：</h5>
+<p>（1） 虚拟机栈（栈帧中本地变量表）中引用的对象
+（2） 方法区中静态属性引用的对象
+（3） 方法区中常量引用的对象
+（4） 本地方法栈中Native方法引用的对象</p>
+<h5 id="3-对象被判定可被回收需要经历两个阶段">3、 对象被判定可被回收，需要经历两个阶段：</h5>
+<p>（1） 第一个阶段是可达性分析，分析该对象是否可达
+（2） 第二个阶段是当对象没有重写finalize()方法或者finalize()方法已经被调用过，虚拟机认为该对象不可以被救活，因此回收该对象。（finalize()方法在垃圾回收中的作用是，给该对象一次救活的机会）</p>
+<h5 id="4-方法区中的垃圾回收">4、 方法区中的垃圾回收：</h5>
+<p>（1） 常量池中一些常量、符号引用没有被引用，则会被清理出常量池
+（2） 无用的类：被判定为无用的类，会被清理出方法区。判定方法如下：
+A、 该类的所有实例被回收
+B、 加载该类的ClassLoader被回收
+C、 该类的Class对象没有被引用</p>
+<h5 id="5-finalize">5、 finalize():</h5>
+<p>（1） GC垃圾回收要回收一个对象的时候，调用该对象的finalize()方法。然后在下一次垃圾回收的时候，才去回收这个对象的内存。
+（2） 可以在该方法里面，指定一些对象在释放前必须执行的操作。</p>
+<h4 id="二-发现虚拟机频繁full-gc时应该怎么办">二、 发现虚拟机频繁full GC时应该怎么办：</h4>
+<p>（1） 首先用命令查看触发GC的原因是什么 jstat –gccause 进程id
+（2） 如果是System.gc()，则看下代码哪里调用了这个方法
+（3） 如果是heap inspection(内存检查)，可能是哪里执行jmap –histo[:live]命令
+（4） 如果是GC locker，可能是程序依赖的JNI库的原因</p>
+<h4 id="三常见的垃圾回收算法">三、常见的垃圾回收算法：</h4>
+<h5 id="1mark-sweep标记-清除算法">1、Mark-Sweep（标记-清除算法）：</h5>
+<p>（1）思想：标记清除算法分为两个阶段，标记阶段和清除阶段。标记阶段任务是标记出所有需要回收的对象，清除阶段就是清除被标记对象的空间。
+（2）优缺点：实现简单，容易产生内存碎片</p>
+<h5 id="2copying复制清除算法">2、Copying（复制清除算法）：</h5>
+<p>（1）思想：将可用内存划分为大小相等的两块，每次只使用其中的一块。当进行垃圾回收的时候了，把其中存活对象全部复制到另外一块中，然后把已使用的内存空间一次清空掉。
+（2）优缺点：不容易产生内存碎片；可用内存空间少；存活对象多的话，效率低下。</p>
+<h5 id="3mark-compact标记-整理算法">3、Mark-Compact（标记-整理算法）：</h5>
+<p>（1）思想：先标记存活对象，然后把存活对象向一边移动，然后清理掉端边界以外的内存。
+（2）优缺点：不容易产生内存碎片；内存利用率高；存活对象多并且分散的时候，移动次数多，效率低下</p>
+<h5 id="4分代收集算法目前大部分jvm的垃圾收集器所采用的算法">4、分代收集算法：（目前大部分JVM的垃圾收集器所采用的算法）：</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>思想：把堆分成新生代和老年代。（永久代指的是方法区）
+</code></pre></div><p>（1） 因为新生代每次垃圾回收都要回收大部分对象，所以新生代采用Copying算法。新生代里面分成一份较大的Eden空间和两份较小的Survivor空间。每次只使用Eden和其中一块Survivor空间，然后垃圾回收的时候，把存活对象放到未使用的Survivor（划分出from、to）空间中，清空Eden和刚才使用过的Survivor空间。
+（2） 由于老年代每次只回收少量的对象，因此采用mark-compact算法。
+（3） 在堆区外有一个永久代。对永久代的回收主要是无效的类和常量</p>
+<h5 id="5gc使用时对程序的影响">5、GC使用时对程序的影响？</h5>
+<p>垃圾回收会影响程序的性能，Java虚拟机必须要追踪运行程序中的有用对象，然后释放没用对象，这个过程消耗处理器时间</p>
+<h5 id="6几种不同的垃圾回收类型">6、几种不同的垃圾回收类型：</h5>
+<p>（1）Minor GC：从年轻代（包括Eden、Survivor区）回收内存。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>A、当JVM无法为一个新的对象分配内存的时候，越容易触发Minor GC。所以分配率越高，内存越来越少，越频繁执行Minor GC
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>B、执行Minor GC操作的时候，不会影响到永久代（Tenured）。从永久代到年轻代的引用，被当成GC Roots，从年轻代到老年代的引用在标记阶段直接被忽略掉。
+</code></pre></div><p>（2）Major GC：清理整个老年代，当eden区内存不足时触发。
+（3）Full GC：清理整个堆空间，包括年轻代和老年代。当老年代内存不足时触发</p>
+<h3 id="四-jvm中类加载的过程">四. jvm中类加载的过程</h3>
+<p>类加载的过程包括了5个阶段：加载，验证，准备，解析和初始化</p>
+<p>常量池：常量池中的数据在编译时就已被确定，储存了类，方法，接口等中的常量，字符串常量等。（和运行时常量池不同）
+常量池中主要存放两大类常量：
+字面量：文本字符串，声明为final的常量等。
+符号引用：类和接口的完全限定名，字段的名称和描述，方法的名称和描述。</p>
+<ol>
+<li>加载：通过类的权限定名称获取这个类的二进制字节流，然后将其代表的静态存储结构转化为方法区的运行时数据结构，最后再堆区创建这个类的Class对象.</li>
+<li>验证：确保Class中的字节流文件是否符合虚拟机的要求</li>
+<li>准备：为类的静态变量分配存储空间，并赋予初始值。</li>
+<li>解析：将常量池中的符号引用转化为直接引用。</li>
+<li>初始化：执行java代码</li>
+</ol>
+<h3 id="五-jvm中对象的创建过程">五. jvm中对象的创建过程</h3>
+<ol>
+<li>检查类是否被加载过，如果没有，则先加载类。</li>
+<li>在堆中给对象分配内存</li>
+<li>给分配的内存空间赋初始值</li>
+<li>设置对象的头信息（对象的Gc年龄，哈希码等）</li>
+<li>执行完new后，接着执行方法，按照代码进行初始化。</li>
+</ol>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/java/">java</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/javase-jdbc/" data-tooltip="javase jdbc">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/javase-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E5%92%8C%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88/" data-tooltip="javase 本地方法和本地方法栈">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

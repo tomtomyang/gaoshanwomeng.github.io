@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js object方法 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" js object方法 ">
+    <meta name="keywords" itemprop="keywords" content=" [js object] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#1-objectfreeze" class="toc-link">1. Object.freeze()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#2-objectassign" class="toc-link">2. Object.assign()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#3-objectcreate" class="toc-link">3. Object.create()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#4-objectdefineproperties" class="toc-link">4. Object.defineProperties()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#5-objectdefineproperty" class="toc-link">5. Object.defineProperty()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#6-objectkeys" class="toc-link">6. Object.keys()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#8-objectvalues" class="toc-link">8. Object.values()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#7-objectgetpropertyof" class="toc-link">7. Object.getPropertyOf()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#8-objectsetpropertyof" class="toc-link">8. Object.setPropertyOf()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#8-hasownproperty" class="toc-link">8. hasOwnProperty()</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-object%E6%96%B9%E6%B3%95/#9-isprototypeof" class="toc-link">9. isPrototypeOf()</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">js object方法</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-31</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2645字</span>
+          <span class="readtime">⏱ 6分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-objectfreeze">1. Object.freeze()</h3>
+<p>阻止修改现有属性的特性和值，并阻止添加新属性
+两种用法：Object.freeze( { } ) 和 Object.freeze( object )</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>a.sex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;男&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>console.log(a.sex, <span style="color:#bd93f9">111</span>);<span style="color:#6272a4">//男 111
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">Object</span>.freeze(a);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>a.sex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;女&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>console.log(a.sex, <span style="color:#bd93f9">222</span>);<span style="color:#6272a4">//男 222 修改属性无效
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">let</span> b <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.freeze({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;piter&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>console.log(b.name,<span style="color:#bd93f9">333</span>); <span style="color:#6272a4">//piter 333
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>b.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;bob&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>console.log(b.name,<span style="color:#bd93f9">444</span>); <span style="color:#6272a4">//piter 444 修改属性无效
+</span></code></pre></div><h3 id="2-objectassign">2. Object.assign()</h3>
+<p>用于对象的合并，将源对象source的所有可枚举属性合并到目标对象target上，此方法只拷贝源对象的自身属性，不拷贝继承的属性。</p>
+<ol>
+<li>Object.assign方法实行的是浅拷贝，而不是深拷贝。也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。同名属性会替换。</li>
+<li>Object.assign只能进行值的复制，如果要复制的值是一个取值函数，那么将求值后再复制。</li>
+<li>Object.assign可以用来处理数组，但是会把数组视为对象。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">let</span> target <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    page<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#8be9fd;font-style:italic">let</span> objA <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">12</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    year<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">20</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    newObj<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;男&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#8be9fd;font-style:italic">Object</span>.assign(target, objA);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>console.log(target, <span style="color:#f1fa8c">&#39;拷贝之后&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">//            {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">//                age:12,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4">//                newObj: {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">//                    sex: &#39;女&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4">//                },
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4">//                page: 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">//                year: 20,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">//            } 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">//拷贝之后
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">// 同名属性会被覆盖
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4"></span>target.newObj.sex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;女&#39;</span>; <span style="color:#6272a4">// 拷贝为对象引用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>console.log(target.newObj.sex, <span style="color:#f1fa8c">&#39;修改拷贝后对象里面的属性&#39;</span>) <span style="color:#6272a4">//女  修改拷贝后对象里面的属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;bob&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>Person.prototype.age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#8be9fd;font-style:italic">let</span> man <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>man.age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">29</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;男&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#8be9fd;font-style:italic">Object</span>.assign(obj, man);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>console.log(obj, <span style="color:#f1fa8c">&#39;构造函数拷贝后的属性===&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#6272a4">//{sex: &#34;男&#34;, name: &#34;bob&#34;, age: 29} &#34;构造函数拷贝后的属性===&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#6272a4">// 只能拷贝自身的属性，不能拷贝prototype
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#8be9fd;font-style:italic">Object</span>.assign([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>], [<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>console.log(<span style="color:#8be9fd;font-style:italic">Object</span>.assign([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>], [<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>]), <span style="color:#f1fa8c">&#39;数组使用该方法===&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4">// [4, 5, 3]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4">// 把数组当作对象来处理
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#6272a4"></span>
+</code></pre></div><h3 id="3-objectcreate">3. Object.create()</h3>
+<p>Object.create()方法接受两个参数:Object.create(obj,propertiesObject)</p>
+<ul>
+<li>obj：一个对象，应该是新创建的对象的原型。</li>
+<li>propertiesObject：可选，该参数对象是一组属性与值，该对象的属性名称将是新创建的对象的属性名称，值是属性描述符（这些属性描述符的结构与Object.defineProperties()的第二个参数一样）。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> o <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create(<span style="color:#8be9fd;font-style:italic">Object</span>.prototype, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#6272a4">// foo会成为所创建对象的---数据属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    foo<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        enumerable<span style="color:#ff79c6">:</span><span style="color:#ff79c6">false</span>,<span style="color:#6272a4">//对象属性是否可通过for-in循环，flase为不可循环，默认值为true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>        writable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,<span style="color:#6272a4">////对象属性是否可修改,flase为不可修改，默认值为true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>        configurable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,<span style="color:#6272a4">////能否使用delete、能否需改属性特性、或能否修改访问器属性、，false为不可重新定义，默认值为true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>        value<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;goodnice&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#6272a4">// bar会成为所创建对象的 ---访问器属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    bar<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        configurable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        get<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>            <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        set<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(value) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>            console.log(<span style="color:#f1fa8c">&#34;Setting `o.bar` to&#34;</span>, value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>console.log(o, <span style="color:#f1fa8c">&#39;对象&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">//{foo:&#39;goodnice&#39;}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> test <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create(<span style="color:#ff79c6">null</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>console.log(test);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// {} No Properties
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">//也就是在对象本身不存在属性跟方法，原型链上也不存在属性和方法;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>
+</code></pre></div><p><strong>Object.create() 和 new Object()的区别</strong></p>
+<ol>
+<li>Object.create(null) 创建的对象是一个空对象，在该对象上没有继承 Object.prototype 原型链上的属性或者方法，例如：toString(), hasOwnProperty()等方法</li>
+<li>Object.create()是将对象继承到原型链上，然后可以通过对象实例的<code>__proto__</code>属性进行访问原型链上的属性。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> test <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create({x<span style="color:#ff79c6">:</span><span style="color:#bd93f9">123</span>,y<span style="color:#ff79c6">:</span><span style="color:#bd93f9">345</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>console.log(test);<span style="color:#6272a4">//{}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>console.log(test.x);<span style="color:#6272a4">//123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>console.log(test.<span style="color:#bd93f9">__</span>proto__.x);<span style="color:#6272a4">//123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>console.log(test.<span style="color:#bd93f9">__</span>proto__.x <span style="color:#ff79c6">===</span> test.x);<span style="color:#6272a4">//true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">var</span> test1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>({x<span style="color:#ff79c6">:</span><span style="color:#bd93f9">123</span>,y<span style="color:#ff79c6">:</span><span style="color:#bd93f9">345</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log(test1);<span style="color:#6272a4">//{x:123,y:345}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>console.log(test1.x);<span style="color:#6272a4">//123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log(test1.<span style="color:#bd93f9">__</span>proto__.x);<span style="color:#6272a4">//undefined
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>console.log(test1.<span style="color:#bd93f9">__</span>proto__.x <span style="color:#ff79c6">===</span> test1.x);<span style="color:#6272a4">//false
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#8be9fd;font-style:italic">var</span> test2 <span style="color:#ff79c6">=</span> {x<span style="color:#ff79c6">:</span><span style="color:#bd93f9">123</span>,y<span style="color:#ff79c6">:</span><span style="color:#bd93f9">345</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>console.log(test2);<span style="color:#6272a4">//{x:123,y:345};
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>console.log(test2.x);<span style="color:#6272a4">//123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>console.log(test2.<span style="color:#bd93f9">__</span>proto__.x);<span style="color:#6272a4">//undefined
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>console.log(test2.<span style="color:#bd93f9">__</span>proto__.x <span style="color:#ff79c6">===</span> test2.x);<span style="color:#6272a4">//false
+</span></code></pre></div><h3 id="4-objectdefineproperties">4. Object.defineProperties()</h3>
+<p>直接在一个对象上定义新的属性或修改现有属性，并返回该对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">Object</span>.defineProperties(obj, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#f1fa8c">&#39;property1&#39;</span><span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    value<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    writable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#f1fa8c">&#39;property2&#39;</span><span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    value<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Hello,word&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    writable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>console.log(obj)   
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">// {property1: true, property2: &#34;Hello,word&#34;}
+</span></code></pre></div><h3 id="5-objectdefineproperty">5. Object.defineProperty()</h3>
+<p>在一个对象上定义一个新属性，或者修改一个对象的现有属性， 并返回这个对象。</p>
+<ol>
+<li>obj：需要定义属性的对象；</li>
+<li>prop：需定义或修改的属性的名字；</li>
+<li>descriptor：将被定义或修改的属性的描述符；</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    &lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;UTF-8&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        &lt;<span style="color:#ff79c6">title</span>&gt;test&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    &lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;test&#34;</span>&gt;这是一个测试&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        &lt;<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>            <span style="color:#8be9fd;font-style:italic">var</span> test <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#34;test&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            <span style="color:#8be9fd;font-style:italic">var</span> data <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>            <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>            <span style="color:#8be9fd;font-style:italic">Object</span>.defineProperty(data, <span style="color:#f1fa8c">&#34;b&#34;</span>, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>                set<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(newValue) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                    <span style="color:#6272a4">//当data.b的值改变的时候更新＃test的视图 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>                    test.textContent <span style="color:#ff79c6">=</span> newValue;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                get<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>            });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            setInterval(<span style="color:#8be9fd;font-style:italic">function</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                i<span style="color:#ff79c6">++</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                data[<span style="color:#f1fa8c">&#34;b&#34;</span>] <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;data.b的值更新了，视图更新&#34;</span> <span style="color:#ff79c6">+</span> i;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>            }, <span style="color:#bd93f9">1000</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        &lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    &lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div><p><strong>configurable</strong>
+当且仅当该属性的 configurable 为 true 时，该属性描述符才能够被改变，也能够被删除。默认为 false。</p>
+<p><strong>enumerable</strong>
+当且仅当该属性的 enumerable 为 true 时，该属性才能够出现在对象的枚举属性中。默认为 false。
+数据描述符同时具有以下可选键值：</p>
+<p><strong>value</strong>
+该属性对应的值。可以是任何有效的 JavaScript 值（数值，对象，函数等）。默认为 undefined。</p>
+<p><strong>writable</strong>
+当且仅当该属性的 writable 为 true 时，该属性才能被赋值运算符改变。默认为 false。</p>
+<p>存取描述符（第三个参数对象）同时具有以下可选键值：</p>
+<p><strong>get</strong>
+一个给属性提供 getter 的方法，当我们读取某个属性的时候，其实是在对象内部调用了该方法，此方法必须要有return语句。该方法返回值被用作属性值。默认为 undefined。</p>
+<p><strong>set</strong>
+一个给属性提供 setter 的方法，该方法将接受唯一参数，并将该参数的新值分配给该属性。默认为 undefined。也就是说，当我们设置某个属性的时候，实际上是在对象的内部调用了该方法。</p>
+<h3 id="6-objectkeys">6. Object.keys()</h3>
+<p>返回一个由一个给定对象的自身可枚举属性组成的数组，数组中属性名的排列顺序和使用 for&hellip;in 循环遍历该对象时返回的顺序一致 （两者的主要区别是 一个 for-in 循环还会枚举其原型链上的属性）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;</span>script<span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">let</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#34;a&#34;</span>, <span style="color:#f1fa8c">&#34;b&#34;</span>, <span style="color:#f1fa8c">&#34;c&#34;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    console.log(<span style="color:#8be9fd;font-style:italic">Object</span>.keys(arr));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#6272a4">//[&#34;0&#34;, &#34;1&#34;, &#34;2&#34;]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/* Object 对象 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>            age<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">20</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>            sex<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;男&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    keys <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.keys(obj);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    console.log(keys);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#6272a4">//[&#34;age&#34;, &#34;sex&#34;]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span><span style="color:#ff79c6">&lt;</span>/script&gt;
+</code></pre></div><h3 id="8-objectvalues">8. Object.values()</h3>
+<p>方法返回一个给定对象自己的所有可枚举属性值的数组，值的顺序与使用for&hellip;in循环的顺序相同 ( 区别在于 for-in 循环枚举原型链中的属性 )。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;</span>script<span style="color:#ff79c6">&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        <span style="color:#bd93f9">10</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;a&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;b&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;c&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    console.log(<span style="color:#8be9fd;font-style:italic">Object</span>.values(obj));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#6272a4">// [&#39;b&#39;, &#39;c&#39;, &#39;a&#39;]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#8be9fd;font-style:italic">var</span> obj1 <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        <span style="color:#bd93f9">0</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;a&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;b&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;c&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    console.log(<span style="color:#8be9fd;font-style:italic">Object</span>.values(obj1));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#6272a4">// [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span><span style="color:#ff79c6">&lt;</span>/script&gt;
+</code></pre></div><h3 id="7-objectgetpropertyof">7. Object.getPropertyOf()</h3>
+<p>Object.getPropertyOf() 返回的是这个对象的原型。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Rectangle() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> rec <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Rectangle();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#8be9fd;font-style:italic">Object</span>.getPrototypeOf(rec) <span style="color:#ff79c6">===</span> Rectangle.prototype
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">Object</span>.setPrototypeOf(rec, <span style="color:#8be9fd;font-style:italic">Object</span>.prototype);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#8be9fd;font-style:italic">Object</span>.getPrototypeOf(rec) <span style="color:#ff79c6">===</span> Rectangle.prototype
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// false
+</span></code></pre></div><h3 id="8-objectsetpropertyof">8. Object.setPropertyOf()</h3>
+<p>Object.setPrototypeOf方法用来设置一个对象的prototype对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> proto <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> { x<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span> };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">Object</span>.setPrototypeOf(obj, proto);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>proto.y <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>proto.z <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">40</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>obj.x <span style="color:#6272a4">// 10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>obj.y <span style="color:#6272a4">// 20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>obj.z <span style="color:#6272a4">// 40
+</span></code></pre></div><h3 id="8-hasownproperty">8. hasOwnProperty()</h3>
+<p>判断对象自身属性中是否具有指定的属性。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>obj.hasOwnProperty(<span style="color:#f1fa8c">&#39;name&#39;</span>)
+</code></pre></div><h3 id="9-isprototypeof">9. isPrototypeOf()</h3>
+<p>用来检测一个对象是否存在于另一个对象的原型链中，如果存在就返回 true，否则就返回 false。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> f <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {}  <span style="color:#6272a4">//定义函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>f.prototype <span style="color:#ff79c6">=</span> {  <span style="color:#6272a4">//函数的原型对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    a <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    b <span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span> () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log(f.prototype.a);  <span style="color:#6272a4">//读取函数的原型对象的属性a，返回1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>console.log(f.prototype.b());  <span style="color:#6272a4">//读取函数的原型对象的属性b，返回2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">var</span> o <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> f();  <span style="color:#6272a4">//实例对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>console.log(o.a);  <span style="color:#6272a4">//访问原型对象的属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>console.log(o.b());  <span style="color:#6272a4">//访问原型对象的属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> f.prototype.isPrototypeOf(o);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>console.log(b);  <span style="color:#6272a4">// true
+</span></code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-string%E6%96%B9%E6%B3%95/" data-tooltip="js string方法">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E9%9D%A2%E8%AF%95%E9%A2%98%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" data-tooltip="面试题——计算机网络">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

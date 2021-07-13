@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  正则化解决过拟合 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 深度学习，正则化解决过拟合 ">
+    <meta name="keywords" itemprop="keywords" content=" [深度学习 正则化 过拟合] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#1%e8%bf%87%e6%8b%9f%e5%90%88" class="toc-link">1.过拟合</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#1%e4%bb%80%e4%b9%88%e6%98%af%e8%bf%87%e6%8b%9f%e5%90%88" class="toc-link">1.什么是过拟合</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#2%e4%b8%ba%e4%bb%80%e4%b9%88%e4%bc%9a%e5%87%ba%e7%8e%b0%e8%bf%87%e6%8b%9f%e5%90%88" class="toc-link">2.为什么会出现过拟合</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#2%e6%ad%a3%e5%88%99%e5%8c%96" class="toc-link">2.正则化</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#1%e4%bb%80%e4%b9%88%e6%98%af%e6%ad%a3%e5%88%99%e5%8c%96" class="toc-link">1.什么是正则化</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#2%e6%ad%a3%e5%88%99%e5%8c%96%e5%8e%9f%e7%90%86" class="toc-link">2.正则化原理</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/#3%e6%ad%a3%e5%88%99%e5%8c%96%e8%a7%a3%e5%86%b3%e8%bf%87%e6%8b%9f%e5%90%88" class="toc-link">3.正则化解决过拟合</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">正则化解决过拟合</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-06-23</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1271字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1过拟合">1.过拟合</h3>
+<h4 id="1什么是过拟合">1.什么是过拟合</h4>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ebcb6319899184c6c47f655e3aa4e955_720w.jpg" alt=""></p>
+<p>underfitting通常是针对训练集，例如我们的预测pattern过于平滑（e.g直线来拟合多个输入点），也就是模型过于简单，这个通常可以通过引入多项式，或者神经网络等复杂模型来解决。</p>
+<p>overfitting则通常是说训练习得的model对于测试集性能很差，而对训练集性能很好，也就是对训练集是overfitting，有很差的generalization（泛化能力），测试集的数据是我们的模型不曾见过的（参数无法基于此来训练），虽然我们有i.i.d来保证训练集和测试集在分布上不会偏差太大，但是当样本有限时偏差肯定是不可避免的，特别是当训练集很小时，训练习得的pattern可能与目标pattern差别很大。</p>
+<p>有一个很恰当的比喻是：</p>
+<ol>
+<li>欠拟合:光看书不做题觉得自己会了，上了考场啥都不会。</li>
+<li>过拟合: 做课后题全都能做对，上了考场还是啥都不会。</li>
+<li>差不多的拟合: 做了题，背了老师给画了重点，考试60分过了。</li>
+<li>优秀的拟合: 课后题全能作对，考试100分。</li>
+</ol>
+<h4 id="2为什么会出现过拟合">2.为什么会出现过拟合</h4>
+<p>训练集的不完备性是导致出现拟合问题的主要原因，而数据的不完备是不可避免的（如果我们的训练集是完备的，具有所有pattern下的数据，那么整个问题就不是learning problem，而是test problem，我们其实是验证而不是学习），因此出现拟合问题也是不可避免的。</p>
+<p>另外我们上面提到的underfitting，通常可以通过使用复杂的model来改善，但是当我们的Model解决了underfitting的问题时，也就是说在训练集的表现(performance)非常好时，并不能保证这个model在测试集表现同样好，而通常过于复杂的model会出现在训练集变现很好（甚至0 error)但是在测试集表现很差的问题。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/161572300b52797716017450bcccebb9_720w.jpg" alt=""></p>
+<h3 id="2正则化">2.正则化</h3>
+<h4 id="1什么是正则化">1.什么是正则化</h4>
+<p>正则化应该更通俗的被称作权重衰减，就是在一个$loss$函数中，让$w_{i}$的取值尽可能趋近于0，以减少$x_{i}$的权重，让图像变得更加平滑。</p>
+<h4 id="2正则化原理">2.正则化原理</h4>
+<p>正则化中我们将保留所有的特征变量，但是会减小特征变量的数量级。</p>
+<p>这个方法非常有效，当我们有很多特征变量时，其中每一个变量都能对预测产生一点影响。正如我们在房价预测的例子中看到的那样，我们可以有很多特征变量，其中每一个变量都是有用的，因此我们不希望把它们删掉，这就导致了正则化概念的发生。</p>
+<h4 id="3正则化解决过拟合">3.正则化解决过拟合</h4>
+<p>以下面的公式为例：</p>
+<p>$$y=b+\sum w_{i}x_{i}$$</p>
+<p>$$loss=\sum (y_{i}-(b+\sum w_{i}x_{i}))^2$$</p>
+<p>那么正则化就是在后面额外加一个$\lambda\sum (w_{i})^2$：</p>
+<p>$$loss=\sum (y_{i}-(b+\sum w_{i}x_{i}))^2+\lambda\sum (w_{i})^2$$</p>
+<p>在我们使用梯度下降算法求$loss$的最小值时，就会自然而然的使$w_{i}$的取值趋向于0，从而达到正则化的效果。</p>
+<p>而其中$\lambda$的取值，是需要我们进行调试的。根据$\lambda$的值的改变，$loss$在训练集上的取值会变大，这是很正常的，因为随着图像变得平滑，函数对于采样集的拟合程度会变低。但是$loss$在测试集上的取值不会变大，而是存在一个$\lambda$的取值，使$loss$的取值相对较小。类似于这样：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_143117.png" alt=""></p>
+<p>参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/25720278">https://zhuanlan.zhihu.com/p/25720278</a></p>
+<p><a href="https://www.zhihu.com/question/32246256">https://www.zhihu.com/question/32246256</a></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E8%BF%87%E6%8B%9F%E5%90%88/">过拟合</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/mnist%E6%89%8B%E5%86%99%E6%95%B0%E5%AD%97%E8%AF%86%E5%88%AB/" data-tooltip="MNIST手写数字识别">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/" data-tooltip="偏差与方差">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script><script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-e/4/LvThKH1gwzXhdbY2AsjR3rm7LHWyhIG5C0jiRfn8AN2eTN5ILeztWw0H9jmN" crossorigin="anonymous"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });</script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

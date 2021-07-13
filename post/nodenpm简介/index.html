@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  node&amp;npm简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" node&amp;npm简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [node npm] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#11-ecmascript" class="toc-link">1.1 ECMAScript</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#12-dom" class="toc-link">1.2 DOM</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#13-bom" class="toc-link">1.3 BOM</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#21-node%e6%98%af%e5%a6%82%e4%bd%95%e8%af%9e%e7%94%9f%e7%9a%84" class="toc-link">2.1 Node是如何诞生的？</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#22-node%e5%ae%9a%e4%b9%89" class="toc-link">2.2 Node定义</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#23-node%e7%9a%84%e7%bb%84%e6%88%90" class="toc-link">2.3 Node的组成</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#24-%e5%85%b3%e4%ba%8enode%e7%9a%84%e5%85%b6%e4%bb%96" class="toc-link">2.4 关于Node的其他</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#25-node%e7%9a%84%e7%94%a8%e9%80%94" class="toc-link">2.5 Node的用途</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#31-%e4%bb%80%e4%b9%88%e6%98%afnpm" class="toc-link">3.1 什么是NPM</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#32-npm%e7%9a%84%e7%bb%84%e6%88%90" class="toc-link">3.2 NPM的组成</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#33-npm%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" class="toc-link">3.3 NPM常用命令</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#1-npm-install-%e5%ae%89%e8%a3%85%e6%a8%a1%e5%9d%97" class="toc-link">1. npm install 安装模块</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#2-npm-uninstall-%e5%8d%b8%e8%bd%bd%e6%a8%a1%e5%9d%97" class="toc-link">2. npm uninstall 卸载模块</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#3-npm-update-%e6%9b%b4%e6%96%b0%e6%a8%a1%e5%9d%97" class="toc-link">3. npm update 更新模块</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#4-npm-outdated-%e6%a3%80%e6%9f%a5%e6%a8%a1%e5%9d%97%e6%98%af%e5%90%a6%e8%bf%87%e6%97%b6" class="toc-link">4. npm outdated 检查模块是否过时</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#5-npm-ls-%e6%9f%a5%e7%9c%8b%e5%b7%b2%e5%ae%89%e8%a3%85%e7%9a%84%e6%a8%a1%e5%9d%97" class="toc-link">5. npm ls 查看已安装的模块</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#6-npm-init-%e5%88%9b%e5%bb%bapackagejson%e6%96%87%e4%bb%b6" class="toc-link">6. npm init 创建package.json文件</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#34-npm%e7%9a%84%e6%84%8f%e4%b9%89" class="toc-link">3.4 NPM的意义</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#35-npm%e4%b8%ad%e7%9a%84packagejson%e5%92%8cpackage-lockjson" class="toc-link">3.5 NPM中的package.json和package-lock.json</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/nodenpm%E7%AE%80%E4%BB%8B/#36-npm%e5%ae%89%e8%a3%85%e5%ae%9e%e8%b7%b5" class="toc-link">3.6 NPM安装实践</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">node&amp;npm简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-24</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 7603字</span>
+          <span class="readtime">⏱ 16分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h2 id="1jacascript">1.jacascript</h2>
+<p>JavaScript和ECMAScript通常被人用来表达相同的意思，但JavaScript的含义去比ECMA-262中规定的多得多。一个完整的JavaScript实现应由三个部分组成：</p>
+<ol>
+<li>
+<p>核心（ECMAScript）</p>
+</li>
+<li>
+<p>文档对象模型（DOM）</p>
+</li>
+<li>
+<p>浏览器对象模型（BOM）</p>
+</li>
+</ol>
+<h3 id="11--ecmascript">1.1  ECMAScript</h3>
+<p>由ECMA-262定义的ECMAScript是一种在国际认可的标准的脚本语言规范，与Web浏览器没有依赖关系。ECMA-262标准主要规定了这门语言由以下组成部分：</p>
+<ol>
+<li>
+<p>语法</p>
+</li>
+<li>
+<p>变量和数据类型</p>
+</li>
+<li>
+<p>关键字和保留字</p>
+</li>
+<li>
+<p>操作符</p>
+</li>
+<li>
+<p>控制语句</p>
+</li>
+<li>
+<p>对象</p>
+</li>
+</ol>
+<p>2009年ECMAScript 5.0版正式发布。在很长一段时间，使用javaScript都是按照5.0的标准。2015年ECMAScript 6发布正式版本，官方称为<em>ECMAScript 2015</em>。ECMAScript定义了脚本语言的所有属性、方法和对象。因此抵用web客户端脚本编码时一定要遵循ECMAScript标准。</p>
+<h3 id="12-dom">1.2 DOM</h3>
+<p>HTML DOM是HTML Document Object Model的缩写，根据W3C DOM规范，DOM是一种与浏览器，平台，语言无关的接口，使得你可以访问页面中其他的标准组件。简单理解，DOM解决了Netscape的JavaScript和 Microsoft的JavaScript之间的冲突，给予web设计师和开发者一个标准的方法，让他们来访问他们站点中的数据、脚本和表现层对象。</p>
+<p>DOM 将把整个页面规划成由节点层级构成的文档。HTML或XML页面中的每个组成部分都是某种类型的节点，这些节点又包含着不同类型的数据。每个节点都拥有包含着关于节点某些信息的属性。这些属性是：</p>
+<ol>
+<li>nodeName（节点名称）</li>
+<li>nodeValue（节点值）</li>
+<li>nodeType（节点类型）</li>
+</ol>
+<p>根据W3C的 HTML DOM 标准，HTML 文档中的所有内容都是节点：</p>
+<ul>
+<li>整个文档是一个文档节点</li>
+<li>每个 HTML 元素是元素节点</li>
+<li>HTML 元素内的文本是文本节点</li>
+<li>每个 HTML 属性是属性节点</li>
+<li>注释是注释节点</li>
+</ul>
+<p>可通过 JavaScript （以及其他编程语言）对 HTML DOM 进行访问。所有 HTML 元素被定义为对象，而编程接口则是对象方法和对象属性。其中，方法是能够执行的动作（比如添加或修改元素），属性是能够获取或设置的值（比如节点的名称或内容）。</p>
+<p>一些常用的 HTML DOM 方法：</p>
+<ul>
+<li>getElementById(id) - 获取带有指定 id 的节点（元素）</li>
+<li>appendChild(node) - 插入新的子节点（元素）</li>
+<li>removeChild(node) - 删除子节点（元素）</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>getElementById()</td>
+<td>返回带有指定 ID 的元素。</td>
+</tr>
+<tr>
+<td>getElementsByTagName()</td>
+<td>返回包含带有指定标签名称的所有元素的节点列表（集合/节点数组）。</td>
+</tr>
+<tr>
+<td>getElementsByClassName()</td>
+<td>返回包含带有指定类名的所有元素的节点列表。</td>
+</tr>
+<tr>
+<td>appendChild()</td>
+<td>把新的子节点添加到指定节点。</td>
+</tr>
+<tr>
+<td>removeChild()</td>
+<td>删除子节点。</td>
+</tr>
+<tr>
+<td>replaceChild()</td>
+<td>替换子节点。</td>
+</tr>
+<tr>
+<td>insertBefore()</td>
+<td>在指定的子节点前面插入新的子节点。</td>
+</tr>
+<tr>
+<td>createAttribute()</td>
+<td>创建属性节点。</td>
+</tr>
+<tr>
+<td>createElement()</td>
+<td>创建元素节点。</td>
+</tr>
+<tr>
+<td>createTextNode()</td>
+<td>创建文本节点。</td>
+</tr>
+<tr>
+<td>getAttribute()</td>
+<td>返回指定的属性值。</td>
+</tr>
+<tr>
+<td>setAttribute()</td>
+<td>把指定属性设置或修改为指定的值。</td>
+</tr>
+</tbody>
+</table>
+<p>一些常用的 HTML DOM 属性：</p>
+<ul>
+<li>innerHTML - 节点（元素）的文本值</li>
+<li>parentNode - 节点（元素）的父节点</li>
+<li>childNodes - 节点（元素）的子节点</li>
+<li>attributes - 节点（元素）的属性节点</li>
+</ul>
+<h3 id="13-bom">1.3 BOM</h3>
+<p>BOM(Browser Object Model) 是指浏览器对象模型，浏览器对象模型提供了独立于内容的、可以与浏览器窗口进行互动的对象结构。BOM由多个对象组成，其中代表浏览器窗口的Window对象是BOM的顶层对象，其他对象都是该对象的子对象。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1797293-20200223154934477-563752851.png" alt="img"></p>
+<p>下面列举一部分：</p>
+<ol>
+<li>
+<p>windwo对象</p>
+<ul>
+<li>
+<p>alert(str)：用于向用户展示一些用户不可控的警告信息</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1797293-20200223162800083-106906661.png" alt="img"></p>
+</li>
+<li>
+<p>confirm(str)：用于向用户展示一段信息并确认结果</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1797293-20200223164059009-953002971.png" alt="img"></p>
+</li>
+<li>
+<p>prompt(str，str): 用于向用户展示一段信息并收集用户输入结果</p>
+</li>
+<li>
+<p>print(): 显示打印对话框（等同与点击浏览器菜单栏打印选项）</p>
+</li>
+<li>
+<p>find(): 显示查找对话框（等同与点击浏览器菜单栏查找选项）</p>
+</li>
+</ul>
+</li>
+<li>
+<p>location对象</p>
+<ul>
+<li>hash：保存当前url中的哈希值（url中#号后面的任意个字符），url中不包含哈希值 则返回空串</li>
+<li>host：保存当前url中的域名和端口号</li>
+<li>hostName：保存当前url中的域名</li>
+<li>pathName：保存当前url中路径或者文件名</li>
+<li>port：保存当前url中的端口号</li>
+<li>protocol：保存当前url使用的协议</li>
+<li>search：保存url中的查询字符串</li>
+<li>assign(url):导航到参数url位置并生成一条历史记录（等同与 location.href=url， window.localtion=url)</li>
+<li>replace(url):导航到参数rul位置但不生成历史记录</li>
+<li>reload(boolean)：重新加载当前文档，传参true表示强制从服务器加载所有资源</li>
+</ul>
+</li>
+<li>
+<p>navigator</p>
+<ul>
+<li>userAgent：用户代理字符串，通常用来判断当前使用的是什么浏览器</li>
+<li>plugins：保存安装所有插件信息的数组，用来判断当前用户是否安装了页面所必须的插件，IE无此属性（通过ActiveXobject对象来判断）</li>
+</ul>
+</li>
+</ol>
+<h2 id="2nodejs">2.Node.js</h2>
+<h3 id="21-node是如何诞生的">2.1 Node是如何诞生的？</h3>
+<p><strong>浏览器中的javascript可以做什么</strong></p>
+<p>之前由提到过，javascrip就是用来做交互的，但是笼统的说交互有点不明确，具体一点可以分为：</p>
+<ol>
+<li>操作DOM（也就是对dom的增删改，注册事件之类的事情）</li>
+<li>发送AJAX请求/跨域</li>
+<li>BOM交互如给我们提供页面跳转，历史记录，控制台打印日志</li>
+<li>ecmascript(js的核心语言，如用来定义变量，函数等)</li>
+</ol>
+<p><strong>浏览器端的javasscript不可以做什么</strong></p>
+<p>通过之前的了解，貌似javascrip对我们日常的交互都可以完成，貌似什么都可以做，但是他也有不能做的事。如：</p>
+<ol>
+<li>涉及到端对端的应用程序，我们需要操作文件，浏览器中的javascript是不能进行文件操作的，虽然html5里面提供了关于文件相关的API，但是这些API大多数只限于只读的层面 ，不能像传统的语言如java,通过传一个路径，然后将对应的文件读出来，说白了就是不能进行文件和文件夹的CURD.</li>
+<li>浏览器端的javascript也没有办法去操作操作系统，如获取操作系统的版本之类的。</li>
+</ol>
+<p>那么为什么不能进行这两类操作？其实是出于安全考虑，因为，js这门语言运行的环境比较特殊，说他特殊，特殊在什么地方？虽然我们编写好的js代码最终会放在服务器上，但是他毕竟不是在服务器上执行的，而是通过服务器发送到浏览器端执行的，在浏览器端执行文件的操作显然是不安全的，因此说这些功能在客户端不是不能做，而是由于特殊的运行环境没法做</p>
+<p><strong>了解了客户端的js所能做的事，我们必须还要明确一个概念，那就是javascrip只能运行在浏览器端吗？</strong></p>
+<p>在语言层面，ecmascript只是给我们提供一些操作语法，如定义变量，函数，类型，流程控制等的操作。而BOM，DOM是浏览器提供的，并非es提供的。因此我们常提及的js其实就是es，js的大部分功能（DOM，BOM等的操作）都是由 浏览器的执行引擎决定的 ，这也衍生出一个观点，任何一门编程语言 ，他的能力不是由语言本身决定的，而是由他的执行环境决定的。比如说java，他即是一门语言也是一个平台，对于javascript来说语言就是es，平台是浏览器。</p>
+<p>那么js只能运行在浏览器中吗？非也！对于大多数语言，都是运行 在一个平台上的，比如java只运行在虚拟机上，但是也有运行在多个平台的语言, java在一定层面上来讲是没有必要运行在多个平台上的，因为虚拟机是跨平台（也就是跨操作系统如window，linux等）的。js同样是可以运行在多个平台的，浏览器之所以能过运行js，是因为他由js的执行引擎Chrome V8。js同样，只要由支持他的平台就可以执行。因此说要想语言有很强大的功能，只需要提供强大的平台，node就是这样一个平台，能够执行js，那么node到底是什么东西？</p>
+<h3 id="22-node定义">2.2 Node定义</h3>
+<p>Node.js是一个Javascript运行环境(runtime environment)，不是一个js文件，实质是对Chrome V8引擎进行了封装。Node.js 是一个让 JavaScript 运行在服务端的开发平台，它让 JavaScript 成为与PHP、Python 等服务端语言平起平坐的脚本语言。</p>
+<ol>
+<li>Node.js提供替代的API，使得V8在非浏览器环境下运行得更好。V8引擎执行Javascript的速度非常快，性能非常好。</li>
+<li>Node.js是一个基于Chrome JavaScript运行时建立的平台， 用于方便地搭建响应速度快、易于扩展的网络应用。</li>
+</ol>
+<p>chrome浏览器和Node.js在解析javascript都使用了v8引擎：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20181218145246983.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20181218145320733.png" alt="img"></p>
+<h3 id="23-node的组成">2.3 Node的组成</h3>
+<p>Node是将js的运行环境搬到了服务器端，和客户端没有一点关系。是一个纯服务端的东西，Node只是为js提供了一个平台。Node里面其实还分了两块，一是封装了v8引擎，目的是为了执行es（如定义变量，定义函数等），另外一部分提供了大量的工具库，称为libuv，帮助node实现各种功能的，提供了一些以前js的环境办不到的事情，比如文件操作，网络操作，操作系统的操作等。</p>
+<h3 id="24--关于node的其他">2.4  关于Node的其他</h3>
+<p>既然Node是一个平台（所谓的平台就是用来运行特定语言的），也就意味着Node是用来运行语言的，那么java也是语言，Node能运行java吗？据Nodejs创始人Ryan Dahl回忆，他最初是选择了Ruby这门语言，但是Ruby这门语言的虚拟机效率不怎么样最终放弃了，按照这种思路，貌似Node将java的虚拟机集成进来应该可以运行java，但Node作者最终选择了javascript。这样js就实现了在服务端运行的可能。</p>
+<h3 id="25-node的用途">2.5 Node的用途</h3>
+<p>知道了什么是Node,应该还要清楚Node在web中有什么用途？</p>
+<ol>
+<li>
+<p>Node可以接受客户端用户的所有请求，并且能够快速的给出响应，因此node可以用来做网站。</p>
+</li>
+<li>
+<p>Node可以作为一个中间层来来分发调用数据接口。</p>
+<p>比如有一个网站数据是有java提供的，我们可以让Node作为一个中间层，来接受用户的请求，然后通过Node来调用java数据接口，获取到数据后直接在Node层面做html的组装，然后将渲染好的页面直接给用户。</p>
+<p>为什么要这样做？直接请求java接口不行吗，这是因为node被称之为高性能的web服务器，在并发和抗压方面都比传统的平台要好很多，因此这样一包装可以极大的减轻服务器的开发。</p>
+</li>
+</ol>
+<h2 id="3npm">3.NPM</h2>
+<p>网上有很多资源都提供了同一种下载方式：npm安装，比如前端框架bootstrape、elementUI等。但是并没有告诉过我们，npm是什么？npm的命令在哪里执行？npm的原理是什么?</p>
+<h3 id="31-什么是npm">3.1 什么是NPM</h3>
+<p>npm,全称node package management，是nodejs内置的软件包管理器。毫无疑问，npm是用来管理软件包的。</p>
+<p>它是世界上最大的软件注册中心，每星期大约有30亿次的下载量，包含超过600000个包(即代码模块)。来自各大洲的开源软件开发者使用NPM互相分享和借鉴包的结构，使您能够轻松跟踪依赖项和版本。</p>
+<h3 id="32-npm的组成">3.2 NPM的组成</h3>
+<p>npm由三大独立部分组成：</p>
+<ul>
+<li>网站是开发者查找包（package）、设置参数以及管理 npm 使用体验的主要途径。</li>
+<li>注册表：是一个巨大的数据库，保存了每个包的基本信息。</li>
+<li>命令行工具：开发者与npm包打交道的工具。</li>
+</ul>
+<h3 id="33-npm常用命令">3.3 NPM常用命令</h3>
+<h4 id="1-npm-install-安装模块">1. npm install 安装模块</h4>
+<p>基础语法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>npm install <span style="color:#ff79c6">(</span>with no args, in package dir<span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>npm install <span style="color:#ff79c6">[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;name&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>npm install <span style="color:#ff79c6">[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;name&gt;@&lt;tag&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>npm install <span style="color:#ff79c6">[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;name&gt;@&lt;version&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>npm install <span style="color:#ff79c6">[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;name&gt;@&lt;version range&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>npm install &lt;tarball file&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>npm install &lt;tarball url&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>npm install &lt;folder&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>alias: npm i
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>common options: <span style="color:#ff79c6">[</span>-S|--save|-D|--save-dev|-O|--save-optional<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>-E|--save-exact<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>--dry-run<span style="color:#ff79c6">]</span>
+</code></pre></div><p>安装包，默认会安装最新的版本：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp
+</code></pre></div><p>安装指定版本</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp@3.9.1
+</code></pre></div><p>后缀参数：</p>
+<p><strong>-S, &ndash;save 安装包信息将加入到dependencies（生产阶段的依赖）</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp --save 或 npm install gulp -S
+</code></pre></div><p>package.json 文件的 dependencies 字段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;gulp&#34;</span>: <span style="color:#f1fa8c">&#34;^3.9.1&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><strong>-D, &ndash;save-dev 安装包信息将加入到devDependencies（开发阶段的依赖），所以开发阶段一般使用它</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp --save-dev 或 npm install gulp -D
+</code></pre></div><p>package.json 文件的 devDependencies字段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;devDependencies&#34;</span>: <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#f1fa8c">&#34;gulp&#34;</span>: <span style="color:#f1fa8c">&#34;^3.9.1&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">}</span>
+</code></pre></div><p><strong>-O, &ndash;save-optional 安装包信息将加入到optionalDependencies（可选阶段的依赖）</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp --save-optional 或 npm install gulp -O
+</code></pre></div><p>package.json 文件的optionalDependencies字段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;optionalDependencies&#34;</span>: <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#f1fa8c">&#34;gulp&#34;</span>: <span style="color:#f1fa8c">&#34;^3.9.1&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">}</span>
+</code></pre></div><p><strong>-E, &ndash;save-exact 精确安装指定模块版本</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp --save-exact 或 npm install gulp -E
+</code></pre></div><p>输入命令**npm install gulp -ES，<strong>留意package.json 文件的 dependencies 字段，以看出版本号中的</strong>^**消失了</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;gulp&#34;</span>: <span style="color:#f1fa8c">&#34;3.9.1&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>模块的依赖都被写入了package.json文件后，他人打开项目的根目录（项目开源、内部团队合作），使用npm install命令可以根据dependencies配置安装所有的依赖包</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/278431-20160608180225886-1359105042.jpg" alt="img"></p>
+<p>本地安装（local）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp
+</code></pre></div><p>全局安装（global）,使用 -g 或 &ndash;global</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install gulp -g
+</code></pre></div><h4 id="2-npm-uninstall-卸载模块">2. npm uninstall 卸载模块</h4>
+<p>基础语法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm uninstall <span style="color:#ff79c6">[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;pkg&gt;<span style="color:#ff79c6">[</span>@&lt;version&gt;<span style="color:#ff79c6">]</span>... <span style="color:#ff79c6">[</span>-S|--save|-D|--save-dev|-O|--save-optional<span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>aliases: remove, rm, r, un, unlink
+</code></pre></div><p>如卸载开发版本的模块</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm uninstall gulp --save-dev
+</code></pre></div><h4 id="3-npm-update-更新模块">3. npm update 更新模块</h4>
+<p>基础语法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm update <span style="color:#ff79c6">[</span>-g<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>&lt;pkg&gt;...<span style="color:#ff79c6">]</span>
+</code></pre></div><h4 id="4-npm-outdated-检查模块是否过时">4. npm outdated 检查模块是否过时</h4>
+<p>基础语法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm outdated <span style="color:#ff79c6">[[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;pkg&gt; ...<span style="color:#ff79c6">]</span>
+</code></pre></div><p>此命令会列出所有已经过时的包，可以及时进行包的更新</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/278431-20160608184648105-1925655942.jpg" alt="img"></p>
+<h4 id="5-npm-ls-查看已安装的模块">5. npm ls 查看已安装的模块</h4>
+<p>基础语法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm ls <span style="color:#ff79c6">[[</span>&lt;@scope&gt;/<span style="color:#ff79c6">]</span>&lt;pkg&gt; ...<span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>aliases: list, la, ll
+</code></pre></div><p>查看全局安装的模块及依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm ls -g 
+</code></pre></div><h4 id="6-npm-init-创建packagejson文件">6. npm init 创建package.json文件</h4>
+<p>安装包的信息可保持到项目的package.json文件中，以便后续的其它的项目开发或者他人合作使用，也说package.json在项目中是必不可少的。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm init <span style="color:#ff79c6">[</span>-f|--force|-y|--yes<span style="color:#ff79c6">]</span>
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/278431-20160612103551324-1085207978.gif" alt="img"></p>
+<h3 id="34-npm的意义">3.4 NPM的意义</h3>
+<p>正是为了让包管理变简单，<code>npm</code>出现了。一个项目可能有上百个依赖，每个依赖又有上百个依赖。为了你不陷入依赖地狱，只需简单几行命令，<code>npm</code>就可以安装并管理这些依赖，大大节省了时间。</p>
+<h3 id="35-npm中的packagejson和package-lockjson">3.5 NPM中的package.json和package-lock.json</h3>
+<p>当你使用<code>npm</code>安装一个包(并保存它)的时候，<code>package.json</code>里就自动添加了一条信息，包括包名和其版本。<code>npm</code>当然也支持版本的通配符。<code>npm</code>默认安装最新版本，然后在其版本号之前添加一个<code>^</code>符号。比如<code>^1.2.12</code>，它表明最低应使用<code>1.2.12</code>版本，并且在这之上，拥有相同大版本号的任何版本都是OK的。毕竟小版本和bugfix版本不会对使用造成任何影响，所以用任何相同大版本的更高级版本都很安全。可以从<a href="http://blog.npmjs.org/post/115305091285/introducing-the-npm-semantic-version-calculator">这里</a>了解<code>semver</code>通配符的更多信息，以及npm的semver计算器。</p>
+<ul>
+<li>符号<code>^</code>：表示安装不低于该版本的应用，但是大版本号需相同，例如：<code>vuex: &quot;^3.1.3&quot;</code>，<code>3.1.3</code>及其以上的<code>3.x.x</code>都是满足的。</li>
+<li>符号<code>~</code>：表示安装不低于该版本的应用，但是大版本号和小版本号需相同，例如：<code>vuex: &quot;^3.1.3&quot;</code>，<code>3.1.3</code>及其以上的<code>3.1.x</code>都是满足的。</li>
+<li>无符号：无符号表示固定版本号，例如：<code>vuex: &quot;3.1.3&quot;</code>，此时一定是安装<code>3.1.3</code>版本。</li>
+</ul>
+<p><strong>为什么需要<code>package-lock.json</code></strong></p>
+<p><code>npm install</code>的输入是<code>package.json</code>，它的输出是一棵<code>node_modules</code>树。理想情况下，<code>npm install</code>应该像纯函数一样工作，对于同一个<code>package.json</code>总是生成完全相同的<code>node_modules</code>树。在某些情况下，确实如此。但在其他很多情况中，<code>npm</code>无法做到这一点。有以下原因：</p>
+<ul>
+<li>不同版本的<code>npm</code>的安装算法不同。</li>
+<li>某些依赖项自上次安装以来，可能已发布了新版本，因此将根据<code>package.json</code>中的<code>semver-range version</code>更新依赖。</li>
+<li>某个依赖项的依赖项可能已发布新版本，即使您使用了固定依赖项说明符（是<code>&quot;1.2.3&quot;</code>而不是<code>&quot;^1.2.3&quot;</code>），它也会更新，因为你无法固定子依赖项的版本。</li>
+</ul>
+<p>而依赖项版本更新可能会带来一些问题，例如：A新建了一个项目，生成了上面这份<code>package.json</code>文件，但A安装依赖的时间比较早，此时<code>packageA</code>的最新版本是<code>2.1.0</code>，该版本与代码兼容，没有出现bug。后来B克隆了A的项目，在安装依赖时<code>packageA</code>的最新版本是<code>2.2.0</code>，那么根据语义npm会去安装<code>2.2.0</code>的版本，但<code>2.2.0</code>版本的API可能发生了改动，导致代码出现bug。</p>
+<p>这就是<code>package.json</code>会带来的问题，同一份<code>package.json</code>在不同的时间和环境下安装会产生不同的结果。</p>
+<p>理论上这个问题是不应该出现的，因为<code>npm</code>作为开源世界的一部分，也遵循一个发布原则：相同大版本号下的新版本应该兼容旧版本。即<code>2.1.0</code>升级到<code>2.2.0</code>时<code>API</code>不应该发生变化。</p>
+<p>但很多开源库的开发者并没有严格遵守这个发布原则，导致了上面的这个问题。</p>
+<p>为了在不同的环境下生成相同的<code>node_modules</code>，<code>npm</code>使用<code>package-lock.json</code>。无论何时运行<code>npm install</code>，<code>npm</code>都会生成或更新<code>package-lock.json</code>。</p>
+<p><strong>不同<code>npm</code>版本下<code>npm i</code>的规则</strong></p>
+<ul>
+<li><code>npm 5.0.x</code>版本：不管<code>package.json</code>中依赖是否有更新，<code>npm i</code>都会根据<code>package-lock.json</code>下载。针对这种安装策略，有人提出了这个<a href="https://github.com/npm/npm/issues/16866">issue - #16866</a> ，然后就演变成了<code>5.1.0</code>版本后的规则。</li>
+<li><code>5.1.0</code>版本后：当<code>package.json</code>中的依赖项有新版本时，<code>npm install</code>会无视<code>package-lock.json</code>去下载新版本的依赖项并且更新<code>package-lock.json</code>。针对这种安装策略，又有人提出了一个<a href="https://github.com/npm/npm/issues/17979">issue - #17979</a>，参考 npm 贡献者 iarna 的评论，得出<code>5.4.2</code>版本后的规则。</li>
+<li>5.4.2版本后：
+<ul>
+<li>如果只有一个<code>package.json</code>文件，运行<code>npm i</code>会根据它生成一个<code>package-lock.json</code>文件，这个文件相当于本次<code>install</code>的一个快照，它不仅记录了<code>package.json</code>指明的直接依赖的版本，也记录了间接依赖的版本。</li>
+<li>如果<code>package.json</code>的<code>semver-range version</code>和<code>package-lock.json</code>中版本兼容(<code>package-lock.json</code>版本在<code>package.json</code>指定的版本范围内)，即使此时<code>package.json</code>中有新的版本，执行<code>npm i</code>也还是会根据<code>package-lock.json</code>下载 - 实践场景1。</li>
+<li>如果手动修改了<code>package.json</code>的<code>version ranges</code>，且和<code>package-lock.json</code>中版本不兼容，那么执行<code>npm i</code>时<code>package-lock.json</code>将会更新到兼容<code>package.json</code>的版本。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注意：<code>npm install</code>读取<code>package.json</code>创建依赖项列表，并使用<code>package-lock.json</code>来通知要安装这些依赖项的哪个版本。如果某个依赖项在<code>package.json</code>中，但是不在<code>package-lock.json</code>中，运行<code>npm install</code>会将这个依赖项的确定版本更新到<code>package-lock.json</code>中，不会更新其它依赖项的版本。</p>
+</blockquote>
+<h3 id="36-npm安装实践">3.6 NPM安装实践</h3>
+<p>场景一</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// package.json
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	<span style="color:#ff79c6">&#34;vue&#34;</span>: <span style="color:#f1fa8c">&#34;^2.0.0&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>// package-lock.json
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	<span style="color:#ff79c6">&#34;vue&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		<span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;2.1.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		<span style="color:#ff79c6">&#34;resolved&#34;</span>: <span style="color:#f1fa8c">&#34;https://registry.npm.taobao.org/vue/download/vue-2.1.0.tgz&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>		<span style="color:#ff79c6">&#34;integrity&#34;</span>: <span style="color:#f1fa8c">&#34;sha1-KTuj76rKhGqmvL+sRc+FJMxZfj0=&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+</code></pre></div><p>这种情况下<code>package-lock.json</code>指定的<code>2.1.0</code>在<code>^2.0.0</code>指定的范围内，<code>npm install</code>会安装<code>vue2.1.0</code>版本。</p>
+<p>场景二</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// package.json
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	<span style="color:#ff79c6">&#34;vue&#34;</span>: <span style="color:#f1fa8c">&#34;^2.2.0&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>// package-lock.json
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#f1fa8c">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	<span style="color:#ff79c6">&#34;vue&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>		<span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;2.1.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>		<span style="color:#ff79c6">&#34;resolved&#34;</span>: <span style="color:#f1fa8c">&#34;https://registry.npm.taobao.org/vue/download/vue-2.1.0.tgz&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>		<span style="color:#ff79c6">&#34;integrity&#34;</span>: <span style="color:#f1fa8c">&#34;sha1-KTuj76rKhGqmvL+sRc+FJMxZfj0=&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+</code></pre></div><p>这种情况下<code>package-lock.json</code>指定的<code>2.1.0</code>不在<code>^2.2.0</code>指定的范围内，<code>npm install</code>会按照<code>^2.2.0</code>的规则去安装最新的<code>2.6.10</code>版本，并且将<code>package-lock.json</code>的版本更新为<code>2.6.10</code>。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/node/">node</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/xss%E7%AE%80%E4%BB%8B/" data-tooltip="xss简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/mongodb%E7%AE%80%E4%BB%8B/" data-tooltip="mongoDB简介">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

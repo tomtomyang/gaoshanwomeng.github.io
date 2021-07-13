@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  git husky简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" git husky简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [git husky] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#husky5x%e4%bd%bf%e7%94%a8%e6%80%bb%e7%bb%93" class="toc-link">husky5.x使用总结</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#husky60%e4%bd%bf%e7%94%a8%e6%80%bb%e7%bb%93" class="toc-link">husky6.0使用总结</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#husky%e4%b8%ba%e4%bb%80%e4%b9%88%e6%94%be%e5%bc%83%e4%ba%86%e4%b9%8b%e5%89%8d%e7%9a%84%e9%85%8d%e7%bd%ae%e6%96%b9%e5%bc%8f" class="toc-link">husky为什么放弃了之前的配置方式</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#%e6%96%b0%e7%89%88husky%e7%9a%84%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="toc-link">新版husky的工作原理</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#%e6%96%b0%e7%89%88husky%e4%bd%bf%e7%94%a8%e6%96%b9%e5%bc%8f" class="toc-link">新版husky使用方式</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/git-husky%E7%AE%80%E4%BB%8B/#%e9%9c%80%e8%a6%81%e6%b3%a8%e6%84%8f%e7%9a%84%e7%82%b9" class="toc-link">需要注意的点</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">git husky简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-06-20</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1654字</span>
+          <span class="readtime">⏱ 4分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="husky5x使用总结">husky5.x使用总结</h3>
+<p>husky可以让我们向项目中方便添加git hooks。通常情况下只需要如下两步就可在项目中引入并设置好husky：</p>
+<ol>
+<li>将husky添加到项目的开发依赖中</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install -D husky
+</code></pre></div><ol start="2">
+<li>在package.json中设置我们需要的git hooks</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;husky&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;hooks&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>      <span style="color:#ff79c6">&#34;pre-commit&#34;</span>: <span style="color:#f1fa8c">&#34;npm run test&#34;</span>, // 在commit之前先执行npm run test命令
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>      <span style="color:#ff79c6">&#34;commit-msg&#34;</span>: <span style="color:#f1fa8c">&#34;commitlint -e $HUSKY_GIT_PARAMS&#34;</span> // 校验commit时添加的备注信息是否符合我们要求的规范
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
+</code></pre></div><h3 id="husky60使用总结">husky6.0使用总结</h3>
+<p>最新版本的husky（6.0.0）已经做了破坏性的变更，之前的设置方式已经失效了。</p>
+<h4 id="husky为什么放弃了之前的配置方式">husky为什么放弃了之前的配置方式</h4>
+<p>根据官方的说法，之前husky的工作方式是这样的，为了能够让用户设置任何类型的git hooks都能正常工作，husky不得不创建所有类型的git hooks。这样在git 工作的每个阶段都会调用husky所设置的脚本，在这个脚本中husky会检查用户是否配置该hook，如果有就运行用户配置的命令，如果没有就继续往下执行。</p>
+<p>这样做的好处就是无论用户设置什么类型的git hook husky都能确保其正常运行。但是缺点也是显而易见的，即使用户没有设置任何git hook，husky也向git中添加了所有类型的git hook。</p>
+<p>那有没有可能让husky只添加我们需要的git hook呢？作者尝试过解决这个问题，但是失败了。究其失败的根本原因，就是因为husky需要在两个地方进行配置才能完成一个完整的git hook功能。一个是在package.json中配置git hook所要执行的真正命令，一个是在.git/hooks/中配置相对应的git hook。也就是说无论是添加还是删除git hook就要保证在这两个地方同步执行对应的操作。作者无法找到一个可靠的方法来同步这两个地方的配置，因此失败了。</p>
+<p>作者认为这个问题是由husky工作模型的自身缺陷导致的，如果想要解决就不得不另辟蹊径采用一种新的工作模型。因此新版husky做了破坏性的变更。</p>
+<h4 id="新版husky的工作原理">新版husky的工作原理</h4>
+<p>新版的husky使用了从git 2.9开始引入的一个新功能core.hooksPath。core.hooksPath可以让你指定git hooks所在的目录而不是使用默认的.git/hooks/。这样husky可以使用<code>husky install</code>将git hooks的目录指定为.husky/，然后使用<code>husky add</code>命令向.husky/中添加hook。通过这种方式我们就可以只添加我们需要的git hook，而且所有的脚本都保存在了一个地方（.husky/目录下）因此也就不存在同步文件的问题了。</p>
+<h4 id="新版husky使用方式">新版husky使用方式</h4>
+<ol>
+<li>安装husky</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install -D husky
+</code></pre></div><ol start="2">
+<li>在packgae.json中添加prepare脚本</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>      <span style="color:#ff79c6">&#34;prepare&#34;</span>: <span style="color:#f1fa8c">&#34;husky install&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>prepare脚本会在<code>npm install</code>（不带参数）之后自动执行。也就是说当我们执行npm install安装完项目依赖后会执行 <code>husky install</code>命令，该命令会创建.husky/目录并指定该目录为git hooks所在的目录。</p>
+<ol start="3">
+<li>添加git hooks，运行一下命令创建git hooks</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npx husky add .husky/pre-commit <span style="color:#f1fa8c">&#34;npm run test&#34;</span>
+</code></pre></div><p>运行完该命令后我们会看到.husky/目录下新增了一个名为pre-commit的shell脚本。也就是说在在执行git commit命令时会先执行pre-commit这个脚本。pre-commit脚本内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">#!/bin/sh</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>. <span style="color:#f1fa8c">&#34;</span>$(dirname <span style="color:#f1fa8c">&#34;$0&#34;</span>)<span style="color:#f1fa8c">/_/husky.sh&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>npm run  test
+</code></pre></div><p>可以看到该脚本的功能就是执行npm run test这个命令</p>
+<h4 id="需要注意的点">需要注意的点</h4>
+<p>在项目中我们会使用commit-msg这个git hook来校验我们commit时添加的备注信息是否符合规范。在以前的我们通常是这样配置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;husky&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;hooks&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>      <span style="color:#ff79c6">&#34;commit-msg&#34;</span>: <span style="color:#f1fa8c">&#34;commitlint -e $HUSKY_GIT_PARAMS&#34;</span> // 校验commit时添加的备注信息是否符合我们要求的规范
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>在新版husky中$HUSKY_GIT_PARAMS这个变量不再使用了，取而代之的是$1。在新版husky中我们的commit-msg脚本内容如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">#!/bin/sh
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6"></span>. <span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">$(</span>dirname <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$0</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">)</span><span style="color:#f1fa8c">/_/husky.sh&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">#--no-install 参数表示强制npx使用项目中node_modules目录中的commitlint包</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>npx --no-install commitlint --edit <span style="color:#8be9fd;font-style:italic">$1</span>
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/git/">git</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/nodejs-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" data-tooltip="nodejs 事件循环">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%B9%B6%E5%8F%91/" data-tooltip="js 事件循环与异步并发">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

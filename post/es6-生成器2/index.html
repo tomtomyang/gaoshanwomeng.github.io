@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  es6 生成器2 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" es6 生成器2 ">
+    <meta name="keywords" itemprop="keywords" content=" [es6 生成器] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#1-%e5%9f%ba%e6%9c%ac%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95" class="toc-link">1. 基本使用方法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#2-next%e6%96%b9%e6%b3%95" class="toc-link">2. next方法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#3-throw%e6%96%b9%e6%b3%95" class="toc-link">3. throw方法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#4-return-%e6%96%b9%e6%b3%95" class="toc-link">4. return 方法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#5-forof" class="toc-link">5. for…of…</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A82/#6-yield-%e8%af%ad%e5%8f%a5" class="toc-link">6. yield 语句</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">es6 生成器2</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-25</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2542字</span>
+          <span class="readtime">⏱ 6分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>generator（生成器）是ES6标准引入的新的数据类型。最大特点就是可以交出函数的执行权（即暂停执行）。一个generator看上去像一个函数,区别就是函数名前面多了一个星号 *，但可以返回多次。与yield命令配合，可以实现暂停执行的功能</p>
+<h3 id="1-基本使用方法">1. 基本使用方法</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> <span style="color:#ff79c6">*</span> testGenerator(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  console.log(<span style="color:#f1fa8c">&#39;a&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">yield</span> <span style="color:#ff79c6">++</span>a; 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  console.log(<span style="color:#f1fa8c">&#39;b&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">yield</span> <span style="color:#ff79c6">++</span>a;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  console.log(<span style="color:#f1fa8c">&#39;c&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">++</span>a;	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  console.log(<span style="color:#f1fa8c">&#39;d&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#8be9fd;font-style:italic">var</span> gener <span style="color:#ff79c6">=</span> testGenerator(<span style="color:#bd93f9">5</span>);	<span style="color:#6272a4">// 函数里的log并没有输出，所以函数并没有执行，
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> gener2 <span style="color:#ff79c6">=</span> testGenerator(<span style="color:#bd93f9">1</span>);	<span style="color:#6272a4">// gener 和 gener2 之间互不印象，
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>console.log(gener);	<span style="color:#6272a4">// testGenerator{&lt;suspended&gt;}   (generator对象), 说明返回的是一个对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#8be9fd;font-style:italic">var</span> yield1 <span style="color:#ff79c6">=</span> gener.next();	<span style="color:#6272a4">// a  (输出了一个a，第一个yield前的log执行了)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span>console.log(yield1);  <span style="color:#6272a4">// {value: 6, done: false} 	next函数返回的是一个 包含值和状态的 对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>console.log(yield1.value);	<span style="color:#6272a4">// 6	(value是yield的返回的值)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>console.log(yield1.done);	<span style="color:#6272a4">// false	(done是yield的返回状态，false代表目前处于暂停状态，还没执行完)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#8be9fd;font-style:italic">var</span> yield2 <span style="color:#ff79c6">=</span> gener.next();  <span style="color:#6272a4">// b  (输出一个b，可见函数是接着第一个yield后面的代码继续执行的，到第二个yield停止)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>console.log(yield2);  <span style="color:#6272a4">// {value: 7, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>console.log(yield2.value);  <span style="color:#6272a4">// 7	(第二次返回了7，说明此时的变量值是接着 第一个yield的 变量值(此时a=6)使用的)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4"></span>console.log(yield2.done);  <span style="color:#6272a4">// false	()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#8be9fd;font-style:italic">var</span> yield3 <span style="color:#ff79c6">=</span> gener.next();  <span style="color:#6272a4">// c  (输出一个c，可见函数是接着第二个yield后面的代码继续执行的，到return停止)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>console.log(yield3);  <span style="color:#6272a4">// {value: 8, done: true}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4"></span>console.log(yield3.value);  <span style="color:#6272a4">// 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>console.log(yield3.done);  <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#8be9fd;font-style:italic">var</span> yield4 <span style="color:#ff79c6">=</span> gener.next();  <span style="color:#6272a4">// (没有输出，说明执行的renturn之后不会再往下执行)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4"></span>console.log(yield4);  <span style="color:#6272a4">// {value: undefined, done: true}  (执行完return，以后再 next() 返回的都是 undefind)
+</span></code></pre></div><h3 id="2-next方法">2. next方法</h3>
+<ol>
+<li>遇到yield语句，就暂停执行后面的操作，并将紧跟在yield后面的那个表达式的值，作为返回的对象的value属性的值。</li>
+<li>再次调用next方法时，再继续往下执行，直到遇到下一个yield语句。</li>
+<li>如果没有再遇到新的yield语句，就一直运行到函数结束，直到return语句为止，并将return语句后面的表达式的值，作为返回的对象的value属性值。</li>
+<li>如果该函数没有return语句，则返回的对象的value属性值为undefined。</li>
+<li>next方法可以有参数, next方法参数的作用，是覆盖掉上一个yield语句的值。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testNext() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">yield</span> <span style="color:#ff79c6">++</span>a;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  console.log(b);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#8be9fd;font-style:italic">var</span> c <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">yield</span> <span style="color:#ff79c6">++</span>a;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  console.log(c);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">++</span>a;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#8be9fd;font-style:italic">var</span> gener3 <span style="color:#ff79c6">=</span> testNext();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">// var v1 = gener3.next(3);  // 第一次执行next的时候传值，由于此时并没有 上一个 yield 的值，所以此时传值不起作用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#8be9fd;font-style:italic">var</span> v1 <span style="color:#ff79c6">=</span> gener3.next();  <span style="color:#6272a4">// (没有输出 语句：var b = yield ++a;  先执行等号右边的运算，此时执行到 yield ++a, 返回++a(2) 逻辑暂停，即此时 b并没有附上值。)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>console.log(v1);  <span style="color:#6272a4">// {value: 2, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#8be9fd;font-style:italic">var</span> v2 <span style="color:#ff79c6">=</span> gener3.next(<span style="color:#bd93f9">6</span>);  <span style="color:#6272a4">// 6	执行第二个next，此时，有传参，先将上一个 yield 的值(++a  2) 替换为 参数6，然后接着执行语句，给b赋值， 所以此时 b = 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>console.log(v2);  <span style="color:#6272a4">// {value: 3, done: false}   第一个yield执行完，a的值为2， 所以第二个 yield 返回 ++a  时候，返回值为3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#8be9fd;font-style:italic">var</span> v3 <span style="color:#ff79c6">=</span> gener3.next(<span style="color:#bd93f9">10</span>);  <span style="color:#6272a4">// 10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4"></span>console.log(v3);  <span style="color:#6272a4">// {value: 4, done: true},   同上
+</span></code></pre></div><h3 id="3-throw方法">3. throw方法</h3>
+<ol>
+<li>在函数体外抛出错误，然后在Generator函数体内捕获。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testThrow() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  console.log(<span style="color:#bd93f9">1</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">yield</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">try</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    console.log(<span style="color:#bd93f9">2</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">yield</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    console.log(<span style="color:#bd93f9">3</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">yield</span> <span style="color:#bd93f9">3</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  } <span style="color:#ff79c6">catch</span> (e) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    console.log(<span style="color:#f1fa8c">&#39;第一个catch：&#39;</span> <span style="color:#ff79c6">+</span> e);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  console.log(<span style="color:#bd93f9">4</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#ff79c6">yield</span> <span style="color:#bd93f9">4</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#ff79c6">try</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    console.log(<span style="color:#bd93f9">5</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#ff79c6">yield</span> <span style="color:#bd93f9">5</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  } <span style="color:#ff79c6">catch</span> (e) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    console.log(<span style="color:#f1fa8c">&#39;第二个catch：&#39;</span> <span style="color:#ff79c6">+</span> e);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>	
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  console.log(<span style="color:#bd93f9">6</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">6</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#8be9fd;font-style:italic">var</span> gener4 <span style="color:#ff79c6">=</span> testThrow();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#8be9fd;font-style:italic">var</span> t1 <span style="color:#ff79c6">=</span> gener4.next();  <span style="color:#6272a4">// 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4"></span>console.log(t1);  <span style="color:#6272a4">// {value: 1, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#6272a4">// gener4.throw(&#39;试着抛出个异常 ^_^!&#39;);	// 报错：Uncaught 试着抛出个异常 ^_^!; 	(由于第一次next并没有try...catch... 这时手动抛出异常，异常无法被捕获，代码不再往下执行了。之后再调用 next 将返回 {value: undefined, done: true})
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#8be9fd;font-style:italic">var</span> t2 <span style="color:#ff79c6">=</span> gener4.next();  <span style="color:#6272a4">// 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>console.log(t2);  <span style="color:#6272a4">// {value: 2, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4"></span>gener4.<span style="color:#ff79c6">throw</span>(<span style="color:#f1fa8c">&#39;这个异常1可以被catch到 ^_^&#39;</span>);  <span style="color:#6272a4">// 第一个catch：这个异常1可以被catch到 ^_^    (要抛出的异常，被generator里的catch给捕获到了)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4">// 4 	// 当捕获到异常后，代码会自动再执行一次 next() 方法，此时控制台输出了四，说明try 里面的第二个 yield 并没有被执行，可见，一个try代码块里面只能有一个yield生效
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4">// gener4.throw(&#39;这个异常2不可以被catch到 ^_^&#39;);		// Uncaught 这个异常2不可以被catch到 ^_^	(再次手动抛出异常就不能被捕获了，此时代码已经执行到 yield 4; 了)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#8be9fd;font-style:italic">var</span> t3 <span style="color:#ff79c6">=</span> gener4.next();  <span style="color:#6272a4">// 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#6272a4"></span>console.log(t3);  <span style="color:#6272a4">// {value: 5, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4"></span>gener4.<span style="color:#ff79c6">throw</span>(<span style="color:#f1fa8c">&#39;这个异常3可以被catch到 ^_^&#39;</span>);  <span style="color:#6272a4">// 第二个catch：这个异常3可以被catch到 ^_^
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#6272a4">// 6  // catch捕获后，执行了下一个next(); 此时执行完，已经执行完 return 6; 了
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#8be9fd;font-style:italic">var</span> t4 <span style="color:#ff79c6">=</span> gener4.next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>console.log(t4);  <span style="color:#6272a4">// {value: undefined, done: true}   (上一个catch之后，已经把return执行了，所以再次执行 next 返回 {value: undefined, done: true})
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4"></span><span style="color:#bd93f9">123456789101112131415161718192021222324252627282930313233343536373839404142434445</span>
+</code></pre></div><h3 id="4-return-方法">4. return 方法</h3>
+<ol>
+<li>可以返回给定的值(覆盖本次yield的值)，并且终结遍历Generator函数。</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testReturn() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;a&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;b&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;c&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">var</span> gener5 <span style="color:#ff79c6">=</span> testReturn();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">var</span> g1 <span style="color:#ff79c6">=</span> gener5.next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>console.log(g1);  <span style="color:#6272a4">// {value: &#34;a&#34;, done: false}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#8be9fd;font-style:italic">var</span> g2 <span style="color:#ff79c6">=</span> gener5.<span style="color:#ff79c6">return</span>(<span style="color:#f1fa8c">&#39;e&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>console.log(g2);  <span style="color:#6272a4">// {value: &#34;e&#34;, done: true}  (强行第二次yield的值b为 指定值的 e，并终止generator函数执行，)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#8be9fd;font-style:italic">var</span> g3 <span style="color:#ff79c6">=</span> gener5.next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>console.log(g3);  <span style="color:#6272a4">// {value: undefined, done: true}	(上面已终止执行)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span><span style="color:#bd93f9">12345678910111213141516</span>
+</code></pre></div><h3 id="5-forof">5. for…of…</h3>
+<ol>
+<li>for…of…循环可以自动遍历Generator函数生成的Iterator对象，且此时不再需要调用next方法</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testForOf() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;J&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;Q&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;K&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#39;A&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">var</span> gener6 <span style="color:#ff79c6">=</span> testForOf();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">var</span> f <span style="color:#ff79c6">of</span> gener6) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  console.log(f);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#6272a4">// J 	(for...of循环可以自动遍历Generator函数时生成的Iterator对象，且此时不再需要调用next方法。)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// Q 		
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// K  (一旦next方法的返回对象的done属性为true，for...of循环就会中止，且不包含该返回对象, 所以没输出 A)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#8be9fd;font-style:italic">var</span> f1 <span style="color:#ff79c6">=</span> gener6.next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>console.log(f1);  <span style="color:#6272a4">// {value: undefined, done: true}	(for...of...相当于调用了next，当for循环结束，generator已经执行到 done:true 状态了)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span><span style="color:#bd93f9">123456789101112131415161718</span>
+</code></pre></div><h3 id="6-yield-语句">6. yield 语句</h3>
+<ol>
+<li>yield语句只能用于function<em>的作用域，如果function</em>的内部还定义了其他的普通函数，则函数内部不允许使用yield语句。</li>
+<li>yield* 在Generater函数内部，调用另一个Generator函数</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testYield() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;x&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#6272a4">// function inFn() {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// yield &#39;y&#39;;   // Uncaught SyntaxError: Unexpected string    (报错, 普通函数里无法使用yield)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;y&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testYield2() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;xx&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  testYield();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;yy&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">var</span> m <span style="color:#ff79c6">of</span> testYield2()) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  console.log(m);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  <span style="color:#6272a4">// xx
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// yy
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// (在testYield2中无法访问到testYield中的值)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#8be9fd;font-style:italic">function</span><span style="color:#ff79c6">*</span> testYield3() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;xxx&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  <span style="color:#ff79c6">yield</span><span style="color:#ff79c6">*</span> testYield();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  <span style="color:#ff79c6">yield</span> <span style="color:#f1fa8c">&#39;yyy&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">var</span> n <span style="color:#ff79c6">of</span> testYield3()) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>  console.log(n);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>  <span style="color:#6272a4">// xxx
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// x
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// y
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// yyy
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// (yield* 在testYield3中可以访问到testYield中的值)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4"></span>}
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/es6/">es6</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-tooltip="js 数据结构">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-%E7%94%9F%E6%88%90%E5%99%A8/" data-tooltip="es6 生成器">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

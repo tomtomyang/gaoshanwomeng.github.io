@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  hugo 生成toc导航 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" hugo 生成toc导航 ">
+    <meta name="keywords" itemprop="keywords" content=" [hugo toc] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#1hugo%e8%87%aa%e5%b8%a6toc%e6%a8%a1%e7%89%88" class="toc-link">1.hugo自带toc模版</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#1%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95" class="toc-link">1.使用方法</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#2%e7%bc%ba%e7%82%b9" class="toc-link">2.缺点</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#2%e8%87%aa%e5%ae%9a%e4%b9%89toc%e6%a8%a1%e7%89%88" class="toc-link">2.自定义toc模版</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#1%e6%96%b0%e5%bb%ba%e6%96%87%e4%bb%b6" class="toc-link">1.新建文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#2%e7%bc%96%e8%be%91tochtml" class="toc-link">2.编辑toc.html</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#3%e5%9c%a8singlehtml%e5%bc%95%e5%85%a5%e6%a8%a1%e7%89%88" class="toc-link">3.在single.html引入模版</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#4%e7%bc%96%e8%be%91configtoml" class="toc-link">4.编辑config.toml</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#3%e6%b7%bb%e5%8a%a0%e5%b9%b3%e6%bb%91%e6%bb%9a%e5%8a%a8%e6%95%88%e6%9e%9c" class="toc-link">3.添加平滑滚动效果</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/hugo-%E7%94%9F%E6%88%90toc%E5%AF%BC%E8%88%AA/#4%e6%b7%bb%e5%8a%a0%e6%bb%9a%e5%8a%a8%e7%9b%91%e5%90%ac%e6%95%88%e6%9e%9c" class="toc-link">4.添加滚动监听效果</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">hugo 生成toc导航</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-06-05</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1436字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1hugo自带toc模版">1.hugo自带toc模版</h3>
+<p>hugo本身带有生成文章导航的功能，使用{{ .TableOfContents}}变量，会在页面中渲染出id为TableOfContents的nav样式。</p>
+<h4 id="1使用方法">1.使用方法</h4>
+<p>官方文档给出的使用模版是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{{ if and (gt .WordCount 400 ) (.Params.toc) }}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;<span style="color:#ff79c6">aside</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    &lt;<span style="color:#ff79c6">header</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    &lt;<span style="color:#ff79c6">h2</span>&gt;{{.Title}}&lt;/<span style="color:#ff79c6">h2</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    &lt;/<span style="color:#ff79c6">header</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    {{.TableOfContents}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>&lt;/<span style="color:#ff79c6">aside</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>{{ end }}
+</code></pre></div><p>这样就会自动查找markdown文档生成的h标题。</p>
+<h4 id="2缺点">2.缺点</h4>
+<p>使用hugo默认的{{.TableOfContents}}有如下几个缺点：</p>
+<ol>
+<li>从h1开始查找。我的文章一般都是标题为h2，文章内小标题从h3开始，这样生成的toc会有两段很大的缩进，不够智能，样式也很难看。</li>
+<li>锚点指向出错。以本地调试为例，我的文章页面应该是localhost/post/文章名/，点击锚点指向的应该是localhost/post/文章名/#锚点/，但是这个默认生成的却是指向了localhost/#锚点，因此不能实现跳转。</li>
+<li>不能平滑滚动。即使锚点指向的是正确地址，跳转的时候是直接生硬的跳转，而不是平滑滚动。</li>
+<li>不能滚动监听。只能跳转和显示。</li>
+</ol>
+<h3 id="2自定义toc模版">2.自定义toc模版</h3>
+<h4 id="1新建文件">1.新建文件</h4>
+<p>在主题文件夹/layouts/partials/新建toc.html，位置可以不同，只要在引入的时候写对就可以</p>
+<h4 id="2编辑tochtml">2.编辑toc.html</h4>
+<p>在toc.html里加入以下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;post-toc&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;toc-header&#34;</span>&gt;CATALOG&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    {{- $headers := findRE &#34;&lt;<span style="color:#ff79c6">h</span>[<span style="color:#50fa7b">2-4</span>].*?&gt;(.|\n])+?&lt;/h[2-4]&gt;&#34; .Content -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    {{ .Scratch.Set &#34;last_level&#34; -1 }}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    {{/* at least one header to link to */}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    {{- $has_headers := ge (len $headers) 1 -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    {{- if $has_headers -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        {{- range $headers -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>            {{- $last_level := $.Scratch.Get &#34;last_level&#34; -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>            {{- $header := . -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            {{- $base := ($.Page.File.LogicalName) -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>            {{- $anchorId := ($header | plainify | htmlUnescape | anchorize) -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>            {{- $href := delimit (slice $base $anchorId) &#34;#&#34; | string -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>            {{- range findRE &#34;[2-4]&#34; . 1 -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>                {{- $next_level := (int .) -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>                {{- if eq $last_level -1 -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>                    &lt;<span style="color:#ff79c6">ul</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;toc-h{{ . }}&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>                {{- else if gt $next_level $last_level -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>                    {{- range seq (add $last_level 1) $next_level}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>                        &lt;<span style="color:#ff79c6">ul</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;toc-h{{ . }}&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                    {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                {{- else if lt $next_level $last_level -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>                    {{- range seq (add $next_level 1) $last_level}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>                        &lt;/<span style="color:#ff79c6">ul</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>                    {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>                {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>                &lt;<span style="color:#ff79c6">li</span>&gt;&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;{{ relref $.Page $href }}&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;toc-link&#34;</span>&gt;{{- $header | plainify | htmlUnescape -}}&lt;/<span style="color:#ff79c6">a</span>&gt;&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>                {{ $.Scratch.Set &#34;last_level&#34; $next_level }}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>            {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    {{- end -}}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
+</code></pre></div><p>这个模版是从h2开始查找，而且如果没有h2，目录自动从h3开始生成，不会有那么多缩进造成不美观。</p>
+<h4 id="3在singlehtml引入模版">3.在single.html引入模版</h4>
+<p>single.html是文章的展示页面，可能会有不同，只要是文章的展示页面就可以。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>  {{ if .Site.Params.toc | default false }}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  {{ partial &#34;taxonomy/toc.html&#34; . }}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  {{ end }}
+</code></pre></div><p>{{ partial &ldquo;taxonomy/toc.html&rdquo; . }}根据模版路径更改。</p>
+<h4 id="4编辑configtoml">4.编辑config.toml</h4>
+<p>在config.toml中加入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[params]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>toc = true
+</code></pre></div><p>这样就可在页面中显示toc了。</p>
+<h3 id="3添加平滑滚动效果">3.添加平滑滚动效果</h3>
+<p>打开页面的js文件，新定义一个平滑滚动函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> tocScroll() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#8be9fd;font-style:italic">var</span> target <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">decodeURI</span>(<span style="color:#ff79c6">this</span>.hash.replace(<span style="color:#f1fa8c">/^#/</span>, <span style="color:#f1fa8c">&#39;&#39;</span>));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    $(<span style="color:#f1fa8c">&#39;html,body&#39;</span>).animate({scrollTop<span style="color:#ff79c6">:</span> $(<span style="color:#f1fa8c">&#34;:header[id=&#39;&#34;</span> <span style="color:#ff79c6">+</span> target <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;&#39;]&#34;</span>).offset().top <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">70</span>}, <span style="color:#bd93f9">300</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+</code></pre></div><p>这里面的target是为了处理中文标题，offset().top后面的70自己根据顶部导航栏的大小修改，如果顶部没有导航栏就可以不用写，300是滑动的时间，单位是毫秒。</p>
+<p>给链接绑定平滑滚动效果：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> tocLinks <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.querySelectorAll(<span style="color:#f1fa8c">&#39;.toc-link&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">for</span>( <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">in</span> tocLinks){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        tocLinks[i].onclick <span style="color:#ff79c6">=</span> tocScroll;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    }
+</code></pre></div><h3 id="4添加滚动监听效果">4.添加滚动监听效果</h3>
+<p>滚动监听功能会用到bootstrap的scrollspy插件，页面滚动到章节内容时，toc目录中对应的条目就会变成active状态，自定义li.active的样式就能清楚的看出当前章节的位置。 添加滑动监听有两种方法，一是在所要监听的元素上设置data-spy和data-target属性，通过data-target属性值将toc目录组件与被监听元素绑定起来。二是在js文件中绑定这些元素属性。个人觉得在html中绑定，不是很灵活，而且不好找到元素，所以选择在js中绑定。代码如下. 其中offset依旧是顶部导航栏的高度, 这里多加的5px，是为了调整点击跳转和页面平滑滚两种情况下目录条目active状态的些许误差。这个值根据实际页面情况调整，并非固定值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$(<span style="color:#f1fa8c">&#39;body&#39;</span>).scrollspy({ target<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;#page-scrollspy&#34;</span>, offset<span style="color:#ff79c6">:</span> navbarHeight<span style="color:#ff79c6">+</span><span style="color:#bd93f9">5</span> });
+</code></pre></div><hr>
+<p>参考：</p>
+<p><a href="https://www.ariesme.com/post/2019/add_toc_for_hugo/">https://www.ariesme.com/post/2019/add_toc_for_hugo/</a></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%8D%9A%E5%AE%A2/">博客</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/hugo/">hugo</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/hugo-%E8%85%BE%E8%AE%AF%E4%BA%91cos%E6%94%B6%E8%B4%B9%E8%AF%A6%E8%A7%A3/" data-tooltip="腾讯云cos收费详解">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" data-tooltip="微信小程序开发基础">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

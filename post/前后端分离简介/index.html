@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  前后端分离简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 前后端分离简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [前后端分离] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/#1-%e5%89%8d%e5%90%8e%e7%ab%af%e4%b8%8d%e5%88%86%e7%a6%bb" class="toc-link">1. 前后端不分离</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/#2-%e5%89%8d%e5%90%8e%e7%ab%af%e5%88%86%e7%a6%bb" class="toc-link">2. 前后端分离</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/#3-%e5%87%a0%e4%b8%aa%e5%b8%b8%e8%a7%81%e8%af%af%e8%a7%a3%e7%9a%84%e8%af%b4%e6%98%8e" class="toc-link">3. 几个常见误解的说明</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/#4-%e5%89%8d%e5%90%8e%e7%ab%af%e5%88%86%e7%a6%bb%e7%9a%84%e5%a5%bd%e5%a4%84" class="toc-link">4. 前后端分离的好处</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/#5-%e4%b8%aa%e4%ba%ba%e7%90%86%e8%a7%a3%e4%b8%8a%e5%ad%98%e5%9c%a8%e4%b8%a4%e7%a7%8d%e8%a7%a3%e9%87%8a" class="toc-link">5. 个人理解上存在两种解释</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">前后端分离简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-16</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1368字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-前后端不分离">1. 前后端不分离</h3>
+<p>我们先看看一个 Web 系统，在前后端不分离时架构设计是什么样的：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-1a16914020e75833279d33c873d74eb1_720w.jpg" alt="img"></p>
+<p>用户在浏览器上发送请求，服务器端接收到请求，根据 Header 中的 token 进行用户鉴权，从数据库取出数据，处理后将结果数据填入 HTML 模板，返回给浏览器，浏览器将 HTML 展现给用户。</p>
+<p><strong>有什么问题？</strong></p>
+<p>问题点在图右边那位全栈开发人员！</p>
+<p>他既要会数据库开发（SQL）、又要会服务器端开发（Java、C#），又要会前端开发（HTML、CSS、JS）。现实告诉我们，百样通往往不如一样精，什么都会的人往往哪一样都干不好。是否可以按照前端后端进行人员职责区分呢？如果进行职责区分，分成前端开发和后端开发，但由于程序全在一个服务里，不同职责开发人员彼此间的交流、代码管理就会成为一个大问题，也就是交流成本膨胀的问题了。</p>
+<h3 id="2--前后端分离">2.  前后端分离</h3>
+<p><strong>那么，有什么办法可以让前端和后端开发只做自己擅长的事情，并尽量减少交流成本呢？</strong></p>
+<p>这就是前后端分离了。记住，分离的是人员职责，人员职责分离，所以架构也发生变化了。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-889ced410c2319dbed2fe21c2da6e344_720w.jpg" alt="img"></p>
+<p>这样，前端人员和后端人员约定好接口后，前端人员彻底不用再关心业务处理是怎么回事，他只需要把界面做好就可以了，后端人员也不用再关系前端界面是什么样的，他只需要做好业务逻辑处理即可。服务的切离，代码管理，服务部署也都独立出来分别管理，系统的灵活性也获得了极大的提升。</p>
+<p>总结，任何系统架构设计，实际上是对组织结构在系统上进行映射，前后端分离，就是在对前端开发人员和后端开发人员的工作进行解耦，尽量减少他她们之间的交流成本，帮助他她们更能专注于自己擅长的工作。</p>
+<h3 id="3-几个常见误解的说明">3. 几个常见误解的说明</h3>
+<p>1、前后端分离是说浏览器和后端服务分离吗？</p>
+<p>不是，前后端分离里的前端不是浏览器，指的是生成 HTML 的那个服务，它可以是一个仅仅生成 HTML 的 Web 服务器，也可以是在浏览器中通过 JS 动态生成 HTML 的 单页应用。</p>
+<p>2、前后端分离是种技术吗？</p>
+<p>不是，前后端分离是种架构模式，或者说是最佳实践。所谓模式就是大家这么用了觉得不错，你可以直接抄来用的固定套路。</p>
+<p>3、前后端分离是最佳实践吗？</p>
+<p>看你团队和项目的情况，如果是短平快的小项目，真的没必要。如果是面向简历开发，那绝对在任何时候都应该使用前后端分离这种架构。</p>
+<h3 id="4-前后端分离的好处">4. 前后端分离的好处</h3>
+<ol>
+<li>最大的好处就是前端JS可以做很大部分的数据处理工作，对服务器的压力减小到最小。</li>
+<li>后台错误不会直接反映到前台，错误接秒较为友好。</li>
+<li>由于后台是很难去探知前台页面的分布情况，而这又是JS的强项，而JS又是无法独立和服务器进行通讯的。所以单单用后台去控制整体页面，又或者只靠JS完成效果，都会难度加大，前后台各尽其职可以最大程度的减少开发难度。</li>
+</ol>
+<h3 id="5-个人理解上存在两种解释">5. 个人理解上存在两种解释</h3>
+<ol>
+<li>第一种只是单纯的前后端分离，实在物理层面上的，将View层的任务分配给前端，Controller和Model层给后端，这就存在一个问题，就是后端的同事需要去关注前端的展示逻辑、而前端只要存在变化，后端的数据处理需要做相应的改变。</li>
+<li>第二种是基于职责层面上的分离，将View和Controller层分配的前端，后端只处理Model和业务处理，这就需要Controller使用Node.js，M-V-C对应的是JAVA/PHP - JAVASCRIPT、HTML、CSS - Node.js。</li>
+</ol>
+<blockquote>
+<p>本篇文章为转载，但进行了部分改动和增加</p>
+<p>作者：<a href="https://www.zhihu.com/people/hai-dian-you-min">海淀游民</a></p>
+<p>链接：<a href="https://www.zhihu.com/question/304180174">https://www.zhihu.com/question/304180174</a></p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB/">前后端分离</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E7%AE%80%E4%BB%8B/" data-tooltip="跨域访问简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/ajax-xhr/" data-tooltip="ajax xhr">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

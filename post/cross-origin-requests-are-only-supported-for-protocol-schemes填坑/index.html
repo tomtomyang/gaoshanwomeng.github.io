@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  cross origin requests are only supported for protocol schemes填坑 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" cross origin requests are only supported for protocol schemes填坑 ">
+    <meta name="keywords" itemprop="keywords" content=" [js] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/cross-origin-requests-are-only-supported-for-protocol-schemes%E5%A1%AB%E5%9D%91/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">cross origin requests are only supported for protocol schemes填坑</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-17</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 934字</span>
+          <span class="readtime">⏱ 2分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>今天在写了一个简单的H5页面，项目结构如下图所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20200713150046838.png" alt="在这里插入图片描述"></p>
+<p>然后在运行的时候突然报错</p>
+<blockquote>
+<p>Access to script at
+‘file:///Volumes/PERSON/font_end/h5xuexi/h5-learning3/vue_nocli/js/main.js’
+from origin ‘null’ has been blocked by CORS policy: Cross origin
+requests are only supported for protocol schemes: http, data, chrome,
+chrome-extension, https.</p>
+</blockquote>
+<p>我想来想去都没有相同怎么回事，后来发现是由于我在一个js文件里面倒入其他js文件的时候在标签里面加入了type=“module”</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;module&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./js/main.js&#34;</span>  <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;utf-8&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>但是这样做本身是没什么问题的啊，使用es6语法，在其中一个js文件里面导入其他文件的内容是用的import …from…</p>
+<p>后来再经过研究终于发现了问题所在，其实问题就是浏览器在访问本地js文件的时候遇到了跨域的问题，我们这种引入方式属于file协议，但是上面的报错信息提示是：</p>
+<blockquote>
+<p>Cross origin
+requests are only supported for protocol schemes: http, data, chrome,
+chrome-extension, https.</p>
+</blockquote>
+<p>其实翻译成人话就是，本地跨域仅支持ajax跨域只支持这些协议框架：http,https,data,chrome（Chrome浏览器）,chrome-extension（Chrome扩展插件），chrome-extension-resource（Chrome扩展资源），就是没有file协议!用了jsonp这种跨域json数据交互协议也没有，人家ajax就只支持那几个协议，并且jsonp交互协议也非官方正式的。</p>
+<p>所以我们只要顺着这个思路解决就好了，目前的解决办法有两个</p>
+<h2 id="1增加目标选项">1.增加目标选项</h2>
+<p>对于windows来说，找到chrome的快捷方式，在属性–&gt;目标里面添加–allow-file-access-from-files就可以了，
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20200713151158513.png" alt="在这里插入图片描述">
+mac的话网上说在终端进行这个操作，但是我的黑果上行不通，这里就不给大家指歪路了。</p>
+<h2 id="3放到tomcat上运行">3.放到tomcat上运行</h2>
+<p>既然本地跑不通，我们就放在服务器程序上，然后通过访问服务器接口理论上是可以的</p>
+<h2 id="3使用anywherelive-server插件">3.使用anywhere/live server插件</h2>
+<p>其实这个和tomcat的思路差不多，就是这个是一个npm的插件，会比tomcat方便一些，
+可以使用npm安装</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ npm install anywhere -g 
+</code></pre></div><p>最好是全局安装，这样以后用也方便
+然后切换到html文件所在的文件夹，运行</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ anywhere 
+</code></pre></div><p>运行后一般会自动跳转到浏览器上，终端上会显示一个运行的网址，你也可以在其他地方调试。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E5%88%9D%E5%A7%8B%E5%80%BC/" data-tooltip="es6 函数参数初始值">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/hugo-%E4%BB%8E0%E7%BC%96%E5%86%99%E4%B8%BB%E9%A2%98/" data-tooltip="hugo 从0编写主题">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

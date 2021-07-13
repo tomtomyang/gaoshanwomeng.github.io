@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 循环遍历 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" js 循环遍历 ">
+    <meta name="keywords" itemprop="keywords" content=" [js 循环遍历] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#1-for%e5%be%aa%e7%8e%af" class="toc-link">1. for循环</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#11-for" class="toc-link">1.1 for</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#12-foreach" class="toc-link">1.2 forEach</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#13-forin" class="toc-link">1.3 for…in</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#14-forof" class="toc-link">1.4 for…of</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#2-%e6%95%b0%e7%bb%84%e4%b8%8d%e8%a6%81%e7%94%a8for-in" class="toc-link">2. 数组不要用for in</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#3-for%e5%be%aa%e7%8e%af%e4%b8%ad%e7%9a%84let%e5%92%8cvar" class="toc-link">3. for循环中的let和var</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#4-%e6%95%b0%e7%bb%84%e7%9a%84%e9%81%8d%e5%8e%86" class="toc-link">4. 数组的遍历</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86/#5-%e5%af%b9%e8%b1%a1%e7%9a%84%e9%81%8d%e5%8e%86" class="toc-link">5. 对象的遍历</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">js 循环遍历</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-06</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1035字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-for循环">1. for循环</h3>
+<p>javascript中的for循环选择多种多样，可你知道其中的差别在哪里吗？什么时候又该用哪种循环才是最佳策略？</p>
+<h4 id="11-for">1.1 for</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">//20年前的写法let len = myArray.Length
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> index <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; index <span style="color:#ff79c6">&lt;</span> len; index<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  console.log(myArray[index])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+</code></pre></div><h4 id="12-foreach">1.2 forEach</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">//ES5的写法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>myArray.forEach(<span style="color:#8be9fd;font-style:italic">function</span>(index){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#6272a4">//操作你的index，index即为数组中的元素
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>})
+</code></pre></div><ul>
+<li>缺点，没有返回值。</li>
+</ul>
+<h4 id="13-forin">1.3 for&hellip;in</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">//ES5的写法，劝你慎重
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> index <span style="color:#ff79c6">in</span> myArray) { 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#6272a4">// 千万别这样做
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>  console.log(myArray[index]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><h4 id="14-forof">1.4 for&hellip;of</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**ES6写法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">*支持数组
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">*类数组对象（如：NodeList对象）
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">*字符串
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">*Map
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">*set
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> value <span style="color:#ff79c6">of</span> myArray) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  console.log(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+</code></pre></div><h3 id="2-数组不要用for-in">2. 数组不要用for in</h3>
+<p><strong>for&hellip;in细节</strong></p>
+<p>for&hellip;in本身是Object的遍历方法，JS中的数组也继承自Object，所以自然而然也能使用for&hellip;in遍历出属性。然而for&hellip;in有一些难以注意到的细节，稍不注意就可能被坑。</p>
+<p><strong>细节一： 遍历的的属性值是字符串，而不是数字！</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> list <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">in</span> list) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(i, i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">typeof</span> i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>打印：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#bd93f9">0</span> <span style="color:#bd93f9">01</span> string
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#bd93f9">1</span> <span style="color:#bd93f9">11</span> string
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#bd93f9">2</span> <span style="color:#bd93f9">21</span> string
+</code></pre></div><p>可以看到typeof i的返回值是“string”，这个最坑的地方在于我们通过下标加减想取别的元素时，就会出现异常，像上述输出的i + 1一样，并不是数字相加，而是字符串拼接！</p>
+<p><strong>细节二：遍历的是对象的枚举属性，包括自身属性以及原型链上的属性</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> obj <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  a<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;value_a&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  b<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;value_b&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#8be9fd;font-style:italic">Object</span>.prototype.c <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;proto_value_c&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">Object</span>.defineProperty(obj, <span style="color:#f1fa8c">&#39;d&#39;</span>, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  get () { <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#39;value_d&#39;</span> },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  enumerable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> key <span style="color:#ff79c6">in</span> obj) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  console.log(key, obj[key])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+</code></pre></div><p>输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>a value_a
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>b value_b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>c proto_value_c
+</code></pre></div><p>可以看到，原型上的属性c也打印出来了，但是通过Object.defineProperty定义的不可枚举属性d（enumerable: false）没有被遍历到。</p>
+<p><strong>细节三：遍历顺序是对象属性的枚举顺序，并不一定按数组的下标顺序遍历</strong></p>
+<p>for&hellip;in的遍历顺序是枚举顺序，对于数组而言，规范并没有约束各浏览器的实现。因此即便在一定范围内是按顺序遍历的，也应该尽量不依赖for&hellip;in遍历的顺序。MDN文档也明确指出，不建议使用for&hellip;in遍历数组，特别是想按照索引顺序遍历的时候：</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/357bc7c95f51237733451c0da81dd9b5.png" alt="357bc7c95f51237733451c0da81dd9b5.png"></p>
+<p>此外，因为有稀疏数组的存在，其实JS里的数组不一定是顺序结构存储的。当数组的键分布较为稀疏，为了充分节约空间，数组可能会退化为像对象一样的哈希表存储结构。</p>
+<p>因为for&hellip;in本身是对象的遍历方法，并不适用于数组，对于数组，还是for&hellip;of、for循环、forEach等遍历比较好。</p>
+<h3 id="3-for循环中的let和var">3. for循环中的let和var</h3>
+<p>关于这个问题，在 <a href="">占位</a> 中进行了说明。</p>
+<h3 id="4-数组的遍历">4. 数组的遍历</h3>
+<h3 id="5-对象的遍历">5. 对象的遍历</h3>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" data-tooltip="js 正则表达式">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/elementui%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E4%BC%A0%E5%8F%82%E4%BC%A0%E9%80%92%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%82%E6%95%B0%E5%A1%AB%E5%9D%91/" data-tooltip="elementUI事件回调函数传参，传递默认参数和自定义参数填坑">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

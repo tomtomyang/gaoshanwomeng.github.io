@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  linux aur简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" linux aur简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [aur linux] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#1pacman" class="toc-link">1.pacman</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#2aur%e7%ae%80%e4%bb%8b" class="toc-link">2.AUR简介</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#3%e4%bd%bf%e7%94%a8aur" class="toc-link">3.使用AUR</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#1%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" class="toc-link">1.准备工作</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#2%e4%b8%8b%e8%bd%bd%e8%bd%af%e4%bb%b6" class="toc-link">2.下载软件</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#4%e5%88%b6%e4%bd%9caur%e5%8c%85" class="toc-link">4.制作AUR包</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#1%e8%8e%b7%e5%8f%96%e6%9e%84%e5%bb%ba%e6%89%80%e9%9c%80%e6%96%87%e4%bb%b6" class="toc-link">1.获取构建所需文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#2%e5%ae%89%e8%a3%85%e8%bd%af%e4%bb%b6%e5%8c%85" class="toc-link">2.安装软件包</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#3%e5%88%9b%e5%bb%ba%e4%b8%80%e4%b8%aa%e8%bd%af%e4%bb%b6%e5%8c%85" class="toc-link">3.创建一个软件包</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#1%e6%99%ae%e9%80%9a%e6%96%b9%e5%bc%8f%e5%ae%89%e8%a3%85" class="toc-link">1.普通方式安装</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#2%e7%bc%96%e5%86%99-pkgbuild" class="toc-link">2.编写 PKGBUILD</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/linux-aur%E7%AE%80%E4%BB%8B/#4%e6%8f%90%e4%ba%a4%e7%bb%99aur" class="toc-link">4.提交给AUR</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">linux aur简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-06-28</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 3313字</span>
+          <span class="readtime">⏱ 7分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1pacman">1.pacman</h3>
+<p>在介绍 AUR 之前，先了解一些pacman基础知识。Arch Linux 使用 pacman  作为包管理器，它在提供了一个简单的包管理器的同时，页提供了一个易用的包构建系统，使用户能够轻松地管理和定制官方提供的、用户自己制作的、甚至是来自第三方的各种软件包。Arch Linux  的基本安装包由“core”提供，此外”extra“、”community“和”testing“软件库则提供了大量的高品质软件以满足你的需求。</p>
+<h3 id="2aur简介">2.AUR简介</h3>
+<blockquote>
+<p><a href="https://aur.archlinux.org">Arch 用户软件仓库</a>（Arch User Repository，AUR）是为用户而建、由用户主导的 Arch 软件仓库。AUR 中的软件包以软件包生成脚本（<a href="https://wiki.archlinux.org/index.php/PKGBUILD_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">PKGBUILD</a>）的形式提供，用户自己通过 <a href="https://wiki.archlinux.org/index.php/Makepkg_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">makepkg</a> 生成包，再由 <a href="https://wiki.archlinux.org/index.php/Pacman_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">pacman</a> 安装。创建 AUR 的初衷是方便用户维护和分享新软件包，并由官方定期从中挑选软件包进入 <a href="https://wiki.archlinux.org/index.php/Community_repository">community</a> 仓库。本文介绍用户访问和使用 AUR 的方法。</p>
+<p>许多官方仓库软件包都来自 AUR。通过 AUR，大家相互分享新的软件包生成脚本（<a href="https://wiki.archlinux.org/index.php/PKGBUILD_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">PKGBUILD</a> 和其他相关文件）。用户还可以为软件包投票。如果一个软件包投票足够多、没有协议问题、打包质量好，那么它就很有希望被收录进官方 <em>community</em> 仓库（以后就可以直接通过 <a href="https://wiki.archlinux.org/index.php/Pacman">pacman</a> 或 <a href="https://wiki.archlinux.org/index.php/ABS">abs</a> 安装了）。</p>
+</blockquote>
+<p>AUR是由用户主导的非官方的仓库，AUR  中的软件包以软件包生成脚本（PKGBUILD）的形式提供，用户自己通过 makepkg 生成包，再由 pacman 安装。创建 AUR  的初衷是方便用户维护和分享新软件包，并由官方定期从中挑选优质的软件包进入 community 仓库。通过  AUR，大家可以互相分享软件包生成脚本、为软件包投票、评论等等。</p>
+<h3 id="3使用aur">3.使用AUR</h3>
+<h4 id="1准备工作">1.准备工作</h4>
+<p>安装 base-devel 软件包组，里面包含了编译软件包所需的工具。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S base-devel
+</code></pre></div><p>安装 yay ，这是一个AUR helper，帮助我们安装AUR包的工具。关于AUR helper可以参考Arch的wiki：<a href="https://wiki.archlinux.org/index.php/AUR_helpers_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">Arch wiki</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S yay
+</code></pre></div><h4 id="2下载软件">2.下载软件</h4>
+<p>接下来就很简单，需要什么包，就直接使用<code>yay -S</code>安装就可以了。</p>
+<h3 id="4制作aur包">4.制作AUR包</h3>
+<p>我们不能只停留在使用AUR包这个阶段，掌握了怎么制作AUR包，我们可以自己制作各种软件包供自己和社区里的其他人使用。</p>
+<h4 id="1获取构建所需文件">1.获取构建所需文件</h4>
+<p>首先到 <a href="https://aur.archlinux.org">AUR 网站</a>上找到你需要的软件包，点击它即可查看详细信息，如 pwntools。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/aur_1.png" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200628_214830.png" alt=""></p>
+<p>点击右侧的View PKGBUILD可查看软件包生成脚本，点击”Download snapshot“可下载软件包的快照，是一个包含了 <code>PKGBUILD</code> 和其他安装文件的 tar 包。</p>
+<h4 id="2安装软件包">2.安装软件包</h4>
+<p>解压：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ tar -zxvf python2-pwntools.tar.gz
+</code></pre></div><p>查看一下软件包目录下的文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ <span style="color:#8be9fd;font-style:italic">cd</span> python2-pwntools/
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ ls -al
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>total <span style="color:#bd93f9">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>drwxr-xr-x <span style="color:#bd93f9">2</span> firmy firmy <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">8</span> 20:52 .
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>drwxr-xr-x <span style="color:#bd93f9">9</span> firmy firmy <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 16:33 ..
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy <span style="color:#bd93f9">1348</span> 10月  <span style="color:#bd93f9">8</span> 20:52 PKGBUILD
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy <span style="color:#bd93f9">1021</span> 10月  <span style="color:#bd93f9">8</span> 20:52 .SRCINFO
+</code></pre></div><p><code>PKGBUILD</code> 是软件包生成脚本，而 <code>.SRCINFO</code> 中记录了软件包的元数据，通过它，AUR 网站后台或 AUR 工具可以不用解析 <code>PKGBUILD</code> 就获取到需要的信息。当我们编写好 <code>PKGBUILD</code> 后，可以使用 makepkg 自动生成 <code>.SRCINFO</code> 文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ makepkg --printsrcinfo &gt; .SRCINFO
+</code></pre></div><p>当然还有多种方法可以下载所需文件：</p>
+<ul>
+<li>
+<p>从终端下载：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/python2-pwntools.tar.gz
+</code></pre></div></li>
+<li>
+<p>下载 Git 仓库：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>git clone https://aur.archlinux.org/python2-pwntools.git
+</code></pre></div></li>
+</ul>
+<p>再次强调 AUR 可能是危险的，请务必仔细检查里面的所有文件！现在我们回到安装过程中来，在检查完成后，就可以运行 makepkg 来创建并安装软件包：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ makepkg -rsi
+</code></pre></div><p>然后软件包就安装好了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>$ pacman -Qi python2-pwntools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>Name            : python2-pwntools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>Version         : 3.9.0-2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>Description     : A CTF framework and exploit development library.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>Architecture    : any
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>URL             : https://github.com/Gallopsled/pwntools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Licenses        : MIT  GPL2  BSD
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>Groups          : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>Provides        : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>Depends On      : python2&gt;<span style="color:#ff79c6">=</span>2.7  python2-mako  python2-paramiko  python2-pyelftools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                  python2-capstone  python2-pyserial  python2-requests  python2-psutil  python2-tox
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>                  python2-pysocks  python2-dateutil  python2-pygments  python2-pypandoc
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>                  python2-packaging  python2-unicorn  python2-intervaltree  python2-pip  ropgadget
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>Optional Deps   : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>Required By     : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>Optional For    : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>Conflicts With  : python2-pwntools  python2-pwntools-git
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>Replaces        : None
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>Installed Size  : 32.02 MiB
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>Packager        : Unknown Packager
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>Build Date      : 2017年10月09日 星期一 17时03分27秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>Install Date    : 2017年10月09日 星期一 17时03分46秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>Install Reason  : Explicitly installed
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>Install Script  : No
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>Validated By    : None
+</code></pre></div><p>其实我们使用yay进行安装就是帮我们做了这些工作，省去了我们机械的操作。但是要构建一个软件包，我们必须了解这里面的流程。</p>
+<h4 id="3创建一个软件包">3.创建一个软件包</h4>
+<p>Arch Linux 中的软件包是通过 <code>makepkg</code> 工具以及存储在 <code>PKGBUILD</code> 文件中的信息编译的。下面我们会详细介绍它。</p>
+<p>在我们刚刚运行过 <code>makepkg -rsi</code> 的目录下，有下面的文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>$ ls -al
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>total <span style="color:#bd93f9">2540</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>drwxr-xr-x <span style="color:#bd93f9">5</span> firmy firmy    <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:03 .
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>drwxr-xr-x <span style="color:#bd93f9">3</span> firmy firmy    <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 16:58 ..
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy <span style="color:#bd93f9">1124598</span> 10月  <span style="color:#bd93f9">9</span> 17:01 3.9.0.tar.gz
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>drwxr-xr-x <span style="color:#bd93f9">3</span> firmy firmy    <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:01 pkg
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy    <span style="color:#bd93f9">1348</span> 10月  <span style="color:#bd93f9">9</span> 16:59 PKGBUILD
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy <span style="color:#bd93f9">1443856</span> 10月  <span style="color:#bd93f9">9</span> 17:03 python2-pwntools-3.9.0-2-any.pkg.tar.xz
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>drwxr-xr-x <span style="color:#bd93f9">3</span> firmy firmy    <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:01 src
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy    <span style="color:#bd93f9">1021</span> 10月  <span style="color:#bd93f9">9</span> 16:59 .SRCINFO
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>$ ls -al pkg/python2-pwntools/
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>total <span style="color:#bd93f9">540</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>drwxr-xr-x <span style="color:#bd93f9">3</span> firmy firmy   <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:03 .
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>drwxr-xr-x <span style="color:#bd93f9">3</span> firmy firmy   <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:01 ..
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy  <span style="color:#bd93f9">44459</span> 10月  <span style="color:#bd93f9">9</span> 17:03 .BUILDINFO
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy <span style="color:#bd93f9">490121</span> 10月  <span style="color:#bd93f9">9</span> 17:03 .MTREE
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>-rw-r--r-- <span style="color:#bd93f9">1</span> firmy firmy    <span style="color:#bd93f9">922</span> 10月  <span style="color:#bd93f9">9</span> 17:03 .PKGINFO
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>drwxr-xr-x <span style="color:#bd93f9">5</span> firmy firmy   <span style="color:#bd93f9">4096</span> 10月  <span style="color:#bd93f9">9</span> 17:02 usr
+</code></pre></div><p>一个 Arch 软件包就是一个使用 xz 压缩的 tar 包，它包含了由 <code>makepkg</code> 生成的文件：</p>
+<ul>
+<li><code>.PKGINFO</code>：包含了所有 pacman 处理软件包的元数据、依赖等待</li>
+<li><code>.MTREE</code>：包含了文件的哈希值和时间戳，pacman 根据这些信息校验软件包的完整性</li>
+<li><code>.BUILDINFO</code></li>
+</ul>
+<p>通过这些文件我们不难知道 <code>makepkg</code> 做了哪些事情。</p>
+<ol>
+<li>检查相关依赖是否安装</li>
+<li>从指定的服务器下载源文件</li>
+<li>解压源文件</li>
+<li>编译源文件并将它安装于伪root环境下</li>
+<li>删除二进制文件和库文件的符号链接</li>
+<li>生成包的meta文件</li>
+<li>将伪root环境压缩成一个包文件</li>
+<li>将生成的包文件保存到配置的文件夹中（默认为当前工作目录）</li>
+</ol>
+<h5 id="1普通方式安装">1.普通方式安装</h5>
+<p>在编写 PKGBUILD 之前，要先尝试以软件作者的方式安装软件包，记录下过程中需要的所有步骤和命令，后面会使用到它们。</p>
+<p>一个典型的例子是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>./configure
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>make
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>make install
+</code></pre></div><h5 id="2编写-pkgbuild">2.编写 PKGBUILD</h5>
+<p>如果软件包能够正常安装，接下来就可以编写 PKGBUILD 文件了。PKGBUILD 是一个 shell 脚本，包含了构建软件包时需要的信息，当运行 makepkg 时，它会在当前目录寻找 <code>PKGBUILD</code> 文件，并按照其中的指令去获取依赖文件，编译出 <code>pkgname.pkg.tar.xz</code> 文件，该文件可以使用 pacman 进行安装(<code>pacman -U</code>)。<code>pkgname</code>、<code>pkgver</code>、<code>pkgrel</code> 和 <code>arch</code> 是必须包含的变量，<code>license</code> 在分享时也是需要的。</p>
+<p>我们通过 pwntools 的 PKGBUILD 文件来学习吧，它非常简单，但包含了所有必须的元素：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4"># Maintainer: Firmy &lt;firmianay@gmail.com&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">pkgname</span><span style="color:#ff79c6">=</span>python2-pwntools
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">pkgver</span><span style="color:#ff79c6">=</span>3.9.0
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#8be9fd;font-style:italic">pkgrel</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#8be9fd;font-style:italic">pkgdesc</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;A CTF framework and exploit development library.&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#8be9fd;font-style:italic">arch</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;any&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">url</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;https://github.com/Gallopsled/pwntools&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">license</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;MIT&#39;</span> <span style="color:#f1fa8c">&#39;GPL2&#39;</span> <span style="color:#f1fa8c">&#39;BSD&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">makedepends</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;lib32-glibc&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>             <span style="color:#f1fa8c">&#39;python2-setuptools&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">depends</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;python2&gt;=2.7&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>         <span style="color:#f1fa8c">&#39;python2-mako&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>         <span style="color:#f1fa8c">&#39;python2-paramiko&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>         <span style="color:#f1fa8c">&#39;python2-pyelftools&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>         <span style="color:#f1fa8c">&#39;python2-capstone&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>         <span style="color:#f1fa8c">&#39;python2-pyserial&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>         <span style="color:#f1fa8c">&#39;python2-requests&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>         <span style="color:#f1fa8c">&#39;python2-psutil&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>         <span style="color:#f1fa8c">&#39;python2-tox&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>         <span style="color:#f1fa8c">&#39;python2-pysocks&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>         <span style="color:#f1fa8c">&#39;python2-dateutil&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>         <span style="color:#f1fa8c">&#39;python2-pygments&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>         <span style="color:#f1fa8c">&#39;python2-pypandoc&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>         <span style="color:#f1fa8c">&#39;python2-packaging&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>         <span style="color:#f1fa8c">&#39;python2-unicorn&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>         <span style="color:#f1fa8c">&#39;python2-intervaltree&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>         <span style="color:#f1fa8c">&#39;python2-pip&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>         <span style="color:#f1fa8c">&#39;ropgadget&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#8be9fd;font-style:italic">conflicts</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;python2-pwntools&#39;</span> <span style="color:#f1fa8c">&#39;python2-pwntools-git&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#8be9fd;font-style:italic">options</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;strip&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#8be9fd;font-style:italic">source</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#34;https://github.com/Gallopsled/pwntools/archive/</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgver</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">.tar.gz&#34;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#8be9fd;font-style:italic">sha256sums</span><span style="color:#ff79c6">=(</span><span style="color:#f1fa8c">&#39;bc62c6ae0ac0e9ea14e660b4a603355a53ca3134c1ab90b654e618eb2be6df5b&#39;</span><span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#8be9fd;font-style:italic">_repodir</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;pwntools-</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgver</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>prepare<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>  <span style="color:#8be9fd;font-style:italic">cd</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">srcdir</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">_repodir</span><span style="color:#f1fa8c">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#ff79c6">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>package<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  <span style="color:#8be9fd;font-style:italic">cd</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">srcdir</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">_repodir</span><span style="color:#f1fa8c">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  python2 setup.py install --root<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgdir</span><span style="color:#f1fa8c">}</span>/ --optimize<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span> --only-use-pwn-command
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  install -D -m <span style="color:#bd93f9">644</span> LICENSE-pwntools.txt <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgdir</span><span style="color:#f1fa8c">}</span>/usr/share/licenses/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgname</span><span style="color:#f1fa8c">}</span>/LICENSE
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>  rm <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">pkgdir</span><span style="color:#f1fa8c">}</span>/usr/lib/python*/site-packages/*.<span style="color:#ff79c6">{</span>txt,md<span style="color:#ff79c6">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#ff79c6">}</span>
+</code></pre></div><p>文件中包含的变量：</p>
+<ul>
+<li><code>pkgname</code>：软件包的名称</li>
+<li><code>pkgver</code>：软件包的版本号，应该与软件原作者发布的版本号一致</li>
+<li><code>pkgrel</code>：发布号，用来区分同一版本软件的多次构建，当调整和优化 PKGBUILD 时，发布号加 1，而当版本号变化时，发布号重置为 1</li>
+<li><code>pkgdesc</code>：软件包描述</li>
+<li><code>arch</code>：表示了 PKGBUILD 可以编译和使用的架构</li>
+<li><code>url</code>：软件官网</li>
+<li><code>license</code>：软件发布许可证</li>
+<li><code>makedepends</code>：仅在编译时需要的软件包列表</li>
+<li><code>depends</code>：软件的运行时依赖列表</li>
+<li><code>conflicts</code>：与当前软件包发生冲突的包列表</li>
+<li><code>options</code>：该变量允许你重置 <code>makepkg</code> 的部分默认行为</li>
+<li><code>source</code>：构建软件包时需要的文件列表</li>
+<li><code>sha256sums</code>：校验和</li>
+</ul>
+<p>另外还可以看到 makepkg 定义的变量：</p>
+<ul>
+<li><code>srcdir</code>：makepkg 会将源文件解压到此文件夹或在此文件夹中生成指向 PKGBUILD 里 source 数组中文件的软连接</li>
+<li><code>pkgdir</code>：makepkg 会将该文件夹当成系统根目录，并将软件安装在此文件夹下</li>
+</ul>
+<p>PKGBUILD 一共有五个函数，<code>pkgver()</code>、<code>prepare()</code>、<code>build()</code>、<code>check()</code> 和 <code>package()</code>，其中 <code>package()</code> 是必须的，该文件中使用了其中的两个：</p>
+<ul>
+<li><code>prepage()</code>：在该函数中，那些用于处理源文件以进行构建的命令会被执行</li>
+<li><code>package()</code>：最后一步是把编译好的文件放到 <code>pkg</code> 文件夹（一个伪root环境）中。</li>
+</ul>
+<h4 id="4提交给aur">4.提交给AUR</h4>
+<p>现在我们已经有创建了一个软件包，那么就可以将它上传到 AUR 中分享。</p>
+<p>首先是注册一个 AUR 账户，由于 AUR 使用 Git 来管理，所以我们需要为 AUR 生成一个 SSH 密钥。<a href="https://aur.archlinux.org/register">注册地址</a></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>$ ssh-keygen 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>Generating public/private rsa key pair.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>Enter file in which to save the key <span style="color:#ff79c6">(</span>/home/firmy/.ssh/id_rsa<span style="color:#ff79c6">)</span>: 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>Enter passphrase <span style="color:#ff79c6">(</span>empty <span style="color:#ff79c6">for</span> no passphrase<span style="color:#ff79c6">)</span>: 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>Enter same passphrase again: 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>Your identification has been saved in /home/firmy/.ssh/id_rsa.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Your public key has been saved in /home/firmy/.ssh/id_rsa.pub.
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>The key fingerprint is:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>SHA256:g1uzMJEnSzhftdF47LawMO8e+YvdfaWG7JZHY9QrAl4 firmy@firmy-pc
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>The key&#39;s randomart image is:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>+---<span style="color:#ff79c6">[</span>RSA 2048<span style="color:#ff79c6">]</span>----+
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>|          o+     |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>|     . . ..o+    |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>|    <span style="color:#8be9fd;font-style:italic">o</span> <span style="color:#ff79c6">=</span> o .o   . |
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>|     + Bo..Eo . .|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>|      * S+o+ o  .|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>|       <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">=</span>oo..+..|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>|      . ..o..<span style="color:#ff79c6">=</span>.o.|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>|          .<span style="color:#ff79c6">==</span>.+..|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>|         .oo<span style="color:#ff79c6">=</span>+. o|
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>+----<span style="color:#ff79c6">[</span>SHA256<span style="color:#ff79c6">]</span>-----+
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>$ ls .ssh/
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>id_rsa  id_rsa.pub
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#ff79c6">[</span>firmy@firmy-pc ~<span style="color:#ff79c6">]</span>$ cat .ssh/id_rsa.pub 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFmUEMYewe8Wwv4EHcNQoLuqptuxwQGJglSb1mFLnAxG3Hb/rsjaix6A5EvzIMAg7h0HyEo2T5b1D/Dt2EZUeVuqsm62bXhCr2CCYlfqzxPlHOBk7btlQNYKNsO1gwroG3sLM3jK8E/gJfcRbtM40Sce1jma8z0jW7pJGq3KgeBe936WXTVcEi6tLfzKkHawN7N3AZPRORUe0vAa82mBMTX7jCixMLw9+48Jh+NjpdH3gHypv1RxQ2PXBWl69A8KUKGakYomr3feARdeYTMAjdzexl2ElTkJ8dgdEuUu9F0yEP5M7Ea61Tvzasl7nR04G2hQMnsyFNWPZVTvjboYrt firmy@firmy-pc
+</code></pre></div><p>复制公钥到 AUR Web 界面”My Account“中的”SSH Public Key“中。</p>
+<p>接下来编辑文件 <code>~/.ssh/config</code>，告诉 SSH 使用我们创建的密钥进行连接。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Host aur.archlinux.org
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    IdentityFile ~/.ssh/id_rsa  <span style="color:#6272a4"># 你的私钥路径</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    User Firmy  <span style="color:#6272a4"># 你的账户名</span>
+</code></pre></div><p>然后就可以创建新仓库了，如pwntools，但记得要使用 ssh 而不是 https：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ git clone ssh://aur@aur.archlinux.org/python2-pwntools.git
+</code></pre></div><p>修改 PKGBUILD 后一定要记得生成 <code>.SRCINFO</code>，验证无误后即可提交到 AUR：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ git add .
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>$ git commit -m <span style="color:#f1fa8c">&#34;update xxx&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$ git push
+</code></pre></div><p>到这里，你已经成功创建了一个软件包并上传分享。但事情还没有结束，你还需要对软件包进行维护，当上游更新了，就要将及时的更新上传，当有人评论或提出建议，就要试着改进。当然了，如果你不想再维护该软件包，可以 disown 它。</p>
+<p>参考：</p>
+<p><a href="https://firmianay.github.io/2017/10/11/aur_tutorial.html">https://firmianay.github.io/2017/10/11/aur_tutorial.html</a></p>
+<p><a href="https://wiki.archlinux.org/index.php/Arch_User_Repository_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">https://wiki.archlinux.org/index.php/Arch_User_Repository_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)</a></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/linux/">linux</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/aur/">aur</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/manjaro&#43;ubuntu&#43;win10%E4%B8%89%E7%B3%BB%E7%BB%9F/" data-tooltip="manjaro&#43;ubuntu&#43;win10三系统安装">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/linux-manjaro%E5%88%9D%E5%A7%8B%E5%8C%96/" data-tooltip="linux manjaro初始化">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

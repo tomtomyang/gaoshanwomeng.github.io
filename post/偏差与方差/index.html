@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  偏差与方差 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 偏差与方差 ">
+    <meta name="keywords" itemprop="keywords" content=" [偏差与方差] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#1%e5%81%8f%e5%b7%aebias" class="toc-link">1.偏差bias</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#2%e6%96%b9%e5%b7%aevariance" class="toc-link">2.方差variance</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#3%e6%96%b9%e5%b7%ae%e4%b8%8e%e5%81%8f%e5%b7%ae" class="toc-link">3.方差与偏差</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/#4%e6%96%b9%e5%b7%ae%e4%b8%8e%e5%81%8f%e5%b7%ae%e7%9a%84%e4%bc%98%e5%8c%96" class="toc-link">4.方差与偏差的优化</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">偏差与方差</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-06-23</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 976字</span>
+          <span class="readtime">⏱ 2分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_183610.png" alt=""></p>
+<h3 id="1偏差bias">1.偏差bias</h3>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185618.png" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185907.png" alt=""></p>
+<p>bias描述的是根据样本拟合出的模型的输出预测结果的期望与样本真实结果的差距。</p>
+<p>简单讲，就是在样本上拟合的好不好。要想在bias上表现好，low bias，就得复杂化模型，增加模型的参数，但这样容易过拟合 (overfitting)，过拟合对应上图是high variance，点很分散。low bias对应就是点都打在靶心附近，所以瞄的是准的，但手不一定稳。</p>
+<h3 id="2方差variance">2.方差variance</h3>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185113.png" alt=""></p>
+<p>varience描述的是样本上训练出来的模型在测试集上的表现。</p>
+<p>要想在variance上表现好，low varience，就要简化模型，减少模型的参数，但这样容易欠拟合(unfitting)，欠拟合对应上图是high bias，点偏离中心。low variance对应就是点都打的很集中，但不一定是靶心附近，手很稳，但是瞄的不准。</p>
+<h3 id="3方差与偏差">3.方差与偏差</h3>
+<p>对于一个简单的model，偏差会比较大，方差会比较小。</p>
+<p>对于一个复杂的model，偏差会比较小，方差会比较大。</p>
+<p>我们训练一个模型的最终目的，是为了让这个模型在测试数据上拟合效果好，也就是Error(test)比较小，但在实际问题中，test data我们是拿不到的，也根本不知道test data的内在规律（如果知道了，还machine learning个啥 ），所以我们通过什么策略来减小Error(test)呢？</p>
+<p>分两步：</p>
+<ol>
+<li>让Error(train)尽可能小</li>
+<li>让Error(train)尽可能等于Error(test)</li>
+</ol>
+<p>三段论，因为A小，而且A=B，这样B就小。</p>
+<p>那么怎么让Error(train)尽可能小呢？——&gt;把模型复杂化，把参数搞得多多的，这个好理解，十元线性回归，肯定error要比二元线性回归低啊。——&gt;low bias</p>
+<p>然后怎么让Error(train)尽可能等于Error(test)呢？——&gt;把模型简单化，把参数搞得少少的。什么叫Error(train)=Error(test)？就是模型没有偏见，对train test一视同仁。那么怎样的模型更容易有这这种一视同仁的特性，换句话说，更有『通用性』，对局部数据不敏感？那就是简单的模型。——&gt;low variance</p>
+<h3 id="4方差与偏差的优化">4.方差与偏差的优化</h3>
+<p>在方差与偏差之间找一个相对的平衡的方法一般有两种方法：</p>
+<ol>
+<li>
+<p>more data</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_204118.png" alt=""></p>
+<p>选用更多的数据，使模型的拟合程度更高。</p>
+</li>
+<li>
+<p>Regularization</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_204147.png" alt=""></p>
+<p>使用正则化。正则化可以使图像变得平滑。</p>
+</li>
+</ol>
+<p>参考：</p>
+<p><a href="https://www.zhihu.com/question/27068705">https://www.zhihu.com/question/27068705</a></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E7%AE%97%E6%B3%95/">算法</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E5%81%8F%E5%B7%AE%E4%B8%8E%E6%96%B9%E5%B7%AE/">偏差与方差</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E6%AD%A3%E5%88%99%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%87%E6%8B%9F%E5%90%88/" data-tooltip="正则化解决过拟合">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/manjaro&#43;ubuntu&#43;win10%E4%B8%89%E7%B3%BB%E7%BB%9F/" data-tooltip="manjaro&#43;ubuntu&#43;win10三系统安装">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

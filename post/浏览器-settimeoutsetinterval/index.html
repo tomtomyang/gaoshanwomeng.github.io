@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  浏览器 setTimeout&amp;setInterval </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 浏览器 setTimeout&amp;setInterval ">
+    <meta name="keywords" itemprop="keywords" content=" [setTimeout setInterval] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-settimeoutsetinterval/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">浏览器 setTimeout&amp;setInterval</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-07-08</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2279字</span>
+          <span class="readtime">⏱ 5分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p><strong>setTimeout</strong>
+setTimeout的在一段时间之后，执行指定的一段函数 （仅执行一次）
+可以理解为指定延迟后执行函数</p>
+<p><strong>setInterval</strong>
+setInterval是循环执行函数，每隔一段时间就执行一次指定的函数（执行N次）
+可以理解为指定周期执行函数</p>
+<p>两个函数的另一个区别在于，setInterval的时间间隔是相对于其指定执行函数的开始时间的，它并不会考虑指定函数的执行时间，也就是说，当指定函数的执行时间大于setInterval的间隔时间时，会出现不同的表现。</p>
+<p><strong>举例来说</strong></p>
+<p>当我们执行下面这段代码</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>setInterval(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    func(i<span style="color:#ff79c6">++</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}, <span style="color:#bd93f9">100</span>)
+</code></pre></div><p>如果 <code>func</code>的执行时间小于100秒，那么很简单，函数会按照下图执行</p>
+<blockquote>
+<p><img src="https:////upload-images.jianshu.io/upload_images/15048255-704719fc46a9ed89.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/587/format/webp" alt="img"></p>
+<p>图片.png</p>
+</blockquote>
+<p>但是如果函数 <code>func</code>的执行时间大于100秒，那么变回造成<strong>执行函数间时间间隔的变化，间隔不一定为100ms</strong>，如下图所示</p>
+<blockquote>
+<p><img src="https:////upload-images.jianshu.io/upload_images/15048255-6b6491edc76f1b2b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/645/format/webp" alt="img"></p>
+<p>图片.png</p>
+</blockquote>
+<p>当 <code>func(1)</code>的执行时间过长，在200和300ms的时间节点，本该执行的函数 <code>func(2)</code>和 <code>func(3)</code>都不会执行，而是进入队列中等待，知道 <code>func(1)</code>执行结束后再依次执行；</p>
+<p>但是如果此时如图所示， <code>func(2)</code>的执行时间过短，10ms就结束了，那么此时因为 <code>func(3)</code>也存在于队列中，所以 <code>func(3)</code>会立即执行，导致的结果就是，函数之间执行的时间间隔并非100ms；</p>
+<p><strong>为什么要用 setTimeout 模拟 setInterval ？</strong></p>
+<h2 id="推入任务队列后的时间不准确">推入任务队列后的时间不准确</h2>
+<p>定时器代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>setInterval(fn(), N);
+</code></pre></div><p>上面这句代码的意思其实是<strong>fn()将会在 N 秒之后被推入任务队列</strong>。</p>
+<p>所以，在 setInterval 被推入任务队列时，如果在它前面有很多任务或者某个任务等待时间较长比如网络请求等，那么这个定时器的执行时间和我们预定它执行的时间可能并不一致。</p>
+<p>比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>let startTime = new Date().getTime();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>let count = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>//耗时任务
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>setInterval(function() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  let i = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  while (i++ &lt; 1000000000);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}, 0);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>setInterval(function() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  count++;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  console.log(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    &#34;与原设定的间隔时差了：&#34;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    new Date().getTime() - (startTime + count * 1000),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    &#34;毫秒&#34;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}, 1000);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>// 输出：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>// 与原设定的间隔时差了： 699 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>// 与原设定的间隔时差了： 771 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>// 与原设定的间隔时差了： 887 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>// 与原设定的间隔时差了： 981 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>// 与原设定的间隔时差了： 1142 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>// 与原设定的间隔时差了： 1822 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>// 与原设定的间隔时差了： 1891 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>// 与原设定的间隔时差了： 2001 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>// 与原设定的间隔时差了： 2748 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>// ...
+</code></pre></div><p>可以看出来，相差的时间是越来越大的，越来越不准确。</p>
+<h2 id="函数操作耗时过长导致的不准确">函数操作耗时过长导致的不准确</h2>
+<p>考虑极端情况，假如定时器里面的代码需要进行大量的计算(耗费时间较长)，或者是 DOM 操作。这样一来，花的时间就比较长，有可能前一次代码还没有执行完，后一次代码就被添加到队列了。也会到时定时器变得不准确，甚至出现同一时间执行两次的情况。</p>
+<p>最常见的出现的就是，当我们需要使用 ajax 轮询服务器是否有新数据时，必定会有一些人会使用 setInterval，然而无论网络状况如何，它都会去一遍又一遍的发送请求，最后的间隔时间可能和原定的时间有很大的出入。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// 做一个网络轮询，每一秒查询一次数据。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>let startTime = new Date().getTime();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>let count = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>setInterval(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    let i = 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    while (i++ &lt; 10000000); // 假设的网络延迟
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    count++;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    console.log(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        &#34;与原设定的间隔时差了：&#34;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        new Date().getTime() - (startTime + count * 1000),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        &#34;毫秒&#34;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}, 1000)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>输出：
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>// 与原设定的间隔时差了： 567 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>// 与原设定的间隔时差了： 552 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>// 与原设定的间隔时差了： 563 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>// 与原设定的间隔时差了： 554 毫秒(2次)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>// 与原设定的间隔时差了： 564 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>// 与原设定的间隔时差了： 602 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>// 与原设定的间隔时差了： 573 毫秒
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>// 与原设定的间隔时差了： 633 毫秒
+</code></pre></div><h2 id="setinterval-缺点-与-settimeout-的不同">setInterval 缺点 与 setTimeout 的不同</h2>
+<blockquote>
+<p>再次强调，定时器指定的时间间隔，表示的是何时将定时器的代码添加到消息队列，而不是何时执行代码。所以真正何时执行代码的时间是不能保证的，取决于何时被主线程的事件循环取到，并执行。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>setInterval(function, N)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>//即：每隔N秒把function事件推到消息队列中
+</code></pre></div><p><img src="D:%5Cyangpeizhuo%5CDesktop%5Cblog%5CsetTimeout%E5%92%8CsetInterval%E7%9A%84%E5%8C%BA%E5%88%AB.assets%5C1460000038829251" alt="setinterval-1.png"></p>
+<p>上图可见，setInterval 每隔 100ms 往队列中添加一个事件；100ms 后，添加 T1 定时器代码至队列中，主线程中还有任务在执行，所以等待，some event 执行结束后执行 T1 定时器代码；又过了 100ms，T2 定时器被添加到队列中，主线程还在执行 T1 代码，所以等待；又过了 100ms，理论上又要往队列里推一个定时器代码，<strong>但由于此时 T2 还在队列中，所以 T3 不会被添加（T3 被跳过）</strong>，结果就是此时被跳过；这里我们可以看到，T1 定时器执行结束后马上执行了 T2 代码，所以并没有达到定时器的效果。</p>
+<p>综上所述，setInterval 有两个缺点：</p>
+<ul>
+<li>使用 setInterval 时，某些间隔会被跳过；</li>
+<li>可能多个定时器会连续执行；</li>
+</ul>
+<p>可以这么理解：<strong>每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。</strong></p>
+<p>因而我们一般用 setTimeout 模拟 setInterval，来规避掉上面的缺点。</p>
+<p>来看一个经典的例子来说明他们的不同：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>for (var i = 0; i &lt; 5; i++) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  setTimeout(function() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    console.log(i);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }, 1000);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>做过的朋友都知道：是一次输出了 5 个 5;
+那么问题来了：是每隔 1 秒输出一个 5 ？还是一秒后立即输出 5 个 5？
+答案是：一秒后立即输出 5 个 5
+因为 for 循环了五次，所以 setTimeout 被 5 次添加到时间循环中，等待一秒后全部执行。</p>
+<p><strong>为什么是一秒后输出了 5 个 5 呢？</strong>
+简单来说，因为 for 是主线程代码，先执行完了，才轮到执行 setTimeout。</p>
+<p>当然为什么输出不是 1 到 5，这个涉及到作用域的问题了，这里就不解释了。</p>
+<h2 id="settimeout-模拟-setinterval">setTimeout 模拟 setInterval</h2>
+<p>综上所述，在某些情况下，setInterval 缺点是很明显的，为了解决这些弊端，可以使用 settTimeout() 代替。</p>
+<ul>
+<li>在前一个定时器执行完前，不会向队列插入新的定时器（解决缺点一）</li>
+<li>保证定时器间隔（解决缺点二）</li>
+</ul>
+<p>具体实现如下：</p>
+<p>1.写一个 interval 方法</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>let timer = null
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>interval(func, wait){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    let interv = function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        func.call(null);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        timer=setTimeout(interv, wait);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    timer= setTimeout(interv, wait);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span> },
+</code></pre></div><p>2.和 setInterval() 一样使用它</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>interval(function() {}, 20);
+</code></pre></div><p>3.终止定时器</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>if (timer) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  window.clearSetTimeout(timer);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  timer = null;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E4%B8%8E%E5%BC%82%E6%AD%A5%E5%B9%B6%E5%8F%91/" data-tooltip="js 事件循环与异步并发">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/" data-tooltip="js 原型&amp;原型链&amp;继承">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

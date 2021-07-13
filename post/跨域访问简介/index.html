@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  跨域访问简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 跨域访问简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [跨域] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E7%AE%80%E4%BB%8B/#1-%e5%89%8d%e5%90%8e%e7%ab%af%e8%b7%a8%e5%9f%9f" class="toc-link">1. 前后端跨域</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E8%B7%A8%E5%9F%9F%E8%AE%BF%E9%97%AE%E7%AE%80%E4%BB%8B/#2-cors%e8%a7%a3%e5%86%b3%e8%b7%a8%e5%9f%9f" class="toc-link">2. CORS解决跨域</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">跨域访问简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-16</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 574字</span>
+          <span class="readtime">⏱ 2分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-前后端跨域">1. 前后端跨域</h3>
+<p>随着前后端分离技术的越来越盛行，跨域问题也逐渐凸显了出来。跨域问题的根本原因：因为浏览器收到同源策略的限制，当前域名的js只能读取同域下的窗口属性。什么叫做同源策略？就是不同的域名, 不同端口, 不同的协议不允许共享资源的，保障浏览器安全。同源策略是针对浏览器设置的门槛。如果绕过浏览就能实现跨域，所以说早期的跨域都是打着安全路数的擦边球，都可以认为是 hack 处理。这一段是我从别的地方cp过来的，大家将就着看吧。</p>
+<p><strong>这里要注意的是，只有访问类型为xhr（XMLHttpRequest)的才会出现跨域。</strong></p>
+<h3 id="2-cors解决跨域">2. CORS解决跨域</h3>
+<p>回归问题本质，跨域问题为什么会产生，上面已经说了，是由于浏览器的限制，那么在执行过程中有什么不同，下面两张度分析一下（主要看请求头的部分）：</p>
+<p>这是非跨域请求</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20180823222853391" alt="img"></p>
+<p>这是跨域请求</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20180823222921237" alt="img"></p>
+<p>这时我们发现跨域访问的请求头中存在Origin的字段，用来记录当前的访问域名，我们可以再服务端增加一个响应头Access-Control-Allow-Origin来告诉浏览器我们支持它获取就可以了。</p>
+<p>以php代码为例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;?</span>php
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:http://127.0.0.1&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">$arr</span> <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;code&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#bd93f9">200</span>, <span style="color:#f1fa8c">&#39;name&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#f1fa8c">&#39;cui&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">echo</span> <span style="color:#8be9fd;font-style:italic">$data</span> <span style="color:#ff79c6">=</span> json_encode(<span style="color:#8be9fd;font-style:italic">$arr</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">?&gt;</span>
+</code></pre></div><p>那如果我有多个域名进行跨域访问呢</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;?</span>php
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">$requestHeader</span> <span style="color:#ff79c6">=</span> getallheaders();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">$origin</span> <span style="color:#ff79c6">=</span> isset(<span style="color:#8be9fd;font-style:italic">$requestHeader</span>[<span style="color:#f1fa8c">&#39;Origin&#39;</span>])<span style="color:#ff79c6">?</span><span style="color:#8be9fd;font-style:italic">$requestHeader</span>[<span style="color:#f1fa8c">&#39;Origin&#39;</span>]<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">switch</span> (<span style="color:#8be9fd;font-style:italic">$origin</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;http://127.0.0.1&#39;</span><span style="color:#ff79c6">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:http://127.0.0.1&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        <span style="color:#ff79c6">break</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#ff79c6">case</span> <span style="color:#f1fa8c">&#39;http://localhost&#39;</span><span style="color:#ff79c6">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:http://localhost&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#ff79c6">break</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">default</span><span style="color:#ff79c6">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#ff79c6">break</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#8be9fd;font-style:italic">$arr</span> <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;code&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#bd93f9">200</span>, <span style="color:#f1fa8c">&#39;name&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#f1fa8c">&#39;cui&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#ff79c6">echo</span> <span style="color:#8be9fd;font-style:italic">$data</span> <span style="color:#ff79c6">=</span> json_encode(<span style="color:#8be9fd;font-style:italic">$arr</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4">//注意，不支持下面这种写法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">//header(&#39;Access-Control-Allow-Origin:http://localhost,http://127.0.0.1&#39;);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span><span style="color:#ff79c6">?&gt;</span>
+</code></pre></div><p>或者直接写成（很不安全，不推荐这么写）</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">&lt;?</span>php
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:*&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">$arr</span> <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;code&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#bd93f9">200</span>, <span style="color:#f1fa8c">&#39;name&#39;</span> <span style="color:#ff79c6">=&gt;</span> <span style="color:#f1fa8c">&#39;cui&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">echo</span> <span style="color:#8be9fd;font-style:italic">$data</span> <span style="color:#ff79c6">=</span> json_encode(<span style="color:#8be9fd;font-style:italic">$arr</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">?&gt;</span>
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E8%B7%A8%E5%9F%9F/">跨域</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/flash%E7%AE%80%E4%BB%8B/" data-tooltip="flash简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/" data-tooltip="前后端分离简介">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

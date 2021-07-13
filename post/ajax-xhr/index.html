@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  ajax xhr </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" ajax xhr ">
+    <meta name="keywords" itemprop="keywords" content=" [ajax xhr] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/ajax-xhr/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#1-xmlhttprequestxhr" class="toc-link">1. XMLHTTPRequest（xhr）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#2-ajax" class="toc-link">2. AJAX</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#21-%e4%bb%80%e4%b9%88%e5%8f%ab%e5%bc%82%e6%ad%a5" class="toc-link">2.1 什么叫异步</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#22-ajax%e5%b7%a5%e4%bd%9c%e5%8e%9f%e7%90%86" class="toc-link">2.2 ajax工作原理</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#3-xhr%e4%bd%bf%e7%94%a8%e6%b5%81%e7%a8%8b" class="toc-link">3. XHR使用流程</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#31-%e6%97%a7%e7%89%88%e6%9c%acxhr" class="toc-link">3.1 旧版本XHR</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#32-%e6%96%b0%e7%89%88%e6%9c%acxhr" class="toc-link">3.2 新版本XHR</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#1-http%e8%af%b7%e6%b1%82%e7%9a%84%e6%97%b6%e9%99%90" class="toc-link">1. HTTP请求的时限</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#2-formdata%e5%af%b9%e8%b1%a1" class="toc-link">2. FormData对象</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#3-%e4%b8%8a%e4%bc%a0%e6%96%87%e4%bb%b6" class="toc-link">3. 上传文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/ajax-xhr/#4-%e8%b7%a8%e5%9f%9f%e8%b5%84%e6%ba%90%e5%85%b1%e4%ba%abcors" class="toc-link">4. 跨域资源共享（CORS）</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">ajax xhr</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-11-16</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1934字</span>
+          <span class="readtime">⏱ 4分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-xmlhttprequestxhr">1. XMLHTTPRequest（xhr）</h3>
+<p>XMLHTTPRequest对象，顾名思义：是基于XML的HTTP请求。我们在浏览器中使用XMLHTTPRequest对象在服务器之间通信，传输的数据是使用XML的方式，但最终还是会被转换成json数据格式来被我们使用。</p>
+<p>XMLHttpRequest是一个浏览器接口，使得Javascript可以进行HTTP(S)通信。自从浏览器提供有了XMLHTTPRequest这个接口之后，ajax操作就此诞生。</p>
+<h3 id="2-ajax">2. AJAX</h3>
+<p>AJAX (Asynchronous JavaScript and XML)翻译为：异步的 JavaScript 和 XML。ajax就是基于浏览器提供的XMLHttpRequest对象来实现的。这下明白他们的关系了吧。</p>
+<p>传统的网页（不使用 AJAX）如果需要更新内容，必需重载整个网页面。自从有了ajax之后，我们就可以实现异步的加载网页。</p>
+<h4 id="21-什么叫异步">2.1 什么叫异步</h4>
+<p>异步，异就是不同的意思，这里也就是指不跟浏览器加载执行网页代码的步伐一致，也就是说在一个网页中需要用户操作来触发执行代码，而不是整个网页代码一次性执行完毕。（这里的用户操作是指在同一个网页下面请求代码执行渲染，而不是让浏览器直接跳转渲染另一个页面）</p>
+<h4 id="22-ajax工作原理">2.2 ajax工作原理</h4>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-1c4c5d4ec96c986672929094d374e83c_720w.jpg" alt=""></p>
+<h3 id="3-xhr使用流程">3. XHR使用流程</h3>
+<h4 id="31-旧版本xhr">3.1 旧版本XHR</h4>
+<ul>
+<li>首先我们需要新建一个XMLHttpRequest实例</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> xhr <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> XMLHttpRequest();
+</code></pre></div><ul>
+<li>然后，向远程主机发出一个HTTP请求</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>xhr.open(<span style="color:#f1fa8c">&#39;GET&#39;</span>, <span style="color:#f1fa8c">&#39;example.php&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>xhr.send();
+</code></pre></div><ul>
+<li>接着，就等待远程主机做出回应。这时需要监控XMLHttpRequest对象的状态变化，指定回调函数</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>xhr.onreadystatechange <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>　　　　<span style="color:#ff79c6">if</span> ( xhr.readyState <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">4</span> <span style="color:#ff79c6">&amp;&amp;</span> xhr.status <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">200</span> ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>　　　　　　alert( xhr.responseText );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>　　　　} <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>　　　　　　alert( xhr.statusText );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>　　　　}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>　　};
+</code></pre></div><ul>
+<li>上面的代码包含了<strong>老版本XMLHttpRequest</strong>对象的主要属性：</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">*</span> xhr.readyState：XMLHttpRequest对象的状态，等于4表示数据已经接收完毕。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">*</span> xhr.status：服务器返回的状态码，等于200表示一切正常。
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">*</span> xhr.responseText：服务器返回的文本数据
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">*</span> xhr.responseXML：服务器返回的XML格式的数据
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">*</span> xhr.statusText：服务器返回的状态文本。
+</code></pre></div><p>老版本的XMLHttpRequest对象有以下几个缺点：</p>
+<blockquote>
+<p>* 只支持文本数据的传送，无法用来读取和上传二进制文件。
+* 传送和接收数据时，没有进度信息，只能提示有没有完成。
+* 受到<a href="http://www.w3.org/Security/wiki/Same_Origin_Policy">&ldquo;同域限制&rdquo;</a>（Same Origin Policy），只能向同一域名的服务器请求数据。</p>
+</blockquote>
+<h4 id="32-新版本xhr">3.2 新版本XHR</h4>
+<p>以上都是2010年以前使用的出来的过时的XMLHttpRequest对象了，现在我们都基本上使用的是<strong>HTML5中的新版本XMLHttpRequest对象</strong>。</p>
+<p><strong>新版本的功能</strong>：</p>
+<p>新版本的XMLHttpRequest对象，针对老版本的缺点，做出了大幅改进。</p>
+<blockquote>
+<p>* 可以<strong>设置HTTP请求的时限</strong>。
+* 可以<strong>使用FormData对象管理表单数据</strong>。
+* 可以<strong>上传文件</strong>。
+* 可以<strong>请求不同域名下的数据（跨域请求）</strong>，CORS。
+* 可以<strong>获取服务器端的二进制数据</strong>。
+* 可以<strong>获得数据传输的进度信息</strong>。</p>
+</blockquote>
+<h5 id="1-http请求的时限">1. HTTP请求的时限</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>xhr.timeout <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3000</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>xhr.ontimeout <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(event){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  alert(<span style="color:#f1fa8c">&#39;请求超时！&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+</code></pre></div><p>上面的语句，将最长等待时间设为3000毫秒。过了这个时限，就自动停止HTTP请求。与之配套的还有一个timeout事件，用来指定回调函数。</p>
+<h5 id="2-formdata对象">2. FormData对象</h5>
+<p>ajax操作往往用来传递表单数据。为了方便表单处理，HTML 5新增了一个FormData对象，可以<strong>模拟表单</strong>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">//首先，新建一个FormData对象。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> formData <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> FormData();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">//然后，为它添加表单项。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>formData.append(<span style="color:#f1fa8c">&#39;username&#39;</span>, <span style="color:#f1fa8c">&#39;张三&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>formData.append(<span style="color:#f1fa8c">&#39;id&#39;</span>, <span style="color:#bd93f9">123456</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">//最后，直接传送这个FormData对象。这与提交网页表单的效果，完全一样。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4"></span>xhr.send(formData);
+</code></pre></div><p>FormData对象也可以<strong>用来获取网页表单的值</strong>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> form <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;myform&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> formData <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> FormData(form);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>formData.append(<span style="color:#f1fa8c">&#39;secret&#39;</span>, <span style="color:#f1fa8c">&#39;123456&#39;</span>); <span style="color:#6272a4">// 添加一个表单项
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>xhr.open(<span style="color:#f1fa8c">&#39;POST&#39;</span>, form.action);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>xhr.send(formData);
+</code></pre></div><h5 id="3-上传文件">3. 上传文件</h5>
+<p>新版XMLHttpRequest对象，不仅可以发送文本信息，还可以<strong>上传文件</strong>。</p>
+<p>假定files是一个&quot;选择文件&quot;的表单元素（input[type=&ldquo;file&rdquo;]），我们将它装入FormData对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> formData <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> FormData();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> files.length;i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  formData.append(<span style="color:#f1fa8c">&#39;files[]&#39;</span>, files[i]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>xhr.send(formData);
+</code></pre></div><h5 id="4-跨域资源共享cors">4. 跨域资源共享（CORS）</h5>
+<p>新版本的XMLHttpRequest对象，可以向不同域名的服务器发出HTTP请求。这叫做<a href="http://en.wikipedia.org/wiki/Cross-Origin_Resource_Sharing">&ldquo;跨域资源共享&rdquo;</a>（Cross-origin resource sharing，简称CORS）。</p>
+<p>使用&quot;跨域资源共享&quot;的前提，是浏览器必须支持这个功能，而且服务器端必须同意这种&quot;跨域&quot;。如果能够满足上面的条件，则代码的写法与不跨域的请求完全一样。</p>
+<p>跨域之前我们都讲过了，这里就不多提了，其他的新XMLHttpRequest对象的功能，个人觉得日常开发中可能遇到很少，就不去总结了。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/ajax/">ajax</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E7%AE%80%E4%BB%8B/" data-tooltip="前后端分离简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/" data-tooltip="ajax 预检请求">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

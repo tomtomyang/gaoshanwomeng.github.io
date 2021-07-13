@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue v-model绑定vuex中state数据报错填坑 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" vue v-model绑定vuex中state数据报错填坑 ">
+    <meta name="keywords" itemprop="keywords" content=" [vue vuex] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/vue-v-model%E7%BB%91%E5%AE%9Avuex%E4%B8%ADstate%E6%95%B0%E6%8D%AE%E6%8A%A5%E9%94%99%E5%A1%AB%E5%9D%91/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/vue-v-model%E7%BB%91%E5%AE%9Avuex%E4%B8%ADstate%E6%95%B0%E6%8D%AE%E6%8A%A5%E9%94%99%E5%A1%AB%E5%9D%91/#1-%e4%bb%a3%e7%a0%81%e8%83%8c%e6%99%af" class="toc-link">1. 代码背景</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-v-model%E7%BB%91%E5%AE%9Avuex%E4%B8%ADstate%E6%95%B0%E6%8D%AE%E6%8A%A5%E9%94%99%E5%A1%AB%E5%9D%91/#2-%e9%94%99%e8%af%af%e5%88%86%e6%9e%90" class="toc-link">2. 错误分析</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/vue-v-model%E7%BB%91%E5%AE%9Avuex%E4%B8%ADstate%E6%95%B0%E6%8D%AE%E6%8A%A5%E9%94%99%E5%A1%AB%E5%9D%91/#3-%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88" class="toc-link">3. 解决方案</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">vue v-model绑定vuex中state数据报错填坑</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-01-30</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 330字</span>
+          <span class="readtime">⏱ 1分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-代码背景">1. 代码背景</h3>
+<ul>
+<li>用vuex管理数据状态，state中有定义 <code>expressTemplate: false,</code></li>
+<li>vue的cart页面有使用vant的标签, 提示报错<strong>Computed property “expressTemplate” was assigned to but it has no setter.</strong></li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">el-radio-group</span>  <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;expressTemplate&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   &lt;<span style="color:#ff79c6">el-radio</span> <span style="color:#50fa7b">v-for</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;( item, index ) in expressList&#34;</span> <span style="color:#50fa7b">:key</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index&#34;</span> <span style="color:#50fa7b">:label</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item.id&#34;</span>&gt;{{item.name}}&lt;/<span style="color:#ff79c6">el-radio</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/<span style="color:#ff79c6">el-radio-group</span>&gt;
+</code></pre></div><h3 id="2-错误分析">2. 错误分析</h3>
+<p>搜索一番，了解 组件中v-model=“XXX”，而XXX是vuex state中的某个变量，html中 expressTemplate 是由v-model绑定 ，vuex中是单项流，v-model是双向绑定，但是在computed中只通过get获取参数值 没有set无法改变参数值，因此增加set的方法 。</p>
+<h3 id="3-解决方案">3. 解决方案</h3>
+<p>computed下增加set方法，set中根据具体业务写出要更改的值即可，我这里是调用vuex中mutations.js的一个方法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span> isAllChecked<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>       get() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.$store.state.batchprint.expressTemplate;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>       },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>       set(val) { 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>          <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;batchprint/SET_EXPRESS_TEMPLATE&#39;</span>, val);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>       }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    },
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/vue/">vue</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/ssrcsr/" data-tooltip="ssr&amp;csr">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/lodop-%E6%8E%A7%E4%BB%B6%E6%9C%AA%E5%AE%89%E8%A3%85/" data-tooltip="lodop 控件未安装">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

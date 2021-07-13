@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  字符集和编码 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 字符集和编码 ">
+    <meta name="keywords" itemprop="keywords" content=" [字符集和编码] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E7%BC%96%E7%A0%81/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E7%BC%96%E7%A0%81/#1-%e4%bb%80%e4%b9%88%e6%98%af%e5%ad%97%e7%ac%a6%e9%9b%86" class="toc-link">1. 什么是字符集</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E7%BC%96%E7%A0%81/#2-%e4%bb%80%e4%b9%88%e6%98%af%e7%bc%96%e7%a0%81" class="toc-link">2. 什么是编码</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">字符集和编码</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-12-21</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1458字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-什么是字符集">1. 什么是字符集</h3>
+<p>在介绍字符集之前，我们先了解下为什么要有字符集。我们在计算机屏幕上看到的是实体化的文字，而在计算机存储介质中存放的实际是二进制的比特流。那么在这两者之间的转换规则就需要一个统一的标准，否则把我们的U盘插到老板的电脑上，文档就乱码了；小伙伴QQ上传过来的文件，在我们本地打开又乱码了。于是为了实现转换标准，各种字符集标准就出现了。简单的说字符集就规定了某个文字对应的二进制数字存放方式（编码）和某串二进制数值代表了哪个文字（解码）的转换关系。 那么为什么会有那么多字符集标准呢？这个问题实际非常容易回答。问问自己为什么我们的插头拿到英国就不能用了呢？为什么显示器同时有DVI，VGA，HDMI，DP这么多接口呢？很多规范和标准在最初制定时并不会意识到这将会是以后全球普适的准则，或者处于组织本身利益就想从本质上区别于现有标准。于是，就产生了那么多具有相同效果但又不相互兼容的标准了。 说了那么多我们来看一个实际例子，下面就是<code>屌</code>这个字在各种编码下的十六进制和二进制编码结果，怎么样有没有一种很屌的感觉？</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">字符集</th>
+<th style="text-align:left">16进制编码</th>
+<th style="text-align:left">对应的二进制数据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">UTF-8</td>
+<td style="text-align:left">0xE5B18C</td>
+<td style="text-align:left">1110 0101 1011 0001 1000 1100</td>
+</tr>
+<tr>
+<td style="text-align:left">UTF-16</td>
+<td style="text-align:left">0x5C4C</td>
+<td style="text-align:left">1011 1000 1001 1000</td>
+</tr>
+<tr>
+<td style="text-align:left">GBK</td>
+<td style="text-align:left">0x8CC5</td>
+<td style="text-align:left">1000 1100 1100 0101</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6/4768913">字符</a>（Character）是各种文字和符号的总称，包括各国家文字、标点符号、图形符号、数字等。字符集（Character set）是多个字符的集合，字符集种类较多，每个字符集包含的字符个数不同，常见字符集名称：ASCII字符集、GB2312字符集、BIG5字符集、 GB18030字符集、Unicode字符集等。计算机要准确的处理各种字符集文字，就需要进行<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/8446880">字符编码</a>，以便计算机能够识别和存储各种文字。中文文字数目大，而且还分为<a href="https://baike.baidu.com/item/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87/1436365">简体中文</a>和<a href="https://baike.baidu.com/item/%E7%B9%81%E4%BD%93%E4%B8%AD%E6%96%87/2677789">繁体中文</a>两种不同书写规则的文字，而计算机最初是按英语单<a href="https://baike.baidu.com/item/%E5%AD%97%E8%8A%82/1096318">字节</a>字符设计的，因此，对中文字符进行编码，是中文信息交流的技术基础。</p>
+<p>字符编码（英语：Character encoding）也称字集码，是把<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6%E9%9B%86">字符集</a>中的<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6/4768913">字符</a><a href="https://baike.baidu.com/item/%E7%BC%96%E7%A0%81">编码</a>为指定<a href="https://baike.baidu.com/item/%E9%9B%86%E5%90%88">集合</a>中某一<a href="https://baike.baidu.com/item/%E5%AF%B9%E8%B1%A1/17158">对象</a>（例如：<a href="https://baike.baidu.com/item/%E6%AF%94%E7%89%B9/3431582">比特</a>模式、<a href="https://baike.baidu.com/item/%E8%87%AA%E7%84%B6%E6%95%B0/385394">自然数</a><a href="https://baike.baidu.com/item/%E5%BA%8F%E5%88%97/1302588">序列</a>、8位组或者<a href="https://baike.baidu.com/item/%E7%94%B5%E8%84%89%E5%86%B2/10706490">电脉冲</a>），以便<a href="https://baike.baidu.com/item/%E6%96%87%E6%9C%AC/5443630">文本</a>在<a href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA/140338">计算机</a>中存储和通过<a href="https://baike.baidu.com/item/%E9%80%9A%E4%BF%A1">通信</a><a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C">网络</a>的传递。常见的例子包括将<a href="https://baike.baidu.com/item/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D%E8%A1%A8/9753254">拉丁字母表</a>编码成<a href="https://baike.baidu.com/item/%E6%91%A9%E6%96%AF%E7%94%B5%E7%A0%81/2667618">摩斯电码</a>和<a href="https://baike.baidu.com/item/ASCII">ASCII</a>。其中，<a href="https://baike.baidu.com/item/ASCII">ASCII</a>将字母、数字和其它符号<a href="https://baike.baidu.com/item/%E7%BC%96%E5%8F%B7/1517267">编号</a>，并用7<a href="https://baike.baidu.com/item/%E6%AF%94%E7%89%B9">比特</a>的<a href="https://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6/361457">二进制</a>来表示这个整数。通常会额外使用一个扩充的比特，以便于以1个<a href="https://baike.baidu.com/item/%E5%AD%97%E8%8A%82/1096318">字节</a>的方式存储。</p>
+<p>在计算机技术发展的早期，如<a href="https://baike.baidu.com/item/ASCII">ASCII</a>（1963年）和<a href="https://baike.baidu.com/item/EBCDIC">EBCDIC</a>（1964年）这样的字符集逐渐成为标准。但这些字符集的局限很快就变得明显，于是人们开发了许多方法来扩展它们。对于支持包括东亚<a href="https://baike.baidu.com/item/CJK">CJK</a>字符家族在内的<a href="https://baike.baidu.com/item/%E5%86%99%E4%BD%9C%E7%B3%BB%E7%BB%9F">写作系统</a>的要求能支持更大量的字符，并且需要一种系统而不是临时的方法实现这些字符的编码。</p>
+<h3 id="2-什么是编码">2. 什么是编码</h3>
+<p>字符编码（英语：Character encoding）也称字集码，是把<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6%E9%9B%86">字符集</a>中的<a href="https://baike.baidu.com/item/%E5%AD%97%E7%AC%A6/4768913">字符</a><a href="https://baike.baidu.com/item/%E7%BC%96%E7%A0%81">编码</a>为指定<a href="https://baike.baidu.com/item/%E9%9B%86%E5%90%88">集合</a>中某一<a href="https://baike.baidu.com/item/%E5%AF%B9%E8%B1%A1/17158">对象</a>（例如：<a href="https://baike.baidu.com/item/%E6%AF%94%E7%89%B9/3431582">比特</a>模式、<a href="https://baike.baidu.com/item/%E8%87%AA%E7%84%B6%E6%95%B0/385394">自然数</a><a href="https://baike.baidu.com/item/%E5%BA%8F%E5%88%97/1302588">序列</a>、8位组或者<a href="https://baike.baidu.com/item/%E7%94%B5%E8%84%89%E5%86%B2/10706490">电脉冲</a>），以便<a href="https://baike.baidu.com/item/%E6%96%87%E6%9C%AC/5443630">文本</a>在<a href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E6%9C%BA/140338">计算机</a>中存储和通过<a href="https://baike.baidu.com/item/%E9%80%9A%E4%BF%A1">通信</a><a href="https://baike.baidu.com/item/%E7%BD%91%E7%BB%9C">网络</a>的传递。常见的例子包括将<a href="https://baike.baidu.com/item/%E6%8B%89%E4%B8%81%E5%AD%97%E6%AF%8D%E8%A1%A8/9753254">拉丁字母表</a>编码成<a href="https://baike.baidu.com/item/%E6%91%A9%E6%96%AF%E7%94%B5%E7%A0%81/2667618">摩斯电码</a>和<a href="https://baike.baidu.com/item/ASCII">ASCII</a>。其中，<a href="https://baike.baidu.com/item/ASCII">ASCII</a>将字母、数字和其它符号<a href="https://baike.baidu.com/item/%E7%BC%96%E5%8F%B7/1517267">编号</a>，并用7<a href="https://baike.baidu.com/item/%E6%AF%94%E7%89%B9">比特</a>的<a href="https://baike.baidu.com/item/%E4%BA%8C%E8%BF%9B%E5%88%B6/361457">二进制</a>来表示这个整数。通常会额外使用一个扩充的比特，以便于以1个<a href="https://baike.baidu.com/item/%E5%AD%97%E8%8A%82/1096318">字节</a>的方式存储。</p>
+<p>在计算机技术发展的早期，如<a href="https://baike.baidu.com/item/ASCII">ASCII</a>（1963年）和<a href="https://baike.baidu.com/item/EBCDIC">EBCDIC</a>（1964年）这样的字符集逐渐成为标准。但这些字符集的局限很快就变得明显，于是人们开发了许多方法来扩展它们。对于支持包括东亚<a href="https://baike.baidu.com/item/CJK">CJK</a>字符家族在内的<a href="https://baike.baidu.com/item/%E5%86%99%E4%BD%9C%E7%B3%BB%E7%BB%9F">写作系统</a>的要求能支持更大量的字符，并且需要一种系统而不是临时的方法实现这些字符的编码。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%85%B6%E4%BB%96/">其他</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E5%AD%97%E7%AC%A6%E9%9B%86%E5%92%8C%E7%BC%96%E7%A0%81/">字符集和编码</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E8%BD%AC%E8%BD%BD%E6%9C%BA%E5%99%A8%E4%B8%8E%E4%BA%BA%E7%B1%BB%E8%A7%86%E8%A7%89%E8%83%BD%E5%8A%9B%E7%9A%84%E5%B7%AE%E8%B7%9D1/" data-tooltip="(转载)机器与人类视觉能力的差距（1）">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/git-%E7%AE%80%E4%BB%8B/" data-tooltip="git 简介">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

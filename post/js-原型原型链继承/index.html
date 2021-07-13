@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 原型&amp;原型链&amp;继承 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" js 原型&amp;原型链&amp;继承 ">
+    <meta name="keywords" itemprop="keywords" content=" [js 原型 原型链 继承] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#1-prototype" class="toc-link">1. prototype</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#2-proto" class="toc-link">2. proto</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#3-constructor" class="toc-link">3. constructor</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#4-%e5%ae%9e%e4%be%8b%e4%b8%8e%e5%8e%9f%e5%9e%8b" class="toc-link">4. 实例与原型</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#5-%e5%8e%9f%e5%9e%8b%e4%b8%8e%e5%8e%9f%e5%9e%8b" class="toc-link">5. 原型与原型</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#6-%e5%8e%9f%e5%9e%8b%e9%93%be" class="toc-link">6. 原型链</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-%E5%8E%9F%E5%9E%8B%E5%8E%9F%E5%9E%8B%E9%93%BE%E7%BB%A7%E6%89%BF/#7-%e7%bb%a7%e6%89%bf" class="toc-link">7. 继承</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">js 原型&amp;原型链&amp;继承</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-07-10</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1024字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-prototype">1. prototype</h3>
+<p>每个函数都有一个 prototype 属性
+每一个JavaScript对象(null除外)在创建的时候就会与之关联另一个对象，这个对象就是我们所说的原型，每一个对象都会从原型&quot;继承&quot;属性。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">// 虽然写在注释里，但是你要注意：
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// prototype是函数才会有的属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>Person.prototype.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Kevin&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">var</span> person1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">var</span> person2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>console.log(person1.name) <span style="color:#6272a4">// Kevin
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log(person2.name) <span style="color:#6272a4">// Kevin
+</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1490251-48851bf37a08259d.png" alt="img"></p>
+<h3 id="2-proto">2. proto</h3>
+<p>每一个JavaScript对象(除了 null )都具有的一个属性，叫<code>__proto__</code>，这个属性会指向该对象的原型</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> person <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log(person.__proto__ <span style="color:#ff79c6">===</span> Person.prototype); <span style="color:#6272a4">// true
+</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1490251-e7476a8697e97aab.png" alt="img"></p>
+<h3 id="3-constructor">3. constructor</h3>
+<p>每个原型都有一个 constructor 属性指向关联的构造函数 实例原型指向构造函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log(Person <span style="color:#ff79c6">===</span> Person.prototype.constructor); <span style="color:#6272a4">// true
+</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1490251-0cac772635e8a128.png" alt="img"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#8be9fd;font-style:italic">var</span> person <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>console.log(person.__proto__ <span style="color:#ff79c6">==</span> Person.prototype) <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>console.log(Person.prototype.constructor <span style="color:#ff79c6">==</span> Person) <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 顺便学习一个ES5的方法,可以获得对象的原型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log(<span style="color:#8be9fd;font-style:italic">Object</span>.getPrototypeOf(person) <span style="color:#ff79c6">===</span> Person.prototype) <span style="color:#6272a4">// true
+</span></code></pre></div><h3 id="4-实例与原型">4. 实例与原型</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Person() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>Person.prototype.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Kevin&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">var</span> person <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>person.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Daisy&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>console.log(person.name) <span style="color:#6272a4">// Daisy
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#ff79c6">delete</span> person.name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>console.log(person.name) <span style="color:#6272a4">// Kevin
+</span></code></pre></div><p>我们给实例对象 person 添加了 name 属性，当我们打印 person.name 的时候，结果自然为 Daisy。</p>
+<p>但是当我们删除了 person 的 name 属性时，读取 person.name，从 person 对象中找不到 name 属性就会从 person 的原型也就是 <code>person.__proto__</code>，也就是 Person.prototype中查找，幸运的是我们找到了 name 属性，结果为 Kevin。</p>
+<h3 id="5-原型与原型">5. 原型与原型</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>obj.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Kevin&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(obj.name) <span style="color:#6272a4">// Kevin
+</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1490251-293b8fe01cf2ef5f.png" alt="img"></p>
+<h3 id="6-原型链">6. 原型链</h3>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1490251-3089c135df71c956.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/%E5%8E%9F%E5%9E%8B%E9%93%BE.jpg" alt=""></p>
+<h3 id="7-继承">7. 继承</h3>
+<p>先看这段包含静态方法的 <code>ES6</code> 继承代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// ES6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">class</span> Parent{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    constructor(name){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">static</span> sayHello(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        console.log(<span style="color:#f1fa8c">&#39;hello&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    sayName(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        console.log(<span style="color:#f1fa8c">&#39;my name is &#39;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">this</span>.name);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#ff79c6">class</span> Child <span style="color:#ff79c6">extends</span> Parent{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    constructor(name, age){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        <span style="color:#ff79c6">super</span>(name);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    sayAge(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        console.log(<span style="color:#f1fa8c">&#39;my age is &#39;</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">this</span>.age);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#8be9fd;font-style:italic">let</span> parent <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Parent(<span style="color:#f1fa8c">&#39;Parent&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#8be9fd;font-style:italic">let</span> child <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Child(<span style="color:#f1fa8c">&#39;Child&#39;</span>, <span style="color:#bd93f9">18</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>console.log(<span style="color:#f1fa8c">&#39;parent: &#39;</span>, parent); <span style="color:#6272a4">// parent:  Parent {name: &#34;Parent&#34;}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4"></span>Parent.sayHello(); <span style="color:#6272a4">// hello
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>parent.sayName(); <span style="color:#6272a4">// my name is Parent
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4"></span>console.log(<span style="color:#f1fa8c">&#39;child: &#39;</span>, child); <span style="color:#6272a4">// child:  Child {name: &#34;Child&#34;, age: 18}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#6272a4"></span>Child.sayHello(); <span style="color:#6272a4">// hello
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>child.sayName(); <span style="color:#6272a4">// my name is Child
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4"></span>child.sayAge(); <span style="color:#6272a4">// my age is 18
+</span></code></pre></div><p>这段代码里有两条原型链：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 1、构造器原型链
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>Child<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">Parent</span>; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#ff79c6">Parent</span><span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> Function<span style="color:#ff79c6">.</span>prototype; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>Function<span style="color:#ff79c6">.</span>prototype<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> Object<span style="color:#ff79c6">.</span>prototype; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>Object<span style="color:#ff79c6">.</span>prototype<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">null</span>; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// 2、实例原型链
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>child<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> Child<span style="color:#ff79c6">.</span>prototype; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>Child<span style="color:#ff79c6">.</span>prototype<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">Parent</span><span style="color:#ff79c6">.</span>prototype; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span><span style="color:#ff79c6">Parent</span><span style="color:#ff79c6">.</span>prototype<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> Object<span style="color:#ff79c6">.</span>prototype; <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>Object<span style="color:#ff79c6">.</span>prototype<span style="color:#ff79c6">.</span>__proto__ <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">null</span>; <span style="color:#6272a4">// true
+</span></code></pre></div><p>如图所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/13253432-d4c12f93076ede01.png" alt="img"></p>
+<p>结合代码和图可以知道， ES6 extends 继承，主要就是：</p>
+<ol>
+<li>把子类构造函数( Child)的原型( <strong>proto</strong>)指向了父类构造函数( Parent)。</li>
+<li>把子类实例 child的原型对象( Child.prototype) 的原型( <strong>proto</strong>)指向了父类 parent的原型对象( Parent.prototype)。这两点也就是图中用不同颜色标记的两条线。</li>
+<li>子类构造函数 Child继承了父类构造函数 Preant的里的属性。使用 super调用的( ES5则用 call或者 apply调用传参)。也就是图中用不同颜色标记的两条线。</li>
+</ol>
+<p>看过《JavaScript高级程序设计-第3版》 章节 6.3继承的读者应该知道，这2和3小点，正是寄生组合式继承，书中例子没有第1小点。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-settimeoutsetinterval/" data-tooltip="浏览器 setTimeout&amp;setInterval">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE/" data-tooltip="js 作用域&amp;作用域链&amp;闭包">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  webpack简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" webpack简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [webpack] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#1-%e4%b8%ba%e4%bb%80%e4%b9%88%e4%bd%bf%e7%94%a8webpack" class="toc-link">1. 为什么使用webpack</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#1-%e8%bf%9c%e5%8f%a4%e9%98%b6%e6%ae%b5" class="toc-link">1. 远古阶段</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#2-%e7%ab%8b%e5%8d%b3%e8%b0%83%e7%94%a8%e5%87%bd%e6%95%b0%e8%a1%a8%e8%be%be%e5%bc%8f%e9%98%b6%e6%ae%b5" class="toc-link">2. 立即调用函数表达式阶段</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#3-nodejs%e6%a8%a1%e5%9d%97%e5%8c%96commonjs" class="toc-link">3. node.js模块化&#43;commonJS</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#4-ecmascript-%e6%a8%a1%e5%9d%97" class="toc-link">4. ECMAScript 模块</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#5-webpack" class="toc-link">5. webpack</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#6-vite" class="toc-link">6. vite</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#2-webpack" class="toc-link">2. webpack</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#1-%e6%a8%a1%e5%9d%97modules" class="toc-link">1. 模块（Modules）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#1-%e5%85%a5%e5%8f%a3entry" class="toc-link">1. 入口（entry）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#2-%e8%be%93%e5%87%baoutput" class="toc-link">2. 输出（output）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#3-%e5%8a%a0%e8%bd%bdloader-" class="toc-link">3. 加载（loader ）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#4-%e6%8f%92%e4%bb%b6plugin" class="toc-link">4. 插件（plugin）</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#5-%e6%a8%a1%e5%bc%8fmode" class="toc-link">5. 模式（mode）</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#3-webpackconfigjs" class="toc-link">3. webpack.config.js</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#1-%e4%bd%bf%e7%94%a8%e4%b8%8d%e5%90%8c%e7%9a%84%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6" class="toc-link">1. 使用不同的配置文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#2-%e5%af%bc%e5%87%ba%e5%a4%9a%e7%a7%8d%e9%85%8d%e7%bd%ae" class="toc-link">2. 导出多种配置</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#4-webpack-dev-server" class="toc-link">4. webpack-dev-server</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/webpack%E7%AE%80%E4%BB%8B/#5-html-webpack-plugin" class="toc-link">5. html-webpack-plugin</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">webpack简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-05-15</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 3555字</span>
+          <span class="readtime">⏱ 8分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-为什么使用webpack">1. 为什么使用webpack</h3>
+<h4 id="1-远古阶段">1. 远古阶段</h4>
+<blockquote>
+<p>在打包工具出现之前，我们是如何在 web 中使用 JavaScript 的？</p>
+<p>在浏览器中运行 JavaScript 有两种方法：</p>
+<ol>
+<li>引用一些脚本来存放每个功能；此解决方案很难扩展，因为加载大量脚本会导致网络瓶颈。</li>
+<li>使用一个包含所有项目代码的大型 <code>.js</code> 文件，但是这会导致作用域、文件大小、可读性和可维护性方面的问题。</li>
+</ol>
+</blockquote>
+<h4 id="2-立即调用函数表达式阶段">2. 立即调用函数表达式阶段</h4>
+<p>立即调用函数表达式(IIFE - Immediately invoked function expressions)</p>
+<blockquote>
+<p>IIFE 解决大型项目的作用域问题：当脚本文件被封装在 IIFE 内部时，你可以安全地拼接或安全地组合所有文件，而不必担心作用域冲突。</p>
+<p>IIFE 使用方式产生出 Make, Gulp, Grunt, Broccoli 或 Brunch 等工具。这些工具称为任务执行器，它们将所有项目文件拼接在一起。</p>
+<p>但是，修改一个文件意味着必须重新构建整个文件。拼接可以做到很容易地跨文件重用脚本，但是却使构建结果的优化变得更加困难。如何判断代码是否实际被使用？</p>
+<p>即使你只用到 lodash 中的某个函数，也必须在构建结果中加入整个库，然后将它们压缩在一起。如何 treeshake 代码依赖？难以大规模地实现延迟加载代码块，这需要开发人员手动地进行大量工作。</p>
+</blockquote>
+<h4 id="3-nodejs模块化commonjs">3. node.js模块化+commonJS</h4>
+<p>Node.js 是一个 JavaScript 运行时环境，可以在浏览器环境之外的计算机和服务器中使用。webpack 运行在 Node.js 中。</p>
+<p>既然不是在浏览器中运行 JavaScript，现在已经没有了可以添加到浏览器中的 html 文件和 script 标签。那么 Node.js 应用程序要如何加载新的代码 chunk 呢？</p>
+<p>CommonJS 问世并引入了 <code>require</code> 机制，它允许你在当前文件中加载和使用某个模块。导入需要的每个模块，这一开箱即用的功能，帮助我们解决了作用域问题。</p>
+<h4 id="4-ecmascript-模块">4. ECMAScript 模块</h4>
+<p>模块正在成为 ECMAScript 标准的官方功能。然而，浏览器支持不完整，版本迭代速度也不够快，目前还是推荐上面那些早期模块实现。</p>
+<h4 id="5-webpack">5. webpack</h4>
+<p>是否可以有一种方式，不仅可以让我们编写模块，而且还支持任何模块格式（至少在我们到达 ESM 之前），并且可以同时处理资源和资产？</p>
+<p>这就是 webpack 存在的原因。它是一个工具，可以打包你的 JavaScript 应用程序（支持 ESM 和 CommonJS），可以扩展为支持许多不同的静态资源，例如：images, fonts 和 stylesheets。</p>
+<h4 id="6-vite">6. vite</h4>
+<p>Vite是Vue的作者尤雨溪开发的Web开发构建工具，它是一个基于浏览器原生ES模块导入的开发服务器，在开发环境下，利用浏览器去解析import，在服务器端按需编译返回，完全跳过了打包这个概念，服务器随启随用。</p>
+<h3 id="2-webpack">2. webpack</h3>
+<blockquote>
+<p>本质上，<strong>webpack</strong> 是一个用于现代 JavaScript 应用程序的 <em>静态模块打包工具</em>。当 webpack 处理应用程序时，它会在内部构建一个 依赖图(dependency graph），此依赖图对应映射到项目所需的每个模块，并生成一个或多个 <em>bundle</em>。</p>
+</blockquote>
+<p>根据官网的介绍我们可以知道这几点信息：</p>
+<ol>
+<li>webpack是一个模块打包工具</li>
+<li>webpack是用来打包js文件的</li>
+<li>webpack是通过构建一个依赖图，来明确模块之间的关系的</li>
+<li>webpack最终会生成一个或多个文件</li>
+</ol>
+<h4 id="1-模块modules">1. 模块（Modules）</h4>
+<ul>
+<li>在模块化编程中，程序分解为功能离散的 chunk，并称之为模块。</li>
+<li>每个模块都拥有小于完整程序的体积，使得验证、调试及测试变得轻松。 精心编写的模块提供了可靠的抽象和封装界限，使得应用程序中每个模块都具备了条理清晰的设计和明确的目的。</li>
+<li>Node.js 从一开始就支持模块化编程。 web 的 <em>模块化</em> 正在缓慢支持中。</li>
+<li>在 web 界存在多种支持 JavaScript 模块化的工具，这些工具各有优势和限制。 webpack 从这些系统中汲取了经验和教训，并将 <em>模块</em> 的概念应用到项目的任何文件中。</li>
+</ul>
+<p><strong>webpack模块</strong></p>
+<p>webpack 天生支持如下模块类型：</p>
+<ul>
+<li>ECMAScript 模块</li>
+<li>CommonJS 模块</li>
+<li>AMD 模块</li>
+</ul>
+<p>通过 loader可以使 webpack 支持多种语言和预处理器语法编写的模块。loader向 webpack 描述了如何处理非原生<em>模块</em>，并将相关依赖引入到你的 bundles中。webpack 社区已经为各种流行的语言和预处理器创建了 <em>loader</em>，其中包括：</p>
+<ul>
+<li>CoffeeScript</li>
+<li>TypeScript</li>
+<li>Sass</li>
+<li>Less</li>
+<li>Stylus</li>
+</ul>
+<blockquote>
+<p>webpack <em>模块</em> 能以各种方式表达它们的依赖关系：</p>
+<ul>
+<li>ES2015 <code>import</code> 语句</li>
+<li>CommonJS <code>require()</code> 语句</li>
+<li>AMD <code>define</code> 和 <code>require</code> 语句</li>
+<li>css/sass/less 文件中的 <code>@import</code> 语句。</li>
+<li>stylesheet <code>url(...)</code> 或者 HTML <code>&lt;img src=...&gt;</code> 文件中的图片链接。</li>
+</ul>
+</blockquote>
+<h4 id="1-入口entry">1. 入口（entry）</h4>
+<blockquote>
+<p>入口(entry)作为构建其内部依赖图的开始。进入入口起点后，webpack 会找出有哪些模块和库是入口起点（直接和间接）依赖的。</p>
+<p>默认值是 <code>./src/index.js</code>，但可以通过配置 <code>entry</code> 属性，来指定一个（或多个）不同的入口起点。</p>
+</blockquote>
+<p><strong>webpack.config.js</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./path/to/my/entry/file.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>};
+</code></pre></div><h4 id="2-输出output">2. 输出（output）</h4>
+<blockquote>
+<p>output告诉 webpack 在哪里输出它所创建的 <em>bundle</em>，以及如何命名这些文件。主要输出文件的默认值是 <code>./dist/main.js</code>，其他生成文件默认放置在 <code>./dist</code> 文件夹中。</p>
+<p>可以通过在配置中指定一个 <code>output</code> 字段，来配置这些处理过程。</p>
+</blockquote>
+<p><strong>webpack.config.js</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./path/to/my/entry/file.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    path<span style="color:#ff79c6">:</span> path.resolve(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;my-first-webpack.bundle.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>};
+</code></pre></div><p>示例中，通过 <code>output.filename</code> 和 <code>output.path</code> 属性，来告诉 webpack bundle 的名称，以及我们想要 bundle 生成到哪里。</p>
+<blockquote>
+<p>可能你想要了解在代码最上面导入的 path 模块是什么，它是一个 <a href="https://nodejs.org/api/modules.html">Node.js 核心模块</a>，用于操作文件路径。</p>
+</blockquote>
+<h4 id="3-加载loader-">3. 加载（loader ）</h4>
+<blockquote>
+<p>webpack 只能理解 JavaScript 和 JSON 文件，这是 webpack 开箱可用的自带能力。<strong>loader</strong> 让 webpack 能够去处理其他类型的文件，并将它们转换为有效模块，以供应用程序使用，以及被添加到依赖图中。</p>
+<p>loader 用于对模块的源代码进行转换。loader 可以使你在 <code>import</code> 或 &ldquo;load(加载)&rdquo; 模块时预处理文件。因此，loader 类似于其他构建工具中“任务(task)”，并提供了处理前端构建步骤的得力方式。loader 可以将文件从不同的语言（如 TypeScript）转换为 JavaScript 或将内联图像转换为 data URL。loader 甚至允许你直接在 JavaScript 模块中 <code>import</code> CSS 文件！</p>
+</blockquote>
+<p>在 webpack 的配置中，<strong>loader</strong> 有两个属性：</p>
+<ol>
+<li><code>test</code> 属性，识别出哪些文件会被转换。</li>
+<li><code>use</code> 属性，定义出在进行转换时，应该使用哪个 loader。</li>
+</ol>
+<p><strong>webpack.config.js</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;my-first-webpack.bundle.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    rules<span style="color:#ff79c6">:</span> [{ test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.txt$/</span>, use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;raw-loader&#39;</span> }],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>};
+</code></pre></div><blockquote>
+<p>Warning</p>
+<p>请记住，使用正则表达式匹配文件时，你不要为它添加引号。也就是说，<code>/\.txt$/</code> 与 <code>'/\.txt$/'</code> 或 <code>&quot;/\.txt$/&quot;</code> 不一样。前者指示 webpack 匹配任何以 .txt 结尾的文件，后者指示 webpack 匹配具有绝对路径 &lsquo;.txt&rsquo; 的单个文件; 这可能不符合你的意图。</p>
+</blockquote>
+<h4 id="4-插件plugin">4. 插件（plugin）</h4>
+<blockquote>
+<p>loader 用于转换某些类型的模块，而插件则可以用于执行范围更广的任务。包括：打包优化，资源管理，注入环境变量。</p>
+<p>插件目的在于解决 loader 无法实现的<strong>其他事</strong>。</p>
+<p>webpack 自身也是构建于你在 webpack 配置中用到的<strong>相同的插件系统</strong>之上！</p>
+<p>想要使用一个插件，你只需要 <code>require()</code> 它，然后把它添加到 <code>plugins</code> 数组中。多数插件可以通过选项(option)自定义。你也可以在一个配置文件中因为不同目的而多次使用同一个插件，这时需要通过使用 <code>new</code> 操作符来创建一个插件实例。</p>
+</blockquote>
+<p><strong>webpack.config.js</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>); <span style="color:#6272a4">// 通过 npm 安装
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> webpack <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;webpack&#39;</span>); <span style="color:#6272a4">// 用于访问内置插件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    rules<span style="color:#ff79c6">:</span> [{ test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.txt$/</span>, use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;raw-loader&#39;</span> }],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  plugins<span style="color:#ff79c6">:</span> [<span style="color:#ff79c6">new</span> HtmlWebpackPlugin({ template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span> })],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>};
+</code></pre></div><p>在上面的示例中，<code>html-webpack-plugin</code> 为应用程序生成一个 HTML 文件，并自动注入所有生成的 bundle。</p>
+<h4 id="5-模式mode">5. 模式（mode）</h4>
+<p>通过选择 <code>development</code>, <code>production</code> 或 <code>none</code> 之中的一个，来设置 <code>mode</code> 参数，你可以启用 webpack 内置在相应环境下的优化。其默认值为 <code>production</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;production&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>};
+</code></pre></div><h3 id="3-webpackconfigjs">3. webpack.config.js</h3>
+<ul>
+<li>webpack 开箱即用，可以无需使用任何配置文件。</li>
+<li>webpack 会默认项目的入口起点为 <code>src/index.js</code>，在 <code>dist/main.js</code> 输出结果，并且在生产环境开启压缩和优化。</li>
+<li>如果项目还需要继续扩展此能力，需要在项目根目录下创建 <code>webpack.config.js</code> ，webpack 会自动使用它。</li>
+</ul>
+<h4 id="1-使用不同的配置文件">1. 使用不同的配置文件</h4>
+<p>如果出于某些原因，需要根据特定情况使用不同的配置文件，则可以通过在命令行中使用 <code>--config</code> flag 修改此配置文件名称。</p>
+<p><strong>package.json</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;build&#34;</span>: <span style="color:#f1fa8c">&#34;webpack --config prod.config.js&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><blockquote>
+<p>webpack 的配置文件是 JavaScript 文件，文件内导出了一个 webpack 配置的对象。webpack 会根据该配置定义的属性进行处理。</p>
+<p>由于 webpack 遵循 CommonJS 模块规范，因此，可以在配置中使用：</p>
+<ul>
+<li>通过 <code>require(...)</code> 引入其他文件</li>
+<li>通过 <code>require(...)</code> 使用 npm 下载的工具函数</li>
+<li>使用 JavaScript 控制流表达式，例如 <code>?:</code> 操作符</li>
+<li>对 value 使用常量或变量赋值</li>
+<li>编写并执行函数，生成部分配置</li>
+</ul>
+</blockquote>
+<h4 id="2-导出多种配置">2. 导出多种配置</h4>
+<p>除了导出单个配置对象/函数，你可能也会需要导出多种配置（webpack 3.1.0 起支持）。当运行 webpack 时，所有配置项都会构建。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>module.exports = [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    output: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>      filename: &#39;./dist-amd.js&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      libraryTarget: &#39;amd&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    name: &#39;amd&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    entry: &#39;./app.js&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    mode: &#39;production&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    output: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      filename: &#39;./dist-commonjs.js&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      libraryTarget: &#39;commonjs&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    name: &#39;commonjs&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    entry: &#39;./app.js&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    mode: &#39;production&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>];
+</code></pre></div><h3 id="4-webpack-dev-server">4. webpack-dev-server</h3>
+<blockquote>
+<p>webpack-dev-server是一个小型的<code>Node.js Express</code>服务器,它使用<code>webpack-dev-middleware</code>来服务于webpack的包,除此自外，它还有一个通过<a href="http://sockjs.org/">Sock.js</a>来连接到服务器的微型运行时。</p>
+<p>有一点需要注意的是:webpack-dev-server生成的包并没有放在你的真实目录中,而是放在了内存中。</p>
+</blockquote>
+<h3 id="5-html-webpack-plugin">5. html-webpack-plugin</h3>
+<blockquote>
+<p><a href="https://github.com/jantimon/html-webpack-plugin"><code>HtmlWebpackPlugin</code></a> 简化了 HTML 文件的创建，以便为你的 webpack 包提供服务。</p>
+<p>你可以让该插件为你生成一个 HTML 文件，使用 <a href="https://lodash.com/docs#template">lodash 模板</a>提供模板，或者使用你自己的 <a href="https://webpack.docschina.org/loaders">loader</a>。</p>
+</blockquote>
+<p>该插件将为你生成一个 HTML5 文件， 在 body 中使用 <code>script</code> 标签引入你所有 webpack 生成的 bundle。 只需添加该插件到你的 webpack 配置中，如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    path<span style="color:#ff79c6">:</span> path.resolve(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index_bundle.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  plugins<span style="color:#ff79c6">:</span> [<span style="color:#ff79c6">new</span> HtmlWebpackPlugin()],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>};
+</code></pre></div><p>这将会生成一个包含以下内容的 <code>dist/index.html</code> 文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  &lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;UTF-8&#34;</span> /&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;<span style="color:#ff79c6">title</span>&gt;webpack App&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  &lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  &lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index_bundle.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  &lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/webpack/">webpack</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vscode%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE/" data-tooltip="vscode常用快捷键">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%88%B0js%E5%8D%95%E7%BA%BF%E7%A8%8B/" data-tooltip="浏览器 从浏览器多进程到js单线程">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

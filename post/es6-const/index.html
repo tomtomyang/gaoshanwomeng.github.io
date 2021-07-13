@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  es6 const </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" es6 const ">
+    <meta name="keywords" itemprop="keywords" content=" [es6 const] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/es6-const/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">es6 const</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-15</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 832字</span>
+          <span class="readtime">⏱ 2分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>es6中新增了一个const。就是用来定义一个常量的。有一下特性：</p>
+<ol>
+<li>常量名一般大写；</li>
+<li>和let一样，块级作用域；</li>
+<li>一定要赋初值；</li>
+<li>对数组和对象的元素修改，不算做对常量的修改，不会报错；</li>
+</ol>
+<p>问题来了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> {<span style="color:#f1fa8c">&#39;num1&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">20</span>, <span style="color:#f1fa8c">&#39;num2&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">30</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">const</span> obj1 <span style="color:#ff79c6">=</span> obj
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">const</span> num <span style="color:#ff79c6">=</span> obj.num1 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>obj.num1 <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">40</span>
+</code></pre></div><p>那么，试问这时候如果输出obj1 和 num的值，分别是多少呢？让我们在谷歌浏览器中试验一下</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20180529111003582" alt="img"></p>
+<p>答案很显而易见了。在obj的num1属性值改变了以后，obj1的值是随着对象的改变而改变了，但是num的值却并没有改变。也就是说：</p>
+<p>const定义的对象，当对象改变了之后，const定义的值也会跟着改变。</p>
+<p>cosnt定义的变量是一个对象的一个属性值，但是当对象属性值改变了以后，const定义的这个值并不会改变。</p>
+<p>那么这是为了什么呢？</p>
+<p>在计算机中，常量是放在栈中的，而对象是放在堆中的。对于对象赋值，const指向的仅仅是他的地址，cosnt仅仅是保证这个地址不改变，至于地址对应的数据，是可以进行改变的。举个栗子，现在可能在外工作很多人都是租的房子，假如你住在a公寓的a单元101，cosnt就仅仅是保证他指向的是这个地址，至于你房子里住的是哪些人，他是不关心的。~</p>
+<p>而如果定义一个简单的数据类型，那这个数据他本身就是存在栈中的，所以不可以改变。</p>
+<p>我们使用const声明常量时，总认为值一旦声明就不可改变，然后我发现在定义对象时，对象的值是可以改变的；</p>
+<p>对于数值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> message <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Hello!&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">let</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">25</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// 以下两行都会报错
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> message <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Goodbye!&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">const</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">30</span>;
+</code></pre></div><p>对于对象</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">// 为 foo 添加一个属性，可以成功
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>foo.prop <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">123</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>foo.prop <span style="color:#6272a4">// 123
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// 将 foo 指向另一个对象，就会报错
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>foo <span style="color:#ff79c6">=</span> {}; <span style="color:#6272a4">// TypeError: &#34;foo&#34; is read-only
+</span></code></pre></div><p>查阅相关资料得知</p>
+<p><code>const</code>实际上保证的，并不是变量的值不得改动，而是变量指向的那个内存地址不得改动。对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个内存地址，因此等同于常量。</p>
+<p>但对于复合类型的数据（主要是对象和数组），变量指向的内存地址，保存的只是一个指针，<code>const</code>只能保证这个指针是固定的，至于它指向的数据结构是不是可变的；</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/es6/">es6</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-let/" data-tooltip="es6 let">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC/" data-tooltip="es6 解构赋值">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

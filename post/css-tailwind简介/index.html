@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  css tailwind简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" css tailwind简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [tailwind css] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#1-%e5%9b%9b%e7%a7%8d%e7%b2%92%e5%ba%a6" class="toc-link">1. 四种粒度</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#2-%e4%b8%80%e4%ba%9b%e9%97%ae%e9%a2%98%e7%9a%84%e8%a7%a3%e7%ad%94" class="toc-link">2. 一些问题的解答</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q1-%e8%bf%99%e5%92%8c%e8%a1%8c%e5%86%85-css-%e6%9c%89%e4%bd%95%e5%8c%ba%e5%88%ab" class="toc-link">Q1: 这和行内 CSS 有何区别?</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q2-tailwindcss-%e5%8f%af%e4%bb%a5%e6%91%86%e8%84%b1%e6%89%8b%e5%86%99-css-" class="toc-link">Q2: TailwindCSS 可以摆脱手写 CSS ?</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q3-%e9%80%a0%e6%88%90%e6%96%b0%e7%9a%84%e8%ae%b0%e5%bf%86%e8%b4%9f%e6%8b%85" class="toc-link">Q3: 造成新的记忆负担</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q4-%e4%bb%85%e4%bb%85%e6%98%af%e5%ae%9e%e7%8e%b0%e4%b8%80%e4%b8%aa%e5%8e%9f%e5%ad%90%e5%8c%96%e7%9a%84-css%e6%80%8e%e4%b9%88%e8%bf%99%e4%b9%88%e5%a4%9a-star" class="toc-link">Q4: 仅仅是实现一个原子化的 CSS，怎么这么多 Star？</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q5-%e5%88%9d%e6%9c%9f%e5%be%88%e7%88%bd%e4%bd%86%e6%98%af%e5%90%8e%e6%9c%9f%e7%bb%b4%e6%8a%a4%e5%9b%b0%e9%9a%be%e7%89%b9%e5%88%ab%e6%98%af%e4%ba%ba%e5%91%98%e8%b0%83%e5%8a%a8%e5%90%8e" class="toc-link">Q5: 初期很爽，但是后期维护困难，特别是人员调动后</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q6-%e8%99%bd%e7%84%b6-css-%e4%bd%93%e7%a7%af%e5%a4%a7%e5%b9%85%e9%99%8d%e4%bd%8e%e4%bd%86%e6%98%af-html-%e4%bd%93%e7%a7%af%e5%8d%b4%e5%8f%98%e5%a4%a7%e4%ba%86" class="toc-link">Q6: 虽然 CSS 体积大幅降低，但是 HTML 体积却变大了</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#3-%e8%b0%88%e8%b0%88%e6%88%91%e9%81%87%e5%88%b0%e7%9a%84%e5%87%a0%e4%b8%aa%e9%97%ae%e9%a2%98" class="toc-link">3. 谈谈我遇到的几个问题</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q1-purgecss-%e6%9c%89%e5%8f%af%e8%83%bd%e8%bf%87%e5%a4%9a%e5%88%a0%e9%99%a4-class" class="toc-link">Q1: PurgeCSS 有可能过多删除 class</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#q2-%e6%a0%b7%e5%bc%8f%e8%a6%86%e7%9b%96%e9%97%ae%e9%a2%98" class="toc-link">Q2: 样式覆盖问题</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#4-%e5%ae%9e%e8%b7%b5" class="toc-link">4. 实践</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#%e4%b8%8e-classnames-%e6%90%ad%e9%85%8d%e4%bd%bf%e7%94%a8" class="toc-link">与 classnames 搭配使用</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/css-tailwind%E7%AE%80%E4%BB%8B/#%e4%b8%8e-styled-jsx-%e6%90%ad%e9%85%8d%e4%bd%bf%e7%94%a8" class="toc-link">与 styled-jsx 搭配使用</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">css tailwind简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-29</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2314字</span>
+          <span class="readtime">⏱ 5分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <p>TailwindCSS 因为一个 <code>class</code> 代表一个 CSS 属性这种原子化 CSS (Atomic CSS)，这种细粒度的 CSS 方案备受争议。</p>
+<p>这里把 CSS 样式的方案分为四种粒度</p>
+<h3 id="1-四种粒度">1. 四种粒度</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;{ borderRadius: &#39;0.5rem&#39;, padding: &#39;1rem&#39; }&#34;</span>&gt; Click &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;rounded-lg p-4&#34;</span>&gt; Click &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;button&#34;</span>&gt; Click &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>&lt;<span style="color:#ff79c6">Button</span>&gt; Click &lt;/<span style="color:#ff79c6">Button</span>&gt;
+</code></pre></div><p>越往下走，颗粒度越来越大，约束性变高，自由性不足。而 <code>TailwindCSS</code> 位于第二层。</p>
+<h3 id="2-一些问题的解答">2. 一些问题的解答</h3>
+<p>Tailwindcss 为啥受欢迎，在我看来无非是<strong>更好用的原子化的CSS</strong>。在国外如火如荼，但是在国内论坛上争议很大，前几天在我的博客上写了一篇关于 Tailwindcss 的文章，但是底下评论很多了各种问题，于是再总结一下</p>
+<h4 id="q1-这和行内-css-有何区别">Q1: 这和行内 CSS 有何区别?</h4>
+<p>大部分人的想法应该是这样的: 仅仅对于 <code>text-center</code> 而言，虽然提供了些许方便，但是不足以拉开差距。</p>
+<p>如果说它仅仅是简单的原子化 CSS，好用却不亮眼。但是它却不仅仅止于此。</p>
+<p><strong>1. 方便性: <code>text-center</code>、<code>grid-cols-3</code></strong></p>
+<p>或许一个 <code>text-center</code> 不足以使你觉得提供了多大的方便性，但对于一个三等分的 Grid 属性来说，一个 <code>grid-cols-3</code> 和 <code>shadow</code> 绝对方便</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">grid-cols-3</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">grid-template-columns</span>: <span style="color:#50fa7b">repeat</span>(<span style="color:#bd93f9">3</span>, <span style="color:#50fa7b">minmax</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>fr));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><strong>或者你还能记得 <code>box-shadow</code> 各个位置的参数吗？</strong> 我敢保证看这篇文章的人至少有 93% 说不上来</p>
+<p>在 tailwind 中，直接用 <code>.shadow</code> 简单方便</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">shadow</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">box-shadow</span>: <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span><span style="color:#8be9fd">px</span> <span style="color:#bd93f9">3</span><span style="color:#8be9fd">px</span> <span style="color:#bd93f9">0</span> <span style="color:#8be9fd;font-style:italic">rgba</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0.1</span>), <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span><span style="color:#8be9fd">px</span> <span style="color:#bd93f9">2</span><span style="color:#8be9fd">px</span> <span style="color:#bd93f9">0</span> <span style="color:#8be9fd;font-style:italic">rgba</span>(<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0.06</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><strong>2. 语义化: <code>text-lg</code>、text-white<code>、</code>ring<code>、</code>animate-spin`</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>text-lg`，一个较大字体，如果设置行内样式，肯定有诸多麻烦的事: `我想设计一个较大的字体，那我应该设计多大尺寸、使用什么单位
+</code></pre></div><p>同样还有:</p>
+<ol>
+<li><code>text-white</code>: 白色的色值是哪个来着?</li>
+<li><code>ring</code>: 我想给这个按钮加一个圈圈？</li>
+<li><code>animate-spin</code>: 怎么做一个动画？</li>
+</ol>
+<p><strong>3. 约束性: <code>bg-gray-500</code>、<code>text-lg</code>、<code>p-4</code></strong></p>
+<p><strong>新人总容易弄出一种大红大绿的新人风格网页</strong>，有了一些约束就很难出现这种很糟糕的色彩控制</p>
+<p>另外，有了 <code>text-lg</code> 此类，一个页面上就不会出现<strong>几十种参差不同的字体大小</strong></p>
+<p><strong>4. 响应式:</strong></p>
+<p>先来看一个在工作中会遇到的响应式布局问题，这也是我上一次在头条面试时的一道题目</p>
+<blockquote>
+<p><strong><a href="https://q.shanyue.tech/fe/css/473.html">响应式布局，一大堆子元素，在大屏幕三等分，中等屏幕二等分，小屏幕一等分？</a></strong></p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;container&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>&lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><p>通过 <code>grid</code> 布局很容易实现，但未免繁琐</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>@<span style="color:#ff79c6">media</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">min-width</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">1024px</span><span style="color:#ff79c6">)</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  .<span style="color:#50fa7b">container</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">grid-template-columns</span>: <span style="color:#50fa7b">repeat</span>(<span style="color:#bd93f9">3</span>,<span style="color:#50fa7b">minmax</span>(<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">1</span>fr));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>@<span style="color:#ff79c6">media</span> <span style="color:#ff79c6">(</span><span style="color:#ff79c6">min-width</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">768px</span><span style="color:#ff79c6">)</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  .<span style="color:#50fa7b">container</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">grid-template-columns</span>: <span style="color:#50fa7b">repeat</span>(<span style="color:#bd93f9">2</span>,<span style="color:#50fa7b">minmax</span>(<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">1</span>fr));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>.<span style="color:#50fa7b">conainer</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#ff79c6">display</span>: <span style="color:#ff79c6">grid</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  gap: <span style="color:#bd93f9">1</span><span style="color:#8be9fd">rem</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>}
+</code></pre></div><p>那使用 <code>tailwind</code> 呢? <strong>只要一行，就问你高效不高效</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><p><strong>5. 修饰符</strong></p>
+<p>把修饰符，如各种伪类、暗黑模式、响应式设计至于前缀的设计简直深得我心</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;focus:ring-2 hover:bg-red-700 dark:bg-gray-800&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><h4 id="q2-tailwindcss-可以摆脱手写-css-">Q2: TailwindCSS 可以摆脱手写 CSS ?</h4>
+<p>很遗憾，不能。不过虽然你无法摆脱手写 CSS，但是你基本上也写不了几行，说以下几种很常用的情况</p>
+<p><strong>1. 复杂选择器</strong></p>
+<p>当父级元素鼠标悬浮时的，子级元素的样式控制</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">container</span>:hover .<span style="color:#50fa7b">item</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><strong>2. CSS function</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">body</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">height</span>: <span style="color:#8be9fd;font-style:italic">calc</span>(<span style="color:#bd93f9">100</span><span style="color:#8be9fd">vh</span> <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">6</span><span style="color:#8be9fd">rem</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><strong>3. 多种属性复用</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">item</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  @apply p-2 border-b flex justify-between font-mono;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><h4 id="q3-造成新的记忆负担">Q3: 造成新的记忆负担</h4>
+<p>这个问题就仁者见仁智者见智了，在 Vue 的 <code>template</code> 语法中也经常出现此类问题，很多人会对一些命名上的约定，特别是自己不太喜欢的约定天然排斥，这也无可厚非。</p>
+<p>我在初期确实会一边开发网页，一边瞅着文档全局搜索: <strong><a href="https://tailwindcss.com/docs/border-radius">TailwindCSS 属性查找</a></strong>，现在借助浏览器插件及熟能生巧的经验已经不太需要翻文档了</p>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss">Tailwind CSS IntelliSensemarketplace.visualstudio.com</a></p>
+<p><img src="https://pic1.zhimg.com/v2-1fe69fafe4355d172ba08b9840287d5c_r.jpg?source=1940ef5c" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-66f6d1ed57ae22aeafb841287d3fb5b6_r.jpg" alt="img"></p>
+<p>初期经常花时间翻文档而不手写 CSS，而其中的原因不外乎两个:</p>
+<ol>
+<li>多写几个字母，确实有点嫌麻烦，有这时间还不如看看文档，全局搜索下也不费事</li>
+<li>自己设置一个 fontSize，padding、margin 实在不知道设置多少尺寸，tailwindcss 有较大的约束</li>
+</ol>
+<p><strong>过了多久就会觉得: 嗯，真香</strong></p>
+<h4 id="q4-仅仅是实现一个原子化的-css怎么这么多-star">Q4: 仅仅是实现一个原子化的 CSS，怎么这么多 Star？</h4>
+<p>因为他确实比较方便，算是解决了痛点。而且 Star 也和功能复杂度无关</p>
+<p>使用 Gihub Star 数和 npm 周下载量来表明一个库的受欢迎程度，那么你会发现有的库只有几十行，下载量比 React/Vue/Angular 加起来都要多</p>
+<ol>
+<li><strong><a href="https://npm.devtool.tech/mime">mime</a></strong>: 获取 Mime Type。几十行代码，每周 3700 万次下载，1.6K Star</li>
+<li><strong><a href="https://npm.devtool.tech/classnames">classnames</a></strong>: 根据条件连接 class 类名。一百几十行代码，每周 580 万次下载，13.5K Star</li>
+<li><strong><a href="https://npm.devtool.tech/js-cookie">js-cookie</a></strong>: 操作 cookie。<strong>一百多行代码，每周 200 万次下载，17K Star，但是在 Jsdelivr 每月有上亿次下载</strong></li>
+<li><strong><a href="https://npm.devtool.tech/ms">ms</a></strong>: <code>ms('2 days')</code> 可读性的时间转化为秒数。几十行代码，每周 7300 万次下载，3.3K Star</li>
+<li><strong><a href="https://npm.devtool.tech/is-mobile">isMobile</a></strong>: 检测当前 web 环境是否为移动端。几十行代码，每周 15 万下载，2K Star</li>
+<li><strong><a href="https://npm.devtool.tech/is-ci">isci</a></strong></li>
+</ol>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-1fa9a5642f77cb6f6b648d236c70c37c_r.jpg" alt="img"></p>
+<h4 id="q5-初期很爽但是后期维护困难特别是人员调动后">Q5: 初期很爽，但是后期维护困难，特别是人员调动后</h4>
+<p>我算是 TailwindCSS 中度使用者吧，目前还没有后期维护困难方面的困惑。<strong>甚至可以说，维护比以前的方案还要容易</strong></p>
+<p>至于调试，可轻松使用 <code>chrome devtools</code>，还是可以一眼望到底的，而且<strong>没有以前各种 class 存在属性重复覆盖，造成调试困难，从下图可看出 tailwindcss 调试一目了然</strong></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-67202362faf54a8fe4fc5e0609345f16_r.jpg" alt="img"></p>
+<p>即使实在有过多的 CSS Class，也可以<strong>通过 <code>Computed</code> 面板中的小箭头跳转过去找到相对应的 class</strong></p>
+<p><img src="https://pic1.zhimg.com/v2-d16599c385bc014f1adf0fd1163b971c_r.jpg" alt="img"></p>
+<h4 id="q6-虽然-css-体积大幅降低但是-html-体积却变大了">Q6: 虽然 CSS 体积大幅降低，但是 HTML 体积却变大了</h4>
+<p>Facebook 经过重构后 CSS 体积已经从 413Kb 减至 74Kb。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-8ef2e2eee213a3cb07411368c06f8c43_r.jpg" alt="img"></p>
+<p>gzip 的核心是 Deflate，而它使用了 LZ77 算法与 Huffman 编码来压缩文件，重复度越高的文件可压缩的空间就越大。</p>
+<p>即使 HTML 因为类名过多造成体积增大，由于 class 高度相似，gzip 也将会得到一个很大的压缩比例。</p>
+<h3 id="3-谈谈我遇到的几个问题">3. 谈谈我遇到的几个问题</h3>
+<h4 id="q1-purgecss-有可能过多删除-class">Q1: PurgeCSS 有可能过多删除 class</h4>
+<p>tailwind 使用了 <code>purgecss</code> 删除无用的 class，但有时候会吧有用的 class 也给删掉。道理也很简单，它并不能动态执行代码，你计算后的 class 他不认识就给你删了</p>
+<p>比如:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text-{{  error  ?  &#39;red&#39;  :  &#39;green&#39;  }}-600&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><p>所以我强烈推荐使用 <strong><a href="https://npm.devtool.tech/classnames">classnames</a></strong></p>
+<p>上面这段在文档里有描述: <strong><a href="https://tailwindcss.com/docs/optimizing-for-production#writing-purgeable-html">如何正确书写能够被 purgecss 识别的样式</a></strong></p>
+<h4 id="q2-样式覆盖问题">Q2: 样式覆盖问题</h4>
+<p>以下 red 与 blue 两个样式哪个会生效？无法确定。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;red blue&#34;</span>&gt; &lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><p><code>class</code> 在样式表中的顺序决定，而非在 class 中的先后顺序。这使得通过 className 扩展样式时遭遇问题，示例如下</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> cx from <span style="color:#f1fa8c">&#39;classnames&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> Input ({ classname }) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#6272a4">// 默认居中，提供外层扩展 class 的功能
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&lt;</span>input className<span style="color:#ff79c6">=</span>{cx(<span style="color:#f1fa8c">&#39;text-center&#39;</span>, classname)} <span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">function</span> ExtendInput () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#6272a4">// 扩展失败
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&lt;</span>Input className<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text-left&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+</code></pre></div><h3 id="4-实践">4. 实践</h3>
+<p>再来谈几个实践的点</p>
+<h4 id="与-classnames-搭配使用">与 classnames 搭配使用</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>classNames(&#39;text-center transition-opacity&#39;, showTip ? &#39;opacity-100&#39; : &#39;opacity-0&#39;)
+</code></pre></div><h4 id="与-styled-jsx-搭配使用">与 styled-jsx 搭配使用</h4>
+<p>此时样式由大量的 <code>tailwind</code> 及少量的 <code>styled-jsx</code>组成。需要注意此时需要搭配 styled-jsx 的 postcss 插件使用</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">style</span> <span style="color:#50fa7b">jsx</span>&gt;{`
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  .item {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    @apply p-2 border-b flex justify-between font-mono;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  } 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>`}&lt;/<span style="color:#ff79c6">style</span>&gt;
+</code></pre></div><blockquote>
+<p>转载自：https://www.zhihu.com/question/337939566/answers/updated</p>
+<p>作者：<a href="https://www.zhihu.com/people/shfshanyue">山月</a></p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/css/">css</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/react-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86/" data-tooltip="react 事件处理">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/js-%E7%AE%97%E6%B3%95/" data-tooltip="js 算法">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

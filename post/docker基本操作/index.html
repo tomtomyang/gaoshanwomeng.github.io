@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  docker基本操作 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" docker基本操作 ">
+    <meta name="keywords" itemprop="keywords" content=" [docker 服务端] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#1%e5%ae%89%e8%a3%85docker" class="toc-link">1.安装docker</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#2%e5%90%af%e5%8a%a8docker%e5%b9%b6%e6%b5%8b%e8%af%95" class="toc-link">2.启动Docker并测试</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#3%e8%ae%be%e7%bd%aedocker%e4%b8%ad%e5%a4%ae%e4%bb%93%e5%ba%93" class="toc-link">3.设置Docker中央仓库</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#4%e9%95%9c%e5%83%8f%e7%9a%84%e6%93%8d%e4%bd%9c" class="toc-link">4.镜像的操作</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#1%e6%8b%89%e5%8f%96%e9%95%9c%e5%83%8f" class="toc-link">1.拉取镜像</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#2%e6%9f%a5%e7%9c%8b%e6%9c%ac%e5%9c%b0%e5%85%a8%e9%83%a8%e9%95%9c%e5%83%8f" class="toc-link">2.查看本地全部镜像</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#3%e5%88%a0%e9%99%a4%e6%9c%ac%e5%9c%b0%e9%95%9c%e5%83%8f" class="toc-link">3.删除本地镜像</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#4%e9%95%9c%e5%83%8f%e7%9a%84%e5%af%bc%e5%85%a5%e5%af%bc%e5%87%ba" class="toc-link">4.镜像的导入导出</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#5%e5%ae%b9%e5%99%a8%e7%9a%84%e6%93%8d%e4%bd%9c" class="toc-link">5.容器的操作</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#1%e8%bf%90%e8%a1%8c%e5%ae%b9%e5%99%a8" class="toc-link">1.运行容器</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#2%e6%9f%a5%e7%9c%8b%e6%ad%a3%e5%9c%a8%e8%bf%90%e8%a1%8c%e7%9a%84%e5%ae%b9%e5%99%a8" class="toc-link">2.查看正在运行的容器</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#3%e6%9f%a5%e7%9c%8b%e5%ae%b9%e5%99%a8%e6%97%a5%e5%bf%97" class="toc-link">3.查看容器日志</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#4%e8%bf%9b%e5%85%a5%e5%ae%b9%e5%99%a8%e7%9a%84%e5%86%85%e9%83%a8" class="toc-link">4.进入容器的内部</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#5%e5%a4%8d%e5%88%b6%e5%86%85%e5%ae%b9%e5%88%b0%e5%ae%b9%e5%99%a8" class="toc-link">5.复制内容到容器</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#6%e9%87%8d%e5%90%af%e5%90%af%e5%8a%a8%e5%81%9c%e6%ad%a2%e5%88%a0%e9%99%a4%e5%ae%b9%e5%99%a8" class="toc-link">6.重启&amp;启动&amp;停止&amp;删除容器</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">docker基本操作</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-08-01</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1132字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1安装docker">1.安装docker</h3>
+<p>不同的linux发行版使用不同的包管理器，因此安装docker的命令不同。</p>
+<p>红帽系：CentOS，Fedora</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>yum -y install yum-utils device-mapper-persistent-data lvm2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>yum makacache fast
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>yum -y install docker-ce
+</code></pre></div><p>arch系：Arch Linux，Manjaro</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>sudo pacman -S docker
+</code></pre></div><h3 id="2启动docker并测试">2.启动Docker并测试</h3>
+<p>安装成功后，需要手动启动，设置为开机启动，并测试一下Docker</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">#启动docker服务</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>systemctl start docker
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">#设置开机自动启动</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>systemctl <span style="color:#8be9fd;font-style:italic">enable</span> docker
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">#测试</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>docker run hello-world
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200801_201644.png" alt=""></p>
+<h3 id="3设置docker中央仓库">3.设置Docker中央仓库</h3>
+<ol>
+<li>
+<p>Docker官方的中央仓库：</p>
+<p>这个仓库是镜像最全的，但是下载速度较慢。<a href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+</li>
+<li>
+<p>国内的镜像网站：网易蜂巢，daoCloud等，下载速度快，但是镜像相对不全。<a href="https://c.163yun.com/hub#/home">https://c.163yun.com/hub#/home</a></p>
+<p><a href="http://hub.daocloud.io/">http://hub.daocloud.io/</a> （推荐使用）</p>
+</li>
+<li>
+<p>在公司内部会采用私服的方式拉取镜像（需要单独配置）</p>
+</li>
+</ol>
+<h3 id="4镜像的操作">4.镜像的操作</h3>
+<h4 id="1拉取镜像">1.拉取镜像</h4>
+<p>从中央仓库拉取镜像到本地docker pull 镜像名称[:tag]。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">#举个栗子:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>docker pull daocloud.io/library/tomcat:8.5.15-jre8
+</code></pre></div><h4 id="2查看本地全部镜像">2.查看本地全部镜像</h4>
+<p>查看本地已经安装过的镜像信息，包含标识，名称，版本，更新时间，大小。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker images
+</code></pre></div><h4 id="3删除本地镜像">3.删除本地镜像</h4>
+<p>镜像会占用磁盘空间，可以直接手动删除。标识通过查看获取。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker rmi 镜像的标识
+</code></pre></div><h4 id="4镜像的导入导出">4.镜像的导入导出</h4>
+<p>如果因为网络原因可以通过硬盘的方式传输镜像，虽然不规范，但是有效，但是这种方式导出的镜像名称和版本都是null，需要手动修改。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">#将本地的镜像导出</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>docker save -o 导出的路径 镜像id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">#加载本地的镜像文件</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>docker load -i 镜像文件
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">#修改镜像文件</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>docker tag 镜像id 新镜像名称：版本
+</code></pre></div><h3 id="5容器的操作">5.容器的操作</h3>
+<h4 id="1运行容器">1.运行容器</h4>
+<p>运行容器需要定制具体镜像，如果镜像不存在，会直接下载。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">#简单操作</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>docker run 镜像的标识|镜像的名称<span style="color:#ff79c6">[</span>:tag<span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">#常用的参数</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>docker run -d -p 宿主机端口:容器端口 --name 容器名称 镜像的标识|镜像名称<span style="color:#ff79c6">[</span>:tag<span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">#-d:代表后台运行容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">#-p 宿主机端口:容器端口：为了映射当前Linux的端口和容器的端口</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">#--name 容器名称:指定容器的名称</span>
+</code></pre></div><h4 id="2查看正在运行的容器">2.查看正在运行的容器</h4>
+<p>查看全部正在运行的容器信息。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker ps <span style="color:#ff79c6">[</span>-qa<span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">#-a 查看全部的容器，包括没有运行</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">#-q 只查看容器的标识</span>
+</code></pre></div><h4 id="3查看容器日志">3.查看容器日志</h4>
+<p>查看容器日志，以查看容器运行的信息。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker logs -f 容器id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">#-f：可以滚动查看日志的最后几行</span>
+</code></pre></div><h4 id="4进入容器的内部">4.进入容器的内部</h4>
+<p>可以进入容器的内部进行操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker <span style="color:#8be9fd;font-style:italic">exec</span> -it 容器id bash
+</code></pre></div><h4 id="5复制内容到容器">5.复制内容到容器</h4>
+<p>将宿主机的文件复制到容器内部的指定目录。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>docker cp 文件名称 容器id:容器内部路径
+</code></pre></div><h4 id="6重启启动停止删除容器">6.重启&amp;启动&amp;停止&amp;删除容器</h4>
+<p>容器的启动，停止，删除等操作，后续会经常使用到。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">#重新启动容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>docker restart 容器id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">#启动停止运行的容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>docker start 容器id 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">#停止指定的容器(删除容器前，需要先停止容器)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>docker stop 容器id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">#停止全部容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>docker stop <span style="color:#ff79c6">$(</span>docker ps -qa<span style="color:#ff79c6">)</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">#删除指定容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>docker rm 容器id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">#删除全部容器</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>docker rm <span style="color:#ff79c6">$(</span>docker ps -qa<span style="color:#ff79c6">)</span>
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/linux/">linux</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/docker/">docker</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/docker%E7%AE%80%E4%BB%8B/" data-tooltip="docker简介">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E4%BA%92%E8%81%94%E7%BD%91%E8%BF%90%E4%BD%9C%E6%96%B9%E5%BC%8F/" data-tooltip="互联网运作方式">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

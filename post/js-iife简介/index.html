@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js IIFE简介 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" js IIFE简介 ">
+    <meta name="keywords" itemprop="keywords" content=" [js iife] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/js-iife%E7%AE%80%E4%BB%8B/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/js-iife%E7%AE%80%E4%BB%8B/#1-%e5%9c%ba%e6%99%af" class="toc-link">1. 场景</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-iife%E7%AE%80%E4%BB%8B/#2-iife%e6%98%af%e4%bb%80%e4%b9%88" class="toc-link">2. IIFE是什么</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-iife%E7%AE%80%E4%BB%8B/#3-%e9%97%ad%e5%8c%85%e4%bd%9c%e7%94%a8%e5%9f%9fiife" class="toc-link">3. 闭包，作用域、IIFE</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/js-iife%E7%AE%80%E4%BB%8B/#4-iife%e5%92%8c%e6%a8%a1%e5%9d%97%e5%8c%96" class="toc-link">4. IIFE和模块化</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">js IIFE简介</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-06-10</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 2999字</span>
+          <span class="readtime">⏱ 6分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1-场景">1. 场景</h3>
+<p>下面这个面试题你大概率遇到过：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    console.log(i);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }, <span style="color:#bd93f9">10</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>这里<code>var</code>会声明一个全局变量<code>i</code>。函数会在10秒后异步执行，当函数在执行时，根据作用域链会在全局变量对象中进行查找，而此时循环已经结束，全局的<code>i</code>为<code>5</code>。所以最终结果为5个5。</p>
+<p>闭包可以帮我们保护变量不被外部所污染，也可以帮我们保存变量，以供之后作用域链查找并使用。通过自执行函数，我们将<code>i</code>作为局部变量传入进行保护和保存：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  (<span style="color:#8be9fd;font-style:italic">function</span> fn (i) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>      console.log(i);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }, <span style="color:#bd93f9">10</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }(i));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>这里自执行函数<code>fn</code>在每次循环的时候，都会创建一个全新的执行上下文。各个执行上下文之间不会相互影响，从而保证每次传入的<code>i</code>不会发生变化。</p>
+<p>每次<code>fn</code>对应的执行上下文中，函数<code>() =&gt; {console.log(i)}</code>的作用域会在创建的时候确定，其值为当前循环中<code>fn</code>的变量对象。</p>
+<p>由于函数<code>() =&gt; {console.log(i)}</code>的引用地址会在其它的(<code>setTimeout</code>执行时生成的执行上下文)执行上下文中被占用，而它是在<code>fn</code>中被创建的，所以<code>fn</code>的执行上下文并不会被销毁，进而帮我们保存当前循环中对应的<code>i</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 这是一段伪代码
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">window</span>.setTimeout <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(callback,delay) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#6272a4">// callback会在形参赋值时占用`() =&gt; {console.log(i)}`的引用地址
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// callback = AAAFFF111 (假设AAAFFF111为函数`()=&gt; {console.log(i)}`在堆中的地址)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// 10秒后调用callback
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>  callback()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>所以在<code>10</code>毫秒后执行函数时，函数<code>() =&gt; {console.log(i)}</code>中的变量<code>i</code>会从其根据作用域链到对应的循环中的<code>fn</code>中获取，而<code>fn</code>中的<code>i</code>正好是每次循环中传入的<code>i</code>。</p>
+<p>当然，由于在<code>es6</code>中引入了<code>let</code>，所以我们可以直接使用<code>let</code>来定义变量保证能获取到每次循环中的<code>i</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    console.log(i);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }, <span style="color:#bd93f9">10</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>其实现过程其实和上例中的自执行函数形成闭包，并将对应的变量传入类似，只不过传入变量并赋值的过程<code>JavaScript</code>引擎帮我们处理了。</p>
+<blockquote>
+<p><code>for</code>循环有一个特别之处，设置循环变量的那部分是一个父作用域，而循环体内部是一个单独的子作用域</p>
+</blockquote>
+<p>执行过程的伪代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#6272a4">// 父块作用域
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>  <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#6272a4">// 第一次循环
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#6272a4">// 子块作用域,将i传进来，并进行形参赋值(相当于有形参i的函数自执行)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; <span style="color:#6272a4">// 这里`JavaScript`引擎帮我们传入实参，并进行形参赋值
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    setTimeout(() =&gt; console.log(i), <span style="color:#bd93f9">10</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  i<span style="color:#ff79c6">++</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#6272a4">// 第二次循环
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    setTimeout(() =&gt; console.log(i), <span style="color:#bd93f9">10</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#6272a4">// ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>}
+</code></pre></div><h3 id="2-iife是什么">2. IIFE是什么</h3>
+<p>立即执行函数表达式（IIFE）</p>
+<ul>
+<li>在 JavaScript 中，每一个函数在执行时都会产生一个新的执行环境。</li>
+<li>由于在函数中定义的变量和函数只能在内部访问而不能被外部访问。</li>
+<li>这提供了一个非常简单的方法来创建私有作用域。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 因为返回的函数有权访问私有变量 `i`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> makeCounter() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#6272a4">// `i` 只能在 `makeCounter`内被访问.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      console.log( <span style="color:#ff79c6">++</span>i );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// 注意 `counter` 和 `counter2` 都有私有的作用域 `i`.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#8be9fd;font-style:italic">var</span> counter <span style="color:#ff79c6">=</span> makeCounter();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>counter(); <span style="color:#6272a4">// logs: 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>counter(); <span style="color:#6272a4">// logs: 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#8be9fd;font-style:italic">var</span> counter2 <span style="color:#ff79c6">=</span> makeCounter();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>counter2(); <span style="color:#6272a4">// logs: 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>counter2(); <span style="color:#6272a4">// logs: 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>i; <span style="color:#6272a4">// ReferenceError: i 未定义 (只存在 makeCounter 内部)
+</span></code></pre></div><blockquote>
+<p><strong>需要注意1</strong></p>
+<p>现在，无论你用 <code>function foo(){}</code> 还是 <code>var foo = function(){}</code> 的方式定义函数，最终都会以一个函数的标识符结尾，可以通过 <code>()</code> 调用函数，像 <code>foo()</code> 。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 像这样定义的函数可以在函数名后放置 () 来执行
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> foo <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){ }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// 比如 foo(), 因为 foo 只是函数表达式 `function() { /* code */ }`的引用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// ...是不是只在函数表达式之后放置 () 就能执行?
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span>(){ }(); <span style="color:#6272a4">// SyntaxError: Unexpected token (
+</span></code></pre></div><p>当解析器在全局范围内或在函数中遇到 <code>function</code> 关键字时，它会认为这是函数声明而不是函数表达式。如果你没有明确告诉解析器这是一个表达式，它会认为这是一个匿名的函数声明并抛出意外的语法错误，因为函数声明需要名称。</p>
+</blockquote>
+<blockquote>
+<p><strong>需要注意2</strong></p>
+<p>如果你为一个函数指定了名称并且在立刻在其后边放置了括号，解析器也会抛出错误，但原因不同。虽然在表达式之后放置括号说明这是一个将被执行的函数，但在声明之后放置括号会与前面的语句分离，成为一个分组操作符（可以作为优先提升的方法）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 现在这个函数声明的语法是正确的，但还是有报错
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// 表达式后面的括号是非法的， 因为分组运算符必须包含表达式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#8be9fd;font-style:italic">function</span> foo(){ }(); <span style="color:#6272a4">// SyntaxError: Unexpected token )
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">// 如果你在括号内放置了表达式， 没有错误抛出...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// 但是函数也不会执行， 因为:
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">function</span> foo(){ }( <span style="color:#bd93f9">1</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// 它与一个函数声明后面放一个完全无关的表达式是一样的:
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#8be9fd;font-style:italic">function</span> foo(){ }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>( <span style="color:#bd93f9">1</span> );
+</code></pre></div></blockquote>
+<blockquote>
+<p><strong>正确的写法</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 以下的任何一种方式都可以立即执行函数表达式，利用函数的执行环境
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">// 括号
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>(<span style="color:#8be9fd;font-style:italic">function</span>(){ }()); <span style="color:#6272a4">// 推荐这个
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>(<span style="color:#8be9fd;font-style:italic">function</span>(){ })(); <span style="color:#6272a4">// 这个同样运行正常
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// 强制运算符
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){ <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">10</span>; }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">true</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// 括号和强制运算符的目的就是区分函数表达式和函数声明它们会在解析器解析表达式时被忽略
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">// 如果你不关心函数返回值或者你的代码变得难以阅读
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">// 你可以在函数前面加一个一元运算符
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#ff79c6">!</span><span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#ff79c6">~</span><span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#ff79c6">-</span><span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#ff79c6">+</span><span style="color:#8be9fd;font-style:italic">function</span>(){ }();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">// 下面是另一种变体
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">// 不确定使用 `new` 关键字是否有性能影响， 但是能够正常运行
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">function</span>(){ }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">function</span>(){ }() <span style="color:#6272a4">// 只需要使用括号传递参数
+</span></code></pre></div></blockquote>
+<h3 id="3-闭包作用域iife">3. 闭包，作用域、IIFE</h3>
+<blockquote>
+<p><strong>作用域</strong></p>
+<p>在 JavaScript 中有两种作用域类型：局部作用域、全局作用域</p>
+<ul>
+<li>JavaScript 拥有函数作用域：每个函数创建一个新的作用域。</li>
+<li>作用域决定了这些变量的可访问性（可见性）。</li>
+<li>函数内部定义的变量从函数外部是不可访问的（不可见的）。</li>
+</ul>
+</blockquote>
+<ul>
+<li>像函数被函数名调用时参数会被传递一样，立即执行函数表达式时参数同样会被传递。</li>
+<li>在一个函数内部定义的函数可以访问外部函数的变量（这种关系被称为闭包）。</li>
+<li>一个立即执行函数表达式可以用于封锁函数值并且有效的存储状态。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 以下程序的运行结果和你想象的并不一样
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// 因为 `i` 的值不会被锁定。相反，当点击每个链接的时候 (循环已经结束), 会显示元素的总数, 因为那才是点击时 `i` 实际的值.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#8be9fd;font-style:italic">var</span> elems <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementsByTagName( <span style="color:#f1fa8c">&#39;a&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">// addEventListener(event, function, useCapture) 中useCapture
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// true - 事件在捕获阶段执行 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// false- 默认。事件在冒泡阶段执行
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">for</span> ( <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> elems.length; i<span style="color:#ff79c6">++</span> ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  	elems[ i ].addEventListener( <span style="color:#f1fa8c">&#39;click&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(e){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    	e.preventDefault();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    	alert( <span style="color:#f1fa8c">&#39;I am link #&#39;</span> <span style="color:#ff79c6">+</span> i );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  	}, <span style="color:#f1fa8c">&#39;false&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">// 以下程序会按你想象的方式运行,
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4">// 因为在 IIFE 中, `i` 的值，会作为 `lockedInIndex` 被锁定。 循环结束之后, 尽管 `i` 的值是元素总数, 但是在 IIFE 中`lockedInIndex` 的值是函数表达式调用时传入的(`i`)的值因此当点击链接时, 显示的值是正确的。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#8be9fd;font-style:italic">var</span> elems <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementsByTagName( <span style="color:#f1fa8c">&#39;a&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#ff79c6">for</span> ( <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> elems.length; i<span style="color:#ff79c6">++</span> ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  (<span style="color:#8be9fd;font-style:italic">function</span>( lockedInIndex ){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    elems[ i ].addEventListener( <span style="color:#f1fa8c">&#39;click&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(e){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      e.preventDefault();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      alert( <span style="color:#f1fa8c">&#39;I am link #&#39;</span> <span style="color:#ff79c6">+</span> lockedInIndex );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    }, <span style="color:#f1fa8c">&#39;false&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  })( i );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4">// 还这样使用 IIFE , 只是包含点击处理函数, 并不是整个 `addEventListener` 声明
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4">// 无论哪种方式，两个示例都使用IIFE, 我发现前面的例子更易读懂
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#8be9fd;font-style:italic">var</span> elems <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementsByTagName( <span style="color:#f1fa8c">&#39;a&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#ff79c6">for</span> ( <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> elems.length; i<span style="color:#ff79c6">++</span> ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  elems[ i ].addEventListener( <span style="color:#f1fa8c">&#39;click&#39;</span>, (<span style="color:#8be9fd;font-style:italic">function</span>( lockedInIndex ){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span>(e){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>      e.preventDefault();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>      alert( <span style="color:#f1fa8c">&#39;I am link #&#39;</span> <span style="color:#ff79c6">+</span> lockedInIndex );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>  })( i ), <span style="color:#f1fa8c">&#39;false&#39;</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>}
+</code></pre></div><p>立即执行函数表达式最好的一方面就是，因为这个匿名函数表达式被立即执行，没有标识符，所以闭包的使用不会污染当前作用域。</p>
+<h3 id="4-iife和模块化">4. IIFE和模块化</h3>
+<p>模块化方法不仅强大而且简单。你可以用更少的代码有效地命名方法和属性，用一种方式组织所有的代码模块，并且可以避免全局变量的污染以及创建私有作用域。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 创建一个立即执行的匿名函数表达式, 然后将它的 *返回值* 赋给一个变量。这种方法无须再创建一个 `makeWhatever` 函数的引用。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">// 如同上面 &#34;关于括号的注意事项&#34; 中提到的一样， 尽管括号在函数表达式中不是必须添加的, 但是按照习惯还是应该添加括号.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">// 因为这可以更清晰的表示出赋值给一个变量的是函数的 *结果* 而不是函数自身
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#8be9fd;font-style:italic">var</span> counter <span style="color:#ff79c6">=</span> (<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    get<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      <span style="color:#ff79c6">return</span> i;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    set<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>( val ){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      i <span style="color:#ff79c6">=</span> val;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    increment<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">++</span>i;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>}());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">// `counter` 是一个有属性的对象, 它的属性都是方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>counter.get(); <span style="color:#6272a4">// 0
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>counter.set( <span style="color:#bd93f9">3</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>counter.increment(); <span style="color:#6272a4">// 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4"></span>counter.increment(); <span style="color:#6272a4">// 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>counter.i; <span style="color:#6272a4">// undefined (`i` 不是返回对象的属性)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#6272a4"></span>i; <span style="color:#6272a4">// ReferenceError: i 未定义 (它只存在于闭包内)
+</span></code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/js/">js</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E5%A4%9A%E8%BF%9B%E7%A8%8B%E5%88%B0js%E5%8D%95%E7%BA%BF%E7%A8%8B/" data-tooltip="浏览器 从浏览器多进程到js单线程">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/git-%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E4%B8%8E%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93/" data-tooltip="git 远程仓库与本地仓库">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

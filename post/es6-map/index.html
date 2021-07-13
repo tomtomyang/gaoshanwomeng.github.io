@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  es6 map </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" es6 map ">
+    <meta name="keywords" itemprop="keywords" content=" [es6 map] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/es6-map/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#map-%e5%af%b9%e8%b1%a1" class="toc-link">Map 对象</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#maps-%e5%92%8c-objects-%e7%9a%84%e5%8c%ba%e5%88%ab" class="toc-link">Maps 和 Objects 的区别</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#map%e7%9a%84%e6%93%8d%e4%bd%9c" class="toc-link">Map的操作</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#map-%e4%b8%ad%e7%9a%84-key" class="toc-link">Map 中的 key</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#map-%e7%9a%84%e8%bf%ad%e4%bb%a3" class="toc-link">Map 的迭代</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#forof" class="toc-link">for…of</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#foreach" class="toc-link">forEach()</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/es6-map/#map-%e5%af%b9%e8%b1%a1%e7%9a%84%e6%93%8d%e4%bd%9c" class="toc-link">Map 对象的操作</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">es6 map</a>
+        
+        <div class="info">
+          <span class="date">📅 2021-03-25</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 1236字</span>
+          <span class="readtime">⏱ 3分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="map-对象">Map 对象</h3>
+<p>Map 对象保存键值对。任何值(对象或者原始值) 都可以作为一个键或一个值。</p>
+<h3 id="maps-和-objects-的区别">Maps 和 Objects 的区别</h3>
+<ul>
+<li>一个 Object 的键只能是字符串或者 Symbols，但一个 Map 的键可以是任意值。</li>
+<li>Map 中的键值是有序的（FIFO 原则），而添加到对象中的键则不是。</li>
+<li>Map 的键值对个数可以从 size 属性获取，而 Object 的键值对个数只能手动计算。</li>
+<li>Object 都有自己的原型，原型链上的键名有可能和你自己在对象上的设置的键名产生冲突。</li>
+</ul>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1_HmXTMmVps1oJ7MU-odCpUA.jpeg" alt="img"></p>
+<h3 id="map的操作">Map的操作</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//声明 Map
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> m <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">//添加元素
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>m.set(<span style="color:#f1fa8c">&#39;name&#39;</span>,<span style="color:#f1fa8c">&#39;尚硅谷&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>m.set(<span style="color:#f1fa8c">&#39;change&#39;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    console.log(<span style="color:#f1fa8c">&#34;我们可以改变你!!&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">let</span> key <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    school <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;ATGUIGU&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>m.set(key, [<span style="color:#f1fa8c">&#39;北京&#39;</span>,<span style="color:#f1fa8c">&#39;上海&#39;</span>,<span style="color:#f1fa8c">&#39;深圳&#39;</span>]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">//size
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>console.log(m.size);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">//删除
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>m.<span style="color:#ff79c6">delete</span>(<span style="color:#f1fa8c">&#39;name&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">//获取
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>console.log(m.get(<span style="color:#f1fa8c">&#39;change&#39;</span>));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>console.log(m.get(key));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">//清空
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>m.clear();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4">//遍历
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">let</span> v <span style="color:#ff79c6">of</span> m){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    console.log(v);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
+</code></pre></div><h3 id="map-中的-key">Map 中的 key</h3>
+<p><strong>key 是字符串</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> keyString <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;a string&#34;</span>; 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>myMap.set(keyString, <span style="color:#f1fa8c">&#34;和键&#39;a string&#39;关联的值&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>myMap.get(keyString);    <span style="color:#6272a4">// &#34;和键&#39;a string&#39;关联的值&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>myMap.get(<span style="color:#f1fa8c">&#34;a string&#34;</span>);   <span style="color:#6272a4">// &#34;和键&#39;a string&#39;关联的值&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>                         <span style="color:#6272a4">// 因为 keyString === &#39;a string&#39;
+</span></code></pre></div><p><strong>key 是对象</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> keyObj <span style="color:#ff79c6">=</span> {}, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>myMap.set(keyObj, <span style="color:#f1fa8c">&#34;和键 keyObj 关联的值&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>﻿
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>myMap.get(keyObj); <span style="color:#6272a4">// &#34;和键 keyObj 关联的值&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>myMap.get({}); <span style="color:#6272a4">// undefined, 因为 keyObj !== {}
+</span></code></pre></div><p><strong>key 是函数</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> keyFunc <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {}, <span style="color:#6272a4">// 函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>myMap.set(keyFunc, <span style="color:#f1fa8c">&#34;和键 keyFunc 关联的值&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>myMap.get(keyFunc); <span style="color:#6272a4">// &#34;和键 keyFunc 关联的值&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>myMap.get(<span style="color:#8be9fd;font-style:italic">function</span>() {}) <span style="color:#6272a4">// undefined, 因为 keyFunc !== function () {}
+</span></code></pre></div><p><strong>key 是 NaN</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>myMap.set(<span style="color:#ff79c6">NaN</span>, <span style="color:#f1fa8c">&#34;not a number&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>myMap.get(<span style="color:#ff79c6">NaN</span>); <span style="color:#6272a4">// &#34;not a number&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#8be9fd;font-style:italic">var</span> otherNaN <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Number</span>(<span style="color:#f1fa8c">&#34;foo&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>myMap.get(otherNaN); <span style="color:#6272a4">// &#34;not a number&#34;
+</span></code></pre></div><p>虽然 NaN 和任何值甚至和自己都不相等(NaN !== NaN 返回true)，NaN作为Map的键来说是没有区别的。</p>
+<h3 id="map-的迭代">Map 的迭代</h3>
+<p>对 Map 进行遍历，以下两个最高级。</p>
+<h4 id="forof">for&hellip;of</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>myMap.set(<span style="color:#bd93f9">0</span>, <span style="color:#f1fa8c">&#34;zero&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>myMap.set(<span style="color:#bd93f9">1</span>, <span style="color:#f1fa8c">&#34;one&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// 将会显示两个 log。 一个是 &#34;0 = zero&#34; 另一个是 &#34;1 = one&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> [key, value] <span style="color:#ff79c6">of</span> myMap) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  console.log(key <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; = &#34;</span> <span style="color:#ff79c6">+</span> value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> [key, value] <span style="color:#ff79c6">of</span> myMap.entries()) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  console.log(key <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; = &#34;</span> <span style="color:#ff79c6">+</span> value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">/* 这个 entries 方法返回一个新的 Iterator 对象，它按插入顺序包含了 Map 对象中每个元素的 [key, value] 数组。 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">// 将会显示两个log。 一个是 &#34;0&#34; 另一个是 &#34;1&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> key <span style="color:#ff79c6">of</span> myMap.keys()) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  console.log(key);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4">/* 这个 keys 方法返回一个新的 Iterator 对象， 它按插入顺序包含了 Map 对象中每个元素的键。 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">// 将会显示两个log。 一个是 &#34;zero&#34; 另一个是 &#34;one&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> value <span style="color:#ff79c6">of</span> myMap.values()) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  console.log(value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">/* 这个 values 方法返回一个新的 Iterator 对象，它按插入顺序包含了 Map 对象中每个元素的值。 */</span>
+</code></pre></div><h4 id="foreach">forEach()</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>myMap.set(<span style="color:#bd93f9">0</span>, <span style="color:#f1fa8c">&#34;zero&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>myMap.set(<span style="color:#bd93f9">1</span>, <span style="color:#f1fa8c">&#34;one&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// 将会显示两个 logs。 一个是 &#34;0 = zero&#34; 另一个是 &#34;1 = one&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>myMap.forEach(<span style="color:#8be9fd;font-style:italic">function</span>(value, key) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  console.log(key <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; = &#34;</span> <span style="color:#ff79c6">+</span> value);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}, myMap)
+</code></pre></div><h3 id="map-对象的操作">Map 对象的操作</h3>
+<p><strong>Map 与 Array的转换</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> kvArray <span style="color:#ff79c6">=</span> [[<span style="color:#f1fa8c">&#34;key1&#34;</span>, <span style="color:#f1fa8c">&#34;value1&#34;</span>], [<span style="color:#f1fa8c">&#34;key2&#34;</span>, <span style="color:#f1fa8c">&#34;value2&#34;</span>]];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// Map 构造函数可以将一个 二维 键值对数组转换成一个 Map 对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> myMap <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map(kvArray);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// 使用 Array.from 函数可以将一个 Map 对象转换成一个二维键值对数组
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> outArray <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Array</span>.from(myMap);
+</code></pre></div><p><strong>Map 的克隆</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> myMap1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map([[<span style="color:#f1fa8c">&#34;key1&#34;</span>, <span style="color:#f1fa8c">&#34;value1&#34;</span>], [<span style="color:#f1fa8c">&#34;key2&#34;</span>, <span style="color:#f1fa8c">&#34;value2&#34;</span>]]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> myMap2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map(myMap1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log(original <span style="color:#ff79c6">===</span> clone); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// 打印 false。 Map 对象构造函数生成实例，迭代出新的对象。
+</span></code></pre></div><p><strong>Map 的合并</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> first <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map([[<span style="color:#bd93f9">1</span>, <span style="color:#f1fa8c">&#39;one&#39;</span>], [<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#39;two&#39;</span>], [<span style="color:#bd93f9">3</span>, <span style="color:#f1fa8c">&#39;three&#39;</span>],]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> second <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map([[<span style="color:#bd93f9">1</span>, <span style="color:#f1fa8c">&#39;uno&#39;</span>], [<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#39;dos&#39;</span>]]);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// 合并两个 Map 对象时，如果有重复的键值，则后面的会覆盖前面的，对应值即 uno，dos， three
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> merged <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Map([...first, ...second]);
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/es6/">es6</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-promise/" data-tooltip="es6 promise">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/es6-class/" data-tooltip="es6 class">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

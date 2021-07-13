@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  模块化开发基础 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description" content=" 前端模块化开发思想 ">
+    <meta name="keywords" itemprop="keywords" content=" [前端 vue 模块化 webpack] ">
+    <base href="https://tomtomyoung.github.io/">
+    <link rel="shortcut icon" href="https://tomtomyoung.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.github.io/css/style.min.54a58365f411ae6ea6d5a55041363c3e36e68119ef57efe4175cdf6d9d4d4c42.css" integrity="sha256-VKWDZfQRrm6m1aVQQTY8PjbmgRnvV&#43;/kF1zfbZ1NTEI=" type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e4%bc%a0%e7%bb%9f%e6%a8%a1%e5%bc%8f%e5%bc%8a%e7%ab%af" class="toc-link">1.传统模式弊端</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e6%a8%a1%e5%9d%97%e5%8c%96%e5%bc%80%e5%8f%91" class="toc-link">2.模块化开发</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e4%bb%80%e4%b9%88%e6%98%af%e6%a8%a1%e5%9d%97%e5%8c%96" class="toc-link">1.什么是模块化</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e6%a8%a1%e5%9d%97%e5%8c%96%e4%bc%98%e5%8a%bf" class="toc-link">2.模块化优势</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3es6%e6%a8%a1%e5%9d%97%e5%8c%96%e8%a7%84%e8%8c%83" class="toc-link">3.ES6模块化规范</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#4bable" class="toc-link">4.bable</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e5%ae%89%e8%a3%85bable" class="toc-link">1.安装bable</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e9%85%8d%e7%bd%aebable" class="toc-link">2.配置bable</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3%e4%bd%bf%e7%94%a8bable" class="toc-link">3.使用bable</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#5es6%e6%a8%a1%e5%9d%97%e5%8c%96%e8%af%ad%e6%b3%95" class="toc-link">5.ES6模块化语法</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e5%af%bc%e5%85%a5%e4%b8%8e%e5%af%bc%e5%87%ba" class="toc-link">1.导入与导出</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e5%af%bc%e5%85%a5%e6%89%a7%e8%a1%8c%e6%a8%a1%e5%9d%97%e4%bb%a3%e7%a0%81" class="toc-link">2.导入执行模块代码</a>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3webpack" class="toc-link">3.webpack</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e5%bd%93%e5%89%8dweb%e5%bc%80%e5%8f%91%e5%9b%b0%e5%a2%83" class="toc-link">1.当前web开发困境</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2webpack%e6%a6%82%e8%bf%b0" class="toc-link">2.webpack概述</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3webpack%e5%ae%89%e8%a3%85" class="toc-link">3.webpack安装</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#4webpack%e4%bd%bf%e7%94%a8" class="toc-link">4.webpack使用</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#5webpack%e9%85%8d%e7%bd%ae" class="toc-link">5.webpack配置</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e9%85%8d%e7%bd%ae%e5%85%a5%e5%8f%a3%e4%b8%8e%e5%87%ba%e5%8f%a3" class="toc-link">1.配置入口与出口</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e8%87%aa%e5%8a%a8%e6%89%93%e5%8c%85%e5%8a%9f%e8%83%bd" class="toc-link">2.自动打包功能</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3%e9%85%8d%e7%bd%ae%e9%a2%84%e8%a7%88%e9%a1%b5%e9%9d%a2" class="toc-link">3.配置预览页面</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#6webpack%e5%8a%a0%e8%bd%bd%e5%99%a8" class="toc-link">6.webpack加载器</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1loader%e8%b0%83%e7%94%a8%e8%bf%87%e7%a8%8b" class="toc-link">1.loader调用过程</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e5%a4%84%e7%90%86css%e6%96%87%e4%bb%b6" class="toc-link">2.处理css文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3%e5%a4%84%e7%90%86less%e6%96%87%e4%bb%b6" class="toc-link">3.处理less文件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#4%e5%a4%84%e7%90%86%e5%9b%be%e7%89%87%e5%92%8c%e5%ad%97%e4%bd%93" class="toc-link">4.处理图片和字体</a>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#4vue%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6" class="toc-link">4.vue单文件组件</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6%e6%9e%84%e6%88%90" class="toc-link">1.单文件组件构成</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e4%bd%bf%e7%94%a8%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6" class="toc-link">2.使用单文件组件</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e5%ae%9a%e4%b9%89%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6" class="toc-link">1.定义单文件组件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e5%af%bc%e5%85%a5%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6" class="toc-link">2.导入单文件组件</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#3%e4%bd%bf%e7%94%a8%e5%8d%95%e6%96%87%e4%bb%b6%e7%bb%84%e4%bb%b6" class="toc-link">3.使用单文件组件</a>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#5%e5%8f%91%e5%b8%83%e9%a1%b9%e7%9b%ae" class="toc-link">5.发布项目</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#1%e9%85%8d%e7%bd%aepackagejson" class="toc-link">1.配置package.json</a>
+                </li>
+                <li>
+                    <a href="https://tomtomyoung.github.io/post/%E6%A8%A1%E5%9D%97%E5%8C%96%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/#2%e6%89%a7%e8%a1%8c%e6%89%93%e5%8c%85%e6%8c%87%e4%bb%a4" class="toc-link">2.执行打包指令</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://tomtomyoung.github.io/">模块化开发基础</a>
+        
+        <div class="info">
+          <span class="date">📅 2020-06-15</span>
+          <span class="author">👦 Tomtom Young</span>
+          <span class="wordcount">📖 4156字</span>
+          <span class="readtime">⏱ 9分钟</span>
+        </div>
+        
+        </div>
+      <div class="content markdown-body">
+        <h3 id="1传统模式弊端">1.传统模式弊端</h3>
+<p>传统的开发模式就是一个页面对应1套html，js，css。这样就造成了3个问题：</p>
+<ol>
+<li>
+<p>命名冲突</p>
+<p>多个js文件如果存在同名的变量，则会发生变量覆盖。</p>
+<p><code>1.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span>
+</code></pre></div><p><code>2.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> a<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span>
+</code></pre></div></li>
+<li>
+<p>文件依赖</p>
+<p>各个js文件之间不能相互直接按需引用。必须都在.html文件中进行按顺序的引入。</p>
+</li>
+<li>
+<p>代码冗余</p>
+<p>类似的页面之间会用大量重复的代码，降低工作效率。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200704_222307.png" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200704_222406.png" alt=""></p>
+</li>
+</ol>
+<p>模块化就是为了解决这一系列问题而出现的。</p>
+<h3 id="2模块化开发">2.模块化开发</h3>
+<h4 id="1什么是模块化">1.什么是模块化</h4>
+<p>模块化就是将单独的一个功能封装到一个单独的文件中，模块之间是相互独立的，但是可以通过特定的接口进行自己的公开和对其他模块的依赖。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200704_221510.png" alt=""></p>
+<p><code>Welcome.vue</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        &lt;<span style="color:#ff79c6">h3</span>&gt;欢迎使用我的后台管理系统&lt;/<span style="color:#ff79c6">h3</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        &lt;<span style="color:#ff79c6">el-carousel</span> <span style="color:#ff79c6">:interval</span><span style="color:#f1fa8c">=&#34;2000&#34;</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;card&#34;</span> <span style="color:#50fa7b">height</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;200px&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>            &lt;<span style="color:#ff79c6">el-carousel-item</span> <span style="color:#ff79c6">v-for</span><span style="color:#f1fa8c">=&#34;item in 3&#34; </span><span style="color:#ff79c6">:key</span><span style="color:#f1fa8c">=&#34;item&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>            &lt;<span style="color:#ff79c6">h3</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;medium&#34;</span>&gt;{{ item }}&lt;/<span style="color:#ff79c6">h3</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>            <span style="color:#ff79c6">&lt;</span>/el-carousel-item&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#ff79c6">&lt;</span>/el-carousel&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>&lt;<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>&lt;<span style="color:#ff79c6">style</span> <span style="color:#50fa7b">lang</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;less&#39;</span> <span style="color:#50fa7b">scoped</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>.el<span style="color:#ff79c6">-</span>carousel__item h3 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    color<span style="color:#ff79c6">:</span> #<span style="color:#bd93f9">475669</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    font<span style="color:#ff79c6">-</span>size<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">14</span>px;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    opacity<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0.75</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    line<span style="color:#ff79c6">-</span>height<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">200</span>px;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    margin<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>.el<span style="color:#ff79c6">-</span>carousel__item<span style="color:#ff79c6">:</span>nth<span style="color:#ff79c6">-</span>child(<span style="color:#bd93f9">2</span>n) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    background<span style="color:#ff79c6">-</span>color<span style="color:#ff79c6">:</span> #<span style="color:#bd93f9">99</span>a9bf;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>.el<span style="color:#ff79c6">-</span>carousel__item<span style="color:#ff79c6">:</span>nth<span style="color:#ff79c6">-</span>child(<span style="color:#bd93f9">2</span>n<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    background<span style="color:#ff79c6">-</span>color<span style="color:#ff79c6">:</span> #d3dce6;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>
+</code></pre></div><h4 id="2模块化优势">2.模块化优势</h4>
+<ol>
+<li>方便代码的复用</li>
+<li>提高开发效率，方便后期维护</li>
+<li>解决了传统开发模式的弊端：命名冲突，文件依赖，代码冗余</li>
+</ol>
+<h4 id="3es6模块化规范">3.ES6模块化规范</h4>
+<p>ES6模块化规范是浏览器端和服务器端通用的模块化规范：</p>
+<ol>
+<li>每一个js文件都是一个独立的模块</li>
+<li>导入模块成员使用import关键字</li>
+<li>暴露模块成员使用export关键字</li>
+</ol>
+<h4 id="4bable">4.bable</h4>
+<p>bable在我理解应该是一种js语言的转换器，提高js在各个不同内核浏览器和不同版本浏览器的兼容性。</p>
+<p>bable的官方定义：</p>
+<blockquote>
+<p>Babel 是一个工具链，主要用于将 ECMAScript 2015+ 版本的代码转换为向后兼容的 JavaScript 语法，以便能够运行在当前和旧版本的浏览器或其他环境中。下面列出的是 Babel 能为你做的事情：</p>
+<ol>
+<li>语法转换</li>
+<li>通过 Polyfill 方式在目标环境中添加缺失的特性 (通过 <a href="https://www.babeljs.cn/docs/babel-polyfill">@babel/polyfill</a> 模块)</li>
+<li>源码转换 (codemods)</li>
+<li>更多！ (查看这些 <a href="https://www.babeljs.cn/videos.html">视频</a> 获得启发)</li>
+</ol>
+</blockquote>
+<h5 id="1安装bable">1.安装bable</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save-dev @babel/core @babel/cli @babel/preset-env
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>npm install --save @babel/polyfill
+</code></pre></div><h5 id="2配置bable">2.配置bable</h5>
+<p>新建<code>babel.config.json</code>文件，并写入以下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#f1fa8c">&#34;presets&#34;</span>: <span style="color:#ff79c6">[</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">[</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>      <span style="color:#f1fa8c">&#34;@babel/env&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        <span style="color:#f1fa8c">&#34;targets&#34;</span>: <span style="color:#ff79c6">{</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>          <span style="color:#f1fa8c">&#34;edge&#34;</span>: <span style="color:#f1fa8c">&#34;17&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>          <span style="color:#f1fa8c">&#34;firefox&#34;</span>: <span style="color:#f1fa8c">&#34;60&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>          <span style="color:#f1fa8c">&#34;chrome&#34;</span>: <span style="color:#f1fa8c">&#34;67&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>          <span style="color:#f1fa8c">&#34;safari&#34;</span>: <span style="color:#f1fa8c">&#34;11.1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        <span style="color:#ff79c6">}</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#f1fa8c">&#34;useBuiltIns&#34;</span>: <span style="color:#f1fa8c">&#34;usage&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      <span style="color:#ff79c6">}</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    <span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#ff79c6">]</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#ff79c6">}</span>
+</code></pre></div><h5 id="3使用bable">3.使用bable</h5>
+<p>新建一个<code>index.js</code>文件，并写入：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>console.log(<span style="color:#f1fa8c">&#34;ok&#34;</span>)
+</code></pre></div><p>使用以下命令运行js文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npx bable-node .<span style="color:#f1fa8c">\i</span>ndex.js
+</code></pre></div><p>可以输出ok。</p>
+<h4 id="5es6模块化语法">5.ES6模块化语法</h4>
+<h5 id="1导入与导出">1.导入与导出</h5>
+<ol>
+<li>
+<p>默认导出</p>
+<p>默认的导出语法是<code>export default</code>，导出默认的成员，以<code>m1.js</code>为例：</p>
+<p><code>m1.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">let</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">let</span> c <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">30</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#8be9fd;font-style:italic">function</span> show() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>console.log(<span style="color:#f1fa8c">&#39;haha&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">//每个模块中只允许使用一次export default
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	a,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    b,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>   show
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
+</code></pre></div></li>
+<li>
+<p>默认导入</p>
+<p>默认导入的语法是<code>import 名称 from '路径'</code>，以<code>m2.js</code>导入<code>m1.js</code>为例：</p>
+<p><code>m2.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> m1 from <span style="color:#f1fa8c">&#39;./m1.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log(m1)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">//输出结果为{ a:10 , b:20 , show:[Function:show]}
+</span></code></pre></div></li>
+<li>
+<p>按需导出</p>
+<p>按需导出语法<code>export let a=10</code></p>
+<p><code>m1.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">export</span>  <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">export</span>  <span style="color:#8be9fd;font-style:italic">let</span> b <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;hahaha&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">export</span>  <span style="color:#8be9fd;font-style:italic">function</span> hello <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() { console.log(<span style="color:#f1fa8c">&#39;hello&#39;</span>)}
+</code></pre></div></li>
+<li>
+<p>按需导入</p>
+<p>按需导入语法<code>import { a} from '路径'</code></p>
+<p><code>m2.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> { a, b, hello} from <span style="color:#f1fa8c">&#39;./m1.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log(a)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(b)
+</code></pre></div></li>
+</ol>
+<h5 id="2导入执行模块代码">2.导入执行模块代码</h5>
+<p>有时候我们只想执行某个模块的代码，不需要得到里面向外暴露的成员，此时使用语法<code>import '路径'</code>，以<code>m2.js</code>导入<code>m1.js</code>为例：</p>
+<p><code>m1.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>;i<span style="color:#ff79c6">&lt;</span><span style="color:#bd93f9">3</span>;i<span style="color:#ff79c6">++</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    console.log(i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><code>m2.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./m1.js&#39;</span>
+</code></pre></div><h3 id="3webpack">3.webpack</h3>
+<p>我们已经学习了ES6的模块化思想，但是在实际开发中，并不能很好的使用模块化思想，即使使用了bable，增强了高级JS的兼容性，但web开发仍然有很多问题存在。</p>
+<h4 id="1当前web开发困境">1.当前web开发困境</h4>
+<ol>
+<li>文件依赖关系错综复杂</li>
+<li>静态资源请求效率低</li>
+<li>对模块化的支持不够友好</li>
+<li>浏览器对高级js兼容性差</li>
+</ol>
+<h4 id="2webpack概述">2.webpack概述</h4>
+<p>Webpack 是一个前端资源加载/打包工具。它将根据模块的依赖关系进行静态分析，然后将这些模块按照指定的规则生成对应的静态资源。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/what-is-webpack.png" alt=""></p>
+<p>webpack提供了强大的模块化支持，以及代码压缩，处理JS兼容问题，性能优化等一系列功能，极大的提高了开发效率和项目的可维护性。</p>
+<p>webpack的官方定义：</p>
+<blockquote>
+<p>本质上，<em>webpack</em> 是一个现代 JavaScript 应用程序的<em>静态模块打包器(module bundler)</em>。当 webpack 处理应用程序时，它会递归地构建一个<em>依赖关系图(dependency graph)</em>，其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个 <em>bundle</em>。</p>
+</blockquote>
+<h4 id="3webpack安装">3.webpack安装</h4>
+<p>在项目根路径下执行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm init -y
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>npm i webpack webpack-cli -D
+</code></pre></div><p>安装完成后，新建<code>webpack.config.js</code>配置文件，并写入以下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>打开<code>package.json</code>文件，添加新的脚本：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;test&#34;</span>: <span style="color:#f1fa8c">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;dev&#34;</span>: <span style="color:#f1fa8c">&#34;webpack&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  },
+</code></pre></div><h4 id="4webpack使用">4.webpack使用</h4>
+<p>通过一个小案例来使用webpack。</p>
+<ol>
+<li>
+<p>新建源文件</p>
+<p>在项目根目录下新建一个<code>src</code>文件夹，在<code>src</code>下新建<code>index.html</code>，<code>index.js</code>文件，并分别写入以下内容：</p>
+<p><code>index.html</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span> <span style="color:#50fa7b">lang</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;en&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;UTF-8&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;viewport&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;width=device-width, initial-scale=1.0&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;<span style="color:#ff79c6">title</span>&gt;Document&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    &lt;<span style="color:#ff79c6">ul</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第1个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第2个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第3个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第4个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第5个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第6个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第7个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第8个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        &lt;<span style="color:#ff79c6">li</span>&gt;这是第9个li&lt;/<span style="color:#ff79c6">li</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    &lt;/<span style="color:#ff79c6">ul</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>&lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;../dist/main.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div><p><code>index.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> $ from <span style="color:#f1fa8c">&#39;jquery&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>$(<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    $(<span style="color:#f1fa8c">&#39;li:odd&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;red&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    $(<span style="color:#f1fa8c">&#39;li:even&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;blue&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>})
+</code></pre></div></li>
+<li>
+<p>安装jquery</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i jquery -s
+</code></pre></div></li>
+<li>
+<p>打包</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run dev
+</code></pre></div><p>在项目根目录下生成了<code>dist\main.js</code>，这个文件已经引入html中，点击预览就可以在浏览器中看到效果：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615151155290.png" alt="image-20200615151155290"></p>
+</li>
+</ol>
+<h4 id="5webpack配置">5.webpack配置</h4>
+<h5 id="1配置入口与出口">1.配置入口与出口</h5>
+<p>在上面的小例子里，可以得知webpack的默认入口文件为<code>src\index.js</code>，默认出口文件为<code>dist\main.js</code>，如果要修改打包的入口与出口，需要在<code>webpack.config.js</code>中进行配置：</p>
+<p><code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+</code></pre></div><p>这里我们指定入口文件是<code>index.js</code>，出口文件为<code>bundle.js</code>。</p>
+<h5 id="2自动打包功能">2.自动打包功能</h5>
+<p>对于<code>index.js</code>文件，如果我们在打包后再次更改里面的内容，需要再次打包，才能生效，因此需要配置自动打包功能。</p>
+<ol>
+<li>
+<p>安装dev-server</p>
+<p>dev-server是一个本地服务器插件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i webpack-dev-server -D
+</code></pre></div></li>
+<li>
+<p>修改<code>package.json</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;test&#34;</span>: <span style="color:#f1fa8c">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;dev&#34;</span>: <span style="color:#f1fa8c">&#34;webpack-dev-server&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  },
+</code></pre></div></li>
+<li>
+<p>修改<code>index.html</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/bundle.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>需要特别说明，这里并不是真的在根目录下生成了bundle.js，而是在内存中生成了一个bundle.js文件。</p>
+</li>
+<li>
+<p>预览页面</p>
+<p>打开http://localhost:8080/src，可以预览<code>index.html</code>效果。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615153901652.png" alt="image-20200615153901652"></p>
+</li>
+</ol>
+<h5 id="3配置预览页面">3.配置预览页面</h5>
+<p>通过上面一条我们可以知道，如果需要预览页面需要访问http://localhost:8080/src，如果我们想直接访问http://localhost:8080就可以预览页面，需要进行以下配置：</p>
+<ol>
+<li>
+<p>安装插件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i html-webpack-plugin -D
+</code></pre></div></li>
+<li>
+<p>修改<code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> htmlPlugin <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.html&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        htmlPlugin
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
+</code></pre></div></li>
+<li>
+<p>运行项目</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run dev
+</code></pre></div><p>就可直接访问http://localhost:8080/预览页面。</p>
+</li>
+</ol>
+<h4 id="6webpack加载器">6.webpack加载器</h4>
+<p>webpack默认只能打包js文件，非js文件webpack是处理不了的，需要调用loader加载器才能正常打包。loader加载器可以协助webpack打包特定的文件模块，比如：</p>
+<ol>
+<li>less-loader打包处理.less文件。</li>
+<li>sass-loader打包处理.sass文件。</li>
+<li>url-loader打包处理css中与url路径相关的文件。</li>
+</ol>
+<h5 id="1loader调用过程">1.loader调用过程</h5>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615171308081.png" alt="image-20200615171308081"></p>
+<h5 id="2处理css文件">2.处理css文件</h5>
+<ol>
+<li>
+<p>安装对应loader</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i style-loader css-loader -D
+</code></pre></div></li>
+<li>
+<p>配置<code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> htmlPlugin <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.html&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        htmlPlugin
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.css$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>}
+</code></pre></div></li>
+<li>
+<p>新建css文件并引入</p>
+<p><code>\css\index.css</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">li</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">list-style</span>: <span style="color:#ff79c6">none</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p><code>index.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> $ from <span style="color:#f1fa8c">&#39;jquery&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./css/index.css&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>$(<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    $(<span style="color:#f1fa8c">&#39;li:odd&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;red&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    $(<span style="color:#f1fa8c">&#39;li:even&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;blue&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>})
+</code></pre></div></li>
+<li>
+<p>开启服务，在页面中预览</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run dev
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615173027979.png" alt="image-20200615173027979"></p>
+</li>
+</ol>
+<h5 id="3处理less文件">3.处理less文件</h5>
+<ol>
+<li>
+<p>安装对应loader</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i less-loader less -D
+</code></pre></div></li>
+<li>
+<p>配置<code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> htmlPlugin <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.html&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        htmlPlugin
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.css$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.less$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>, <span style="color:#f1fa8c">&#39;less-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>}
+</code></pre></div></li>
+<li>
+<p>新建css文件并引入</p>
+<p><code>src\1.less</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>body {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    margin: 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    padding: 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    ul {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        margin: 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        padding: 0;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
+</code></pre></div><p><code>index.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> $ from <span style="color:#f1fa8c">&#39;jquery&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./css/index.css&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./css/1.less&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>$(<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    $(<span style="color:#f1fa8c">&#39;li:odd&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;red&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    $(<span style="color:#f1fa8c">&#39;li:even&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;blue&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>})
+</code></pre></div></li>
+<li>
+<p>开启服务，在页面中预览</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run dev
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615174144508.png" alt="image-20200615174144508"></p>
+</li>
+</ol>
+<h5 id="4处理图片和字体">4.处理图片和字体</h5>
+<ol>
+<li>
+<p>安装对应loader</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i url-loader file-loader -D
+</code></pre></div></li>
+<li>
+<p>配置<code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> htmlPlugin <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.html&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        htmlPlugin
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.css$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.less$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>, <span style="color:#f1fa8c">&#39;less-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.jpg|png|gif|bmp|ttf|eot|svg|woff|woff2$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>                use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;url-loader&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>        ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>}
+</code></pre></div></li>
+<li>
+<p>使用图片</p>
+<p><code>index.html</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;box&#34;</span>&gt; &lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div><p><code>index.css</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>.<span style="color:#50fa7b">box</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">width</span>: <span style="color:#bd93f9">400</span><span style="color:#8be9fd">px</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">height</span>: <span style="color:#bd93f9">400</span><span style="color:#8be9fd">px</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#ff79c6">background</span>: <span style="color:#8be9fd;font-style:italic">url</span>(<span style="color:#f1fa8c">&#39;../images/wukong19.jpg&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div></li>
+<li>
+<p>开启服务，在页面中预览</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615175409563.png" alt="image-20200615175409563"></p>
+</li>
+</ol>
+<h3 id="4vue单文件组件">4.vue单文件组件</h3>
+<h4 id="1单文件组件构成">1.单文件组件构成</h4>
+<p>每个单文件组件都由template，script，style三部分构成，其中template是组件的模版区，script是组件的业务逻辑区，style是组件的样式区。</p>
+<h4 id="2使用单文件组件">2.使用单文件组件</h4>
+<h5 id="1定义单文件组件">1.定义单文件组件</h5>
+<p>在根目录新建一个<code>components</code>文件夹，在里面新建<code>App.vue</code>文件，并写入以下内容：</p>
+<p><code>App.vue</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        &lt;<span style="color:#ff79c6">h1</span>&gt;这是app组件&lt;/<span style="color:#ff79c6">h1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&lt;<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    data() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#ff79c6">return</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    methods<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>&lt;<span style="color:#ff79c6">style</span> <span style="color:#50fa7b">scoped</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    h1 {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        color<span style="color:#ff79c6">:</span> red;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
+</code></pre></div><h5 id="2导入单文件组件">2.导入单文件组件</h5>
+<ol>
+<li>
+<p>安装对应loader</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i vue-loader vue-template-compiler -D
+</code></pre></div></li>
+<li>
+<p>配置<code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> htmlPlugin <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    template<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.html&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;index.html&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ff79c6">const</span> VueLoaderPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;vue-loader/lib/plugin&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    mode<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;development&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    entry<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        path<span style="color:#ff79c6">:</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;./dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        htmlPlugin,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        <span style="color:#ff79c6">new</span> VueLoaderPlugin()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.css$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.less$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>                use<span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#39;style-loader&#39;</span>, <span style="color:#f1fa8c">&#39;css-loader&#39;</span>, <span style="color:#f1fa8c">&#39;less-loader&#39;</span>] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.jpg|png|gif|bmp|ttf|eot|svg|woff|woff2$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>                use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;url-loader&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>                test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.vue$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>                use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;vue-loader&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>        ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>}
+</code></pre></div></li>
+</ol>
+<h5 id="3使用单文件组件">3.使用单文件组件</h5>
+<ol>
+<li>
+<p>安装vue</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i vue -D
+</code></pre></div></li>
+<li>
+<p>导入vue和组件</p>
+<p><code>index.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> $ from <span style="color:#f1fa8c">&#39;jquery&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./css/index.css&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;./css/1.less&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">import</span> Vue from <span style="color:#f1fa8c">&#39;vue&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ff79c6">import</span> App from <span style="color:#f1fa8c">&#39;./components/App.vue&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ff79c6">const</span> vm <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Vue({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    el<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;#app&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    render<span style="color:#ff79c6">:</span> h =&gt; h(App)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>})
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>$(<span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    $(<span style="color:#f1fa8c">&#39;li:odd&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;red&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    $(<span style="color:#f1fa8c">&#39;li:even&#39;</span>).css(<span style="color:#f1fa8c">&#39;background&#39;</span>,<span style="color:#f1fa8c">&#39;blue&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>})
+</code></pre></div><p><code>index.html</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;app&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+</code></pre></div></li>
+<li>
+<p>开启服务，在页面中预览</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200615182624491.png" alt="image-20200615182624491"></p>
+</li>
+</ol>
+<h3 id="5发布项目">5.发布项目</h3>
+<h4 id="1配置packagejson">1.配置<code>package.json</code></h4>
+<p><code>package.json</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">&#34;name&#34;</span>: <span style="color:#f1fa8c">&#34;webpack02&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;1.0.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">&#34;description&#34;</span>: <span style="color:#f1fa8c">&#34;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">&#34;main&#34;</span>: <span style="color:#f1fa8c">&#34;index.js&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">&#34;test&#34;</span>: <span style="color:#f1fa8c">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#ff79c6">&#34;dev&#34;</span>: <span style="color:#f1fa8c">&#34;webpack-dev-server&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">&#34;build&#34;</span>: <span style="color:#f1fa8c">&#34;webpack -p&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#ff79c6">&#34;keywords&#34;</span>: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ff79c6">&#34;author&#34;</span>: <span style="color:#f1fa8c">&#34;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#ff79c6">&#34;license&#34;</span>: <span style="color:#f1fa8c">&#34;ISC&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#ff79c6">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#ff79c6">&#34;jquery&#34;</span>: <span style="color:#f1fa8c">&#34;^3.5.1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#ff79c6">&#34;vue&#34;</span>: <span style="color:#f1fa8c">&#34;^2.6.11&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  <span style="color:#ff79c6">&#34;devDependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    <span style="color:#ff79c6">&#34;css-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^3.6.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#ff79c6">&#34;file-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^6.0.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#ff79c6">&#34;html-webpack-plugin&#34;</span>: <span style="color:#f1fa8c">&#34;^4.3.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    <span style="color:#ff79c6">&#34;less&#34;</span>: <span style="color:#f1fa8c">&#34;^3.11.3&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#ff79c6">&#34;less-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^6.1.1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#ff79c6">&#34;style-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^1.2.1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    <span style="color:#ff79c6">&#34;url-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^4.1.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#ff79c6">&#34;vue-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^15.9.2&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#ff79c6">&#34;vue-template-compiler&#34;</span>: <span style="color:#f1fa8c">&#34;^2.6.11&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#ff79c6">&#34;webpack&#34;</span>: <span style="color:#f1fa8c">&#34;^4.43.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    <span style="color:#ff79c6">&#34;webpack-cli&#34;</span>: <span style="color:#f1fa8c">&#34;^3.3.11&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    <span style="color:#ff79c6">&#34;webpack-dev-server&#34;</span>: <span style="color:#f1fa8c">&#34;^3.11.0&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
+</code></pre></div><h4 id="2执行打包指令">2.执行打包指令</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run build
+</code></pre></div><p>在根目录下生成了<code>dist</code>文件夹，里面包括<code>index.html</code>和<code>bundle.js</code>两个文件。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+
+        <span><a class="tag" href="https://tomtomyoung.github.io/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/">模块化</a></span>
+
+        
+      </div>
+  
+      
+    </div>
+  
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://tomtomyoung.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vue-%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B/" data-tooltip="vue 实战案例">   
+            <i class="iconfont icon-left item-btn"></i>
+             
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.github.io/post/vue-%E5%AE%9E%E6%88%98%E6%A1%88%E4%BE%8B2/" data-tooltip="vue 实战案例2">
+            <i class="iconfont icon-right item-btn"></i>
+             
+        </a>
+    </li>
+</ul>
+
+  
+  </div>
+</div>
+
+   
+        
+    </body>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.github.io/js/util.min.896ed35540d4bb8d0bfab2bf6e07e0e2d65c14baa5d6d51180580c8dcdb224f2.js" integrity="sha256-iW7TVUDUu40L&#43;rK/bgfg4tZcFLql1tURgFgMjc2yJPI="></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>
