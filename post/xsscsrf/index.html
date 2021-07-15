@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  xss&amp;csrf </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" xss&amp;csrf ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [xss csrf] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/xsscsrf/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_wmx8u3schqb.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.7cdbbae3853be75857a3eced7427abbcaa2f4365d31bf19df3b6c79294de86e0.css" integrity="sha256-fNu644U751hXo&#43;ztdCervKovQ2XTG/Gd87bHkpTehuA="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#1%e4%bb%80%e4%b9%88%e6%98%afxss%e6%94%bb%e5%87%bb" class="toc-link">1：什么是XSS攻击？</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#2-%e5%b8%b8%e8%a7%81%e7%9a%84xss%e6%94%bb%e5%87%bb" class="toc-link">2. 常见的XSS攻击</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#1-%e5%8f%8d%e5%b0%84%e5%9e%8b" class="toc-link">1. 反射型</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#2-%e5%ad%98%e5%82%a8%e5%9e%8b" class="toc-link">2. 存储型</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#3-%e5%9f%ba%e4%ba%8edom" class="toc-link">3. 基于DOM</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#3-xss%e6%94%bb%e5%87%bb%e7%9a%84%e9%98%b2%e8%8c%83" class="toc-link">3. XSS攻击的防范</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#1-csp" class="toc-link">1. CSP</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#2-cookie%e5%ae%89%e5%85%a8%e7%ad%96%e7%95%a5" class="toc-link">2. cookie安全策略</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#3-%e8%be%93%e5%85%a5%e6%a3%80%e6%9f%a5" class="toc-link">3. 输入检查</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#4-%e8%be%93%e5%87%ba%e6%a3%80%e6%9f%a5" class="toc-link">4. 输出检查</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#5-css-%e7%bc%96%e7%a0%81" class="toc-link">5. CSS 编码</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#4-csrf%e6%94%bb%e5%87%bb" class="toc-link">4. CSRF攻击</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#5-csrf%e7%9a%84%e9%98%b2%e8%8c%83" class="toc-link">5. CSRF的防范</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#1-%e9%aa%8c%e8%af%81-http-referer-%e5%ad%97%e6%ae%b5" class="toc-link">1. 验证 HTTP Referer 字段</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/xsscsrf/#2-%e5%9c%a8%e8%af%b7%e6%b1%82%e5%9c%b0%e5%9d%80%e4%b8%ad%e6%b7%bb%e5%8a%a0-token" class="toc-link">2. 在请求地址中添加 token</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://gaoshanwomeng.github.io/">xss&amp;csrf</a>
+        
+        <div class="info">
+          <span>📅 2021-07-14</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 3728字</span>
+          <span>⏱ 8分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <h3 id="1什么是xss攻击">1：什么是XSS攻击？</h3>
+<ul>
+<li>XSS，即 Cross Site Script，跨站脚本攻击；</li>
+<li>XSS 攻击是指攻击者在网站上注入恶意的客户端代码，对客户端网页进行篡改，对用户浏览器进行控制或者获取用户隐私数据；</li>
+<li>XSS攻击可以分为3类：反射型（非持久型）、存储型（持久型）、基于DOM。</li>
+</ul>
+<h3 id="2-常见的xss攻击">2. 常见的XSS攻击</h3>
+<h4 id="1-反射型">1. 反射型</h4>
+<ul>
+<li>反射型是简单地把用户输入的数据 “反射” 给浏览器；</li>
+<li>需要攻击者诱使用户点击一个恶意链接，或者提交一个表单，或者进入一个恶意网站时，注入脚本进入被攻击者的网站。</li>
+</ul>
+<p>常见的反射性XSS：恶意链接。</p>
+<blockquote>
+<p>比如我现在做一个demo，比如如下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">utf-8</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;referrer&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;never&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  &lt;<span style="color:#ff79c6">title</span>&gt;csrf攻击&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    &lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;http://localhost:3001/xss&#34;</span>&gt;xxs 攻击&lt;/<span style="color:#ff79c6">a</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    &lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;http://localhost:3001/testcookie&#34;</span>&gt;testcookie 攻击&lt;/<span style="color:#ff79c6">a</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>&lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div><p>在本地启动一个简单的服务器，然后node中app.js 代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> Koa <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;koa&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;fs&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">const</span> router <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;koa-router&#39;</span>)();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ff79c6">const</span> koaBody <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;koa-body&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ff79c6">const</span> <span style="color:#ff79c6">static</span> <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;koa-static&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ff79c6">const</span> app <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Koa();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>router.get(<span style="color:#f1fa8c">&#39;/&#39;</span>, (ctx, next) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#6272a4">// 设置头类型, 如果不设置，会直接下载该页面
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>  ctx.type <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;html&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#6272a4">// 读取文件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> pathUrl <span style="color:#ff79c6">=</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;/static/index.html&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  ctx.body <span style="color:#ff79c6">=</span> fs.createReadStream(pathUrl);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>router.get(<span style="color:#f1fa8c">&#39;/xss&#39;</span>, (ctx, next) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  ctx.body <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;script&gt;alert(&#34;反射型 XSS 攻击&#34;)&lt;/script&gt;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>router.get(<span style="color:#f1fa8c">&#39;/testcookie&#39;</span>, (ctx, next) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  console.log(ctx.cookies.get(<span style="color:#f1fa8c">&#39;connect.sid&#39;</span>));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  ctx.body <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;script&gt;alert(&#34;&#39;</span><span style="color:#ff79c6">+</span>ctx.cookies.get(<span style="color:#f1fa8c">&#39;connect.sid&#39;</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#39;&#34;)&lt;/script&gt;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  next();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>app.use(<span style="color:#ff79c6">static</span>(path.join(<span style="color:#bd93f9">__</span>dirname)));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>app.use(router.routes());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>app.use(router.allowedMethods());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>app.listen(<span style="color:#bd93f9">3001</span>, () =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  console.log(<span style="color:#f1fa8c">&#39;server is listen in 3001&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>});
+</code></pre></div><p>当用户点击xxs 攻击恶意链接时候，页面会跳转到 http://localhost:3001/xss 攻击者预先准备的页面，然后会返回攻击者准备的js脚本，该js脚本就在浏览器中执行了，如下所示：
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231214099-1234219577.png" alt="img"></p>
+<p>当用户点击 testcookie 攻击 这个链接的时候，首先要保证页面上有cookie，比如我请求如下的cookie:</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231229205-1557810526.png" alt="img"></p>
+<p>然后我们点击 testcookie 该链接，也会调用node中的 router.get('/testcookie', (ctx, next) =&gt; {}) 这个请求获取到cookie，如下所示：
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231254328-364209115.png" alt="img"></p>
+<p>我们就通过xss攻击拿到对方的cookie信息了。</p>
+</blockquote>
+<h4 id="2-存储型">2. 存储型</h4>
+<ul>
+<li>存储型把用户输入的数据 “存储” 在服务器端，当浏览器请求数据时，脚本从服务器上传回并执行。这种 XSS 攻击具有很强的稳定性；</li>
+<li>常见的场景是包含恶意 JavaScript 代码的文章或评论，发表后所有访问该文章或评论的人，都会执行这段恶意代码。</li>
+</ul>
+<h4 id="3-基于dom">3. 基于DOM</h4>
+<ul>
+<li>基于 DOM 的 XSS 攻击是指通过恶意脚本修改页面的 DOM 结构，是纯粹发生在客户端的攻击。</li>
+<li>一般有如下DOM操作：
+<ol>
+<li>使用document.write直接输出数据；</li>
+<li>使用innerHTML直接输出数据；</li>
+<li>使用location、location.href、location.replace、iframe.src、document.referer、window.name等这些；</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p><strong>使用document.write、innerHTML直接输出导致浏览器解析恶意代码</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">utf-8</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;referrer&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;never&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  &lt;<span style="color:#ff79c6">title</span>&gt;&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;test&#39;</span>&gt;&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;&lt;/<span style="color:#ff79c6">a</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#6272a4">// 返回URL中的查询部分（？之后的内容）
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">var</span> s <span style="color:#ff79c6">=</span> location.search;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#6272a4">// 为了方便演示，我们假如url是 如下这样的
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// http://127.0.0.1/xsstest.html?url=javascript:alert(&#39;xsstest&#39;); 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// 然后我们的是 s 的值就为如下：
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    s <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;?url=javascript:alert(&#39;xsstest&#39;)&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    s <span style="color:#ff79c6">=</span> s.substring(<span style="color:#bd93f9">1</span>, s.length);       <span style="color:#6272a4">// 返回整个查询内容
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">var</span> url <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span>;                       <span style="color:#6272a4">// 定义变量url
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (s.indexOf(<span style="color:#f1fa8c">&#34;url=&#34;</span>) <span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>) {       <span style="color:#6272a4">// 判断URL是否为空 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">var</span> pos <span style="color:#ff79c6">=</span> s.indexOf(<span style="color:#f1fa8c">&#34;url=&#34;</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">4</span>;  <span style="color:#6272a4">// 过滤掉&#34;url=&#34;字符
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>      url <span style="color:#ff79c6">=</span> s.substring(pos, s.length);  <span style="color:#6272a4">// 得到地址栏里的url参数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      url <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;url参数为空&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    <span style="color:#8be9fd;font-style:italic">document</span>.write(<span style="color:#f1fa8c">&#39;url: &lt;a href=&#34;&#39;</span> <span style="color:#ff79c6">+</span> url <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;&#34;&gt;&#34;&#39;</span> <span style="color:#ff79c6">+</span> url <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;&#34;&lt;/a&gt;&#39;</span>); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#34;test&#34;</span>).innerHTML <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;我的url是: &lt;a href=&#34;&#39;</span> <span style="color:#ff79c6">+</span> url <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;&#34;&gt;&#34;&#39;</span> <span style="color:#ff79c6">+</span> url <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;&#34;&lt;/a&gt;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  &lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>&lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div><p>页面渲染完成后，点击弹窗如下所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231742177-474046373.png" alt="img"></p>
+<p><strong>使用location/location.href/location.replace/iframe.src 造成的XSS</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">html</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">utf-8</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  &lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;referrer&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;never&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  &lt;<span style="color:#ff79c6">title</span>&gt;&lt;/<span style="color:#ff79c6">title</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>&lt;/<span style="color:#ff79c6">head</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#8be9fd;font-style:italic">var</span> s <span style="color:#ff79c6">=</span> location.search;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    s <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;?url=javascript:alert(&#39;xsstest&#39;)&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    s <span style="color:#ff79c6">=</span> s.substring(<span style="color:#bd93f9">1</span>, s.length);       <span style="color:#6272a4">// 返回整个查询内容
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">var</span> url <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span>;                       <span style="color:#6272a4">// 定义变量url
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (s.indexOf(<span style="color:#f1fa8c">&#34;url=&#34;</span>) <span style="color:#ff79c6">&gt;</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>) {       <span style="color:#6272a4">// 判断URL是否为空 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>      <span style="color:#8be9fd;font-style:italic">var</span> pos <span style="color:#ff79c6">=</span> s.indexOf(<span style="color:#f1fa8c">&#34;url=&#34;</span>) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">4</span>;  <span style="color:#6272a4">// 过滤掉&#34;url=&#34;字符
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>      url <span style="color:#ff79c6">=</span> s.substring(pos, s.length);  <span style="color:#6272a4">// 得到地址栏里的url参数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      url <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;url参数为空&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  &lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;test&#39;</span>&gt;&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;&lt;/<span style="color:#ff79c6">a</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    location.href <span style="color:#ff79c6">=</span> url;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  &lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>&lt;/<span style="color:#ff79c6">body</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>&lt;/<span style="color:#ff79c6">html</span>&gt;
+</code></pre></div><p>刷新下页面，也会弹出窗口执行 xss攻击了。</p>
+</blockquote>
+<h3 id="3-xss攻击的防范">3. XSS攻击的防范</h3>
+<h4 id="1-csp">1. CSP</h4>
+<ul>
+<li>CSP是内容安全策略；</li>
+<li>CSP就是一个把白名单：网站通过发送一个 CSP 头部告诉浏览器这个网站什么是被可以执行的，什么是需要被禁止的。</li>
+</ul>
+<blockquote>
+<p>我们只需要在meta属性中设置下即可：如下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">http-equiv</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Content-Security-Policy&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span>&gt;
+</code></pre></div><p>比如如下的列子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">meta</span> <span style="color:#50fa7b">http-equiv</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Content-Security-Policy&#34;</span> <span style="color:#50fa7b">content</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#f1fa8c">default-src http: https:  *.xxx.com &#39;self&#39; &#39;unsafe-inline&#39; ;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#f1fa8c">style-src &#39;self&#39; &#39;unsafe-inline&#39; *.yyy.com;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#f1fa8c">script-src &#39;self&#39; &#39;unsafe-inline&#39; &#39;unsafe-eval&#39; ;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#f1fa8c">&#34;</span>&gt;
+</code></pre></div><p><strong>content下有如下类别：</strong></p>
+<p>default-src 给下面所有的规则设定一个默认值
+script-src 外部脚本
+style-src 样式表
+img-src 图像
+media-src 媒体文件（音频和视频）
+font-src 字体文件
+object-src 插件（比如 Flash）
+child-src 框架
+frame-ancestors 嵌入的外部资源（比如、<code>&lt;iframe&gt;</code>、和）
+connect-src HTTP 连接（通过 XHR、WebSockets、EventSource等）
+worker-src worker脚本
+manifest-src manifest 文件</p>
+<p><strong>script-src有如下属性值：</strong></p>
+<p>unsafe-inline 允许执行页面内嵌的<code>&lt;script&gt;</code>标签和事件监听函数
+unsafe-eval 允许将字符串当作代码执行，比如使用eval、setTimeout、setInterval和Function等函数
+nonce 每次HTTP回应给出一个授权token，页面内嵌脚本必须有这个token，才会执行
+hash 列出允许执行的脚本代码的Hash值，页面内嵌脚本的哈希值只有吻合的情况下，才能执行</p>
+</blockquote>
+<h4 id="2-cookie安全策略">2. cookie安全策略</h4>
+<ul>
+<li>攻击者可以通过注入恶意脚本获取用户的 Cookie 信息。通常 Cookie 中都包含了用户的登录凭证信息；</li>
+</ul>
+<blockquote>
+<ul>
+<li>
+<p><strong>http-only:</strong></p>
+<p>只允许http或https请求读取cookie、JS代码是无法读取cookie的(document.cookie会显示http-only的cookie项被自动过滤掉)。发送请求时自动发送cookie.</p>
+</li>
+<li>
+<p><strong>secure-only:</strong></p>
+<p>只允许https请求读取，发送请求时自动发送cookie。</p>
+</li>
+<li>
+<p><strong>host-only:</strong></p>
+<p>只允许主机域名与domain设置完成一致的网站才能访问该cookie。</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="3-输入检查">3. 输入检查</h4>
+<ul>
+<li>不要相信用户的任何输入。 对于用户的任何输入要进行检查、过滤和转义；</li>
+<li>建立可信任的字符和 HTML 标签白名单，对于不在白名单之列的字符或者标签进行过滤或编码；</li>
+<li>检查用户输入的数据中是否包含特殊字符，如果存在，则进行过滤或编码，也称为 XSS Filter；</li>
+<li>在一些前端框架中，都会有一份 decodingMap， 用于对用户输入所包含的特殊字符或标签进行编码或过滤。</li>
+</ul>
+<h4 id="4-输出检查">4. 输出检查</h4>
+<ul>
+<li>用户的输入会存在问题，服务端的输出也会存在问题；</li>
+<li>在变量输出到 HTML 页面时，可以使用编码或转义的方式来防御 XSS 攻击。</li>
+</ul>
+<blockquote>
+<p><strong>HTML编码</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 使用正则表达式实现html编码
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> htmlEncodeByRegExp(str) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#8be9fd;font-style:italic">var</span> s <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">if</span> (str.length <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">0</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">return</span> s;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">return</span> (s <span style="color:#ff79c6">+</span> str)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    .replace(<span style="color:#f1fa8c">/&amp;/g</span>, <span style="color:#f1fa8c">&#34;&amp;amp;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    .replace(<span style="color:#f1fa8c">/&lt;/g</span>, <span style="color:#f1fa8c">&#34;&amp;lt;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    .replace(<span style="color:#f1fa8c">/&gt;/g</span>, <span style="color:#f1fa8c">&#34;&amp;gt;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    .replace(<span style="color:#f1fa8c">/ /g</span>, <span style="color:#f1fa8c">&#34;&amp;nbsp;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    .replace(<span style="color:#f1fa8c">/\&#39;/g</span>, <span style="color:#f1fa8c">&#34;&amp;#39&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    .replace(<span style="color:#f1fa8c">/\&#34;/g</span>, <span style="color:#f1fa8c">&#34;&amp;quot;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    .replace(<span style="color:#f1fa8c">/\//g</span>, <span style="color:#f1fa8c">&#39;&amp;#x2F;&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4">// 使用正则表达式实现html解码
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> htmlDecodeByRegExp(str) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  <span style="color:#8be9fd;font-style:italic">var</span> s <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  <span style="color:#ff79c6">if</span> (str.length <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">0</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#ff79c6">return</span> s;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  <span style="color:#ff79c6">return</span> (s <span style="color:#ff79c6">+</span> str)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    .replace(<span style="color:#f1fa8c">/&amp;amp;/g</span>, <span style="color:#f1fa8c">&#34;&amp;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    .replace(<span style="color:#f1fa8c">/&amp;lt;/g</span>, <span style="color:#f1fa8c">&#34;&lt;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    .replace(<span style="color:#f1fa8c">/&amp;gt;/g</span>, <span style="color:#f1fa8c">&#34;&gt;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    .replace(<span style="color:#f1fa8c">/&amp;nbsp;/g</span>, <span style="color:#f1fa8c">&#34; &#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    .replace(<span style="color:#f1fa8c">/&amp;#39/g</span>, <span style="color:#f1fa8c">&#34;\&#39;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    .replace(<span style="color:#f1fa8c">/&amp;quot;/g</span>, <span style="color:#f1fa8c">&#34;\&#34;&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    .replace(<span style="color:#f1fa8c">/&amp;#x2F;/g</span>, <span style="color:#f1fa8c">&#34;\/&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>}
+</code></pre></div><p><strong>HTML Attribute编码</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> encodeForHTMLAttibute(str) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">let</span> encoded <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> str.length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> ch <span style="color:#ff79c6">=</span> hex <span style="color:#ff79c6">=</span> str[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#f1fa8c">/[A-Za-z0-9]/</span>.test(str[i]) <span style="color:#ff79c6">&amp;&amp;</span> str.charCodeAt(i) <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">256</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      hex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&amp;#x&#39;</span> <span style="color:#ff79c6">+</span> ch.charCodeAt(<span style="color:#bd93f9">0</span>).toString(<span style="color:#bd93f9">16</span>) <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    encoded <span style="color:#ff79c6">+=</span> hex;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">return</span> encoded;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>};
+</code></pre></div><p><strong>URL 编码</strong></p>
+<p>将不可信数据作为 URL 参数值时需要对参数进行 URL 编码</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> encodeForURL(str){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">encodeURIComponent</span>(str);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>};
+</code></pre></div></blockquote>
+<h4 id="5-css-编码">5. CSS 编码</h4>
+<ul>
+<li>将不可信数据作为 CSS 时进行 CSS 编码；</li>
+</ul>
+<blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;background-image: url(javascript:alert(&#39;xss&#39;));&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;<span style="color:#ff79c6">style</span>&gt;<span style="color:#ff79c6">body</span>{<span style="color:#ff79c6">background-image</span>: <span style="color:#8be9fd;font-style:italic">url</span>(<span style="color:#f1fa8c">&#34;javascript:alert(&#39;xss&#39;)&#34;</span>);}&lt;/<span style="color:#ff79c6">style</span>&gt;
+</code></pre></div><p>编码规则：除了字母数字字符以外，使用\XXXXXX格式来转义ASCII值小于256的所有字符。 编码代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> encodeForCSS (attr, str){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">let</span> encoded <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> str.length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> ch <span style="color:#ff79c6">=</span> str.charAt(i);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>ch.match(<span style="color:#f1fa8c">/[a-zA-Z0-9]/</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#8be9fd;font-style:italic">let</span> hex <span style="color:#ff79c6">=</span> str.charCodeAt(i).toString(<span style="color:#bd93f9">16</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      <span style="color:#8be9fd;font-style:italic">let</span> pad <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;000000&#39;</span>.substr((hex.length));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      encoded <span style="color:#ff79c6">+=</span> <span style="color:#f1fa8c">&#39;\\&#39;</span> <span style="color:#ff79c6">+</span> pad <span style="color:#ff79c6">+</span> hex;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      encoded <span style="color:#ff79c6">+=</span> ch;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#ff79c6">return</span> encoded;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>};
+</code></pre></div></blockquote>
+<h3 id="4-csrf攻击">4. CSRF攻击</h3>
+<ul>
+<li>CSRF，Cross Site Request Forgery（跨站请求伪造），是一种劫持受信任用户向服务器发送非预期请求的攻击方式；</li>
+<li>攻击者借助受害者的 Cookie 骗取服务器的信任，在受害者不知情的情况下以受害者名义伪造请求发送给受攻击服务器。</li>
+</ul>
+<p><strong>1. 浏览器的 Cookie 策略</strong></p>
+<ul>
+<li>
+<p>Cookie 是服务器发送到用户浏览器并保存在本地的一小块数据，它会在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上；</p>
+</li>
+<li>
+<p>Cookie 经常用在会话状态管理（如用户登录状态、购物车、游戏分数或其它需要记录的信息）；</p>
+</li>
+<li>
+<p>浏览器所持有的 Cookie 分为两种：</p>
+<ul>
+<li>Session Cookie(会话期 Cookie)，仅在会话期内有效，浏览器关闭之后它会被自动删除；</li>
+<li>Permanent Cookie(持久性 Cookie)， 可以指定一个特定的过期时间（Expires）或有效期（Max-Age）；</li>
+</ul>
+</li>
+<li>
+<p>每个 Cookie 都会有关联的域，这个域的范围一般通过 donmain 属性指定；</p>
+</li>
+<li>
+<p>如果 Cookie 的域和页面的域相同，那么我们称这个 Cookie 为第一方 Cookie；</p>
+</li>
+<li>
+<p>如果 Cookie 的域和页面的域不同，则称之为第三方 Cookie；</p>
+</li>
+<li>
+<p>一个页面包含图片或存放在其他域上的资源（如图片）时，第一方的 Cookie 也会发送给设置它们的服务器。</p>
+</li>
+</ul>
+<p><strong>2. 通过 Cookie 进行 CSRF 攻击</strong></p>
+<ul>
+<li>存在网站a.com，登陆后a.com已经保存了Cookie；</li>
+<li>伪造一个攻击者网站，网站内放置一个图片img，src指向了一个a.com的请求a.com/delete?id=1；</li>
+<li>当a跳转到b.com时，就会发起src中的请求，且携带了自己的Cookie；</li>
+<li>a.com的服务器接到了请求，以为是网页自己主动发出的，就执行了请求。</li>
+</ul>
+<h3 id="5-csrf的防范">5. CSRF的防范</h3>
+<h4 id="1-验证-http-referer-字段">1. 验证 HTTP Referer 字段</h4>
+<ul>
+<li>HTTP 头中有一个字段叫 Referer，它记录了该 HTTP 请求的来源地址；</li>
+<li>防御 CSRF 攻击，只需要对于每一个请求验证其 Referer 值，验证该请求是来自网站自己的请求，</li>
+</ul>
+<h4 id="2-在请求地址中添加-token">2. 在请求地址中添加 token</h4>
+<ul>
+<li>CSRF 攻击之所以能够成功，是因为可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于 cookie 中；</li>
+<li>抵御 CSRF，关键在于在请求中放入黑客所不能伪造的信息，并且该信息不存在于 cookie 之中；</li>
+<li>在 HTTP 请求中以参数的形式加入一个随机产生的 token，并在服务器端拦截验证，如果没有 token 或内容不正确，则拒绝。</li>
+</ul>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/xss/">#xss</a><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/csrf/">#csrf</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-left item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-catalog item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/" data-tooltip="js promise详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInDown">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: false,
+        
+    });
+</script>
+        <div class="cover animated fadeInDown"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>
