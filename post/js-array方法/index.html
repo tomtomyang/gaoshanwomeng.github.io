@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.a2a82f59132d9e30294d8524b4a3576a36e6a1733268908be8bb20e0edb5a70d.css" integrity="sha256-oqgvWRMtnjApTYUktKNXajbmoXMyaJCL6Lsg4O21pw0="
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.cc007135f139f5d7d8d51b3cb172506ef053ade3336f43da570472cdf37661ae.css" integrity="sha256-zABxNfE59dfY1Rs8sXJQbvBTreMzb0PaVwRyzfN2Ya4="
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -750,6 +750,9 @@
 
 <div class="search-container animated fadeInDown">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>全力搜索中</span>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
 <script type="text/javascript">
@@ -760,10 +763,18 @@
         inputSelector: '.docsearch-input',
         debug: true,
         algoliaOptions: {
-            hitsPerPage: 10,
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
         }
-    });
-    
+    })
 </script>
         <div class="cover animated fadeInDown"></div>
     </body>
