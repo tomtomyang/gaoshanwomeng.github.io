@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  webpack和bable的关系 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" webpack和bable的关系 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [webpack bable] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_4i29xfqogjd.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.ab3d535eeceaa8f260ff568fc6d616156d69096fe4f32ef9d33a313bc435312b.css" integrity="sha256-qz1TXuzqqPJg/1aPxtYWFW1pCW/k8y750zoxO8Q1MSs="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#1-webpack" class="toc-link">1. webpack</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#2-babel" class="toc-link">2. babel</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#3-babel-loader" class="toc-link">3. babel-loader</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#4-%e4%b8%89%e8%80%85%e7%9a%84%e5%85%b3%e7%b3%bb" class="toc-link">4. 三者的关系</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#5-%e4%bb%a3%e7%a0%81%e9%aa%8c%e8%af%81" class="toc-link">5. 代码验证</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#1-%e5%88%9d%e5%a7%8b%e5%8c%96" class="toc-link">1. 初始化</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#2-%e9%85%8d%e7%bd%ae-babel" class="toc-link">2. 配置 Babel</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#3-%e9%85%8d%e7%bd%ae-react" class="toc-link">3. 配置 React</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#4-%e9%85%8d%e7%bd%ae-webpack" class="toc-link">4. 配置 webpack</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/webpack%E5%92%8Cbable%E7%9A%84%E5%85%B3%E7%B3%BB/#5-%e4%b8%a4%e7%a7%8d%e7%bc%96%e8%af%91%e7%bb%93%e6%9e%9c%e5%af%b9%e6%af%94" class="toc-link">5. 两种编译结果对比</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="title">
+        <a href="https://gaoshanwomeng.github.io/">webpack和bable的关系</a>
+        
+        <div class="info">
+          <span>📅 2021-07-21</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 921字</span>
+          <span>⏱ 2分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>作者：whosmeya
+链接：https://juejin.cn/post/6844904098303574023
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<h3 id="1-webpack">1. webpack</h3>
+<p>webpack 是一个现代 JavaScript 应用程序的静态模块打包器。（项目打包）</p>
+<h3 id="2-babel">2. babel</h3>
+<p>babel 是一个 JavaScript 编译器。（把浏览器不认识的语法，编译成浏览器认识的语法。）</p>
+<h3 id="3-babel-loader">3. babel-loader</h3>
+<p>用来连接webpack使用babel的加载器</p>
+<h3 id="4-三者的关系">4. 三者的关系</h3>
+<p>webpack 通过 babel-loader 使用 babel ，使用到了Bable的如下内容：</p>
+<blockquote>
+<ul>
+<li>
+<p>@babel/cli</p>
+<p>Babel附带了一个内置的CLI，可用于从命令行编译文件。</p>
+</li>
+<li>
+<p>@babel/core</p>
+<p>使用本地配置文件</p>
+</li>
+<li>
+<p>@babel/preset-env</p>
+<p>编译最新版本JavaScript</p>
+</li>
+<li>
+<p>@babel/preset-react</p>
+<p>编译react</p>
+</li>
+<li>
+<p>@babel/polyfill</p>
+<p>通过 Polyfill 方式在目标环境中添加缺失的特性</p>
+</li>
+<li>
+<p>@babel/plugin-proposal-class-properties</p>
+<p>编译 class</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="5-代码验证">5. 代码验证</h3>
+<h4 id="1-初始化">1. 初始化</h4>
+<p>新建项目</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>mkdir babel-in-webpack
+</code></pre></div><p>进入项目</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">cd</span> babel-in-webpack/
+</code></pre></div><p>初始化 npm</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm init
+</code></pre></div><p>不用管提示，一顿回车键。然后会生成一个文件 <code>package.json</code></p>
+<h4 id="2-配置-babel">2. 配置 Babel</h4>
+<p>安装 Babel 相关依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save-dev @babel/cli @babel/core @babel/preset-env @babel/polyfill
+</code></pre></div><p>新建文件 <code>babel.config.json</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;presets&#34;</span>: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#f1fa8c">&#34;@babel/preset-env&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#ff79c6">&#34;plugins&#34;</span>: []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
+</code></pre></div><p>新建文件夹 <code>src</code>，<code>src</code> 内新建文件 <code>test.js</code>，随便写点啥es6语法。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbea1000f3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>使用下面命令编译</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>./node_modules/.bin/babel src --out-dir lib
+</code></pre></div><p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbeade14d6?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>编译完会新增目录<code>lib</code>, 里面放着编译好的文件</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbead1a5b8?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<h4 id="3-配置-react">3. 配置 React</h4>
+<p>安装 <code>Babel</code> 编译 <code>React</code> 的依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save-dev @babel/preset-react @babel/plugin-proposal-class-properties
+</code></pre></div><p><code>babel.config.json</code> 添加 <code>React</code> 相关配置</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;presets&#34;</span>: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#f1fa8c">&#34;@babel/preset-env&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#f1fa8c">&#34;@babel/preset-react&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#ff79c6">&#34;plugins&#34;</span>: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    <span style="color:#f1fa8c">&#34;@babel/plugin-proposal-class-properties&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>}
+</code></pre></div><p>安装 <code>React</code> 相关依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save react react-dom
+</code></pre></div><p><code>src</code> 下新增 <code>react</code> 文件 <code>main.js</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> React from <span style="color:#f1fa8c">&#39;react&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">import</span> ReactDOM from <span style="color:#f1fa8c">&#39;react-dom&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">class</span> App <span style="color:#ff79c6">extends</span> React.Component {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  render() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">return</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      &lt;<span style="color:#ff79c6">div</span>&gt;Hello World<span style="color:#ff79c6">!</span>&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>ReactDOM.render(&lt;<span style="color:#ff79c6">App</span> /&gt;, <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;root&#39;</span>));
+</code></pre></div><p>运行命令编译</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>./node_modules/.bin/babel src --out-dir lib
+</code></pre></div><p>编译完成后 <code>lib</code> 下多了一个 <code>main.js</code>。</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbeb4d6b7b?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>看起来编译很成功, 我们在 <code>lib</code> 下面新建一个 html 引入 <code>main.js</code> 看看效果</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbefcf3ea3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>报错，浏览器不认识require，继续往下看。</p>
+<h4 id="4-配置-webpack">4. 配置 webpack</h4>
+<p>安装 <code>webpack</code> 依赖</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save-dev webpack webpack-cli
+</code></pre></div><p>根目录新建文件 <code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/main.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    path<span style="color:#ff79c6">:</span> path.resolve(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;[name].js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>};
+</code></pre></div><p>在 <code>package.json</code> 的 <code>scripts</code> 中加入命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;build&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;webpack --mode development&#34;</span>,
+</code></pre></div><p>运行命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run build
+</code></pre></div><p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fbf1613980?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p><code>webpack</code> 不认识 <code>react</code> 语法，在 <code>webpack.config.js</code> 中加入 <code>babel-loader</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/main.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    path<span style="color:#ff79c6">:</span> path.resolve(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;dist&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;[name].js&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      { test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.js$/</span>, use<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;babel-loader&#39;</span> }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  plugins<span style="color:#ff79c6">:</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>};
+</code></pre></div><p>安装依赖 <code>babel-loader</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install --save-dev babel-loader
+</code></pre></div><p>运行命令</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm run build
+</code></pre></div><p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fc1cc5e5e3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<p>会看到 <code>dist/main.js</code>, 写个html引入试试</p>
+<p><img src="https://user-gold-cdn.xitu.io/2020/3/20/170f87fc1f474c1d?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="img"></p>
+<h4 id="5-两种编译结果对比">5. 两种编译结果对比</h4>
+<p>我们来看 <code>Babel</code> 编译结果 <code>lib/main.js</code> 和 <code>webpack</code> 编译结果 <code>dist/main.js</code>，发现 <code>Babel</code> 仅仅是将 <code>src/main.js</code> 的react语法编译成了js语法，而 <code>webpack</code> 将 <code>src/main.js</code> 和引入的 <code>node_modules</code> 融合后用 <code>Babel</code> 编译。</p>
+<p>浏览器不认识 <code>require</code>，<code>webpack</code> 实现了一套浏览器认识的 <code>require</code>。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/webpack/">#webpack</a><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/bable/">#bable</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/xsscsrf/" data-tooltip="xss&amp;csrf">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInDown">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInDown"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>
