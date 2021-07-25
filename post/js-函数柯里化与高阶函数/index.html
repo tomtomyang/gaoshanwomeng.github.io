@@ -4,7 +4,7 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  js 函数柯里化与高阶函数 </title>
-    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="description" itemprop="description"
         content=" js 函数柯里化与高阶函数 ">
     <meta name="keywords" itemprop="keywords"
@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.ab3d535eeceaa8f260ff568fc6d616156d69096fe4f32ef9d33a313bc435312b.css" integrity="sha256-qz1TXuzqqPJg/1aPxtYWFW1pCW/k8y750zoxO8Q1MSs="
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6226085fc2a44cf082da8dec48955d262ebfd4913e2814bfe0920f29c017e1aa.css" integrity="sha256-YiYIX8KkTPCC2o3sSJVdJi6/1JE&#43;KBS/4JIPKcAX4ao="
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -82,14 +82,14 @@
                 </li>
                 </div><div class="single-post container">
     <div class="post">
-      <div class="title">
-        <a href="https://gaoshanwomeng.github.io/">js 函数柯里化与高阶函数</a>
+      <div class="header">
+        <span class="title">js 函数柯里化与高阶函数</span>
         
         <div class="info">
           <span>📅 2021-03-26</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 4951字</span>
-          <span>⏱ 10分钟</span>
+          <span>📖 5063字</span>
+          <span>⏱ 11分钟</span>
         </div>
         
       </div>
@@ -110,51 +110,127 @@
 <p><code>Array.prototype.map</code>，<code>Array.prototype.filter</code>，<code>Array.prototype.reduce</code>和<code>Array.prototype.sort</code>是JavaScript中内置的高阶函数。它们接受一个函数作为参数，并应用这个函数到列表的每一个元素。下面是一些内置高阶函数的具体说明讲解，以及和不使用高阶函数情况下的对比：</p>
 <h4 id="31-arrayprototypemap">3.1 Array.prototype.map</h4>
 <p><code>map()</code>(映射)方法最后生成一个新数组，不改变原始数组的值。其结果是该数组中的每个元素都调用一个提供的函数后返回的结果。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>array.map(callback,[ thisObject]);
-</code></pre></div><p>callback(回调函数)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[].map(<span style="color:#8be9fd;font-style:italic">function</span>(currentValue, index, array) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#6272a4">// ...
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>});
-</code></pre></div><p>传递给 <code>map</code> 的回调函数（<code>callback</code>）接受三个参数，分别是<code>currentValue</code>——正在遍历的元素、index（可选）——元素索引、array（可选）——原数组本身，除了 <code>callback</code> 之外还可以接受 this 值（可选），用于执行 <code>callback</code> 函数时使用的this 值。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">array.map(callback,[ thisObject]);
+</code></pre></td></tr></table>
+</div>
+</div><p>callback(回调函数)</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">[].map(<span style="color:#8be9fd;font-style:italic">function</span>(currentValue, index, array) {
+    <span style="color:#6272a4">// ...
+</span><span style="color:#6272a4"></span>});
+</code></pre></td></tr></table>
+</div>
+</div><p>传递给 <code>map</code> 的回调函数（<code>callback</code>）接受三个参数，分别是<code>currentValue</code>——正在遍历的元素、index（可选）——元素索引、array（可选）——原数组本身，除了 <code>callback</code> 之外还可以接受 this 值（可选），用于执行 <code>callback</code> 函数时使用的this 值。</p>
 <p>来个简单的例子方便理解，现在有一个数组<code>[1,2,3,4]</code>，我们想要生成一个新数组，其每个元素皆是之前数组的两倍，那么我们有下面两种使用高阶和不使用高阶函数的方式来实现。</p>
 <p><strong>不使用高阶函数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// koala
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> [];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr1.length; i<span style="color:#ff79c6">++</span>) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  arr2.push( arr1[i] <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log( arr2 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// [2, 4, 6, 8]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log( arr1 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// [1, 2, 3, 4]
-</span></code></pre></div><p><strong>使用高阶函数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// kaola
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.map(item =&gt; item <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>console.log( arr2 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// [2, 4, 6, 8]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>console.log( arr1 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// [1, 2, 3, 4]
-</span></code></pre></div><p><strong>map高阶函数注意点</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// koala
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> [];
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr1.length; i<span style="color:#ff79c6">++</span>) {
+  arr2.push( arr1[i] <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
+}
+
+console.log( arr2 );
+<span style="color:#6272a4">// [2, 4, 6, 8]
+</span><span style="color:#6272a4"></span>console.log( arr1 );
+<span style="color:#6272a4">// [1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用高阶函数</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// kaola
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.map(item =&gt; item <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
+
+console.log( arr2 );
+<span style="color:#6272a4">// [2, 4, 6, 8]
+</span><span style="color:#6272a4"></span>console.log( arr1 );
+<span style="color:#6272a4">// [1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>map高阶函数注意点</strong></p>
 <p>callback需要有return值，否则会出现所有项映射为undefind；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// kaola
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.map(item =&gt; {});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>console.log( arr2 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// [ undefined, undefined, undefined, undefined ]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>console.log( arr1 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// [1, 2, 3, 4]
-</span></code></pre></div><p><strong>map高阶函数对应的一道经典面试题</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">//输出结果
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>[<span style="color:#f1fa8c">&#34;1&#34;</span>, <span style="color:#f1fa8c">&#34;2&#34;</span>, <span style="color:#f1fa8c">&#34;3&#34;</span>].map(<span style="color:#8be9fd;font-style:italic">parseInt</span>);
-</code></pre></div><p>看了这道题不知道会不会有大多数开发者认为输出结果是[1,2,3]</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// kaola
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.map(item =&gt; {});
+
+console.log( arr2 );
+<span style="color:#6272a4">// [ undefined, undefined, undefined, undefined ]
+</span><span style="color:#6272a4"></span>console.log( arr1 );
+<span style="color:#6272a4">// [1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>map高阶函数对应的一道经典面试题</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//输出结果
+</span><span style="color:#6272a4"></span>[<span style="color:#f1fa8c">&#34;1&#34;</span>, <span style="color:#f1fa8c">&#34;2&#34;</span>, <span style="color:#f1fa8c">&#34;3&#34;</span>].map(<span style="color:#8be9fd;font-style:italic">parseInt</span>);
+</code></pre></td></tr></table>
+</div>
+</div><p>看了这道题不知道会不会有大多数开发者认为输出结果是[1,2,3]</p>
 <p>正确的输出结果为：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[<span style="color:#bd93f9">1</span>,<span style="color:#ff79c6">NaN</span>,<span style="color:#ff79c6">NaN</span>]
-</code></pre></div><p><strong>分析与讲解</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">[<span style="color:#bd93f9">1</span>,<span style="color:#ff79c6">NaN</span>,<span style="color:#ff79c6">NaN</span>]
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>分析与讲解</strong></p>
 <p>因为<code>map</code>的<code>callback</code>函数有三个参数，正在遍历的元素, 元素索引(index), 原数组本身(array)。<code>parseInt</code>有两个参数，string和radix(进制)，注意第二个参数进制当为0或者没有参数的时候，parseInt()会根据string来判断数字的基数。当忽略参数 radix , JavaScript 默认数字的基数如下:</p>
 <ul>
 <li>如果 string 以 &ldquo;0x&rdquo; 开头，parseInt() 会把 string 的其余部分解析为十六进制的整数。</li>
@@ -163,15 +239,33 @@
 </ul>
 <p>只传入parseInt的话，map callback会自动忽略第三个参数array。而index参数不会被忽略。而不被忽略的index(0,1,2)就会被parseInt当做第二个参数。</p>
 <p>将其拆开看：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;1&#34;</span>,<span style="color:#bd93f9">0</span>);<span style="color:#6272a4">//上面说过第二个参数为进制，所以&#34;1&#34;，radix为0上面提到过，会忽略，根据string 以 1 ~ 9 的数字开头，parseInt() 将把它解析为十进制的整数1。
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;2&#34;</span>,<span style="color:#bd93f9">1</span>);<span style="color:#6272a4">//此时将2转为1进制数，由于超过进制数1，所以返回NaN。
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;3&#34;</span>,<span style="color:#bd93f9">2</span>);<span style="color:#6272a4">//此时将3转为2进制数，由于超过进制数1，所以返回NaN。
-</span></code></pre></div><p>所以最终的结果为<code>[1,NaN,NaN]</code>。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;1&#34;</span>,<span style="color:#bd93f9">0</span>);<span style="color:#6272a4">//上面说过第二个参数为进制，所以&#34;1&#34;，radix为0上面提到过，会忽略，根据string 以 1 ~ 9 的数字开头，parseInt() 将把它解析为十进制的整数1。
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;2&#34;</span>,<span style="color:#bd93f9">1</span>);<span style="color:#6272a4">//此时将2转为1进制数，由于超过进制数1，所以返回NaN。
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">parseInt</span>(<span style="color:#f1fa8c">&#34;3&#34;</span>,<span style="color:#bd93f9">2</span>);<span style="color:#6272a4">//此时将3转为2进制数，由于超过进制数1，所以返回NaN。
+</span></code></pre></td></tr></table>
+</div>
+</div><p>所以最终的结果为<code>[1,NaN,NaN]</code>。</p>
 <p>那么如果想要得到<code>[1,2,3]</code>该怎么写。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[<span style="color:#f1fa8c">&#34;1&#34;</span>,<span style="color:#f1fa8c">&#34;2&#34;</span>,<span style="color:#f1fa8c">&#34;3&#34;</span>].map((x)=&gt;{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">parseInt</span>(x);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>});
-</code></pre></div><p>也可以简写为：
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">[<span style="color:#f1fa8c">&#34;1&#34;</span>,<span style="color:#f1fa8c">&#34;2&#34;</span>,<span style="color:#f1fa8c">&#34;3&#34;</span>].map((x)=&gt;{
+    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">parseInt</span>(x);
+});
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以简写为：
 <code>[&quot;1&quot;,&quot;2&quot;,&quot;3&quot;].map(x=&gt;parseInt(x));</code></p>
 <p>这样写为什么就能返回想要的值呢？因为，传一个完整函数进去，有形参，有返回值。这样就不会造成因为参数传入错误而造成结果错误了，最后返回一个经纯函数处理过的新数组。</p>
 <h4 id="32-arrayprototypereduce">3.2 Array.prototype.reduce</h4>
@@ -182,29 +276,61 @@
 </ul>
 <p>例子，现在有一个数组 [0, 1, 2, 3, 4]，需要计算数组元素的和，需求比较简单，来看下代码实现。</p>
 <p><strong>不使用高阶函数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//koala
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  sum <span style="color:#ff79c6">+=</span> arr[i];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log( sum );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log( arr );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// [0, 1, 2, 3, 4]
-</span></code></pre></div><p><strong>使用高阶函数</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//koala
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
+  sum <span style="color:#ff79c6">+=</span> arr[i];
+}
+
+console.log( sum );
+<span style="color:#6272a4">// 10
+</span><span style="color:#6272a4"></span>console.log( arr );
+<span style="color:#6272a4">// [0, 1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用高阶函数</strong></p>
 <p>无 initialValue 值</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> arr.reduce((accumulator, currentValue, currentIndex, array) =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#ff79c6">return</span> accumulator <span style="color:#ff79c6">+</span> currentValue;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>console.log( sum );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// 10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>console.log( arr );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4">// [0, 1, 2, 3, 4]
-</span></code></pre></div><p>上面是没有 initialValue 的情况，代码的执行过程如下，callback 总共调用四次。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> arr.reduce((accumulator, currentValue, currentIndex, array) =&gt; {
+  <span style="color:#ff79c6">return</span> accumulator <span style="color:#ff79c6">+</span> currentValue;
+});
+
+console.log( sum );
+<span style="color:#6272a4">// 10
+</span><span style="color:#6272a4"></span>console.log( arr );
+<span style="color:#6272a4">// [0, 1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面是没有 initialValue 的情况，代码的执行过程如下，callback 总共调用四次。</p>
 <table>
 <thead>
 <tr>
@@ -253,17 +379,33 @@
 </table>
 <p>有 initialValue 值</p>
 <p>我们再来看下有 initialValue 的情况，假设 initialValue 值为 10，我们看下代码。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//koala
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> arr.reduce((accumulator, currentValue, currentIndex, array) =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">return</span> accumulator <span style="color:#ff79c6">+</span> currentValue;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}, <span style="color:#bd93f9">10</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>console.log( sum );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>console.log( arr );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// [0, 1, 2, 3, 4]
-</span></code></pre></div><p>代码的执行过程如下所示，callback 总共调用五次。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//koala
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> arr.reduce((accumulator, currentValue, currentIndex, array) =&gt; {
+  <span style="color:#ff79c6">return</span> accumulator <span style="color:#ff79c6">+</span> currentValue;
+}, <span style="color:#bd93f9">10</span>);
+
+console.log( sum );
+<span style="color:#6272a4">// 20
+</span><span style="color:#6272a4"></span>console.log( arr );
+<span style="color:#6272a4">// [0, 1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>代码的执行过程如下所示，callback 总共调用五次。</p>
 <table>
 <thead>
 <tr>
@@ -320,75 +462,164 @@
 </table>
 <h4 id="33-arrayprototypefilter">3.3 Array.prototype.filter</h4>
 <p><code>filter</code>(过滤，筛选) 方法创建一个新数组,原始数组不发生改变。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>array.filter(callback,[ thisObject]);
-</code></pre></div><p>其包含通过提供函数实现的测试的所有元素。接收的参数和 map 是一样的，filter的<code>callbac</code>k函数需要返回布尔值true或false. 如果为true则表示通过啦！如果为false则失败，其返回值是一个新数组，由通过测试为true的所有元素组成，如果没有任何数组元素通过测试，则返回空数组。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">array.filter(callback,[ thisObject]);
+</code></pre></td></tr></table>
+</div>
+</div><p>其包含通过提供函数实现的测试的所有元素。接收的参数和 map 是一样的，filter的<code>callbac</code>k函数需要返回布尔值true或false. 如果为true则表示通过啦！如果为false则失败，其返回值是一个新数组，由通过测试为true的所有元素组成，如果没有任何数组元素通过测试，则返回空数组。</p>
 <p>来个例子介绍下，现在有一个数组 <code>[1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]</code>，我们想要生成一个新数组，这个数组要求没有重复的内容，即为去重。</p>
 <p><strong>不使用高阶函数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> [];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr1.length; i<span style="color:#ff79c6">++</span>) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">if</span> (arr1.indexOf( arr1[i] ) <span style="color:#ff79c6">===</span> i) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    arr2.push( arr1[i] );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log( arr2 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// [1, 2, 3, 5, 4]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>console.log( arr1 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// [1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]
-</span></code></pre></div><p><strong>使用高阶函数</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.filter( (element, index, self) =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">return</span> self.indexOf( element ) <span style="color:#ff79c6">===</span> index;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>console.log( arr2 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// [1, 2, 3, 5, 4]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>console.log( arr1 );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4">// [1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]
-</span></code></pre></div><p><strong>filter注意点说明</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> [];
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr1.length; i<span style="color:#ff79c6">++</span>) {
+  <span style="color:#ff79c6">if</span> (arr1.indexOf( arr1[i] ) <span style="color:#ff79c6">===</span> i) {
+    arr2.push( arr1[i] );
+  }
+}
+console.log( arr2 );
+<span style="color:#6272a4">// [1, 2, 3, 5, 4]
+</span><span style="color:#6272a4"></span>console.log( arr1 );
+<span style="color:#6272a4">// [1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用高阶函数</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> arr1 <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>];
+<span style="color:#ff79c6">const</span> arr2 <span style="color:#ff79c6">=</span> arr1.filter( (element, index, self) =&gt; {
+    <span style="color:#ff79c6">return</span> self.indexOf( element ) <span style="color:#ff79c6">===</span> index;
+});
+
+console.log( arr2 );
+<span style="color:#6272a4">// [1, 2, 3, 5, 4]
+</span><span style="color:#6272a4"></span>console.log( arr1 );
+<span style="color:#6272a4">// [1, 2, 1, 2, 3, 5, 4, 5, 3, 4, 4, 4, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>filter注意点说明</strong></p>
 <p><code>callback</code>在过滤测试的时候，一定要是Boolean值吗？
 例子：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> arrayFilter <span style="color:#ff79c6">=</span> arr.filter(<span style="color:#8be9fd;font-style:italic">function</span>(item) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">return</span> item;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>console.log(arrayFilter); <span style="color:#6272a4">// [1, 2, 3]
-</span></code></pre></div><p>通过例子可以看出:过滤测试的返回值只要是弱等于== true/false就可以了，而非非得返回 === true/false.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">var</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>];
+<span style="color:#8be9fd;font-style:italic">var</span> arrayFilter <span style="color:#ff79c6">=</span> arr.filter(<span style="color:#8be9fd;font-style:italic">function</span>(item) {
+    <span style="color:#ff79c6">return</span> item;
+});
+console.log(arrayFilter); <span style="color:#6272a4">// [1, 2, 3]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>通过例子可以看出:过滤测试的返回值只要是弱等于== true/false就可以了，而非非得返回 === true/false.</p>
 <h4 id="34-arrayprototypesort">3.4 Array.prototype.sort</h4>
 <p><code>sort() </code>方法用原地算法对数组的元素进行排序，并返回数组，该排序方法会在原数组上直接进行排序，并不会生成一个排好序的新数组。排序算法现在是稳定的。默认排序顺序是根据字符串Unicode码点。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 语法
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>arr.sort([compareFunction])
-</code></pre></div><p><code>compareFunction</code>参数是可选的，用来指定按某种顺序进行排列的函数。注意该函数有两个参数：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 语法
+</span><span style="color:#6272a4"></span>arr.sort([compareFunction])
+</code></pre></td></tr></table>
+</div>
+</div><p><code>compareFunction</code>参数是可选的，用来指定按某种顺序进行排列的函数。注意该函数有两个参数：</p>
 <p><strong>参数1:firstEl</strong></p>
 <p>第一个用于比较的元素。</p>
 <p><strong>参数2:secondEl</strong></p>
 <p>第二个用于比较的元素。看下面的例子与说明：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 未指明compareFunction函数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>[<span style="color:#f1fa8c">&#39;Google&#39;</span>, <span style="color:#f1fa8c">&#39;Apple&#39;</span>, <span style="color:#f1fa8c">&#39;Microsoft&#39;</span>].sort(); <span style="color:#6272a4">// [&#39;Apple&#39;, &#39;Google&#39;, &#39;Microsoft&#39;];
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// apple排在了最后:
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>[<span style="color:#f1fa8c">&#39;Google&#39;</span>, <span style="color:#f1fa8c">&#39;apple&#39;</span>, <span style="color:#f1fa8c">&#39;Microsoft&#39;</span>].sort(); <span style="color:#6272a4">// [&#39;Google&#39;, &#39;Microsoft&#34;, &#39;apple&#39;]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 无法理解的结果:
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>[<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(); <span style="color:#6272a4">// [1, 10, 2, 20]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">//正确的结果
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>[<span style="color:#bd93f9">6</span>, <span style="color:#bd93f9">8</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(); <span style="color:#6272a4">// [1, 2，6, 8]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">// 指明compareFunction函数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span><span style="color:#f1fa8c">&#39;use strict&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#8be9fd;font-style:italic">var</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    arr.sort(<span style="color:#8be9fd;font-style:italic">function</span> (x, y) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;</span> y) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&gt;</span> y) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>            <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>        }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    });
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>console.log(arr); <span style="color:#6272a4">// [1, 2, 10, 20]
-</span></code></pre></div><p>如果没有指明 <code>compareFunction</code> ，那么元素会按照转换为的字符串的诸个字符的<code>Unicode</code>位点进行排序。例如 &ldquo;Banana&rdquo; 会被排列到 &ldquo;cherry&rdquo; 之前。当数字按由小到大排序时，10 出现在 2 之前，但因为（没有指明 <code>compareFunction</code>），比较的数字会先被转换为字符串，所以在<code>Unicode</code>顺序上 &ldquo;10&rdquo; 要比 &ldquo;2&rdquo; 要靠前。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 未指明compareFunction函数
+</span><span style="color:#6272a4"></span>
+[<span style="color:#f1fa8c">&#39;Google&#39;</span>, <span style="color:#f1fa8c">&#39;Apple&#39;</span>, <span style="color:#f1fa8c">&#39;Microsoft&#39;</span>].sort(); <span style="color:#6272a4">// [&#39;Apple&#39;, &#39;Google&#39;, &#39;Microsoft&#39;];
+</span><span style="color:#6272a4"></span>
+<span style="color:#6272a4">// apple排在了最后:
+</span><span style="color:#6272a4"></span>[<span style="color:#f1fa8c">&#39;Google&#39;</span>, <span style="color:#f1fa8c">&#39;apple&#39;</span>, <span style="color:#f1fa8c">&#39;Microsoft&#39;</span>].sort(); <span style="color:#6272a4">// [&#39;Google&#39;, &#39;Microsoft&#34;, &#39;apple&#39;]
+</span><span style="color:#6272a4"></span>
+<span style="color:#6272a4">// 无法理解的结果:
+</span><span style="color:#6272a4"></span>[<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(); <span style="color:#6272a4">// [1, 10, 2, 20]
+</span><span style="color:#6272a4">//正确的结果
+</span><span style="color:#6272a4"></span>[<span style="color:#bd93f9">6</span>, <span style="color:#bd93f9">8</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(); <span style="color:#6272a4">// [1, 2，6, 8]
+</span><span style="color:#6272a4"></span>
+<span style="color:#6272a4">// 指明compareFunction函数
+</span><span style="color:#6272a4"></span><span style="color:#f1fa8c">&#39;use strict&#39;</span>;
+<span style="color:#8be9fd;font-style:italic">var</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>];
+    arr.sort(<span style="color:#8be9fd;font-style:italic">function</span> (x, y) {
+        <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&lt;</span> y) {
+            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>;
+        }
+        <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&gt;</span> y) {
+            <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">1</span>;
+        }
+        <span style="color:#ff79c6">return</span> <span style="color:#bd93f9">0</span>;
+    });
+console.log(arr); <span style="color:#6272a4">// [1, 2, 10, 20]
+</span></code></pre></td></tr></table>
+</div>
+</div><p>如果没有指明 <code>compareFunction</code> ，那么元素会按照转换为的字符串的诸个字符的<code>Unicode</code>位点进行排序。例如 &ldquo;Banana&rdquo; 会被排列到 &ldquo;cherry&rdquo; 之前。当数字按由小到大排序时，10 出现在 2 之前，但因为（没有指明 <code>compareFunction</code>），比较的数字会先被转换为字符串，所以在<code>Unicode</code>顺序上 &ldquo;10&rdquo; 要比 &ldquo;2&rdquo; 要靠前。</p>
 <p>如果指明了 <code>compareFunction</code> ，那么数组会按照调用该函数的返回值排序。即 a 和 b 是两个将要被比较的元素：</p>
 <ul>
 <li>如果 compareFunction(a, b) 小于 0 ，那么 a 会被排列到 b 之前；</li>
@@ -401,80 +632,175 @@
 <blockquote>
 <p>源码地址：<a href="https://github.com/v8/v8/blob/ad82a40509c5b5b4680d4299c8f08d6c6d31af3c/src/js/array.js">https://github.com/v8/v8/blob&hellip;</a></p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// In-place QuickSort algorithm.
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">// For short (length &lt;= 22) arrays, insertion sort is used for efficiency.
-</span></code></pre></div><p>V8 引擎 sort 函数只给出了两种排序 <code>InsertionSort</code>和 <code>QuickSort</code>，<strong>数量小于等于22</strong>的数组使用 <code>InsertionSort</code>，比22大的数组则使用 <code>QuickSort</code>，有兴趣的可以看看具体算法实现。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// In-place QuickSort algorithm.
+</span><span style="color:#6272a4">// For short (length &lt;= 22) arrays, insertion sort is used for efficiency.
+</span></code></pre></td></tr></table>
+</div>
+</div><p>V8 引擎 sort 函数只给出了两种排序 <code>InsertionSort</code>和 <code>QuickSort</code>，<strong>数量小于等于22</strong>的数组使用 <code>InsertionSort</code>，比22大的数组则使用 <code>QuickSort</code>，有兴趣的可以看看具体算法实现。</p>
 <blockquote>
 <p>注意：不同的浏览器引擎可能算法实现并不同，我这里只是查看了V8引擎的算法实现，有兴趣的小伙伴可以查看下其他开源浏览器具体sort的算法实现。</p>
 </blockquote>
 <h5 id="如何改进排序算法实现数字正确排序呢">如何改进排序算法实现数字正确排序呢？</h5>
 <p>对于要比较数字而非字符串，比较函数可以简单的以 a 减 b，如下的函数将会将数组升序排列，降序排序则使用b-a。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> compareNumbers<span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (a, b) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">-</span> b;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#8be9fd;font-style:italic">let</span> koala<span style="color:#ff79c6">=</span>[<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(compareNumbers)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>console.log(koala);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// [1 , 2 , 10 , 20]
-</span></code></pre></div><h3 id="4-函数作为返回值输出">4. 函数作为返回值输出</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> compareNumbers<span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (a, b) {
+    <span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">-</span> b;
+}
+<span style="color:#8be9fd;font-style:italic">let</span> koala<span style="color:#ff79c6">=</span>[<span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>].sort(compareNumbers)
+
+console.log(koala);
+<span style="color:#6272a4">// [1 , 2 , 10 , 20]
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4-函数作为返回值输出">4. 函数作为返回值输出</h3>
 <p>返回一个函数，下面直接看两个例子来加深理解。</p>
 <h4 id="41-istype-函数">4.1 isType 函数</h4>
 <p>我们知道在判断类型的时候可以通过<code>Object.prototype.toString.call</code> 来获取对应对象返回的字符串，比如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> isString <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object String]&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">let</span> isArray <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object Array]&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#8be9fd;font-style:italic">let</span> isNumber <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object Number]&#39;</span>;
-</code></pre></div><p>可以发现上面三行代码有很多重复代码，只需要把具体的类型抽离出来就可以封装成一个判断类型的方法了，代码如下。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> isType <span style="color:#ff79c6">=</span> type =&gt; obj =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object &#39;</span> <span style="color:#ff79c6">+</span> type <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;]&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>isType(<span style="color:#f1fa8c">&#39;String&#39;</span>)(<span style="color:#f1fa8c">&#39;123&#39;</span>);        <span style="color:#6272a4">// true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>isType(<span style="color:#f1fa8c">&#39;Array&#39;</span>)([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);    <span style="color:#6272a4">// true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span>isType(<span style="color:#f1fa8c">&#39;Number&#39;</span>)(<span style="color:#bd93f9">123</span>);            <span style="color:#6272a4">// true
-</span></code></pre></div><p>这里就是一个高阶函数，因为 isType 函数将 <code>obj =&gt; { ... }</code> 这一函数作为返回值输出。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> isString <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object String]&#39;</span>;
+
+<span style="color:#8be9fd;font-style:italic">let</span> isArray <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object Array]&#39;</span>;
+
+<span style="color:#8be9fd;font-style:italic">let</span> isNumber <span style="color:#ff79c6">=</span> obj =&gt; <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object Number]&#39;</span>;
+</code></pre></td></tr></table>
+</div>
+</div><p>可以发现上面三行代码有很多重复代码，只需要把具体的类型抽离出来就可以封装成一个判断类型的方法了，代码如下。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> isType <span style="color:#ff79c6">=</span> type =&gt; obj =&gt; {
+  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">Object</span>.prototype.toString.call( obj ) <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;[object &#39;</span> <span style="color:#ff79c6">+</span> type <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;]&#39;</span>;
+}
+
+isType(<span style="color:#f1fa8c">&#39;String&#39;</span>)(<span style="color:#f1fa8c">&#39;123&#39;</span>);        <span style="color:#6272a4">// true
+</span><span style="color:#6272a4"></span>isType(<span style="color:#f1fa8c">&#39;Array&#39;</span>)([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);    <span style="color:#6272a4">// true
+</span><span style="color:#6272a4"></span>isType(<span style="color:#f1fa8c">&#39;Number&#39;</span>)(<span style="color:#bd93f9">123</span>);            <span style="color:#6272a4">// true
+</span></code></pre></td></tr></table>
+</div>
+</div><p>这里就是一个高阶函数，因为 isType 函数将 <code>obj =&gt; { ... }</code> 这一函数作为返回值输出。</p>
 <h4 id="42-add求和函数">4.2 add求和函数</h4>
 <p>前言中的面试题，用 JS 实现一个无限累加的函数 add，示例如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>);  <span style="color:#6272a4">// 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>)(<span style="color:#bd93f9">3</span>)； <span style="color:#6272a4">// 6
-</span></code></pre></div><p>分析面试题的结构，都是将函数作为返回值输出，然后接收新的参数并进行计算。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// 1
+</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>);  <span style="color:#6272a4">// 3
+</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>)(<span style="color:#bd93f9">3</span>)； <span style="color:#6272a4">// 6
+</span></code></pre></td></tr></table>
+</div>
+</div><p>分析面试题的结构，都是将函数作为返回值输出，然后接收新的参数并进行计算。</p>
 <p>我们知道打印函数时会自动调用 <code>toString()</code>方法（如果不知道的可以去看我的这篇文章），函数 add(a) 返回一个sum(b)函数，函数 sum() 中累加计算 a = a + b，只需要重写sum.toString()方法返回变量 a 就可以了。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> add(a) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">function</span> sum(b) { <span style="color:#6272a4">// 使用闭包
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>        a <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">+</span> b; <span style="color:#6272a4">// 累加
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> sum;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>     }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>     sum.toString <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() { <span style="color:#6272a4">// 重写toString()方法
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> a;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>     <span style="color:#ff79c6">return</span> sum; <span style="color:#6272a4">// 返回一个函数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>);  <span style="color:#6272a4">// 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>)(<span style="color:#bd93f9">3</span>)； <span style="color:#6272a4">// 6
-</span></code></pre></div><h4 id="43-自己创建高阶函数">4.3 自己创建高阶函数</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">function</span> add(a) {
+    <span style="color:#8be9fd;font-style:italic">function</span> sum(b) { <span style="color:#6272a4">// 使用闭包
+</span><span style="color:#6272a4"></span>        a <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">+</span> b; <span style="color:#6272a4">// 累加
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> sum;
+     }
+     sum.toString <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() { <span style="color:#6272a4">// 重写toString()方法
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> a;
+    }
+     <span style="color:#ff79c6">return</span> sum; <span style="color:#6272a4">// 返回一个函数
+</span><span style="color:#6272a4"></span>}
+
+add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// 1
+</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>);  <span style="color:#6272a4">// 3
+</span><span style="color:#6272a4"></span>add(<span style="color:#bd93f9">1</span>)(<span style="color:#bd93f9">2</span>)(<span style="color:#bd93f9">3</span>)； <span style="color:#6272a4">// 6
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="43-自己创建高阶函数">4.3 自己创建高阶函数</h4>
 <p>前面讲了语言中内置的各种高阶函数。知道了到底啊什么是高阶函数，有哪些类型的高阶函数。那么让我们<strong>自己创建一个高阶函数吧！</strong></p>
 <p>假设 JavaScript 没有原生的<code>map</code>方法。 我们自己构建个类似map的高阶函数，从而创建我们自己的高阶函数。
 假设我们有一个字符串数组，我们希望把它转换为整数数组，其中每个元素代表原始数组中字符串的长度。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> strArray<span style="color:#ff79c6">=</span>[<span style="color:#f1fa8c">&#39;JavaScript&#39;</span>,<span style="color:#f1fa8c">&#39;PHP&#39;</span>,<span style="color:#f1fa8c">&#39;JAVA&#39;</span>,<span style="color:#f1fa8c">&#39;C&#39;</span>,<span style="color:#f1fa8c">&#39;Python&#39;</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">function</span> mapForEach(arr,fn){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">const</span> newArray <span style="color:#ff79c6">=</span> [];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i<span style="color:#ff79c6">&lt;</span>arr.length;i<span style="color:#ff79c6">++</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        newArray.push({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>            fn(arr[i])
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">return</span> newArray;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#ff79c6">const</span> lenArray <span style="color:#ff79c6">=</span> mapForEach(strArray,<span style="color:#8be9fd;font-style:italic">function</span>(item){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">return</span> item.length;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>console.log(lenArray);<span style="color:#6272a4">//[10,3,4,1,6]
-</span></code></pre></div><p><strong>代码分析讲解：</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> strArray<span style="color:#ff79c6">=</span>[<span style="color:#f1fa8c">&#39;JavaScript&#39;</span>,<span style="color:#f1fa8c">&#39;PHP&#39;</span>,<span style="color:#f1fa8c">&#39;JAVA&#39;</span>,<span style="color:#f1fa8c">&#39;C&#39;</span>,<span style="color:#f1fa8c">&#39;Python&#39;</span>];
+<span style="color:#8be9fd;font-style:italic">function</span> mapForEach(arr,fn){
+    <span style="color:#ff79c6">const</span> newArray <span style="color:#ff79c6">=</span> [];
+    <span style="color:#ff79c6">for</span>(<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i<span style="color:#ff79c6">&lt;</span>arr.length;i<span style="color:#ff79c6">++</span>){
+        newArray.push({
+            fn(arr[i])
+        );
+    }
+    <span style="color:#ff79c6">return</span> newArray;
+}
+<span style="color:#ff79c6">const</span> lenArray <span style="color:#ff79c6">=</span> mapForEach(strArray,<span style="color:#8be9fd;font-style:italic">function</span>(item){
+    <span style="color:#ff79c6">return</span> item.length;
+});
+
+console.log(lenArray);<span style="color:#6272a4">//[10,3,4,1,6]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>代码分析讲解：</strong></p>
 <p>我们创建了一个高阶函数 mapForEach ，它接受一个数组和一个回调函数 fn。 它循环遍历传入的数组，并在每次迭代时在 newArray.push 方法调用回调函数 fn 。</p>
 <p>回调函数 fn 接收数组的当前元素并返回该元素的长度，该元素存储在 newArray 中。 for 循环完成后，newArray 被返回并赋值给 lenArray。</p>
 <h3 id="5-总结">5. 总结</h3>
@@ -529,7 +855,7 @@
   </div>
 </div>
 
-<div class="search-container animated fadeInDown">
+<div class="search-container animated fadeInShow">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
     <div  id="loading" class="loading-container">
         <span>搜索中...</span>
@@ -557,12 +883,12 @@
         }
     })
 </script>
-        <div class="cover animated fadeInDown"></div>
+        <div class="cover animated fadeInShow"></div>
     </body>
 
 
 
-<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {

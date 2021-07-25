@@ -4,7 +4,7 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  js 事件循环与异步并发 </title>
-    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="description" itemprop="description"
         content=" js 事件循环与异步并发 ">
     <meta name="keywords" itemprop="keywords"
@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.ab3d535eeceaa8f260ff568fc6d616156d69096fe4f32ef9d33a313bc435312b.css" integrity="sha256-qz1TXuzqqPJg/1aPxtYWFW1pCW/k8y750zoxO8Q1MSs="
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6226085fc2a44cf082da8dec48955d262ebfd4913e2814bfe0920f29c017e1aa.css" integrity="sha256-YiYIX8KkTPCC2o3sSJVdJi6/1JE&#43;KBS/4JIPKcAX4ao="
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -49,13 +49,13 @@
                 </li>
                 </div><div class="single-post container">
     <div class="post">
-      <div class="title">
-        <a href="https://gaoshanwomeng.github.io/">js 事件循环与异步并发</a>
+      <div class="header">
+        <span class="title">js 事件循环与异步并发</span>
         
         <div class="info">
           <span>📅 2021-06-25</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 6278字</span>
+          <span>📖 6295字</span>
           <span>⏱ 13分钟</span>
         </div>
         
@@ -144,19 +144,37 @@
 <p>事件循环机制：</p>
 <p><img src="https://miro.medium.com/max/2396/1*WGEUuqPJu4ti7kBfufwdXw.png" alt="img" style="zoom:50%;" /></p>
 <p>用一段代码来看一下具体的过程：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;First&#34;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> bar <span style="color:#ff79c6">=</span> () =&gt; setTimeout(() =&gt; console.log(<span style="color:#f1fa8c">&#34;Second&#34;</span>), <span style="color:#bd93f9">500</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> baz <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;Third&#34;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>bar();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>foo();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>baz();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// Output:
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// First
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// Third 
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// Second
-</span></code></pre></div><p><img src="https://miro.medium.com/max/1400/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  /></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;First&#34;</span>);
+<span style="color:#ff79c6">const</span> bar <span style="color:#ff79c6">=</span> () =&gt; setTimeout(() =&gt; console.log(<span style="color:#f1fa8c">&#34;Second&#34;</span>), <span style="color:#bd93f9">500</span>);
+<span style="color:#ff79c6">const</span> baz <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;Third&#34;</span>);
+
+bar();
+foo();
+baz();
+
+<span style="color:#6272a4">// Output:
+</span><span style="color:#6272a4">// First
+</span><span style="color:#6272a4">// Third 
+</span><span style="color:#6272a4">// Second
+</span></code></pre></td></tr></table>
+</div>
+</div><p><img src="https://miro.medium.com/max/1400/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  /></p>
 <ol>
 <li>当开始执行 JS 代码时，首先会执行一个 <code>main</code> 函数，然后执行我们的代码；</li>
 <li>bar函数被调用，形成函数调用帧，压入执行栈；</li>
@@ -172,24 +190,47 @@
 <li>但是，如果前面有其它任务或者执行栈还不为空，<code>setTimeout</code> 消息必须等待。</li>
 <li>因此第二个参数仅仅表示最少延迟时间，而非确切的等待时间。</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>(<span style="color:#8be9fd;font-style:italic">function</span>() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  console.log(<span style="color:#f1fa8c">&#39;这是开始&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  setTimeout(<span style="color:#8be9fd;font-style:italic">function</span> cb() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    console.log(<span style="color:#f1fa8c">&#39;这是来自第一个回调的消息&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  });
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  console.log(<span style="color:#f1fa8c">&#39;这是一条消息&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  setTimeout(<span style="color:#8be9fd;font-style:italic">function</span> cb1() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    console.log(<span style="color:#f1fa8c">&#39;这是来自第二个回调的消息&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }, <span style="color:#bd93f9">0</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  console.log(<span style="color:#f1fa8c">&#39;这是结束&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>})();
-</code></pre></div><p>![image-20210705143824688](D:\yangpeizhuo\Desktop\blog\JS Event Loop.assets\image-20210705143824688.png)</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">(<span style="color:#8be9fd;font-style:italic">function</span>() {
+
+  console.log(<span style="color:#f1fa8c">&#39;这是开始&#39;</span>);
+
+  setTimeout(<span style="color:#8be9fd;font-style:italic">function</span> cb() {
+    console.log(<span style="color:#f1fa8c">&#39;这是来自第一个回调的消息&#39;</span>);
+  });
+
+  console.log(<span style="color:#f1fa8c">&#39;这是一条消息&#39;</span>);
+
+  setTimeout(<span style="color:#8be9fd;font-style:italic">function</span> cb1() {
+    console.log(<span style="color:#f1fa8c">&#39;这是来自第二个回调的消息&#39;</span>);
+  }, <span style="color:#bd93f9">0</span>);
+
+  console.log(<span style="color:#f1fa8c">&#39;这是结束&#39;</span>);
+
+})();
+</code></pre></td></tr></table>
+</div>
+</div><p>![image-20210705143824688](D:\yangpeizhuo\Desktop\blog\JS Event Loop.assets\image-20210705143824688.png)</p>
 </blockquote>
 <h3 id="4-宏任务和微任务">4. 宏任务和微任务</h3>
 <p>根据上面的事件循环机制，可以知道的是，setTimeout作为一个调用浏览器API的异步事件，它的回调函数会在某一个时刻，被加入到任务队列中，等待进入执行栈。</p>
@@ -255,31 +296,31 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:left"></th>
-<th style="text-align:left">宏任务（macrotask）</th>
-<th style="text-align:left">微任务（microtask）</th>
+<th align="left"></th>
+<th align="left">宏任务（macrotask）</th>
+<th align="left">微任务（microtask）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left">谁发起的</td>
-<td style="text-align:left">宿主（Node.js、浏览器）</td>
-<td style="text-align:left">JS引擎（JS自身）</td>
+<td align="left">谁发起的</td>
+<td align="left">宿主（Node.js、浏览器）</td>
+<td align="left">JS引擎（JS自身）</td>
 </tr>
 <tr>
-<td style="text-align:left">具体事件</td>
-<td style="text-align:left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
-<td style="text-align:left">1. Promise<br/>2. MutaionObserver（监听DOM树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
+<td align="left">具体事件</td>
+<td align="left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
+<td align="left">1. Promise<br/>2. MutaionObserver（监听DOM树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
 </tr>
 <tr>
-<td style="text-align:left">谁先运行</td>
-<td style="text-align:left">后运行</td>
-<td style="text-align:left">先运行</td>
+<td align="left">谁先运行</td>
+<td align="left">后运行</td>
+<td align="left">先运行</td>
 </tr>
 <tr>
-<td style="text-align:left">会触发新一轮Tick吗</td>
-<td style="text-align:left">会</td>
-<td style="text-align:left">不会</td>
+<td align="left">会触发新一轮Tick吗</td>
+<td align="left">会</td>
+<td align="left">不会</td>
 </tr>
 </tbody>
 </table>
@@ -295,17 +336,33 @@
 <p><img src="https://miro.medium.com/max/875/1*0xDGBNrA1WtfSfYY3FJOdw.gif" alt="img" style="zoom:80%;" /></p>
 </blockquote>
 <p>再用一个实际的例子来看一下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>setTimeout(() =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	console.log(<span style="color:#f1fa8c">&#39;Timeout!&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}, <span style="color:#bd93f9">0</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#f1fa8c">&#39;Promise!&#39;</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	.then((res) =&gt; { console.log(res) })
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>console.log(<span style="color:#f1fa8c">&#39;End!&#39;</span>);
-</code></pre></div><ol>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
+
+setTimeout(() =&gt; {
+	console.log(<span style="color:#f1fa8c">&#39;Timeout!&#39;</span>);
+}, <span style="color:#bd93f9">0</span>);
+
+<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#f1fa8c">&#39;Promise!&#39;</span>)
+	.then((res) =&gt; { console.log(res) })
+
+console.log(<span style="color:#f1fa8c">&#39;End!&#39;</span>);
+</code></pre></td></tr></table>
+</div>
+</div><ol>
 <li>在第一行，JS引擎遇到<code>console.log()</code>方法。 它被添加到执行栈，之后会将指定内容输出到控制台。 该方法弹出执行栈，JS引擎继续；</li>
 </ol>
 <p><img src="https://miro.medium.com/max/1760/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" /></p>
@@ -427,7 +484,7 @@
   </div>
 </div>
 
-<div class="search-container animated fadeInDown">
+<div class="search-container animated fadeInShow">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
     <div  id="loading" class="loading-container">
         <span>搜索中...</span>
@@ -455,12 +512,12 @@
         }
     })
 </script>
-        <div class="cover animated fadeInDown"></div>
+        <div class="cover animated fadeInShow"></div>
     </body>
 
 
 
-<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {

@@ -4,7 +4,7 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  opencv 腐蚀与膨胀 </title>
-    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="description" itemprop="description"
         content=" opencv 腐蚀与膨胀 ">
     <meta name="keywords" itemprop="keywords"
@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.ab3d535eeceaa8f260ff568fc6d616156d69096fe4f32ef9d33a313bc435312b.css" integrity="sha256-qz1TXuzqqPJg/1aPxtYWFW1pCW/k8y750zoxO8Q1MSs="
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6226085fc2a44cf082da8dec48955d262ebfd4913e2814bfe0920f29c017e1aa.css" integrity="sha256-YiYIX8KkTPCC2o3sSJVdJi6/1JE&#43;KBS/4JIPKcAX4ao="
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -42,15 +42,20 @@
                 <li>
                     <a href="https://gaoshanwomeng.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/#%e8%85%90%e8%9a%80" class="toc-link">腐蚀</a>
                 </li>
+                
+                        </ul>
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/opencv-%E8%85%90%E8%9A%80%E4%B8%8E%E8%86%A8%E8%83%80/#%e8%a7%a3%e9%87%8a" class="toc-link">解释</a>
+                </li>
                 </div><div class="single-post container">
     <div class="post">
-      <div class="title">
-        <a href="https://gaoshanwomeng.github.io/">opencv 腐蚀与膨胀</a>
+      <div class="header">
+        <span class="title">opencv 腐蚀与膨胀</span>
         
         <div class="info">
           <span>📅 2020-10-18</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 1141字</span>
+          <span>📖 1149字</span>
           <span>⏱ 3分钟</span>
         </div>
         
@@ -120,22 +125,43 @@
 </li>
 <li>
 <p><strong>Erosion:</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**  @function Erosion  */</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Erosion</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#8be9fd">int</span> erosion_type;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { erosion_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( erosion_type,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                                       Point( erosion_size, erosion_size ) );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#6272a4">/// 腐蚀操作
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>  erode( src, erosion_dst, element );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  imshow( <span style="color:#f1fa8c">&#34;Erosion Demo&#34;</span>, erosion_dst );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
-</code></pre></div><ul>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">/**  @function Erosion  */</span>
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Erosion</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
+{
+  <span style="color:#8be9fd">int</span> erosion_type;
+  <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
+  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ erosion_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
+  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( erosion_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { erosion_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
+   
+  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( erosion_type,
+                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>erosion_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
+                                       Point( erosion_size, erosion_size ) );
+  <span style="color:#6272a4">/// 腐蚀操作
+</span><span style="color:#6272a4"></span>  erode( src, erosion_dst, element );
+  imshow( <span style="color:#f1fa8c">&#34;Erosion Demo&#34;</span>, erosion_dst );
+}
+</code></pre></td></tr></table>
+</div>
+</div><ul>
 <li>进行 <em>腐蚀</em> 操作的函数是 <a href="http://opencv.jp/opencv-2.2_org/cpp/imgproc_image_filtering.html#cv-erode">erode</a> 。 它接受了三个参数:
 <ul>
 <li><em>src</em>: 原图像</li>
@@ -152,22 +178,43 @@
 </li>
 </ol>
 <p>下面是膨胀的代码，你可以看到，它和 <strong>Erosion</strong> 函数是多么相似。 这里我们同样可以指定内核的形状，锚点和大小。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/** @function Dilation */</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Dilation</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#8be9fd">int</span> dilation_type;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { dilation_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( dilation_type,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>                                       Point( dilation_size, dilation_size ) );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#6272a4">/// 膨胀操作
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>  dilate( src, dilation_dst, element );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  imshow( <span style="color:#f1fa8c">&#34;Dilation Demo&#34;</span>, dilation_dst );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>}
-</code></pre></div>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#6272a4">/** @function Dilation */</span>
+<span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Dilation</span>( <span style="color:#8be9fd">int</span>, <span style="color:#8be9fd">void</span><span style="color:#ff79c6">*</span> )
+{
+  <span style="color:#8be9fd">int</span> dilation_type;
+  <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_RECT; }
+  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">1</span> ){ dilation_type <span style="color:#ff79c6">=</span> MORPH_CROSS; }
+  <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>( dilation_elem <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">2</span>) { dilation_type <span style="color:#ff79c6">=</span> MORPH_ELLIPSE; }
+
+  Mat element <span style="color:#ff79c6">=</span> getStructuringElement( dilation_type,
+                                       Size( <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span><span style="color:#ff79c6">*</span>dilation_size<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span> ),
+                                       Point( dilation_size, dilation_size ) );
+  <span style="color:#6272a4">/// 膨胀操作
+</span><span style="color:#6272a4"></span>  dilate( src, dilation_dst, element );
+  imshow( <span style="color:#f1fa8c">&#34;Dilation Demo&#34;</span>, dilation_dst );
+}
+</code></pre></td></tr></table>
+</div>
+</div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span>
@@ -216,7 +263,7 @@
   </div>
 </div>
 
-<div class="search-container animated fadeInDown">
+<div class="search-container animated fadeInShow">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
     <div  id="loading" class="loading-container">
         <span>搜索中...</span>
@@ -244,12 +291,12 @@
         }
     })
 </script>
-        <div class="cover animated fadeInDown"></div>
+        <div class="cover animated fadeInShow"></div>
     </body>
 
 
 
-<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
