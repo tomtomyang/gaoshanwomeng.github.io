@@ -4,7 +4,7 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  MNIST手写数字识别 </title>
-    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="description" itemprop="description"
         content=" MNIST手写数字识别 ">
     <meta name="keywords" itemprop="keywords"
@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.71fa2f92a523e21dd193f2d59b55e925fc54d714d4153645d8814843740920c4.css" integrity="sha256-cfovkqUj4h3Rk/LVm1XpJfxU1xTUFTZF2IFIQ3QJIMQ="
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.ac72e85d0f1b601396ba6a0dc744a0a969d87447d5ea84c2ae7c5d44d953183d.css" integrity="sha256-rHLoXQ8bYBOWumoNx0SgqWnYdEfV6oTCrnxdRNlTGD0="
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -72,7 +72,7 @@
         <div class="info">
           <span>📅 2020-06-18</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2917字</span>
+          <span>📖 2916字</span>
           <span>⏱ 6分钟</span>
         </div>
         
@@ -245,22 +245,22 @@ learning_rate <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0
 
 <span style="color:#6272a4"># MNIST dataset</span>
 train_dataset <span style="color:#ff79c6">=</span> torchvision<span style="color:#ff79c6">.</span>datasets<span style="color:#ff79c6">.</span>MNIST(root<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;data/&#39;</span>,
-                                           train<span style="color:#ff79c6">=</span>True,
+                                           train<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>,
                                            transform<span style="color:#ff79c6">=</span>transforms<span style="color:#ff79c6">.</span>ToTensor(),
-                                           download<span style="color:#ff79c6">=</span>True)
+                                           download<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
 
 test_dataset <span style="color:#ff79c6">=</span> torchvision<span style="color:#ff79c6">.</span>datasets<span style="color:#ff79c6">.</span>MNIST(root<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;data/&#39;</span>,
-                                          train<span style="color:#ff79c6">=</span>False,
+                                          train<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
                                           transform<span style="color:#ff79c6">=</span>transforms<span style="color:#ff79c6">.</span>ToTensor())
 
 <span style="color:#6272a4"># Data loader</span>
 train_loader <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>utils<span style="color:#ff79c6">.</span>data<span style="color:#ff79c6">.</span>DataLoader(dataset<span style="color:#ff79c6">=</span>train_dataset,
                                            batch_size<span style="color:#ff79c6">=</span>batch_size,
-                                           shuffle<span style="color:#ff79c6">=</span>True)
+                                           shuffle<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
 
 test_loader <span style="color:#ff79c6">=</span> torch<span style="color:#ff79c6">.</span>utils<span style="color:#ff79c6">.</span>data<span style="color:#ff79c6">.</span>DataLoader(dataset<span style="color:#ff79c6">=</span>test_dataset,
                                           batch_size<span style="color:#ff79c6">=</span>batch_size,
-                                          shuffle<span style="color:#ff79c6">=</span>False)
+                                          shuffle<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>)
 
 
 <span style="color:#6272a4"># Convolutional neural network (two convolutional layers)</span>
@@ -321,7 +321,7 @@ total_step <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-
         optimizer<span style="color:#ff79c6">.</span>step()
 
         <span style="color:#ff79c6">if</span> (i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>) <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">100</span> <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span>:
-            <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">&#39;Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}&#39;</span>
+            <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;Epoch [</span><span style="color:#f1fa8c">{}</span><span style="color:#f1fa8c">/</span><span style="color:#f1fa8c">{}</span><span style="color:#f1fa8c">], Step [</span><span style="color:#f1fa8c">{}</span><span style="color:#f1fa8c">/</span><span style="color:#f1fa8c">{}</span><span style="color:#f1fa8c">], Loss: </span><span style="color:#f1fa8c">{:.4f}</span><span style="color:#f1fa8c">&#39;</span>
                   <span style="color:#ff79c6">.</span>format(epoch <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, num_epochs, i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, total_step, loss<span style="color:#ff79c6">.</span>item()))
 
 <span style="color:#6272a4"># Test the model</span>
@@ -337,7 +337,7 @@ model<span style="color:#ff79c6">.</span>eval()  <span style="color:#6272a4"># e
         total <span style="color:#ff79c6">+=</span> labels<span style="color:#ff79c6">.</span>size(<span style="color:#bd93f9">0</span>)
         correct <span style="color:#ff79c6">+=</span> (predicted <span style="color:#ff79c6">==</span> labels)<span style="color:#ff79c6">.</span>sum()<span style="color:#ff79c6">.</span>item()
 
-    <span style="color:#ff79c6">print</span>(<span style="color:#f1fa8c">&#39;Test Accuracy of the model on the 10000 test images: {} %&#39;</span><span style="color:#ff79c6">.</span>format(<span style="color:#bd93f9">100</span> <span style="color:#ff79c6">*</span> correct <span style="color:#ff79c6">/</span> total))
+    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#39;Test Accuracy of the model on the 10000 test images: </span><span style="color:#f1fa8c">{}</span><span style="color:#f1fa8c"> %&#39;</span><span style="color:#ff79c6">.</span>format(<span style="color:#bd93f9">100</span> <span style="color:#ff79c6">*</span> correct <span style="color:#ff79c6">/</span> total))
 
 <span style="color:#6272a4"># Save the model checkpoint</span>
 torch<span style="color:#ff79c6">.</span>save(model<span style="color:#ff79c6">.</span>state_dict(), <span style="color:#f1fa8c">&#39;model.ckpt&#39;</span>)
@@ -428,7 +428,7 @@ torch<span style="color:#ff79c6">.</span>save(model<span style="color:#ff79c6">.
 
 
 
-<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script><script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-e/4/LvThKH1gwzXhdbY2AsjR3rm7LHWyhIG5C0jiRfn8AN2eTN5ILeztWw0H9jmN" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script><script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-e/4/LvThKH1gwzXhdbY2AsjR3rm7LHWyhIG5C0jiRfn8AN2eTN5ILeztWw0H9jmN" crossorigin="anonymous"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ['\\(','\\)']] } });</script>
 <script type="application/javascript">
 var doNotTrack = false;
