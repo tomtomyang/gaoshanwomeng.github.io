@@ -63,7 +63,10 @@
                     <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#2-promisereject" class="toc-link">2. Promise.reject()</a>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#1-promiseall" class="toc-link">1. Promise.all()</a>
+                    <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#3-promiseall" class="toc-link">3. Promise.all()</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#4-promiseallsettled" class="toc-link">4. Promise.allSettled()</a>
                 </li>
                 </div><div class="single-post container">
     <div class="post">
@@ -73,8 +76,8 @@
         <div class="info">
           <span>📅 2021-07-10</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 6423字</span>
-          <span>⏱ 13分钟</span>
+          <span>📖 6867字</span>
+          <span>⏱ 14分钟</span>
         </div>
         
       </div>
@@ -747,7 +750,7 @@ p.<span style="color:#ff79c6">finally</span>(<span style="color:#8be9fd;font-sty
 <ul>
 <li>
 <p>onFinally</p>
-<p><code>Promise</code> 结束后调用的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function"><code>Function</code></a>。</p>
+<p><code>Promise</code> 结束后调用的<code>Function</code>。</p>
 </li>
 </ul>
 <p><strong>返回值</strong></p>
@@ -1122,7 +1125,7 @@ p1.then(<span style="color:#8be9fd;font-style:italic">function</span>(v) {
 </span></code></pre></td></tr></table>
 </div>
 </div><p>这里和resolve不同了，resolve如果传入一个promise对象，则会返回这个对象，状态的值都会一样，reject传入一个promise对象，必定会返回一个rejected的对象，rejected的reason是这个promise对象</p>
-<h3 id="1-promiseall">1. Promise.all()</h3>
+<h3 id="3-promiseall">3. Promise.all()</h3>
 <blockquote>
 <ul>
 <li>接收一组promise的iterable类型（注：Array，Map，Set都属于ES6的iterable类型）的输入</li>
@@ -1304,7 +1307,65 @@ p1.then(<span style="color:#8be9fd;font-style:italic">function</span>(v) {
 </div>
 </div><blockquote>
 <p><strong>Promise.all()的异步和同步</strong></p>
-</blockquote>
+<p>只有当Promise.all()传入的iterable为空时，Promise.all()才是同步的。</p>
+<p><strong>示例</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([]));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all(<span style="color:#f1fa8c">&#39;&#39;</span>));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all(<span style="color:#f1fa8c">&#39;hahahha&#39;</span>));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all(<span style="color:#ff79c6">new</span> Map()));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all(<span style="color:#bd93f9">123456</span>));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>), <span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]));
+console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>), <span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]));
+
+<span style="color:#6272a4">// console output
+</span><span style="color:#6272a4">// 空迭代对象，同步返回
+</span><span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(0)}
+</span><span style="color:#6272a4">// 非空迭代对象，异步返回
+</span><span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span><span style="color:#6272a4">// 空迭代对象，同步返回
+</span><span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(0)}
+</span><span style="color:#6272a4">// 非空迭代对象，异步返回
+</span><span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span><span style="color:#6272a4">// 空迭代对象，同步返回
+</span><span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(0)}
+</span><span style="color:#6272a4">// 非迭代对象，同步返回
+</span><span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: number 123456 is not iterable (cannot read property Symbol(Symbol.iterator))at Func…}
+</span><span style="color:#6272a4">// 非空迭代对象，包含promise，一部返回
+</span><span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span><span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
 <blockquote>
 <p><strong>其他</strong></p>
 <p>一个常见的技巧是，将一个任务数据数组映射（map）到一个 promise 数组，然后将其包装到 <code>Promise.all</code>。</p>
@@ -1344,6 +1405,25 @@ p1.then(<span style="color:#8be9fd;font-style:italic">function</span>(v) {
 </code></pre></td></tr></table>
 </div>
 </div></blockquote>
+<h3 id="4-promiseallsettled">4. Promise.allSettled()</h3>
+<p><code>Promise.allSettled()</code>方法返回一个在所有给定的promise都已经<code>fulfilled</code>或<code>rejected</code>后的promise，并带有一个对象数组，每个对象表示对应的promise结果。</p>
+<p>和<code>Promise.all()</code>相比，<code>Promise.allSettled()</code>解除了各个Promise之间的关联，只是提供一个所有Promise有结果之后的时机。</p>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled(iterable);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>iterable</p>
+<p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
+</li>
+</ul>
 
       </div>
       <div class="footer">
