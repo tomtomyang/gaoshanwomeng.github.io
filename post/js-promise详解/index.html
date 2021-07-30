@@ -82,7 +82,7 @@
         <div class="info">
           <span>📅 2021-07-10</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 8640字</span>
+          <span>📖 8675字</span>
           <span>⏱ 18分钟</span>
         </div>
         
@@ -1859,6 +1859,13 @@ console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<s
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
@@ -1867,43 +1874,50 @@ console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<s
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: 1
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
-<span style="color:#6272a4">// Promise {&lt;rejected&gt;: 1}
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 2}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 2
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 2}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
-</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4">// [[PromiseResult]]: AggregateError: All promises were rejected
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#bd93f9">1</span>,<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
 <span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: 1
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
-    resolve(<span style="color:#bd93f9">1</span>);
-}), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
-    resolve(<span style="color:#bd93f9">2</span>);
-})]);
-<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>), <span style="color:#bd93f9">2</span>]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 2}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
-</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4">// [[PromiseResult]]: 2
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
     setTimeout(()=&gt; {
         resolve(<span style="color:#bd93f9">1</span>);
     }, <span style="color:#bd93f9">3000</span>)
 }), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
     setTimeout(()=&gt; {
-        resolve(<span style="color:#bd93f9">1</span>);
+        resolve(<span style="color:#bd93f9">2</span>);
     }, <span style="color:#bd93f9">1000</span>)
 })]);
-<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+<span style="color:#6272a4">// Promise {&lt;pending&gt;}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4">// 1秒后变为
+</span><span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 2}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 2
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
     setTimeout(()=&gt; {
         resolve(<span style="color:#bd93f9">1</span>);
     }, <span style="color:#bd93f9">1000</span>)
@@ -1913,25 +1927,25 @@ console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<s
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: 1
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race();
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any();
 <span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: undefined is not iterable...
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: undefined is not iterable...
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([]);
-<span style="color:#6272a4">// Promise {&lt;pending&gt;}
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([]);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
-</span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
-</span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: AggregateError: All promises were rejected
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]);
+<span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]);
 <span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
 </span><span style="color:#6272a4">// [[PromiseResult]]: 1
 </span><span style="color:#6272a4"></span>
-<span style="color:#8be9fd;font-style:italic">Promise</span>.race(<span style="color:#bd93f9">123456</span>);
+<span style="color:#8be9fd;font-style:italic">Promise</span>.a(<span style="color:#bd93f9">123456</span>);
 <span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: number 123456 is not iterable...
 </span><span style="color:#6272a4">// [[Prototype]]: Promise
 </span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
