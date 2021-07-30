@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 手写promise </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" js 手写promise ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [js promise] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.d46f33042689d9dd3c152c841824b8fc8945b5acde1bcf86af2805c8679b2ee8.css" integrity="sha256-1G8zBCaJ2d08FSyEGCS4/IlFtazeG8&#43;GrygFyGebLug="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h2"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#1-%e7%ae%80%e6%98%93%e7%89%88promise" class="toc-link">1. 简易版Promise</a>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#1-%e5%ae%9e%e7%8e%b0executor" class="toc-link">1. 实现executor</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#2-%e5%ae%9e%e7%8e%b0%e7%8a%b6%e6%80%81%e6%9c%ba%e5%88%b6" class="toc-link">2. 实现状态机制</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#3-%e5%ae%9e%e7%8e%b0then" class="toc-link">3. 实现then</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#4-%e6%b5%8b%e8%af%95%e4%b8%80%e4%b8%8b" class="toc-link">4. 测试一下</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#5-%e5%ae%9e%e7%8e%b0%e9%93%be%e5%bc%8f%e8%b0%83%e7%94%a8" class="toc-link">5. 实现链式调用</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 手写promise</span>
+        
+        <div class="info">
+          <span>📅 2021-07-29</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 1256字</span>
+          <span>⏱ 3分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://segmentfault.com/a/1190000023180502">手写Promise - 实现一个基础的Promise</a></p>
+<p><a href="https://juejin.cn/post/6850037281206566919">面试官：“你能手写一个 Promise 吗”</a></p>
+</blockquote>
+<h2 id="1-简易版promise">1. 简易版Promise</h2>
+<h3 id="1-实现executor">1. 实现executor</h3>
+<p><strong>promise是一个类，它的构造函数接受一个函数，函数的两个参数也都是函数。</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> myPromise <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    resolve(<span style="color:#bd93f9">1</span>);
+    <span style="color:#ff79c6">return</span>;
+})
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">class</span> myPromise {
+    constructor(executor) {
+
+        executor(<span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>resolve.bind(<span style="color:#ff79c6">this</span>), <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>reject.bind(<span style="color:#ff79c6">this</span>));
+    }
+    
+    <span style="color:#bd93f9">_</span>resolve() {}
+    
+    <span style="color:#bd93f9">_</span>reject() {}
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-实现状态机制">2. 实现状态机制</h3>
+<p><strong>在传入的函数中执行resolve表示成功，执行reject表示失败，传入的值会传给then方法的回调函数</strong></p>
+<p>在Promise中使用了<code>pending、fulfilled、rejected</code>来标识当前的状态。</p>
+<ul>
+<li><code>pending</code> 初始状态，既不是成功，也不是失败状态。等待resolve或者reject调用更新状态。</li>
+<li><code>fulfilled</code> 意味着操作成功完成。</li>
+<li><code>rejected</code> 意味着操作失败。</li>
+</ul>
+<p>需要注意的一点是，这三个状态之间只存在两个变换关系：</p>
+<ul>
+<li><code>pending</code>转换为<code>fulfilled</code>，只能由<strong>resolve</strong>方法完成转换</li>
+<li><code>pending</code>转换为<code>rejected</code>，只能由<strong>reject</strong>方法完成转换</li>
+</ul>
+<p>传入的值会传给<code>then</code>的回调函数，怎么传递呢？显然我们将对resolve和reject的值做一个保存。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">class</span> myPromise {
+    <span style="color:#ff79c6">static</span> pending <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;pending&#39;</span>;
+    <span style="color:#ff79c6">static</span> fulfilled <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;fulfilled&#39;</span>;
+    <span style="color:#ff79c6">static</span> rejected <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;rejected&#39;</span>;
+
+    constructor(executor) {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.pending; <span style="color:#6272a4">// 初始化状态为pending
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// 存储 this._resolve 即操作成功 返回的值
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// 存储 this._reject 即操作失败 返回的值
+</span><span style="color:#6272a4"></span>        executor(<span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>resolve.bind(<span style="color:#ff79c6">this</span>), <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>reject.bind(<span style="color:#ff79c6">this</span>));
+    }
+    
+    <span style="color:#bd93f9">_</span>resolve(value) {
+        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value;
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.fulfilled; <span style="color:#6272a4">// 将状态设置为成功
+</span><span style="color:#6272a4"></span>    }
+    
+    <span style="color:#bd93f9">_</span>reject(reason) {
+        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> reason;
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.rejected; <span style="color:#6272a4">// 将状态设置为失败
+</span><span style="color:#6272a4"></span>    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="3-实现then">3. 实现then</h3>
+<p><strong>Promise有一个叫做then的方法，该方法有两个参数，第一个参数是成功之后执行的回调函数，第二个参数是失败之后执行的回调函数。then方法在resolve或者reject执行之后才会执行，并且then方法中的值是传给resolve或reject的参数</strong></p>
+<p>这句话有点长，需要注意的是这句<code>then</code>方法在resolve或者reject执行之后才会执行，我们知道<code>Promise</code>是异步的，也就是说<code>then</code>传入的函数是不能立马执行，需要存储起来，在resolve函数执行之后才拿出来执行。</p>
+<p>换句话说，这个过程有点类似于<code>发布订阅模式</code>：我们使用then来注册事件，那什么时候来通知这些事件是否执行呢？答案就是在resolve方法执行或者reject方法执行时。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">class</span> myPromise {
+    <span style="color:#ff79c6">static</span> pending <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;pending&#34;</span>;
+    <span style="color:#ff79c6">static</span> fulfilled <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;fulfilled&#34;</span>;
+    <span style="color:#ff79c6">static</span> rejected <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;rejected&#34;</span>;
+
+    constructor(executor) {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.pending; <span style="color:#6272a4">// 初始化状态为pending
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// 存储 this._resolve 即操作成功 返回的值
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// 存储 this._reject 即操作失败 返回的值
+</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 存储then中传入的参数
+</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 至于为什么是数组呢？因为同一个Promise的then方法可以调用多次
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.callbacks <span style="color:#ff79c6">=</span> [];
+        executor(<span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>resolve.bind(<span style="color:#ff79c6">this</span>), <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>reject.bind(<span style="color:#ff79c6">this</span>));
+    }
+
+    <span style="color:#6272a4">// onFulfilled 是成功时执行的函数
+</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// onRejected 是失败时执行的函数
+</span><span style="color:#6272a4"></span>    then(onFulfilled, onRejected) {
+        <span style="color:#6272a4">// 这里可以理解为在注册事件
+</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 也就是将需要执行的回调函数存储起来
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.callbacks.push({
+            onFulfilled,
+            onRejected,
+        });
+    }
+
+    <span style="color:#bd93f9">_</span>resolve(value) {
+        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value;
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.fulfilled; <span style="color:#6272a4">// 将状态设置为成功
+</span><span style="color:#6272a4"></span>
+        <span style="color:#6272a4">// 通知事件执行
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.callbacks.forEach((cb) =&gt; <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>handler(cb));
+    }
+
+    <span style="color:#bd93f9">_</span>reject(reason) {
+        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> reason;
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> myPromise.rejected; <span style="color:#6272a4">// 将状态设置为失败
+</span><span style="color:#6272a4"></span>
+        <span style="color:#ff79c6">this</span>.callbacks.forEach((cb) =&gt; <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>handler(cb));
+    }
+
+    <span style="color:#bd93f9">_</span>handler(callback) {
+        <span style="color:#ff79c6">const</span> { onFulfilled, onRejected } <span style="color:#ff79c6">=</span> callback;
+
+        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">===</span> myPromise.fulfilled <span style="color:#ff79c6">&amp;&amp;</span> onFulfilled) {
+            <span style="color:#6272a4">// 传入存储的值
+</span><span style="color:#6272a4"></span>            onFulfilled(<span style="color:#ff79c6">this</span>.value);
+        }
+
+        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">===</span> myPromise.rejected <span style="color:#ff79c6">&amp;&amp;</span> onRejected) {
+            <span style="color:#6272a4">// 传入存储的错误信息
+</span><span style="color:#6272a4"></span>            onRejected(<span style="color:#ff79c6">this</span>.reason);
+        }
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="4-测试一下">4. 测试一下</h3>
+<h3 id="5-实现链式调用">5. 实现链式调用</h3>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/promise/">#promise</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-map%E8%AF%A6%E8%A7%A3/" data-tooltip="js map详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>

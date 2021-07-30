@@ -68,6 +68,12 @@
                 <li>
                     <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#4-promiseallsettled" class="toc-link">4. Promise.allSettled()</a>
                 </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#5-promiserace" class="toc-link">5. Promise.race()</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-promise%E8%AF%A6%E8%A7%A3/#6-promiseany" class="toc-link">6. Promise.any()</a>
+                </li>
                 </div><div class="single-post container">
     <div class="post">
       <div class="header">
@@ -76,8 +82,8 @@
         <div class="info">
           <span>📅 2021-07-10</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 6867字</span>
-          <span>⏱ 14分钟</span>
+          <span>📖 8640字</span>
+          <span>⏱ 18分钟</span>
         </div>
         
       </div>
@@ -180,11 +186,21 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> myPromise <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
 	resolve(<span style="color:#bd93f9">1</span>);
 });
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
 myPromise.then( val =&gt; {
   	console.log(val);
 }, res =&gt; {
@@ -1407,7 +1423,7 @@ console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<s
 </div></blockquote>
 <h3 id="4-promiseallsettled">4. Promise.allSettled()</h3>
 <p><code>Promise.allSettled()</code>方法返回一个在所有给定的promise都已经<code>fulfilled</code>或<code>rejected</code>后的promise，并带有一个对象数组，每个对象表示对应的promise结果。</p>
-<p>和<code>Promise.all()</code>相比，<code>Promise.allSettled()</code>解除了各个Promise之间的关联，只是提供一个所有Promise有结果之后的时机。</p>
+<p>和<code>Promise.all()</code>相比，<code>Promise.allSettled()</code>解除了各个Promise之间的关联，只是提供一个所有Promise达到终态的时机。</p>
 <p><strong>语法</strong></p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
@@ -1424,11 +1440,509 @@ console.log(<span style="color:#8be9fd;font-style:italic">Promise</span>.all([<s
 <p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
 </li>
 </ul>
-
+<p><strong>返回</strong></p>
+<blockquote>
+<p>一旦所指定的 promises 集合中每一个 promise 已经完成，无论是成功的达成或被拒绝，都会返回一个数组，该数组包含原始 promises 集中每个 promise 的结果。</p>
+<p>数组中的每个结果对象，都有一个 <code>status</code> 字符串。如果它的值为 <code>fulfilled</code>，则结果对象上存在一个 <code>value</code> 。如果值为 <code>rejected</code>，则存在一个 <code>reason</code> 。</p>
+</blockquote>
+<p><strong>示例</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(2)}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: Array(2)
+</span><span style="color:#6272a4">//     0: {status: &#34;fulfilled&#34;, value: 1}
+</span><span style="color:#6272a4">//     1: {status: &#34;rejected&#34;, reason: 2}
+</span><span style="color:#6272a4">//     length: 2
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(2)}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: Array(2)
+</span><span style="color:#6272a4">//     0: {status: &#34;rejected&#34;, value: 1}
+</span><span style="color:#6272a4">//     1: {status: &#34;rejected&#34;, reason: 2}
+</span><span style="color:#6272a4">//     length: 2
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled();
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled([]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(0)}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: Array(0)
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: Array(3)}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: Array(3)
+</span><span style="color:#6272a4">// 0: {status: &#34;fulfilled&#34;, value: 1}
+</span><span style="color:#6272a4">// 1: {status: &#34;fulfilled&#34;, value: 2}
+</span><span style="color:#6272a4">// 2: {status: &#34;fulfilled&#34;, value: 3}
+</span><span style="color:#6272a4">// length: 3
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled(<span style="color:#bd93f9">123456</span>);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: number 123456 is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: number 123456 is not iterable
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.allSettled(<span style="color:#ff79c6">new</span> Map([[<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>],[<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]]));
+<span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: Array(2)
+</span><span style="color:#6272a4">//		0:
+</span><span style="color:#6272a4">//		status: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">//		value: (2) [1, 2]
+</span><span style="color:#6272a4">//		[[Prototype]]: Object
+</span><span style="color:#6272a4">//		1:
+</span><span style="color:#6272a4">//		status: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">//		value: (2) [2, 3]
+</span><span style="color:#6272a4">//		[[Prototype]]: Object
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5-promiserace">5. Promise.race()</h3>
+<p><strong><code>Promise.race(iterable)</code></strong> 方法返回一个 promise，一旦迭代器中的某个promise解决或拒绝，返回的 promise就会解决或拒绝。</p>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.race(iterable);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>iterable</p>
+<p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
+</li>
+</ul>
+<p><strong>返回</strong></p>
+<p>一个待定的<code>Promise</code>，只要给定的一组promise中的一个变为终态，就采用第一个promise的值作为它的值，异步地resolve或reject。</p>
+<blockquote>
+<ul>
+<li><code>race</code> 函数返回一个 <code>Promise</code>，它将与第一个传递的 promise 相同的完成方式被完成。它可以是完成（ resolves），也可以是失败（rejects），这要取决于第一个完成的方式是两个中的哪个。</li>
+<li>如果传的迭代是空的，则返回的 promise 将永远等待。</li>
+<li>如果迭代包含一个或多个非promise或是已经处于终态的Promise，则<code> Promise.race</code> 将解析为迭代中找到的第一个值。</li>
+</ul>
+</blockquote>
+<p><strong>示例</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    resolve(<span style="color:#bd93f9">1</span>);
+}), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    resolve(<span style="color:#bd93f9">2</span>);
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">3000</span>)
+}), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">1000</span>)
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">1000</span>)
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race();
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([]);
+<span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race(<span style="color:#bd93f9">123456</span>);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: number 123456 is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: number 123456 is not iterable
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6-promiseany">6. Promise.any()</h3>
+<p><code>Promise.any()</code> 接收一个<code>Promise</code>可迭代对象，只要其中的一个 <code>promise</code> 成功，就返回那个已经成功的 <code>promise</code> 。如果可迭代对象中没有一个 <code>promise</code> 成功（即所有的 <code>promises</code> 都失败），就返回一个失败的 <code>promise </code>和<code>AggregateError</code>类型的实例，它是 <code>Error</code>的一个子类，用于把单一的错误集合在一起。</p>
+<p>本质上，这个方法和<code>Promise.all()</code>是相反的。</p>
+<blockquote>
+<p><strong>注意</strong></p>
+<p><code>Promise.any()</code> 方法依然是实验性的，尚未被所有的浏览器完全支持。它当前处于 <a href="https://github.com/tc39/proposal-promise-any">TC39 第四阶段草案（Stage 4）</a></p>
+</blockquote>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.any(iterable);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>iterable</p>
+<p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
+</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>如果传入的参数是一个空的可迭代对象，则返回一个 <strong>已失败（already rejected）</strong> 状态的 Promise。</li>
+<li>如果传入的参数不包含任何 <code>promise</code>，则返回一个 <strong>异步完成</strong> （<strong>asynchronously resolved</strong>）的 Promise。</li>
+<li>其他情况下都会返回一个<strong>处理中（pending）</strong> 的 Promise。 只要传入的迭代对象中的任何一个 <code>promise</code> 变成成功（resolve）状态，或者其中的所有的 <code>promises</code> 都失败，那么返回的 <code>promise</code> 就会 <strong>异步地</strong>（当调用栈为空时） 变成成功/失败（resolved/reject）状态。</li>
+</ul>
+<p><strong>示例</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.any([<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(<span style="color:#bd93f9">1</span>),<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#bd93f9">2</span>)]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    resolve(<span style="color:#bd93f9">1</span>);
+}), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    resolve(<span style="color:#bd93f9">2</span>);
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">3000</span>)
+}), <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">1000</span>)
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
+    setTimeout(()=&gt; {
+        resolve(<span style="color:#bd93f9">1</span>);
+    }, <span style="color:#bd93f9">1000</span>)
+})]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race();
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: undefined is not iterable...
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([]);
+<span style="color:#6272a4">// Promise {&lt;pending&gt;}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;pending&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: undefined
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race([<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>]);
+<span style="color:#6272a4">// Promise {&lt;fulfilled&gt;: 1}
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;fulfilled&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: 1
+</span><span style="color:#6272a4"></span>
+<span style="color:#8be9fd;font-style:italic">Promise</span>.race(<span style="color:#bd93f9">123456</span>);
+<span style="color:#6272a4">// Promise {&lt;rejected&gt;: TypeError: number 123456 is not iterable...
+</span><span style="color:#6272a4">// [[Prototype]]: Promise
+</span><span style="color:#6272a4">// [[PromiseState]]: &#34;rejected&#34;
+</span><span style="color:#6272a4">// [[PromiseResult]]: TypeError: number 123456 is not iterable
+</span></code></pre></td></tr></table>
+</div>
+</div>
       </div>
       <div class="footer">
-        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
-        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a></span>
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/promise/">#promise</a></span>
         
       </div>
     </div>
