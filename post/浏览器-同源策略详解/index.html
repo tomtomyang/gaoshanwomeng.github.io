@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  浏览器 同源策略详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" 浏览器 同源策略详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [浏览器 同源策略] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.9f8843032434aa56671e8fc602a662d6411d980089e726c47651ecb79cef382e.css" integrity="sha256-n4hDAyQ0qlZnHo/GAqZi1kEdmACJ5ybEdlHst5zvOC4="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h2"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#1-%e5%90%8c%e6%ba%90%e7%ad%96%e7%95%a5" class="toc-link">1. 同源策略</a>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#1-%e4%bb%80%e4%b9%88%e6%98%af%e6%ba%90" class="toc-link">1. 什么是源</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#2-%e4%bb%80%e4%b9%88%e6%98%af%e5%90%8c%e6%ba%90" class="toc-link">2. 什么是同源</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#3-%e4%bb%80%e4%b9%88%e5%85%81%e8%ae%b8%e4%bb%80%e4%b9%88%e7%a6%81%e6%ad%a2" class="toc-link">3. 什么允许？什么禁止？</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#2-%e6%bc%94%e7%a4%ba" class="toc-link">2. 演示</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/#2-%e6%ba%90%e7%9a%84%e7%bb%a7%e6%89%bf" class="toc-link">2. 源的继承</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">浏览器 同源策略详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-02</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 1092字</span>
+          <span>⏱ 3分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5">维基百科_同源策略</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html">浏览器同源政策及其规避方法</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy">MDN_浏览器的同源策略</a></p>
+<p><a href="https://web.dev/same-origin-policy/">web_dev_同源策略</a></p>
+</blockquote>
+<h2 id="1-同源策略">1. 同源策略</h2>
+<h3 id="1-什么是源">1. 什么是源</h3>
+<blockquote>
+<p>两个 URL 的 protocol、port  (如果有指定的话)和 host组成了源。这个方案也被称为“协议/主机/端口元组”，或者直接是叫“元组”。</p>
+</blockquote>
+<h3 id="2-什么是同源">2. 什么是同源</h3>
+<p>所谓&quot;同源&quot;指的是&quot;三个相同&quot;：</p>
+<blockquote>
+<ul>
+<li>协议相同</li>
+<li>域名相同</li>
+<li>端口相同</li>
+</ul>
+</blockquote>
+<p>举例来说，<code>http://www.example.com/dir/page.html</code>这个网址，协议是<code>http://</code>，域名是<code>www.example.com</code>，端口是<code>80</code>（默认端口可以省略）。它的同源情况如下。</p>
+<blockquote>
+<ul>
+<li><code>http://www.example.com/dir2/other.html</code>：同源</li>
+<li><code>http://example.com/dir/other.html</code>：不同源（域名不同）</li>
+<li><code>http://v2.www.example.com/dir/other.html</code>：不同源（域名不同）</li>
+<li><code>http://www.example.com:81/dir/other.html</code>：不同源（端口不同）</li>
+<li><code>http://username:password@www.example.com/dir2/other.html</code>： 同源</li>
+</ul>
+</blockquote>
+<h3 id="3-什么允许什么禁止">3. 什么允许？什么禁止？</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>iframe</td>
+<td>通常允许跨域嵌入，但不允许跨域读取（例如使用 JavaScript 访问 iframe 中的文档）。</td>
+</tr>
+<tr>
+<td>CSS</td>
+<td>跨源 CSS 可以使用<code>&lt;link&gt;</code>元素或<code>@import</code>CSS 文件中的嵌入。</td>
+</tr>
+<tr>
+<td>forms</td>
+<td>跨域 URL 可以用作表单的<code>action</code>属性值。Web 应用程序可以将表单数据写入跨源目的地。</td>
+</tr>
+<tr>
+<td>images</td>
+<td>允许嵌入跨源图像。但是，读取跨域图像（例如<code>canvas</code>使用 JavaScript将跨域图像加载到元素中）被阻止。</td>
+</tr>
+<tr>
+<td>多媒体</td>
+<td>可以使用<code>&lt;video&gt;</code>和<code>&lt;audio&gt;</code>元素嵌入跨源视频和音频。</td>
+</tr>
+<tr>
+<td>script</td>
+<td>可以嵌入跨域脚本；但是，对某些 API（例如跨域提取请求）的访问可能会被阻止。</td>
+</tr>
+</tbody>
+</table>
+<p>通过上面可以知道，同源策略主要针对于js，html和css中有很多情况是可以无视源的限制。</p>
+<p>随着互联网的发展，&ldquo;同源政策&quot;越来越严格。目前，如果非同源，共有三种行为受到限制。</p>
+<blockquote>
+<ol>
+<li>Cookie、LocalStorage 和 IndexDB 无法读取。</li>
+<li>DOM 无法获得。</li>
+<li>AJAX 请求不能发送。</li>
+</ol>
+</blockquote>
+<h2 id="2-演示">2. 演示</h2>
+<h2 id="2-源的继承">2. 源的继承</h2>
+<p>在页面中通过 <code>about:blank</code> 或 <code>javascript:</code> URL 执行的脚本会继承打开该 URL 的文档的源，因为这些类型的 URLs 没有包含源服务器的相关信息。</p>
+<blockquote>
+<p>例如，<code>about:blank</code> 通常作为父脚本写入内容的新的空白弹出窗口的 URL（例如，通过 Window.open()。 如果此弹出窗口也包含 JavaScript，则该脚本将从创建它的脚本那里继承对应的源。</p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/%E6%B5%8F%E8%A7%88%E5%99%A8/">#浏览器</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/" data-tooltip="js 手写promise">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-jsonp%E8%AF%A6%E8%A7%A3/" data-tooltip="js jsonp详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></html>
