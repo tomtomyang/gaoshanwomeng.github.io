@@ -46,7 +46,19 @@
                     <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#3-%e5%ae%9e%e7%8e%b0then" class="toc-link">3. 实现then</a>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#5-%e5%ae%9e%e7%8e%b0%e9%93%be%e5%bc%8f%e8%b0%83%e7%94%a8" class="toc-link">5. 实现链式调用</a>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#4-%e5%ae%9e%e7%8e%b0%e9%93%be%e5%bc%8f%e8%b0%83%e7%94%a8" class="toc-link">4. 实现链式调用</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#5-%e5%ae%9e%e7%8e%b0catchfinally" class="toc-link">5. 实现catch/finally</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#7-%e5%ae%9e%e7%8e%b0promiseresolvereject" class="toc-link">7. 实现Promise.resolve/reject</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#1-promiseresolvereject" class="toc-link">1. Promise.resolve()/reject()</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E6%89%8B%E5%86%99promise/#8-%e5%ae%9e%e7%8e%b0promiseallrace" class="toc-link">8. 实现Promise.all/race</a>
                 </li>
                 
                         </ul><li>
@@ -60,8 +72,8 @@
         <div class="info">
           <span>📅 2021-08-05</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2318字</span>
-          <span>⏱ 5分钟</span>
+          <span>📖 4041字</span>
+          <span>⏱ 9分钟</span>
         </div>
         
       </div>
@@ -427,7 +439,7 @@ p1.then(value =&gt; {
 </span><span style="color:#6272a4">// then reject reason ----- 12345
 </span></code></pre></td></tr></table>
 </div>
-</div><h3 id="5-实现链式调用">5. 实现链式调用</h3>
+</div><h3 id="4-实现链式调用">4. 实现链式调用</h3>
 <p>Promise.prototype.then()的返回值也是一个Promise对象，因此可以实现链式调用，同时会出现以下几种情况：</p>
 <blockquote>
 <p>then函数的返回值依据以下规则，如果 <code>then</code> 中的回调函数：</p>
@@ -526,6 +538,10 @@ p1.then(value =&gt; {
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#ff79c6">class</span> myPromise {
@@ -555,8 +571,12 @@ p1.then(value =&gt; {
 
     then <span style="color:#ff79c6">=</span> (handleResolve, handleReject) =&gt; {
         <span style="color:#6272a4">// 如果传进来的不是函数，则穿透
-</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">typeof</span> handleResolve <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;function&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> handleResolve <span style="color:#ff79c6">=</span> value =&gt; value;
-        <span style="color:#ff79c6">typeof</span> handleReject <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;function&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> handleReject <span style="color:#ff79c6">=</span> error =&gt; error;
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleResolve <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleResolve <span style="color:#ff79c6">=</span> value =&gt; value;
+        }
+        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleReject <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleReject <span style="color:#ff79c6">=</span> error =&gt; error;
+        }
 
         <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((nextResolve, nextReject) =&gt; {
             <span style="color:#ff79c6">const</span> resolveFn <span style="color:#ff79c6">=</span> value =&gt; {
@@ -598,15 +618,32 @@ p1.then(value =&gt; {
 </div><p>来试一下：</p>
 <div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 <pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">
@@ -616,8 +653,622 @@ p1.then(value =&gt; {
     }, <span style="color:#bd93f9">2000</span>)
 })
 
+p1
+.then(value =&gt; {
+    console.log(value);
+    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#39;#then 12345#&#39;</span>;
+})
+.then(value =&gt; {
+    console.log(value);
+    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;#then then error&#39;</span>);
+})
+.then(value =&gt; {
+    console.log(value);
+}, reason =&gt; {
+    console.log(reason);
+})
+
+<span style="color:#6272a4">// console output
+</span><span style="color:#6272a4">// #origin 12345#
+</span><span style="color:#6272a4">// #then 12345#
+</span><span style="color:#6272a4">// Error: #then then error
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="5-实现catchfinally">5. 实现catch/finally</h3>
+<p>catch和finally可以看成是阉割版的then，都可以直接用then来实现那么就直接写代码吧：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#ff79c6">class</span> myPromise {
+    constructor(executor) {
+        executor(<span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>resolve, <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>reject);
+    }
+
+    status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;pending&#39;</span>
+    value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+    reason <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+    resolveCallback <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+    rejectCallback <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+    param <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+
+    <span style="color:#bd93f9">_</span>resolve <span style="color:#ff79c6">=</span> value =&gt; {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;fulfilled&#39;</span>;
+        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value;
+        <span style="color:#ff79c6">!!</span><span style="color:#ff79c6">this</span>.resolveCallback <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">this</span>.resolveCallback(<span style="color:#ff79c6">this</span>.value);
+    }
+
+    <span style="color:#bd93f9">_</span>reject <span style="color:#ff79c6">=</span> reason =&gt; {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;rejected&#39;</span>;
+        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> reason;
+        <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.reason;
+        <span style="color:#ff79c6">!!</span><span style="color:#ff79c6">this</span>.rejectCallback <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">this</span>.rejectCallback(<span style="color:#ff79c6">this</span>.reason);
+    }
+
+    then <span style="color:#ff79c6">=</span> (handleResolve, handleReject) =&gt; {
+        <span style="color:#6272a4">// 如果传进来的不是函数，则穿透
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleResolve <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleResolve <span style="color:#ff79c6">=</span> value =&gt; value;
+        }
+        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleReject <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleReject <span style="color:#ff79c6">=</span> error =&gt; error;
+        }
+
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((nextResolve, nextReject) =&gt; {
+            <span style="color:#ff79c6">const</span> resolveFn <span style="color:#ff79c6">=</span> value =&gt; {
+                <span style="color:#ff79c6">try</span> {
+                    <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> handleResolve(value);
+                    r <span style="color:#ff79c6">instanceof</span> myPromise <span style="color:#ff79c6">?</span> r.then(nextResolve, nextReject) <span style="color:#ff79c6">:</span> nextResolve(r);
+                }
+                <span style="color:#ff79c6">catch</span> (err) {
+                    nextReject(err);
+                }
+            }
+            <span style="color:#ff79c6">const</span> rejectFn <span style="color:#ff79c6">=</span> reason =&gt; {
+                <span style="color:#ff79c6">try</span> {
+                    <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> handleReject(reason);
+                    r <span style="color:#ff79c6">instanceof</span> myPromise <span style="color:#ff79c6">?</span> r.then(nextResolve, nextReject) <span style="color:#ff79c6">:</span> nextResolve(r);
+                }
+                <span style="color:#ff79c6">catch</span> (err) {
+                    nextReject(err);
+                }
+            }
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;fulfilled&#39;</span>) {
+                resolveFn(<span style="color:#ff79c6">this</span>.value);
+            }
+
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;rejected&#39;</span>) {
+                rejectFn(<span style="color:#ff79c6">this</span>.reason);
+            }
+
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;pending&#39;</span>) {
+                <span style="color:#ff79c6">this</span>.resolveCallback <span style="color:#ff79c6">=</span> resolveFn;
+                <span style="color:#ff79c6">this</span>.rejectCallback <span style="color:#ff79c6">=</span> rejectFn;
+            }
+        })
+    }
+    
+    <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">=</span> handleReject =&gt; {
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.then(<span style="color:#ff79c6">null</span>, handleReject);
+    }
+
+    <span style="color:#ff79c6">finally</span> <span style="color:#ff79c6">=</span> handleFinally =&gt; {
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.then(handleFinally, handleFinally);
+    }
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><p>来试一下：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject) =&gt; {
+    setTimeout(() =&gt; {
+        resolve(<span style="color:#bd93f9">12345</span>);
+    }, <span style="color:#bd93f9">2000</span>)
+})
 
 
+p1.then(value =&gt; {
+    console.log(value);
+    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject) =&gt; {
+        setTimeout(() =&gt; {
+            resolve(<span style="color:#f1fa8c">&#39;then 12345&#39;</span>);
+        }, <span style="color:#bd93f9">5000</span>)
+    })
+}).then(value =&gt; {
+    console.log(value);
+    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;then then reject 12345&#39;</span>)
+}).<span style="color:#ff79c6">catch</span>(reason =&gt; {
+    console.log(reason);
+})
+
+<span style="color:#6272a4">// console output
+</span><span style="color:#6272a4">// 12345
+</span><span style="color:#6272a4">// then 12345
+</span><span style="color:#6272a4">// Error: then then reject 12345
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="7-实现promiseresolvereject">7. 实现Promise.resolve/reject</h3>
+<blockquote>
+<h3 id="1-promiseresolvereject">1. Promise.resolve()/reject()</h3>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(value);
+<span style="color:#8be9fd;font-style:italic">Promise</span>.reject(reason);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>value/reason</p>
+<p>被<code>Promise</code>对象解析的参数，可以是数据类型，也可以是一个<code>Promise</code>对象，或者是一个thenable。</p>
+</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>如果参数为普通数据类型，返回一个带着给定值状态为fulfilled/rejected的<code>Promise</code>对象</li>
+<li>如果参数本身就是一个<code>Promise</code>对象，则直接返回这个<code>Promise</code>对象，状态和值都是传入的这个<code>promise</code>。</li>
+</ul>
+</blockquote>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">94
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">95
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">class</span> myPromise {
+    constructor(executor) {
+        executor(<span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>resolve, <span style="color:#ff79c6">this</span>.<span style="color:#bd93f9">_</span>reject);
+    }
+
+    status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;pending&#39;</span>
+    value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+    reason <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+    resolveCallback <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+    rejectCallback <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+    param <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+
+    <span style="color:#bd93f9">_</span>resolve <span style="color:#ff79c6">=</span> value =&gt; {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;fulfilled&#39;</span>;
+        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value;
+        <span style="color:#ff79c6">!!</span><span style="color:#ff79c6">this</span>.resolveCallback <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">this</span>.resolveCallback(<span style="color:#ff79c6">this</span>.value);
+    }
+
+    <span style="color:#bd93f9">_</span>reject <span style="color:#ff79c6">=</span> reason =&gt; {
+        <span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;rejected&#39;</span>;
+        <span style="color:#ff79c6">this</span>.reason <span style="color:#ff79c6">=</span> reason;
+        <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.reason;
+        <span style="color:#ff79c6">!!</span><span style="color:#ff79c6">this</span>.rejectCallback <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">this</span>.rejectCallback(<span style="color:#ff79c6">this</span>.reason);
+    }
+
+    then <span style="color:#ff79c6">=</span> (handleResolve, handleReject) =&gt; {
+        <span style="color:#6272a4">// 如果传进来的不是函数，则穿透
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleResolve <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleResolve <span style="color:#ff79c6">=</span> value =&gt; value;
+        }
+        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> handleReject <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+            handleReject <span style="color:#ff79c6">=</span> error =&gt; error;
+        }
+
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((nextResolve, nextReject) =&gt; {
+            <span style="color:#ff79c6">const</span> resolveFn <span style="color:#ff79c6">=</span> value =&gt; {
+                <span style="color:#ff79c6">try</span> {
+                    <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> handleResolve(value);
+                    r <span style="color:#ff79c6">instanceof</span> myPromise <span style="color:#ff79c6">?</span> r.then(nextResolve, nextReject) <span style="color:#ff79c6">:</span> nextResolve(r);
+                }
+                <span style="color:#ff79c6">catch</span> (err) {
+                    nextReject(err);
+                }
+            }
+            <span style="color:#ff79c6">const</span> rejectFn <span style="color:#ff79c6">=</span> reason =&gt; {
+                <span style="color:#ff79c6">try</span> {
+                    <span style="color:#8be9fd;font-style:italic">let</span> r <span style="color:#ff79c6">=</span> handleReject(reason);
+                    r <span style="color:#ff79c6">instanceof</span> myPromise <span style="color:#ff79c6">?</span> r.then(nextResolve, nextReject) <span style="color:#ff79c6">:</span> nextResolve(r);
+                }
+                <span style="color:#ff79c6">catch</span> (err) {
+                    nextReject(err);
+                }
+            }
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;fulfilled&#39;</span>) {
+                resolveFn(<span style="color:#ff79c6">this</span>.value);
+            }
+
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;rejected&#39;</span>) {
+                rejectFn(<span style="color:#ff79c6">this</span>.reason);
+            }
+
+            <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.status <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;pending&#39;</span>) {
+                <span style="color:#ff79c6">this</span>.resolveCallback <span style="color:#ff79c6">=</span> resolveFn;
+                <span style="color:#ff79c6">this</span>.rejectCallback <span style="color:#ff79c6">=</span> rejectFn;
+            }
+        })
+    }
+
+    <span style="color:#ff79c6">catch</span> <span style="color:#ff79c6">=</span> handleReject =&gt; {
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.then(<span style="color:#ff79c6">null</span>, handleReject);
+    }
+
+    <span style="color:#ff79c6">finally</span> <span style="color:#ff79c6">=</span> handleFinally =&gt; {
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.then(handleFinally, handleFinally);
+    }
+    
+    <span style="color:#ff79c6">static</span> resolve <span style="color:#ff79c6">=</span> value =&gt; {
+        <span style="color:#ff79c6">if</span>( value <span style="color:#ff79c6">instanceof</span> myPromise ){
+            <span style="color:#ff79c6">return</span> value;
+        }
+        <span style="color:#ff79c6">else</span> {
+            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject)=&gt;{
+                resolve(value);
+            })
+        }
+    }
+
+    <span style="color:#ff79c6">static</span> reject <span style="color:#ff79c6">=</span> reason =&gt; {
+        <span style="color:#ff79c6">if</span>( reason <span style="color:#ff79c6">instanceof</span> myPromise ){
+            <span style="color:#ff79c6">return</span> reason;
+        }
+        <span style="color:#ff79c6">else</span> {
+            <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject)=&gt;{
+                reject(reason);
+            })
+        }
+    }
+
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="8-实现promiseallrace">8. 实现Promise.all/race</h3>
+<blockquote>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.all(iterable);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>iterable</p>
+<p>一个可迭代对象，如 <code>Array</code>或 <code>String</code>。</p>
+</li>
+</ul>
+<p><strong>返回</strong></p>
+<ul>
+<li>如果没有传入参数时，返回一个rejected状态的<code>Promise</code>。</li>
+<li>如果传入的参数是一个空的可迭代对象，则返回一个fulfilled状态的 <code>Promise</code>。</li>
+<li>如果传入的参数不包含任何 <code>promise</code>，则返回一个fulfilled状态的<code>Promise</code>。</li>
+<li>其它情况下返回一个pending状态的<code>Promise</code>。这个返回的 <code>promise</code> 之后会在所有的 <code>promise</code> 都完成或有一个 <code>promise</code> 失败时变为完成或失败。</li>
+</ul>
+</blockquote>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#ff79c6">static</span> all <span style="color:#ff79c6">=</span> promises =&gt; {
+    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve,reject) =&gt; {
+        <span style="color:#8be9fd;font-style:italic">let</span> result <span style="color:#ff79c6">=</span> [];
+        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>(promises <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Array</span>)){
+            reject(<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;params is not array&#39;</span>));
+        }
+        promises.forEach(promise =&gt; {
+            <span style="color:#ff79c6">if</span>(promise <span style="color:#ff79c6">instanceof</span> myPromise){
+                promise.then(value =&gt; {
+                    result.push(value);
+                }, reason =&gt; {
+                    reject(reason);
+                })
+            } <span style="color:#ff79c6">else</span> {
+                result.push(promise);
+            }
+            <span style="color:#ff79c6">if</span>(result.length <span style="color:#ff79c6">==</span> promises.length){
+                resolve(result);
+            }  
+        })
+    })
+}
+
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>语法</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">Promise</span>.race(iterable);
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p>iterable</p>
+<p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
+</li>
+</ul>
+<p><strong>返回</strong></p>
+<p>一个待定的<code>Promise</code>，只要给定的一组promise中的一个变为终态，就采用第一个promise的值作为它的值，异步地resolve或reject。</p>
+<ul>
+<li><code>race</code> 函数返回一个 <code>Promise</code>，它将与第一个传递的 promise 相同的完成方式被完成。它可以是完成（ resolves），也可以是失败（rejects），这要取决于第一个完成的方式是两个中的哪个。</li>
+<li>如果传的迭代是空的，则返回的 promise 将永远等待。</li>
+<li>如果迭代包含一个或多个非promise或是已经处于终态的Promise，则<code> Promise.race</code> 将解析为迭代中找到的第一个值。</li>
+</ul>
+</blockquote>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">static</span> race <span style="color:#ff79c6">=</span> promises =&gt; {
+    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve,reject) =&gt; {
+        <span style="color:#8be9fd;font-style:italic">let</span> result <span style="color:#ff79c6">=</span> [];
+        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>(promises <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Array</span>)){
+            reject(<span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;params is not array&#39;</span>));
+        }
+        promises.forEach(promise =&gt; {
+            <span style="color:#ff79c6">if</span>(promise <span style="color:#ff79c6">instanceof</span> myPromise){
+                promise.then(value =&gt; {
+                    resolve(value);
+                }, reason =&gt; {
+                    reject(reason);
+                })
+            } <span style="color:#ff79c6">else</span> {
+                resolve(promise);
+            } 
+        })
+    })
+}
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="2-promise源码">2. Promise源码</h2>
