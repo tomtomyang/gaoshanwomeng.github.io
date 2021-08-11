@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 箭头函数详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" js 箭头函数详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [箭头函数] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.9f8843032434aa56671e8fc602a662d6411d980089e726c47651ecb79cef382e.css" integrity="sha256-n4hDAyQ0qlZnHo/GAqZi1kEdmACJ5ybEdlHst5zvOC4="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e5%a3%b0%e6%98%8e%e4%b8%80%e4%b8%aa%e5%87%bd%e6%95%b0" class="toc-link">声明一个函数</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e8%b0%83%e7%94%a8%e5%87%bd%e6%95%b0" class="toc-link">调用函数</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e7%ae%ad%e5%a4%b4%e5%87%bd%e6%95%b0%e7%89%b9%e6%80%a7" class="toc-link">箭头函数特性</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#this-%e5%a7%8b%e7%bb%88%e6%8c%87%e5%90%91%e5%87%bd%e6%95%b0%e5%a3%b0%e6%98%8e%e6%97%b6%e6%89%80%e5%9c%a8%e4%bd%9c%e7%94%a8%e5%9f%9f%e4%b8%8b%e7%9a%84-this" class="toc-link">this 始终指向函数声明时所在作用域下的 this</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e4%b8%8d%e8%83%bd%e4%bd%9c%e4%b8%ba%e6%9e%84%e9%80%a0%e5%ae%9e%e4%be%8b%e5%8c%96%e5%af%b9%e8%b1%a1" class="toc-link">不能作为构造实例化对象</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e4%b8%8d%e8%83%bd%e4%bd%bf%e7%94%a8-arguments-%e5%8f%98%e9%87%8f" class="toc-link">不能使用 arguments 变量</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e7%ae%ad%e5%a4%b4%e5%87%bd%e6%95%b0%e7%9a%84%e7%ae%80%e5%86%99" class="toc-link">箭头函数的简写</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e7%9c%81%e7%95%a5%e5%b0%8f%e6%8b%ac%e5%8f%b7" class="toc-link">省略小括号</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e7%9c%81%e7%95%a5%e8%8a%b1%e6%8b%ac%e5%8f%b7" class="toc-link">省略花括号</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/#%e7%ae%ad%e5%a4%b4%e5%87%bd%e6%95%b0%e7%9a%84%e4%bd%bf%e7%94%a8" class="toc-link">箭头函数的使用</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 箭头函数详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-10</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 926字</span>
+          <span>⏱ 2分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <p>ES6标准新增了一种新的函数：Arrow Function（箭头函数）。</p>
+<p>为什么叫Arrow Function？因为它的定义用的就是一个箭头：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">x =&gt; x * x
+</code></pre></td></tr></table>
+</div>
+</div><p>上面的箭头函数相当于：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">function (x) {
+    return x * x;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>箭头函数相当于匿名函数，并且简化了函数定义。箭头函数有两种格式，一种像上面的，只包含一个表达式，连<code>{ ... }</code>和<code>return</code>都省略掉了。还有一种可以包含多条语句，这时候就不能省略<code>{ ... }</code>和<code>return</code>：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">x =&gt; {
+    if (x &gt; 0) {
+        return x * x;
+    }
+    else {
+        return - x * x;
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>如果参数不是一个，就需要用括号<code>()</code>括起来：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 两个参数:
+</span><span style="color:#6272a4"></span>(x, y) =&gt; x <span style="color:#ff79c6">*</span> x <span style="color:#ff79c6">+</span> y <span style="color:#ff79c6">*</span> y
+
+<span style="color:#6272a4">// 无参数:
+</span><span style="color:#6272a4"></span>() =&gt; <span style="color:#bd93f9">3.14</span>
+
+<span style="color:#6272a4">// 可变参数:
+</span><span style="color:#6272a4"></span>(x, y, ...rest) =&gt; {
+    <span style="color:#8be9fd;font-style:italic">var</span> i, sum <span style="color:#ff79c6">=</span> x <span style="color:#ff79c6">+</span> y;
+    <span style="color:#ff79c6">for</span> (i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>; i<span style="color:#ff79c6">&lt;</span>rest.length; i<span style="color:#ff79c6">++</span>) {
+        sum <span style="color:#ff79c6">+=</span> rest[i];
+    }
+    <span style="color:#ff79c6">return</span> sum;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>如果要返回一个对象，就要注意，如果是单表达式，这么写的话会报错</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">// SyntaxError:
+x =&gt; { foo: x }
+</code></pre></td></tr></table>
+</div>
+</div><p>因为和函数体的<code>{ ... }</code>有语法冲突，所以要改为</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">// ok:
+x =&gt; ({ foo: x })
+</code></pre></td></tr></table>
+</div>
+</div><p>ES6 允许使用「箭头」（=&gt;）定义函数。</p>
+<h3 id="声明一个函数">声明一个函数</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+
+}
+<span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> (<span style="color:#ff79c6">*</span>a<span style="color:#ff79c6">*</span>,<span style="color:#ff79c6">*</span>b<span style="color:#ff79c6">*</span>) =&gt; {
+	<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">*</span>a<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">*</span>b<span style="color:#ff79c6">*</span>;
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="调用函数">调用函数</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> result <span style="color:#ff79c6">=</span> fn(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>);
+console.log(result);
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="箭头函数特性">箭头函数特性</h3>
+<h4 id="this-始终指向函数声明时所在作用域下的-this">this 始终指向函数声明时所在作用域下的 this</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">function</span> getName(){
+	console.log(<span style="color:#ff79c6">this</span>.name);
+}
+<span style="color:#8be9fd;font-style:italic">let</span> getName2 <span style="color:#ff79c6">=</span> () =&gt; {
+	console.log(<span style="color:#ff79c6">this</span>.name);
+}
+
+<span style="color:#6272a4">//设置 window 对象的 name 属性
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">window</span>.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;尚硅谷&#39;</span>;
+<span style="color:#ff79c6">const</span> school <span style="color:#ff79c6">=</span> {
+	name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;ATGUIGU&#34;</span>
+}
+
+<span style="color:#6272a4">// 直接调用
+</span><span style="color:#6272a4"></span>getName();
+getName2();
+
+<span style="color:#6272a4">// call 方法调用
+</span><span style="color:#6272a4"></span>getName.call(school);
+getName2.call(school);
+
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="heading"></h4>
+<h4 id="不能作为构造实例化对象">不能作为构造实例化对象</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> Person <span style="color:#ff79c6">=</span> (name, age) =&gt; {
+	<span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+	<span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+}
+<span style="color:#8be9fd;font-style:italic">let</span> me <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;xiao&#39;</span>,<span style="color:#bd93f9">30</span>);
+console.log(me);
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="不能使用-arguments-变量">不能使用 arguments 变量</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> () =&gt; {
+	console.log(arguments);
+}
+fn(<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>);
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="箭头函数的简写">箭头函数的简写</h3>
+<h4 id="省略小括号">省略小括号</h4>
+<p>当形参有且只有一个的时候</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> add <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> =&gt; {
+	<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span>;
+}
+console.log(add(<span style="color:#bd93f9">9</span>));
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="省略花括号">省略花括号</h4>
+<p>当代码体只有一条语句的时候, 此时 return 必须省略，而且语句的执行结果就是函数的返回值。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> pow <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> =&gt; <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span>;
+console.log(pow(<span style="color:#bd93f9">8</span>));
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="箭头函数的使用">箭头函数的使用</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//需求-1  点击 div 2s 后颜色变成『粉色』
+</span><span style="color:#6272a4">//获取元素
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> ad <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;ad&#39;</span>);
+<span style="color:#6272a4">//绑定事件
+</span><span style="color:#6272a4"></span>ad.addEventListener(<span style="color:#f1fa8c">&#34;click&#34;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(){
+    <span style="color:#6272a4">//保存 this 的值
+</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// let _this = this;
+</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//定时器
+</span><span style="color:#6272a4"></span>    setTimeout(() =&gt; {
+        <span style="color:#6272a4">//修改背景颜色 this
+</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// console.log(this);
+</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// _this.style.background = &#39;pink&#39;;
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.style.background <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;pink&#39;</span>;
+    }, <span style="color:#bd93f9">2000</span>);
+});
+
+<span style="color:#6272a4">//需求-2  从数组中返回偶数的元素
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">6</span>,<span style="color:#bd93f9">9</span>,<span style="color:#bd93f9">10</span>,<span style="color:#bd93f9">100</span>,<span style="color:#bd93f9">25</span>];
+<span style="color:#6272a4">// const result = arr.filter(function(item){
+</span><span style="color:#6272a4">//     if(item % 2 === 0){
+</span><span style="color:#6272a4">//         return true;
+</span><span style="color:#6272a4">//     }else{
+</span><span style="color:#6272a4">//         return false;
+</span><span style="color:#6272a4">//     }
+</span><span style="color:#6272a4">// });
+</span><span style="color:#6272a4"></span>
+<span style="color:#ff79c6">const</span> result <span style="color:#ff79c6">=</span> arr.filter(item =&gt; item <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">0</span>);
+
+console.log(result);
+
+
+</code></pre></td></tr></table>
+</div>
+</div><p>箭头函数适合与 this 无关的回调. 定时器, 数组的方法回调
+箭头函数不适合与 this 有关的回调.  事件回调, 对象的方法</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/react-hooks%E8%AF%A6%E8%A7%A3/" data-tooltip="react hooks详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE/" data-tooltip="js 作用域&amp;作用域链&amp;闭包">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</html>
