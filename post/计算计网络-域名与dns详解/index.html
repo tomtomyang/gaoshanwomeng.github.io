@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  计算计网络 域名与dns详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" 计算计网络 域名与dns详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [dns 域名] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.70d1a7657a82d7ab87b61f3c2e3ed747c8e22c5c84e3a375847afe2c51bb13f3.css" integrity="sha256-cNGnZXqC16uHth88Lj7XR8jiLFyE46N1hHr&#43;LFG7E/M="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h2"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/#1-%e5%9f%9f%e5%90%8d" class="toc-link">1. 域名</a>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/#1-%e5%9f%9f%e5%90%8d%e7%9a%84%e5%b1%82%e7%ba%a7" class="toc-link">1. 域名的层级</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/#2-dns" class="toc-link">2. DNS</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/#3-dns%e6%9f%a5%e8%af%a2" class="toc-link">3. DNS查询</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E8%AE%A1%E7%BD%91%E7%BB%9C-%E5%9F%9F%E5%90%8D%E4%B8%8Edns%E8%AF%A6%E8%A7%A3/#4-dns%e5%8f%8d%e5%90%91%e6%9f%a5%e8%af%a2" class="toc-link">4. DNS反向查询</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">计算计网络 域名与dns详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-11</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2298字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/DNS">MDN dns</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2016/06/dns.html">DNS 原理入门</a></p>
+<p><a href="https://www.cloudflare.com/zh-cn/learning/dns/what-is-dns/">what-is-dns</a></p>
+<p><a href="https://juejin.cn/post/6844903895903240206">工程师最容易搞错的域名知识</a></p>
+</blockquote>
+<h2 id="1-域名">1. 域名</h2>
+<h3 id="1-域名的层级">1. 域名的层级</h3>
+<p>比如，域名<code>math.stackexchange.com</code>显示为<code>math.stackexchange.com.</code>。这不是疏忽，而是所有域名的尾部，实际上都有一个根域名。</p>
+<p>举例来说，<code>www.example.com</code>真正的域名是<code>www.example.com.root</code>，简写为<code>www.example.com.</code>。因为，根域名<code>.root</code>对于所有域名都是一样的，所以平时是省略的。</p>
+<p>根域名的下一级，叫做&quot;顶级域名&rdquo;（top-level domain，缩写为TLD），比如<code>.com</code>、<code>.net</code>；再下一级叫做&quot;次级域名&rdquo;（second-level domain，缩写为SLD），比如<code>www.example.com</code>里面的<code>.example</code>，这一级域名是用户可以注册的；再下一级是主机名（host），比如<code>www.example.com</code>里面的<code>www</code>，又称为&quot;三级域名&rdquo;，这是用户在自己的域里面为服务器分配的名称，是用户可以任意分配的。</p>
+<p>总结一下，域名的层级结构如下：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">主机名.次级域名.顶级域名.根域名
+
+<span style="color:#6272a4"># 即</span>
+
+host.sld.tld.root
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="2-dns">2. DNS</h2>
+<p>DNS (Domain Name System) 域名系统，维护着一个包含域名与对应资源例如IP地址的列表。</p>
+<p>从域名到IP地址的映射过程被称为<strong>DNS查询(DNS lookup)</strong>，与之对应，**DNS反向查询(rDNS)**用来找到与IP地址对应的域名。</p>
+<h2 id="3-dns查询">3. DNS查询</h2>
+<p>DNS查询就是将域名转换成对应的 IP地址，它应用于在浏览器地址栏中输入网站域名时的情形。</p>
+<p>虽然只需要返回一个IP地址，但是DNS的查询过程非常复杂，分成多个步骤。</p>
+<p>首先，本机一定要知道DNS服务器的IP地址，否则上不了网。通过DNS服务器，才能知道某个域名的IP地址到底是什么。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2016061507.jpg" alt="img"></p>
+<ul>
+<li>DNS服务器的IP地址，有可能是动态的，每次上网时由网关分配，这叫做DHCP机制；</li>
+<li>也有可能是事先指定的固定地址。Linux系统里面，DNS服务器的IP地址保存在<code>/etc/resolv.conf</code>文件。</li>
+<li>上例的DNS服务器是<code>192.168.1.253</code>，这是一个内网地址。有一些公网的DNS服务器，也可以使用，其中最有名的就是Google的<a href="https://developers.google.com/speed/public-dns/"><code>8.8.8.8</code></a>和Level 3的<a href="https://www.tummy.com/articles/famous-dns-server/"><code>4.2.2.2</code></a>。</li>
+<li>本机只向自己的DNS服务器查询，<code>dig</code>命令有一个<code>@</code>参数，显示向其他DNS服务器查询的结果。</li>
+</ul>
+<p>DNS服务器怎么会知道每个域名的IP地址呢？答案是分级查询。</p>
+<p>DNS服务器根据域名的层级，进行分级查询。</p>
+<p>需要明确的是，每一级域名都有自己的NS记录，NS记录指向该级域名的域名服务器。这些服务器知道下一级域名的各种记录。</p>
+<p>所谓&quot;分级查询&rdquo;，就是从根域名开始，依次查询每一级域名的NS记录，直到查到最终的IP地址，过程大致如下。</p>
+<blockquote>
+<ol>
+<li>从&quot;根域名服务器&quot;查到&quot;顶级域名服务器&quot;的NS记录和A记录（IP地址）</li>
+<li>从&quot;顶级域名服务器&quot;查到&quot;次级域名服务器&quot;的NS记录和A记录（IP地址）</li>
+<li>从&quot;次级域名服务器&quot;查出&quot;主机名&quot;的IP地址</li>
+</ol>
+</blockquote>
+<p>仔细看上面的过程，你可能发现了，没有提到DNS服务器怎么知道&quot;根域名服务器&quot;的IP地址。回答是&quot;根域名服务器&quot;的NS记录和IP地址一般是不会变化的，所以内置在DNS服务器里面。</p>
+<p><strong>DNS解析过程：</strong></p>
+<p>场景：用户在浏览器输入网址：clondant.blog.51cto.com，其解析过程如下：</p>
+<p>**第1步：**浏览器将会检查缓存中有没有这个域名对应的解析过的IP地址，如果有该解析过程将会结束。</p>
+<p>**第2步：**如果用户的浏览器中缓存中没有，操作系统会先检查自己本地的hosts文件是否有这个网址映射关系，如果有，就先调用这个IP地址映射关系，完成域名解析。</p>
+<p>**第3步：**如果hosts里没有这个域名的映射，则查找本地DNS解析器缓存，是否有这个网址映射关系或缓存信息，如果有，直接返回给浏览器，完成域名解析。</p>
+<p>**第4步：**如果hosts与本地DNS解析器缓存都没有相应的网址映射关系，则会首先找本地DNS服务器，一般是公司内部的DNS服务器，此服务器收到查询，如果此本地DNS服务器查询到相对应的IP地址映射或者缓存信息，则返回解析结果给客户机，完成域名解析，此解析具有权威性。</p>
+<p>**第5步：**如果本地DNS服务器无法查询到，则根据本地DNS服务器设置的转发器进行查询；</p>
+<p><strong>未用转发****模式：<strong>本地DNS就把请求发至根DNS进行</strong>（迭代）查询</strong>，根DNS服务器收到请求后会判断这个域名(.com)是谁来授权管理，并会返回一个负责该顶级域名服务器的一个IP。本地DNS服务器收 到IP信息后，将会联系负责.com域的这台服务器。这台负责.com域的服务器收到请求后，如果自己无法解析，它就会找一个管理.com域的下一级 DNS服务器地址给本地DNS服务器。当本地DNS服务器收到这个地址后，就会找域名域服务器，重复上面的动作，进行查询，直至找到域名对应的主机。</p>
+<p>**使用转发模式：**此DNS服务器就会把请求转发至上一级DNS服务器，由上一级服务器进行解析，上一级服务器如果不能解析，或找根DNS或把转请求转至 上上级，以此循环。不管是本地DNS服务器用是是转发，还是根提示，最后都是把结果返回给本地DNS服务器，由此DNS服务器再返回给客户机。</p>
+<p>搭建基本的DNS服务</p>
+<h2 id="4-dns反向查询">4. DNS反向查询</h2>
+<p>反向解析：根据IP地址查找对应的注册域名，经常被一些后台程序使用,用户看不到。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/dns/">#dns</a><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/%E5%9F%9F%E5%90%8D/">#域名</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%B8%8E%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE/" data-tooltip="js 作用域&amp;作用域链&amp;闭包">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E8%AF%A6%E8%A7%A3/" data-tooltip="计算机网络 http请求与响应详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</html>

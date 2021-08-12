@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 循环遍历详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" js 循环遍历详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [js 循环遍历] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.70d1a7657a82d7ab87b61f3c2e3ed747c8e22c5c84e3a375847afe2c51bb13f3.css" integrity="sha256-cNGnZXqC16uHth88Lj7XR8jiLFyE46N1hHr&#43;LFG7E/M="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#1-for%e5%be%aa%e7%8e%af" class="toc-link">1. for循环</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#11-for" class="toc-link">1.1 for</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#12-foreach" class="toc-link">1.2 forEach</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#13-forin" class="toc-link">1.3 for…in</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#14-forof" class="toc-link">1.4 for…of</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#2-%e6%95%b0%e7%bb%84%e4%b8%8d%e8%a6%81%e7%94%a8for-in" class="toc-link">2. 数组不要用for in</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#3-for%e5%be%aa%e7%8e%af%e4%b8%ad%e7%9a%84let%e5%92%8cvar" class="toc-link">3. for循环中的let和var</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#4-%e6%95%b0%e7%bb%84%e7%9a%84%e9%81%8d%e5%8e%86" class="toc-link">4. 数组的遍历</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E5%BE%AA%E7%8E%AF%E9%81%8D%E5%8E%86%E8%AF%A6%E8%A7%A3/#5-%e5%af%b9%e8%b1%a1%e7%9a%84%e9%81%8d%e5%8e%86" class="toc-link">5. 对象的遍历</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 循环遍历详解</span>
+        
+        <div class="info">
+          <span>📅 2021-03-06</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 1062字</span>
+          <span>⏱ 3分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <h3 id="1-for循环">1. for循环</h3>
+<p>javascript中的for循环选择多种多样，可你知道其中的差别在哪里吗？什么时候又该用哪种循环才是最佳策略？</p>
+<h4 id="11-for">1.1 for</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//20年前的写法let len = myArray.Length
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> index <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; index <span style="color:#ff79c6">&lt;</span> len; index<span style="color:#ff79c6">++</span>) {
+  console.log(myArray[index])
+}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="12-foreach">1.2 forEach</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//ES5的写法
+</span><span style="color:#6272a4"></span>myArray.forEach(<span style="color:#8be9fd;font-style:italic">function</span>(index){
+    <span style="color:#6272a4">//操作你的index，index即为数组中的元素
+</span><span style="color:#6272a4"></span>})
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>缺点，没有返回值。</li>
+</ul>
+<h4 id="13-forin">1.3 for&hellip;in</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">//ES5的写法，劝你慎重
+</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> index <span style="color:#ff79c6">in</span> myArray) { 
+  <span style="color:#6272a4">// 千万别这样做
+</span><span style="color:#6272a4"></span>  console.log(myArray[index]);
+}
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="14-forof">1.4 for&hellip;of</h4>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">/**ES6写法
+</span><span style="color:#6272a4">*支持数组
+</span><span style="color:#6272a4">*类数组对象（如：NodeList对象）
+</span><span style="color:#6272a4">*字符串
+</span><span style="color:#6272a4">*Map
+</span><span style="color:#6272a4">*set
+</span><span style="color:#6272a4">*/</span>
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> value <span style="color:#ff79c6">of</span> myArray) {
+  console.log(value);
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-数组不要用for-in">2. 数组不要用for in</h3>
+<p><strong>for&hellip;in细节</strong></p>
+<p>for&hellip;in本身是Object的遍历方法，JS中的数组也继承自Object，所以自然而然也能使用for&hellip;in遍历出属性。然而for&hellip;in有一些难以注意到的细节，稍不注意就可能被坑。</p>
+<p><strong>细节一： 遍历的的属性值是字符串，而不是数字！</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> list <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]
+
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">in</span> list) {
+    console.log(i, i <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>, <span style="color:#ff79c6">typeof</span> i)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>打印：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#bd93f9">0</span> <span style="color:#bd93f9">01</span> string
+<span style="color:#bd93f9">1</span> <span style="color:#bd93f9">11</span> string
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">21</span> string
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到typeof i的返回值是“string”，这个最坑的地方在于我们通过下标加减想取别的元素时，就会出现异常，像上述输出的i + 1一样，并不是数字相加，而是字符串拼接！</p>
+<p><strong>细节二：遍历的是对象的枚举属性，包括自身属性以及原型链上的属性</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#ff79c6">const</span> obj <span style="color:#ff79c6">=</span> {
+  a<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;value_a&#39;</span>,
+  b<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;value_b&#39;</span>
+}
+
+<span style="color:#8be9fd;font-style:italic">Object</span>.prototype.c <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;proto_value_c&#39;</span>
+
+<span style="color:#8be9fd;font-style:italic">Object</span>.defineProperty(obj, <span style="color:#f1fa8c">&#39;d&#39;</span>, {
+  get () { <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#39;value_d&#39;</span> },
+  enumerable<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>,
+})
+
+<span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> key <span style="color:#ff79c6">in</span> obj) {
+  console.log(key, obj[key])
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>输出：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">a value_a
+b value_b
+c proto_value_c
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到，原型上的属性c也打印出来了，但是通过Object.defineProperty定义的不可枚举属性d（enumerable: false）没有被遍历到。</p>
+<p><strong>细节三：遍历顺序是对象属性的枚举顺序，并不一定按数组的下标顺序遍历</strong></p>
+<p>for&hellip;in的遍历顺序是枚举顺序，对于数组而言，规范并没有约束各浏览器的实现。因此即便在一定范围内是按顺序遍历的，也应该尽量不依赖for&hellip;in遍历的顺序。MDN文档也明确指出，不建议使用for&hellip;in遍历数组，特别是想按照索引顺序遍历的时候：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/357bc7c95f51237733451c0da81dd9b5.png" alt="357bc7c95f51237733451c0da81dd9b5.png"></p>
+<p>此外，因为有稀疏数组的存在，其实JS里的数组不一定是顺序结构存储的。当数组的键分布较为稀疏，为了充分节约空间，数组可能会退化为像对象一样的哈希表存储结构。</p>
+<p>因为for&hellip;in本身是对象的遍历方法，并不适用于数组，对于数组，还是for&hellip;of、for循环、forEach等遍历比较好。</p>
+<h3 id="3-for循环中的let和var">3. for循环中的let和var</h3>
+<p>关于这个问题，在 <a href="">占位</a> 中进行了说明。</p>
+<h3 id="4-数组的遍历">4. 数组的遍历</h3>
+<h3 id="5-对象的遍历">5. 对象的遍历</h3>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" data-tooltip="js 正则表达式">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/elementui%E4%BA%8B%E4%BB%B6%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E4%BC%A0%E5%8F%82%E4%BC%A0%E9%80%92%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%92%8C%E8%87%AA%E5%AE%9A%E4%B9%89%E5%8F%82%E6%95%B0%E5%A1%AB%E5%9D%91/" data-tooltip="elementUI事件回调函数传参，传递默认参数和自定义参数填坑">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</html>

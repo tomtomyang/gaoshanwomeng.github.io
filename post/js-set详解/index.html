@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js set详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" js set详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [js set详解] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.70d1a7657a82d7ab87b61f3c2e3ed747c8e22c5c84e3a375847afe2c51bb13f3.css" integrity="sha256-cNGnZXqC16uHth88Lj7XR8jiLFyE46N1hHr&#43;LFG7E/M="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/#set-%e5%af%b9%e8%b1%a1" class="toc-link">Set 对象</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/#set-%e4%b8%ad%e7%9a%84%e7%89%b9%e6%ae%8a%e5%80%bc" class="toc-link">Set 中的特殊值</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/#set%e7%b1%bb%e5%9e%8b%e8%bd%ac%e6%8d%a2" class="toc-link">Set类型转换</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/#set%e5%af%b9%e8%b1%a1%e7%9a%84%e6%93%8d%e4%bd%9c" class="toc-link">Set对象的操作</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/#set-%e5%af%b9%e8%b1%a1%e4%bd%9c%e7%94%a8" class="toc-link">Set 对象作用</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js set详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-12</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 685字</span>
+          <span>⏱ 2分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <h3 id="set-对象">Set 对象</h3>
+<p>Set 对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。</p>
+<h3 id="set-中的特殊值">Set 中的特殊值</h3>
+<p>Set 对象存储的值总是唯一的，所以需要判断两个值是否恒等。有几个特殊值需要特殊对待：</p>
+<ul>
+<li>+0 与 -0 在存储判断唯一性的时候是恒等的，所以不重复；</li>
+<li>undefined 与 undefined 是恒等的，所以不重复；</li>
+<li>NaN 与 NaN 是不恒等的，但是在 Set 中只能存一个，不重复。</li>
+</ul>
+<p><strong>代码</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">let</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
+ 
+mySet.add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// Set(1) {1}
+</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5}
+</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5} 这里体现了值的唯一性
+</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#f1fa8c">&#34;some text&#34;</span>); 
+<span style="color:#6272a4">// Set(3) {1, 5, &#34;some text&#34;} 这里体现了类型的多样性
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> o <span style="color:#ff79c6">=</span> {a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}; 
+mySet.add(o);
+mySet.add({a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}); 
+<span style="color:#6272a4">// Set(5) {1, 5, &#34;some text&#34;, {…}, {…}} 
+</span><span style="color:#6272a4">// 这里体现了对象之间引用不同不恒等，即使值相同，Set 也能存储
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="set类型转换">Set类型转换</h3>
+<p><strong>Array</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// Array 转 Set
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#34;value1&#34;</span>, <span style="color:#f1fa8c">&#34;value2&#34;</span>, <span style="color:#f1fa8c">&#34;value3&#34;</span>]);
+<span style="color:#6272a4">// 用...操作符，将 Set 转 Array
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> myArray <span style="color:#ff79c6">=</span> [...mySet];
+<span style="color:#8be9fd;font-style:italic">String</span>
+<span style="color:#6272a4">// String 转 Set
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set(<span style="color:#f1fa8c">&#39;hello&#39;</span>);  <span style="color:#6272a4">// Set(4) {&#34;h&#34;, &#34;e&#34;, &#34;l&#34;, &#34;o&#34;}
+</span><span style="color:#6272a4">// 注：Set 中 toString 方法是不能将 Set 转换成 String
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="set对象的操作">Set对象的操作</h3>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"> <span style="color:#6272a4">//声明一个 set
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> s <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
+<span style="color:#8be9fd;font-style:italic">let</span> s2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#39;大事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>,<span style="color:#f1fa8c">&#39;好事儿&#39;</span>,<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>]);
+
+<span style="color:#6272a4">//元素个数
+</span><span style="color:#6272a4"></span>console.log(s2.size);
+<span style="color:#6272a4">//添加新的元素
+</span><span style="color:#6272a4"></span>s2.add(<span style="color:#f1fa8c">&#39;喜事儿&#39;</span>);
+<span style="color:#6272a4">//删除元素
+</span><span style="color:#6272a4"></span>s2.<span style="color:#ff79c6">delete</span>(<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>);
+<span style="color:#6272a4">//检测
+</span><span style="color:#6272a4"></span>console.log(s2.has(<span style="color:#f1fa8c">&#39;糟心事&#39;</span>));
+<span style="color:#6272a4">//清空
+</span><span style="color:#6272a4"></span>s2.clear();
+
+console.log(s2);
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="set-对象作用">Set 对象作用</h3>
+<p><strong>数组去重</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>]);
+[...mySet]; <span style="color:#6272a4">// [1, 2, 3, 4]
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>并集</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> union <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a, ...b]); <span style="color:#6272a4">// {1, 2, 3, 4}
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>交集</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> intersect <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; b.has(x))); <span style="color:#6272a4">// {2, 3}
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>差集</strong></p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+<span style="color:#8be9fd;font-style:italic">var</span> difference <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; <span style="color:#ff79c6">!</span>b.has(x))); <span style="color:#6272a4">// {1}
+</span></code></pre></td></tr></table>
+</div>
+</div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8/" data-tooltip="js 迭代器与生成器">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</html>
