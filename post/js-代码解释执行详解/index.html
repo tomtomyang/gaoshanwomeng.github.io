@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 代码解释执行详解 </title>
+    <meta charset="utf-8"><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" itemprop="description"
+        content=" js 代码解释执行详解 ">
+    <meta name="keywords" itemprop="keywords"
+        content=" [js AST] ">
+    <base href="https://gaoshanwomeng.github.io/">
+    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.87c56d08e9be00523a8b02577a745cf0a38c0adcfb96b33106e703ef8334d35e.css" integrity="sha256-h8VtCOm&#43;AFI6iwJXenRc8KOMCtz7lrMxBucD74M0014="
+        type="text/css">
+</head><body>
+<div class="main animated fadeInDown">
+  <div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+        <span id="read-percentage"></span>
+    </div>
+    <ul class="toc-h2"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e8%a7%a3%e9%87%8a%e5%9e%8b%e5%92%8c%e7%bc%96%e8%af%91%e5%9e%8b" class="toc-link">1. 解释型和编译型</a>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e7%bc%96%e8%af%91%e5%99%a8%e5%92%8c%e8%a7%a3%e9%87%8a%e5%99%a8" class="toc-link">1. 编译器和解释器</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e7%bc%96%e8%af%91%e5%99%a8" class="toc-link">1. 编译器</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-%e8%a7%a3%e9%87%8a%e5%99%a8" class="toc-link">2. 解释器</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#3-%e4%b8%a4%e8%80%85%e5%af%b9%e6%af%94" class="toc-link">3. 两者对比</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e7%bc%96%e8%af%91%e5%9e%8b%e8%af%ad%e8%a8%80" class="toc-link">1. 编译型语言</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-%e7%bc%96%e8%af%91%e5%9e%8b%e8%af%ad%e8%a8%80" class="toc-link">2. 编译型语言</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#3-js%e6%98%af%e5%93%aa%e7%a7%8d%e8%af%ad%e8%a8%80" class="toc-link">3. js是哪种语言</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-js%e5%8f%98%e9%87%8f%e6%8f%90%e5%8d%87" class="toc-link">1. js变量提升</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-jit" class="toc-link">2. JIT</a>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e5%9f%ba%e7%ba%bf%e7%bc%96%e8%af%91%e5%99%a8" class="toc-link">1. 基线编译器</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-%e4%bc%98%e5%8c%96%e7%bc%96%e8%af%91%e5%99%a8" class="toc-link">2. 优化编译器</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#3-%e4%b8%be%e4%be%8b%e7%b1%bb%e5%9e%8b%e7%89%b9%e5%8c%96" class="toc-link">3. 举例：类型特化</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#4-%e6%80%bb%e7%bb%93" class="toc-link">4. 总结</a>
+                </li>
+                
+                        </ul>
+                        </ul>
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-ast" class="toc-link">2. AST</a>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e7%bc%96%e8%af%91" class="toc-link">1. 编译</a>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e5%88%86%e8%af%8dtokenizing" class="toc-link">1. 分词(tokenizing)</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-%e8%a7%a3%e6%9e%90parsing" class="toc-link">2. 解析(parsing)</a>
+                </li>
+                
+                        </ul><li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-%e6%89%a7%e8%a1%8c" class="toc-link">2. 执行</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#3-%e6%9f%a5%e8%af%a2" class="toc-link">3. 查询</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#4-%e5%b5%8c%e5%a5%97" class="toc-link">4. 嵌套</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#5-%e5%bc%82%e5%b8%b8" class="toc-link">5. 异常</a>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 代码解释执行详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-13</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 5169字</span>
+          <span>⏱ 11分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://www.geeksforgeeks.org/difference-between-compiled-and-interpreted-language/">编译语言和解释语言的区别</a></p>
+<p><a href="https://www.geeksforgeeks.org/compiler-vs-interpreter-2/">编译器与解释器</a></p>
+<p><a href="https://blog.fundebug.com/2019/01/22/how-does-javascript-compile/">JavaScript的工作原理：解析、抽象语法树（AST）+ 提升编译速度5个技巧</a></p>
+<p><a href="https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-compiled-versus-interpreted-languages">IBM compiled-versus-interpreted-languages</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/99395691">JavaScript 编译 - JIT (just-in-time) compiler 是怎么工作的</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25669120">WebAssembly 系列（二）JavaScript Just-in-time (JIT) 工作原理</a></p>
+<p><a href="https://gist.github.com/snailkn/b703f68c6c77ff5a75ae80a79e8f6c16">JS - AST基本概念</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5699739.html">深入理解javascript作用域系列第一篇——内部原理</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5700095.html">深入理解javascript作用域系列第二篇——词法作用域和动态作用域</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1761430">JavaScript到底是解释型语言还是编译型语言?</a></p>
+</blockquote>
+<h2 id="1-解释型和编译型">1. 解释型和编译型</h2>
+<h3 id="1-编译器和解释器">1. 编译器和解释器</h3>
+<p>编译器和解释器是将程序从编程语言翻译成机器语言的两种不同方式。</p>
+<p>区分编译型语言和解释型语言，就是要看这个语言是使用编译器来执行，还是使用解释器来执行。</p>
+<h4 id="1-编译器">1. 编译器</h4>
+<blockquote>
+<p>A compiler is a computer program (or a set of programs) that transforms source code written in a programming language (the source language) into another computer language (the target language), with the latter often having a binary form known as object code. The most common reason for converting source code is to create an executable program.</p>
+</blockquote>
+<blockquote>
+<p>编译器是一种计算机程序，负责把一种编程语言编写的源码转换成另外一种计算机代码，后者往往是以二进制的形式被称为目标代码(object code)。这个转换的过程通常的目的是生成可执行的程序。</p>
+</blockquote>
+<blockquote>
+<p>In computer science, an interpreter is a computer program that directly executes, i.e. performs, instructions written in a programming or scripting language, without previously compiling them into a machine language program. An interpreter generally uses one of the following strategies for program execution:</p>
+<ol>
+<li>parse the source code and perform its behavior directly.</li>
+<li>translate source code into some efficient intermediate representation and immediately execute this.</li>
+<li>explicitly execute stored precompiled code made by a compiler which is part of the interpreter system.</li>
+</ol>
+</blockquote>
+<ul>
+<li>编译器的产出是「另外一种代码」，然后这些代码等着被别人拿来执行。</li>
+<li>编译器的工作往往是在「执行」之前完成，产出是一种可执行或需要再编译或者解释的「代码」。</li>
+</ul>
+<h4 id="2-解释器">2. 解释器</h4>
+<blockquote>
+<p>解释器是一种计算机程序，它直接执行由编程语言或脚本语言编写的代码，并不会把源代码预编译成机器码。一个解释器，通常会用以下的姿势来执行程序代码：</p>
+<ol>
+<li>分析源代码，并且直接执行。</li>
+<li>把源代码翻译成相对更加高效率的中间码，然后立即执行它。</li>
+<li>执行由解释器内部的编译器预编译后保存的代码</li>
+</ol>
+</blockquote>
+<ul>
+<li>可以把解释器看成一个黑盒子，我们输入源码，它就会实时返回结果。</li>
+<li>不同类型的解释器，黑盒子里面的构造不一样，有些还会集成编译器，缓存编译结果，用来提高执行效率（例如 Chrome V8 也是这么做的）。</li>
+<li>解释器通常是工作在「运行时」，并且对于我们输入的源码，是一行一行的解释然后执行，然后返回结果。</li>
+</ul>
+<h4 id="3-两者对比">3. 两者对比</h4>
+<p><strong>表现 Behavior</strong></p>
+<ul>
+<li><strong>编译器</strong>把源代码转换成其他的更低级的代码(例如二进制码、机器码)，但是不会执行它。</li>
+<li><strong>解释器</strong>会读取源代码，并且直接生成指令让计算机硬件执行，不会输出另外一种代码。</li>
+</ul>
+<p><strong>性能 Performance</strong></p>
+<ul>
+<li><strong>编译器</strong>会事先用比较多的时间把整个程序的源代码编译成另外一种代码，后者往往较前者更加接近机器码，所以执行的效率会更加高。时间是消耗在预编译的过程中。</li>
+<li><strong>解释器</strong>会一行一行的读取源代码，解释，然后立即执行。这中间往往使用相对简单的词法分析、语法分析，压缩解释的时间，最后生成机器码，交由硬件执行。解释器适合比较低级的语言。但是相对于预编译好的代码，效率往往会更低。如何减少解释的次数和复杂性，是提高解释器效率的难题。</li>
+</ul>
+<h3 id="1-编译型语言">1. 编译型语言</h3>
+<p>编译语言是一种通常被编译而不是解释的编程语言。</p>
+<p>一旦被编译，就在目标机器的指令中表达；这个机器码是人类无法破译的。编译语言的类型——C、C++、C#、GO等。</p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20200326222732/com4.png" alt="img"></p>
+<h3 id="2-编译型语言">2. 编译型语言</h3>
+<p>解释性语言是一种编程语言，通常是解释性的，而不是将程序编译成机器指令。</p>
+<p>在这种情况下，指令不是由目标机器直接执行，而是由其他程序读取和执行。解释语言范围——JavaScript、Python、PHP 等。</p>
+<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20200326222734/int2.png" alt="img"></p>
+<h3 id="3-js是哪种语言">3. js是哪种语言</h3>
+<p>JavaScript 的圣经 —— MDN 明确地说 JavaScript 是一个解释型语言。但是下面几点仍然会让 JavaScript 是否真的是一个解释型语言产生疑问：</p>
+<ul>
+<li>如果 JS 是解释型语言那为什么会有变量提升（hoisting）？</li>
+<li>JIT（及时编译）会做代码优化(同时创建代码的编译版本)；解释型语言无法做到这些。</li>
+</ul>
+<h4 id="1-js变量提升">1. js变量提升</h4>
+<p>你应该已经知道了 JavaScript 的变量提升。在函数作用域内的任何变量的声明都会被提升到顶部并且值为undeinfed。</p>
+<p>所以 JavaScript 引擎好像解释了同一个脚本文件两次？</p>
+<p>第一次完成所有的声明提升然后第二次才执行代码？</p>
+<p>还是先编译整个代码然后运行它？</p>
+<p>这两种都不对，下面是 JavaScript 处理声明语句的过程：</p>
+<ul>
+<li>一旦 V8 引擎进入一个执行具体代码的执行上下文（函数作用域/全局作用域），它就对代码进行词法分析或者分词。这意味着代码将被分割成像foo = 10这样的原子符号（atomic token）。</li>
+<li>在对当前的整个作用域分析完成后，引擎将 token 解析翻译成一个AST（抽象语法树）。</li>
+<li>引擎每次遇到声明语句，就会把声明传到作用域（scope）中创建一个绑定。每次声明都会为变量分配内存。只是分配内存，并不会修改源代码将变量声明语句提升。正如你所知道的，在JS中分配内存意味着将变量默认设为undefined。</li>
+<li>在这之后，引擎每一次遇到赋值或者取值，都会通过作用域（scope）查找绑定。如果在当前作用域中没有查找到就接着向上级作用域查找直到找到为止。</li>
+<li>接着引擎生成 CPU 可以执行的机器码。</li>
+<li>最后， 代码执行完毕。</li>
+</ul>
+<p>所以变量提升不过是处理执行上下文的小把戏。在执行任何语句之前，解释器就要从创建执行上下文后已经存在的作用域（scope）中找到变量的值。</p>
+<h4 id="2-jit">2. JIT</h4>
+<blockquote>
+<p>解释器启动和执行的更快。你不需要等待整个编译过程完成就可以运行你的代码。从第一行开始翻译，就可以依次继续执行了。</p>
+<p>正是因为这个原因，解释器看起来更加适合 JavaScript。对于一个 Web 开发人员来讲，能够快速执行代码并看到结果是非常重要的。</p>
+<p>这就是为什么最开始的浏览器都是用 JavaScript 解释器的原因。</p>
+<p>可是当你运行同样的代码一次以上的时候，解释器的弊处就显现出来了。比如你执行一个循环，那解释器就不得不一次又一次的进行翻译，这是一种效率低下的表现。</p>
+</blockquote>
+<blockquote>
+<p>编译器的问题则恰好相反。</p>
+<p>它需要花一些时间对整个源代码进行编译，然后生成目标文件才能在机器上执行。对于有循环的代码执行的很快，因为它不需要重复的去翻译每一次循环。</p>
+<p>另外一个不同是，编译器可以用更多的时间对代码进行优化，以使的代码执行的更快。而解释器是在 runtime 时进行这一步骤的，这就决定了它不可能在翻译的时候用很多时间进行优化。</p>
+</blockquote>
+<p><strong>Just-in-time 编译器：综合了两者的优点</strong></p>
+<p>为了解决解释器的低效问题，后来的浏览器把编译器也引入进来，形成混合模式。</p>
+<p>不同的浏览器实现这一功能的方式不同，不过其基本思想是一致的。在 JavaScript 引擎中增加一个监视器（也叫分析器）。监视器监控着代码的运行情况，记录代码一共运行了多少次、如何运行的等信息。</p>
+<p>如果同一行代码运行了几次，这个代码段就被标记成了 “warm”，如果运行了很多次，则被标记成 “hot”。</p>
+<h5 id="1-基线编译器">1. 基线编译器</h5>
+<p>如果一段代码变成了 “warm”，那么 JIT 就把它送到编译器去编译，并且把编译结果存储起来。</p>
+<p>代码段的每一行都会被编译成一个“桩”（stub），同时给这个桩分配一个以“行号 + 变量类型”的索引。如果监视器监视到了执行同样的代码和同样的变量类型，那么就直接把这个已编译的版本 push 出来给浏览器。</p>
+<p>通过这样的做法可以加快执行速度，但是正如前面我所说的，编译器还可以找到更有效地执行代码的方法，也就是做优化。</p>
+<p>基线编译器可以做一部分这样的优化，不过基线编译器优化的时间不能太久，因为会使得程序的执行在这里 hold 住。</p>
+<p>不过如果代码确实非常 “hot”（也就是说几乎所有的执行时间都耗费在这里），那么花点时间做优化也是值得的。</p>
+<h5 id="2-优化编译器">2. 优化编译器</h5>
+<p>如果一个代码段变得 “very hot”，监视器会把它发送到优化编译器中。生成一个更快速和高效的代码版本出来，并且存储之。</p>
+<p>为了生成一个更快速的代码版本，优化编译器必须做一些假设。例如，它会假设由同一个构造函数生成的实例都有相同的形状——就是说所有的实例都有相同的属性名，并且都以同样的顺序初始化，那么就可以针对这一模式进行优化。</p>
+<p>整个优化器起作用的链条是这样的，监视器从他所监视代码的执行情况做出自己的判断，接下来把它所整理的信息传递给优化器进行优化。如果某个循环中先前每次迭代的对象都有相同的形状，那么就可以认为它以后迭代的对象的形状都是相同的。可是对于 JavaScript 从来就没有保证这么一说，前 99 个对象保持着形状，可能第 100 个就少了某个属性。</p>
+<p>正是由于这样的情况，所以编译代码需要在运行之前检查其假设是不是合理的。如果合理，那么优化的编译代码会运行，如果不合理，那么 JIT 会认为做了一个错误的假设，并且把优化代码丢掉。</p>
+<p>这时（发生优化代码丢弃的情况）执行过程将会回到解释器或者基线编译器，这一过程叫做<strong>去优化</strong>。</p>
+<p>通常优化编译器会使得代码变得更快，但是一些情况也会引起一些意想不到的性能问题。如果你的代码一直陷入优化&lt;-&gt;去优化的怪圈，那么程序执行将会变慢，还不如基线编译器快。</p>
+<p>大多数的浏览器都做了限制，当优化/去优化循环发生的时候会尝试跳出这种循环。比如，如果 JIT 做了 10 次以上的优化并且又丢弃的操作，那么就不继续尝试去优化这段代码了桩。</p>
+<h5 id="3-举例类型特化">3. 举例：类型特化</h5>
+<p>有很多不同类型的优化方法，这里我介绍一种，让大家能够明白是如何优化的。优化编译器最成功一个特点叫做类型特化，下面详细解释。</p>
+<p>JavaScript 所使用的动态类型体系在运行时需要进行额外的解释工作，例如下面代码：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">function</span> arraySum(arr) {
+  <span style="color:#8be9fd;font-style:italic">var</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
+    sum <span style="color:#ff79c6">+=</span> arr[i];
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>+= 循环中这一步看起来很简单，只需要进行一步计算，但是恰恰因为是用动态类型，他所需要的步骤要比你所想象的更复杂一些。</p>
+<p>我们假设 arr 是一个有 100 个整数的数组。当代码被标记为 “warm” 时，基线编译器就为函数中的每一个操作生成一个桩。sum += arr[i]会有一个相应的桩，并且把里面的 += 操作当成整数加法。</p>
+<p>但是，sum 和 arr[i] 两个数并不保证都是整数。因为在 JavaScript 中类型都是动态类型，在接下来的循环当中，arr[i] 很有可能变成了string 类型。整数加法和字符串连接是完全不同的两个操作，会被编译成不同的机器码。</p>
+<p>JIT 处理这个问题的方法是编译多基线桩。如果一个代码段是单一形态的（即总是以同一类型被调用），则只生成一个桩。如果是多形态的（即调用的过程中，类型不断变化），则会为操作所调用的每一个类型组合生成一个桩。</p>
+<p>这就是说 JIT 在选择一个桩之前，会进行多分枝选择，类似于决策树，问自己很多问题才会确定最终选择哪个，见下图：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-1f05c0e29543722fc08df55e8552beae_720w.png" alt="img"></p>
+<p>正是因为在基线编译器中每行代码都有自己的桩，所以 JIT 在每行代码被执行的时候都会检查数据类型。在循环的每次迭代，JIT 也都会重复一次分枝选择。</p>
+<p><img src="https://pic4.zhimg.com/80/v2-eda86cdd0b7e0b00c876bf3d053b440f_720w.png" alt="img"></p>
+<p>如果代码在执行的过程中，JIT 不是每次都重复检查的话，那么执行的还会更快一些，而这就是优化编译器所需要做的工作之一了。</p>
+<p>优化编译器中，整个函数被统一编译，这样的话就可以在循环开始执行之前进行类型检查。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-b7387c3dc140753eb60482aaede0c046_720w.png" alt="img"></p>
+<p>一些浏览器的 JIT 优化更加复杂。比如在 Firefox 中，给一些数组设定了特定的类型，比如里面只包含整型。如果 arr 是这种数组类型，那么 JIT 就不需要检查 arr[i] 是不是整型了，这也意味着 JIT 可以在进入循环之前进行所有的类型检查。</p>
+<h5 id="4-总结">4. 总结</h5>
+<p>简而言之 JIT 是什么呢？它是使 JavaScript 运行更快的一种手段，通过监视代码的运行状态，把 hot 代码（重复执行多次的代码）进行优化。通过这种方式，可以使 JavaScript 应用的性能提升很多倍。</p>
+<p>为了使执行速度变快，JIT 会增加很多多余的开销，这些开销包括：</p>
+<ul>
+<li>优化和去优化开销</li>
+<li>监视器记录信息对内存的开销</li>
+<li>发生去优化情况时恢复信息的记录对内存的开销</li>
+<li>对基线版本和优化后版本记录的内存开销</li>
+</ul>
+<p>这里还有很大的提升空间：即消除开销。通过消除开销使得性能上有进一步地提升，这也是 WebAssembly 所要做的事之一。</p>
+<h2 id="2-ast">2. AST</h2>
+<p>不管使用什么编程语言，都需要一些软件来处理源代码以便让计算机能够理解。该软件可以是解释器，也可以是编译器。</p>
+<p>无论你使用的是解释型语言还是编译型语言，都有一个共同的部分：将源代码作为纯文本解析为 抽象语法树(abstract syntax tree, AST) 的数据结构。</p>
+<p>AST不仅以结构化的方式显示源代码，而且在语义分析中扮演着重要角色。了解AST能帮你真正吃透javascript的语言精髓。</p>
+<p>在javascript世界中，你可以认为抽象语法树(AST)是最底层。 再往下，就是关于转换和编译的“黑魔法”领域了。</p>
+<h3 id="1-编译">1. 编译</h3>
+<p>以<code>var a = 2;</code>为例，说明javascript的内部编译过程，主要包括以下三步：</p>
+<h4 id="1-分词tokenizing">1. 分词(tokenizing)</h4>
+<p>把由字符组成的字符串分解成有意义的代码块，这些代码块被称为词法单元(token)</p>
+<p><code>var a = 2;</code>被分解成为下面这些词法单元：<code>var</code>、<code>a</code>、<code>=</code>、<code>2</code>、<code>;</code>。这些词法单元组成了一个词法单元流数组。</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 词法分析后的结果
+</span><span style="color:#6272a4"></span>[
+  <span style="color:#f1fa8c">&#34;var&#34;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;keyword&#34;</span>,
+  <span style="color:#f1fa8c">&#34;a&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;identifier&#34;</span>,
+  <span style="color:#f1fa8c">&#34;=&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;assignment&#34;</span>,
+  <span style="color:#f1fa8c">&#34;2&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;integer&#34;</span>,
+  <span style="color:#f1fa8c">&#34;;&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;eos&#34;</span> (end <span style="color:#ff79c6">of</span> statement)
+]
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="2-解析parsing">2. 解析(parsing)</h4>
+<p>把词法单元流数组转换成一个由元素逐级嵌套所组成的代表程序语法结构的树，这个树被称为“抽象语法树” (Abstract Syntax Tree, AST)。</p>
+<p><code>var a = 2;</code>的抽象语法树中有一个叫<code>VariableDeclaration</code>的顶级节点，接下来是一个叫<code>Identifier(它的值是a)</code>的子节点，以及一个叫<code>AssignmentExpression</code>的子节点，且该节点有一个叫<code>Numericliteral(它的值是2)</code>的子节点：</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
+  operation<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;=&#34;</span>,
+  left<span style="color:#ff79c6">:</span> {
+    keyword<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;var&#34;</span>,
+    right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;a&#34;</span>
+  }
+  right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;2&#34;</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="2-执行">2. 执行</h3>
+<h3 id="3-查询">3. 查询</h3>
+<h3 id="4-嵌套">4. 嵌套</h3>
+<h3 id="5-异常">5. 异常</h3>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/js/">#js</a></span>
+        
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="back-top-btn">
+            <i class="iconfont icon-top item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="switch-btn">
+            <i class="iconfont icon-switch item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="javascript:void(0);" id="search-btn">
+            <i class="iconfont icon-search item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/" data-tooltip="js 作用域&amp;作用域链&amp;变量提升&amp;闭包">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="search-container animated fadeInShow">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div  id="loading" class="loading-container">
+        <span>搜索中...</span>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: (query) => {
+            $('#loading').css('display', 'flex');
+        },
+        transformData: (tips) => {
+            $('#loading').css('display', 'none');
+        }
+    })
+</script>
+        <div class="cover animated fadeInShow"></div>
+    </body>
+
+
+
+<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.da7e47b665999e07c5a344e11c6f24a0b4e054e6852c2e7f63ad44b11cf66a31ff68afeab35c9ffa81638300fab806f4e67d9699e5e66cea8b22ad4ca61da908.js" integrity=""></script>
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-168042857-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+</html>
