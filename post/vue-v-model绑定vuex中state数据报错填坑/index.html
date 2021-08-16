@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -49,7 +49,7 @@
         <div class="info">
           <span>📅 2021-01-30</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 332字</span>
+          <span>📖 330字</span>
           <span>⏱ 1分钟</span>
         </div>
         
@@ -60,45 +60,22 @@
 <li>用vuex管理数据状态，state中有定义 <code>expressTemplate: false,</code></li>
 <li>vue的cart页面有使用vant的标签, 提示报错<strong>Computed property “expressTemplate” was assigned to but it has no setter.</strong></li>
 </ul>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">el-radio-group</span>  <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;expressTemplate&#34;</span>&gt;
-   &lt;<span style="color:#ff79c6">el-radio</span> <span style="color:#50fa7b">v-for</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;( item, index ) in expressList&#34;</span> <span style="color:#50fa7b">:key</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index&#34;</span> <span style="color:#50fa7b">:label</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item.id&#34;</span>&gt;{{item.name}}&lt;/<span style="color:#ff79c6">el-radio</span>&gt;
-&lt;/<span style="color:#ff79c6">el-radio-group</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="2-错误分析">2. 错误分析</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">el-radio-group</span>  <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;expressTemplate&#34;</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   &lt;<span style="color:#ff79c6">el-radio</span> <span style="color:#50fa7b">v-for</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;( item, index ) in expressList&#34;</span> <span style="color:#50fa7b">:key</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index&#34;</span> <span style="color:#50fa7b">:label</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item.id&#34;</span>&gt;{{item.name}}&lt;/<span style="color:#ff79c6">el-radio</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>&lt;/<span style="color:#ff79c6">el-radio-group</span>&gt;
+</code></pre></div><h3 id="2-错误分析">2. 错误分析</h3>
 <p>搜索一番，了解 组件中v-model=“XXX”，而XXX是vuex state中的某个变量，html中 expressTemplate 是由v-model绑定 ，vuex中是单项流，v-model是双向绑定，但是在computed中只通过get获取参数值 没有set无法改变参数值，因此增加set的方法 。</p>
 <h3 id="3-解决方案">3. 解决方案</h3>
 <p>computed下增加set方法，set中根据具体业务写出要更改的值即可，我这里是调用vuex中mutations.js的一个方法。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"> isAllChecked<span style="color:#ff79c6">:</span> {
-       get() {
-          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.$store.state.batchprint.expressTemplate;
-       },
-       set(val) { 
-          <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;batchprint/SET_EXPRESS_TEMPLATE&#39;</span>, val);
-       }
-    },
-</code></pre></td></tr></table>
-</div>
-</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span> isAllChecked<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>       get() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.$store.state.batchprint.expressTemplate;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>       },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>       set(val) { 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>          <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;batchprint/SET_EXPRESS_TEMPLATE&#39;</span>, val);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>       }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    },
+</code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>

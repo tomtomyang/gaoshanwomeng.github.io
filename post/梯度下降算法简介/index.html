@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -59,7 +59,7 @@
         <div class="info">
           <span>📅 2020-06-18</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2229字</span>
+          <span>📖 2215字</span>
           <span>⏱ 5分钟</span>
         </div>
         
@@ -114,227 +114,103 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200623104321278.png" alt="image-20200623104321278"></p>
 <h4 id="3代码实现">3.代码实现</h4>
 <p>对于$loss = \sum\left( wx_{i}+b-y_{i}\right) ^{2}$，首先我们我们需要把具体表达式写出来，也就是对于一个数据集，$loss$可以表示为所有$\left( wx_{i}+b-y_{i}\right) ^{2}$之和，我们可以定义一个函数来表示：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">compute_error_for_line_given_points</span>(b,w,points):
-	totalError <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>,<span style="color:#8be9fd;font-style:italic">len</span>(points)):
-        x <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">0</span>]
-        y <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">1</span>]
-        totalError <span style="color:#ff79c6">+=</span> (y<span style="color:#ff79c6">-</span>(w<span style="color:#ff79c6">*</span>x<span style="color:#ff79c6">+</span>b))<span style="color:#ff79c6">**</span><span style="color:#bd93f9">2</span>
-     <span style="color:#ff79c6">return</span> totalError <span style="color:#ff79c6">/</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
-</code></pre></td></tr></table>
-</div>
-</div><p>然后计算梯度信息，二元函数和一元函数不同，一元函数的梯度就是导数，二元函数的梯度是两个偏导组成的向量，这个向量的反方向就指向了向最小值走的方向。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">step_gradient</span>(b_current, w_current, points, learningRate):
-    b_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    w_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    N <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>,<span style="color:#8be9fd;font-style:italic">len</span>(points)):
-        x <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">0</span>]
-        y <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">1</span>]
-        b_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> (y<span style="color:#ff79c6">-</span>((w_current<span style="color:#ff79c6">*</span>x)<span style="color:#ff79c6">+</span>b_current))
-        w_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> x<span style="color:#ff79c6">*</span>(y<span style="color:#ff79c6">-</span>((w_current<span style="color:#ff79c6">*</span>x)<span style="color:#ff79c6">+</span>b_current))
-    new_b <span style="color:#ff79c6">=</span> b_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> b_gradient)
-    new_w <span style="color:#ff79c6">=</span> w_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> w_gradient)
-    <span style="color:#ff79c6">return</span> [new_b, new_w]
-</code></pre></td></tr></table>
-</div>
-</div><p>最后循环迭代梯度信息：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">def</span>  <span style="color:#50fa7b">gradient_descent_runner</span>(points, starting_b, starting_w, learning_rate, num_iterations):
-    b<span style="color:#ff79c6">=</span> starting_b
-    w<span style="color:#ff79c6">=</span>starting_m
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(num_iterations):
-        b,m <span style="color:#ff79c6">=</span> step_gradient(b,m,np<span style="color:#ff79c6">.</span>array(points),learning_rate)
-     <span style="color:#ff79c6">return</span> [b,m]
-</code></pre></td></tr></table>
-</div>
-</div><p>再写一个执行函数包一下：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">run</span>():
-    points <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>genfromtxt(<span style="color:#f1fa8c">&#34;data.csv&#34;</span>, delimiter<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;,&#34;</span>)
-    learning_rate <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.0001</span>
-    initial_b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    initial_w <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    num_iterations <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span>
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Starting gradient descent at b = </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(initial_b, initial_w, compute_error_for_line_given_points(initial_b, initial_w, points)))
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;running&#34;</span>)
-    [b, w] <span style="color:#ff79c6">=</span> gradient_descent_runner(points, initial_b, initial_w, learning_rate, num_iterations)
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;after </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c"> iterations b = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{3}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(num_iterations, b, w, compute_error_for_line_given_points(b, w, points)))
-</code></pre></td></tr></table>
-</div>
-</div><p>在根目录下写一个数据data.csv，为了方便先写4条数据试试：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">compute_error_for_line_given_points</span>(b,w,points):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	totalError <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>,<span style="color:#8be9fd;font-style:italic">len</span>(points)):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        x <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        y <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">1</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        totalError <span style="color:#ff79c6">+=</span> (y<span style="color:#ff79c6">-</span>(w<span style="color:#ff79c6">*</span>x<span style="color:#ff79c6">+</span>b))<span style="color:#ff79c6">**</span><span style="color:#bd93f9">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>     <span style="color:#ff79c6">return</span> totalError <span style="color:#ff79c6">/</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
+</code></pre></div><p>然后计算梯度信息，二元函数和一元函数不同，一元函数的梯度就是导数，二元函数的梯度是两个偏导组成的向量，这个向量的反方向就指向了向最小值走的方向。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">step_gradient</span>(b_current, w_current, points, learningRate):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    b_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    w_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    N <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>,<span style="color:#8be9fd;font-style:italic">len</span>(points)):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        x <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        y <span style="color:#ff79c6">=</span> points[i,<span style="color:#bd93f9">1</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        b_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> (y<span style="color:#ff79c6">-</span>((w_current<span style="color:#ff79c6">*</span>x)<span style="color:#ff79c6">+</span>b_current))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        w_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> x<span style="color:#ff79c6">*</span>(y<span style="color:#ff79c6">-</span>((w_current<span style="color:#ff79c6">*</span>x)<span style="color:#ff79c6">+</span>b_current))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    new_b <span style="color:#ff79c6">=</span> b_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> b_gradient)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    new_w <span style="color:#ff79c6">=</span> w_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> w_gradient)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">return</span> [new_b, new_w]
+</code></pre></div><p>最后循环迭代梯度信息：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">def</span>  <span style="color:#50fa7b">gradient_descent_runner</span>(points, starting_b, starting_w, learning_rate, num_iterations):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    b<span style="color:#ff79c6">=</span> starting_b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    w<span style="color:#ff79c6">=</span>starting_m
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(num_iterations):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        b,m <span style="color:#ff79c6">=</span> step_gradient(b,m,np<span style="color:#ff79c6">.</span>array(points),learning_rate)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>     <span style="color:#ff79c6">return</span> [b,m]
+</code></pre></div><p>再写一个执行函数包一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">run</span>():
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    points <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>genfromtxt(<span style="color:#f1fa8c">&#34;data.csv&#34;</span>, delimiter<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;,&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    learning_rate <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.0001</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    initial_b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    initial_w <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    num_iterations <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Starting gradient descent at b = </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(initial_b, initial_w, compute_error_for_line_given_points(initial_b, initial_w, points)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;running&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    [b, w] <span style="color:#ff79c6">=</span> gradient_descent_runner(points, initial_b, initial_w, learning_rate, num_iterations)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;after </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c"> iterations b = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{3}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(num_iterations, b, w, compute_error_for_line_given_points(b, w, points)))
+</code></pre></div><p>在根目录下写一个数据data.csv，为了方便先写4条数据试试：</p>
 <p><code>data.csv</code></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">56.130388816875467,85.498067778840223
-60.269214393997906,70.251934419771587
-53.66093226167304,63.642398775657753
-38.954769073377065,44.847124242467601
-</code></pre></td></tr></table>
-</div>
-</div><p>运行py程序，得到如下输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>56.130388816875467,85.498067778840223
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>60.269214393997906,70.251934419771587
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>53.66093226167304,63.642398775657753
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>38.954769073377065,44.847124242467601
+</code></pre></div><p>运行py程序，得到如下输出：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20200619105318255.png" alt="image-20200619105318255"></p>
 <p>最后放一下完整代码：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">import</span> numpy <span style="color:#ff79c6">as</span> np
-
-
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">compute_error_for_line_given_points</span>(b, w, points):
-    totalError <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">len</span>(points)):
-        x <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">0</span>]
-        y <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">1</span>]
-        totalError <span style="color:#ff79c6">+=</span> (y<span style="color:#ff79c6">-</span>(w <span style="color:#ff79c6">*</span> x <span style="color:#ff79c6">+</span> b)) <span style="color:#ff79c6">**</span> <span style="color:#bd93f9">2</span>
-    <span style="color:#ff79c6">return</span> totalError <span style="color:#ff79c6">/</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
-
-
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">step_gradient</span>(b_current, w_current, points, learningRate):
-    b_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    w_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    N <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">len</span>(points)):
-        x <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">0</span>]
-        y <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">1</span>]
-        b_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> (y<span style="color:#ff79c6">-</span>((w_current <span style="color:#ff79c6">*</span> x) <span style="color:#ff79c6">+</span> b_current))
-        w_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> x<span style="color:#ff79c6">*</span>(y<span style="color:#ff79c6">-</span>((w_current <span style="color:#ff79c6">*</span> x) <span style="color:#ff79c6">+</span> b_current))
-    new_b <span style="color:#ff79c6">=</span> b_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> b_gradient)
-    new_w <span style="color:#ff79c6">=</span> w_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> w_gradient)
-    <span style="color:#ff79c6">return</span> [new_b, new_w]
-
-
-<span style="color:#ff79c6">def</span>  <span style="color:#50fa7b">gradient_descent_runner</span>(points, starting_b, starting_w, learning_rate, num_iterations):
-    b<span style="color:#ff79c6">=</span> starting_b
-    w<span style="color:#ff79c6">=</span> starting_w
-    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(num_iterations):
-        b, w <span style="color:#ff79c6">=</span> step_gradient(b, w, np<span style="color:#ff79c6">.</span>array(points), learning_rate)
-    <span style="color:#ff79c6">return</span> [b, w]
-
-
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">run</span>():
-    points <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>genfromtxt(<span style="color:#f1fa8c">&#34;data.csv&#34;</span>, delimiter<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;,&#34;</span>)
-    learning_rate <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.0001</span>
-    initial_b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    initial_w <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
-    num_iterations <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span>
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Starting gradient descent at b = </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(initial_b, initial_w, compute_error_for_line_given_points(initial_b, initial_w, points)))
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;running&#34;</span>)
-    [b, w] <span style="color:#ff79c6">=</span> gradient_descent_runner(points, initial_b, initial_w, learning_rate, num_iterations)
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;after </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c"> iterations b = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{3}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(num_iterations, b, w, compute_error_for_line_given_points(b, w, points)))
-
-
-<span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;__main__&#39;</span>:
-    run()
-
-</code></pre></td></tr></table>
-</div>
-</div><p>参考：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> numpy <span style="color:#ff79c6">as</span> np
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">compute_error_for_line_given_points</span>(b, w, points):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    totalError <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">len</span>(points)):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        x <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        y <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">1</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        totalError <span style="color:#ff79c6">+=</span> (y<span style="color:#ff79c6">-</span>(w <span style="color:#ff79c6">*</span> x <span style="color:#ff79c6">+</span> b)) <span style="color:#ff79c6">**</span> <span style="color:#bd93f9">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">return</span> totalError <span style="color:#ff79c6">/</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">step_gradient</span>(b_current, w_current, points, learningRate):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    b_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    w_gradient <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    N <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">float</span>(<span style="color:#8be9fd;font-style:italic">len</span>(points))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">len</span>(points)):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        x <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        y <span style="color:#ff79c6">=</span> points[i, <span style="color:#bd93f9">1</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        b_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> (y<span style="color:#ff79c6">-</span>((w_current <span style="color:#ff79c6">*</span> x) <span style="color:#ff79c6">+</span> b_current))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        w_gradient <span style="color:#ff79c6">+=</span> <span style="color:#ff79c6">-</span>(<span style="color:#bd93f9">2</span><span style="color:#ff79c6">/</span>N) <span style="color:#ff79c6">*</span> x<span style="color:#ff79c6">*</span>(y<span style="color:#ff79c6">-</span>((w_current <span style="color:#ff79c6">*</span> x) <span style="color:#ff79c6">+</span> b_current))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    new_b <span style="color:#ff79c6">=</span> b_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> b_gradient)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    new_w <span style="color:#ff79c6">=</span> w_current <span style="color:#ff79c6">-</span> (learningRate <span style="color:#ff79c6">*</span> w_gradient)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#ff79c6">return</span> [new_b, new_w]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#ff79c6">def</span>  <span style="color:#50fa7b">gradient_descent_runner</span>(points, starting_b, starting_w, learning_rate, num_iterations):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    b<span style="color:#ff79c6">=</span> starting_b
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    w<span style="color:#ff79c6">=</span> starting_w
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(num_iterations):
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>        b, w <span style="color:#ff79c6">=</span> step_gradient(b, w, np<span style="color:#ff79c6">.</span>array(points), learning_rate)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#ff79c6">return</span> [b, w]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">run</span>():
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    points <span style="color:#ff79c6">=</span> np<span style="color:#ff79c6">.</span>genfromtxt(<span style="color:#f1fa8c">&#34;data.csv&#34;</span>, delimiter<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;,&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    learning_rate <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.0001</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    initial_b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    initial_w <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>    num_iterations <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">100</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Starting gradient descent at b = </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(initial_b, initial_w, compute_error_for_line_given_points(initial_b, initial_w, points)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;running&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>    [b, w] <span style="color:#ff79c6">=</span> gradient_descent_runner(points, initial_b, initial_w, learning_rate, num_iterations)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;after </span><span style="color:#f1fa8c">{0}</span><span style="color:#f1fa8c"> iterations b = </span><span style="color:#f1fa8c">{1}</span><span style="color:#f1fa8c">, m = </span><span style="color:#f1fa8c">{2}</span><span style="color:#f1fa8c">, error = </span><span style="color:#f1fa8c">{3}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">.</span>format(num_iterations, b, w, compute_error_for_line_given_points(b, w, points)))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;__main__&#39;</span>:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    run()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>
+</code></pre></div><p>参考：</p>
 <p><a href="https://blog.csdn.net/qq_41800366/article/details/86583789">https://blog.csdn.net/qq_41800366/article/details/86583789</a></p>
 
       </div>

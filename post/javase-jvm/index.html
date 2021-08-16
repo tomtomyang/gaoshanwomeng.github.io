@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -166,32 +166,17 @@ C、 该类的Class对象没有被引用</p>
 <p>（1）思想：先标记存活对象，然后把存活对象向一边移动，然后清理掉端边界以外的内存。
 （2）优缺点：不容易产生内存碎片；内存利用率高；存活对象多并且分散的时候，移动次数多，效率低下</p>
 <h5 id="4分代收集算法目前大部分jvm的垃圾收集器所采用的算法">4、分代收集算法：（目前大部分JVM的垃圾收集器所采用的算法）：</h5>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">思想：把堆分成新生代和老年代。（永久代指的是方法区）
-</code></pre></td></tr></table>
-</div>
-</div><p>（1） 因为新生代每次垃圾回收都要回收大部分对象，所以新生代采用Copying算法。新生代里面分成一份较大的Eden空间和两份较小的Survivor空间。每次只使用Eden和其中一块Survivor空间，然后垃圾回收的时候，把存活对象放到未使用的Survivor（划分出from、to）空间中，清空Eden和刚才使用过的Survivor空间。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>思想：把堆分成新生代和老年代。（永久代指的是方法区）
+</code></pre></div><p>（1） 因为新生代每次垃圾回收都要回收大部分对象，所以新生代采用Copying算法。新生代里面分成一份较大的Eden空间和两份较小的Survivor空间。每次只使用Eden和其中一块Survivor空间，然后垃圾回收的时候，把存活对象放到未使用的Survivor（划分出from、to）空间中，清空Eden和刚才使用过的Survivor空间。
 （2） 由于老年代每次只回收少量的对象，因此采用mark-compact算法。
 （3） 在堆区外有一个永久代。对永久代的回收主要是无效的类和常量</p>
 <h5 id="5gc使用时对程序的影响">5、GC使用时对程序的影响？</h5>
 <p>垃圾回收会影响程序的性能，Java虚拟机必须要追踪运行程序中的有用对象，然后释放没用对象，这个过程消耗处理器时间</p>
 <h5 id="6几种不同的垃圾回收类型">6、几种不同的垃圾回收类型：</h5>
 <p>（1）Minor GC：从年轻代（包括Eden、Survivor区）回收内存。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">A、当JVM无法为一个新的对象分配内存的时候，越容易触发Minor GC。所以分配率越高，内存越来越少，越频繁执行Minor GC
-B、执行Minor GC操作的时候，不会影响到永久代（Tenured）。从永久代到年轻代的引用，被当成GC Roots，从年轻代到老年代的引用在标记阶段直接被忽略掉。
-</code></pre></td></tr></table>
-</div>
-</div><p>（2）Major GC：清理整个老年代，当eden区内存不足时触发。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>A、当JVM无法为一个新的对象分配内存的时候，越容易触发Minor GC。所以分配率越高，内存越来越少，越频繁执行Minor GC
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>B、执行Minor GC操作的时候，不会影响到永久代（Tenured）。从永久代到年轻代的引用，被当成GC Roots，从年轻代到老年代的引用在标记阶段直接被忽略掉。
+</code></pre></div><p>（2）Major GC：清理整个老年代，当eden区内存不足时触发。
 （3）Full GC：清理整个堆空间，包括年轻代和老年代。当老年代内存不足时触发</p>
 <h3 id="四-jvm中类加载的过程">四. jvm中类加载的过程</h3>
 <p>类加载的过程包括了5个阶段：加载，验证，准备，解析和初始化</p>

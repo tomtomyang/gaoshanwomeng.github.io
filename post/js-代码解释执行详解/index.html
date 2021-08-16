@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -85,6 +85,9 @@
                         </ul><li>
                     <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#2-ast" class="toc-link">2. AST</a>
                 </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#3-hh" class="toc-link">3. hh</a>
+                </li>
                 
                         <ul class="toc-h3"><li>
                     <a href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/#1-%e7%bc%96%e8%af%91" class="toc-link">1. 编译</a>
@@ -117,7 +120,7 @@
         <div class="info">
           <span>📅 2021-08-13</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 5169字</span>
+          <span>📖 5164字</span>
           <span>⏱ 11分钟</span>
         </div>
         
@@ -246,25 +249,13 @@
 <h5 id="3-举例类型特化">3. 举例：类型特化</h5>
 <p>有很多不同类型的优化方法，这里我介绍一种，让大家能够明白是如何优化的。优化编译器最成功一个特点叫做类型特化，下面详细解释。</p>
 <p>JavaScript 所使用的动态类型体系在运行时需要进行额外的解释工作，例如下面代码：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#8be9fd;font-style:italic">function</span> arraySum(arr) {
-  <span style="color:#8be9fd;font-style:italic">var</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
-    sum <span style="color:#ff79c6">+=</span> arr[i];
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>+= 循环中这一步看起来很简单，只需要进行一步计算，但是恰恰因为是用动态类型，他所需要的步骤要比你所想象的更复杂一些。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> arraySum(arr) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#8be9fd;font-style:italic">var</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    sum <span style="color:#ff79c6">+=</span> arr[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
+</code></pre></div><p>+= 循环中这一步看起来很简单，只需要进行一步计算，但是恰恰因为是用动态类型，他所需要的步骤要比你所想象的更复杂一些。</p>
 <p>我们假设 arr 是一个有 100 个整数的数组。当代码被标记为 “warm” 时，基线编译器就为函数中的每一个操作生成一个桩。sum += arr[i]会有一个相应的桩，并且把里面的 += 操作当成整数加法。</p>
 <p>但是，sum 和 arr[i] 两个数并不保证都是整数。因为在 JavaScript 中类型都是动态类型，在接下来的循环当中，arr[i] 很有可能变成了string 类型。整数加法和字符串连接是完全不同的两个操作，会被编译成不同的机器码。</p>
 <p>JIT 处理这个问题的方法是编译多基线桩。如果一个代码段是单一形态的（即总是以同一类型被调用），则只生成一个桩。如果是多形态的（即调用的过程中，类型不断变化），则会为操作所调用的每一个类型组合生成一个桩。</p>
@@ -291,59 +282,32 @@
 <p>无论你使用的是解释型语言还是编译型语言，都有一个共同的部分：将源代码作为纯文本解析为 抽象语法树(abstract syntax tree, AST) 的数据结构。</p>
 <p>AST不仅以结构化的方式显示源代码，而且在语义分析中扮演着重要角色。了解AST能帮你真正吃透javascript的语言精髓。</p>
 <p>在javascript世界中，你可以认为抽象语法树(AST)是最底层。 再往下，就是关于转换和编译的“黑魔法”领域了。</p>
+<h2 id="3-hh">3. hh</h2>
 <h3 id="1-编译">1. 编译</h3>
 <p>以<code>var a = 2;</code>为例，说明javascript的内部编译过程，主要包括以下三步：</p>
 <h4 id="1-分词tokenizing">1. 分词(tokenizing)</h4>
 <p>把由字符组成的字符串分解成有意义的代码块，这些代码块被称为词法单元(token)</p>
 <p><code>var a = 2;</code>被分解成为下面这些词法单元：<code>var</code>、<code>a</code>、<code>=</code>、<code>2</code>、<code>;</code>。这些词法单元组成了一个词法单元流数组。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 词法分析后的结果
-</span><span style="color:#6272a4"></span>[
-  <span style="color:#f1fa8c">&#34;var&#34;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;keyword&#34;</span>,
-  <span style="color:#f1fa8c">&#34;a&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;identifier&#34;</span>,
-  <span style="color:#f1fa8c">&#34;=&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;assignment&#34;</span>,
-  <span style="color:#f1fa8c">&#34;2&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;integer&#34;</span>,
-  <span style="color:#f1fa8c">&#34;;&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;eos&#34;</span> (end <span style="color:#ff79c6">of</span> statement)
-]
-</code></pre></td></tr></table>
-</div>
-</div><h4 id="2-解析parsing">2. 解析(parsing)</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 词法分析后的结果
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>[
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#f1fa8c">&#34;var&#34;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;keyword&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#f1fa8c">&#34;a&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;identifier&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  <span style="color:#f1fa8c">&#34;=&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;assignment&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#f1fa8c">&#34;2&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;integer&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  <span style="color:#f1fa8c">&#34;;&#34;</span>   <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;eos&#34;</span> (end <span style="color:#ff79c6">of</span> statement)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>]
+</code></pre></div><h4 id="2-解析parsing">2. 解析(parsing)</h4>
 <p>把词法单元流数组转换成一个由元素逐级嵌套所组成的代表程序语法结构的树，这个树被称为“抽象语法树” (Abstract Syntax Tree, AST)。</p>
 <p><code>var a = 2;</code>的抽象语法树中有一个叫<code>VariableDeclaration</code>的顶级节点，接下来是一个叫<code>Identifier(它的值是a)</code>的子节点，以及一个叫<code>AssignmentExpression</code>的子节点，且该节点有一个叫<code>Numericliteral(它的值是2)</code>的子节点：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{
-  operation<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;=&#34;</span>,
-  left<span style="color:#ff79c6">:</span> {
-    keyword<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;var&#34;</span>,
-    right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;a&#34;</span>
-  }
-  right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;2&#34;</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="2-执行">2. 执行</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  operation<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;=&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  left<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    keyword<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;var&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;a&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  right<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;2&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
+</code></pre></div><h3 id="2-执行">2. 执行</h3>
 <h3 id="3-查询">3. 查询</h3>
 <h3 id="4-嵌套">4. 嵌套</h3>
 <h3 id="5-异常">5. 异常</h3>

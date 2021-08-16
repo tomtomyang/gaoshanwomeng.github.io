@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -49,7 +49,7 @@
         <div class="info">
           <span>📅 2021-03-17</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 937字</span>
+          <span>📖 934字</span>
           <span>⏱ 2分钟</span>
         </div>
         
@@ -66,15 +66,8 @@ requests are only supported for protocol schemes: http, data, chrome,
 chrome-extension, https.</p>
 </blockquote>
 <p>我想来想去都没有相同怎么回事，后来发现是由于我在一个js文件里面倒入其他js文件的时候在标签里面加入了type=“module”</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;module&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./js/main.js&#34;</span>  <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;utf-8&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>但是这样做本身是没什么问题的啊，使用es6语法，在其中一个js文件里面导入其他文件的内容是用的import …from…</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;module&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./js/main.js&#34;</span>  <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;utf-8&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>但是这样做本身是没什么问题的啊，使用es6语法，在其中一个js文件里面导入其他文件的内容是用的import …from…</p>
 <p>后来再经过研究终于发现了问题所在，其实问题就是浏览器在访问本地js文件的时候遇到了跨域的问题，我们这种引入方式属于file协议，但是上面的报错信息提示是：</p>
 <blockquote>
 <p>Cross origin
@@ -92,25 +85,11 @@ mac的话网上说在终端进行这个操作，但是我的黑果上行不通�
 <h2 id="3使用anywherelive-server插件">3.使用anywhere/live server插件</h2>
 <p>其实这个和tomcat的思路差不多，就是这个是一个npm的插件，会比tomcat方便一些，
 可以使用npm安装</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ npm install anywhere -g 
-</code></pre></td></tr></table>
-</div>
-</div><p>最好是全局安装，这样以后用也方便
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ npm install anywhere -g 
+</code></pre></div><p>最好是全局安装，这样以后用也方便
 然后切换到html文件所在的文件夹，运行</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ anywhere 
-</code></pre></td></tr></table>
-</div>
-</div><p>运行后一般会自动跳转到浏览器上，终端上会显示一个运行的网址，你也可以在其他地方调试。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>$ anywhere 
+</code></pre></div><p>运行后一般会自动跳转到浏览器上，终端上会显示一个运行的网址，你也可以在其他地方调试。</p>
 
       </div>
       <div class="footer">

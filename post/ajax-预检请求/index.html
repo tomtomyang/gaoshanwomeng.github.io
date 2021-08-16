@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.94cd51a5470e0ea52a03e9c2b97fdb9f52cb1b4ddd550ef007998d4b4d25b8c9.css" integrity=""
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.6b90d7701bfc371925d0464af10d0bf2c512170bfd0d293980e00de661660a99.css" integrity=""
         type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
@@ -49,7 +49,7 @@
         <div class="info">
           <span>📅 2020-11-17</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 1099字</span>
+          <span>📖 1088字</span>
           <span>⏱ 3分钟</span>
         </div>
         
@@ -80,92 +80,44 @@
 </ol>
 <p>因此，需要在后端进行配置，将第一次发送的预检请求进行拦截。</p>
 <p><code>php</code>代码：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#6272a4">// 设置能访问的域名
-</span><span style="color:#6272a4"></span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#8be9fd;font-style:italic">$originarr</span> <span style="color:#ff79c6">=</span> [
-   <span style="color:#f1fa8c">&#39;https://test1.com&#39;</span>,
-   <span style="color:#f1fa8c">&#39;https://test2.com&#39;</span>,
-];
- 
-<span style="color:#f1fa8c">/**
-</span><span style="color:#f1fa8c"> *  公共方法调用
-</span><span style="color:#f1fa8c"> */</span>
-<span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#ff79c6">function</span> <span style="color:#50fa7b">setheader</span>()
-{
-   <span style="color:#6272a4">// 获取当前跨域域名
-</span><span style="color:#6272a4"></span>   <span style="color:#8be9fd;font-style:italic">$origin</span> <span style="color:#ff79c6">=</span> isset(<span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>]) <span style="color:#ff79c6">?</span> <span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>] <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
-   <span style="color:#ff79c6">if</span> (in_array(<span style="color:#8be9fd;font-style:italic">$origin</span>, self<span style="color:#ff79c6">::</span><span style="color:#8be9fd;font-style:italic">$originarr</span>)) {
-      <span style="color:#6272a4">// 允许 $originarr 数组内的 域名跨域访问
-</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:&#39;</span> <span style="color:#ff79c6">.</span> <span style="color:#8be9fd;font-style:italic">$origin</span>);
-      <span style="color:#6272a4">// 响应类型
-</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Methods:POST,GET&#39;</span>);
-      <span style="color:#6272a4">// 带 cookie 的跨域访问
-</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Credentials: true&#39;</span>);
-      <span style="color:#6272a4">// 响应头设置
-</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Headers:x-requested-with,Content-Type,X-CSRF-Token&#39;</span>);
-   }
-} 
-
-</code></pre></td></tr></table>
-</div>
-</div><p><code>go</code>代码：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">crossOrigin</span>( w http.ResponseWriter, req <span style="color:#ff79c6">*</span>http.Request ) {
-    <span style="color:#ff79c6">if</span> origin <span style="color:#ff79c6">:=</span> req.Header.<span style="color:#50fa7b">Get</span>(<span style="color:#f1fa8c">&#34;Orgin&#34;</span>); origin <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
-        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Origin&#34;</span>, origin)
-        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Methods&#34;</span>, <span style="color:#f1fa8c">&#34;POST, GET, HEAD&#34;</span>)
-        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Headers&#34;</span>, <span style="color:#f1fa8c">&#34;x-requested-with,content-type,token&#34;</span>)
-	}
-    <span style="color:#ff79c6">if</span> req.Method <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;OPTIONS&#34;</span> {
-        result = <span style="color:#bd93f9">0</span>
-    }
-}
-
-</code></pre></td></tr></table>
-</div>
-</div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 设置能访问的域名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#8be9fd;font-style:italic">$originarr</span> <span style="color:#ff79c6">=</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>   <span style="color:#f1fa8c">&#39;https://test1.com&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   <span style="color:#f1fa8c">&#39;https://test2.com&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#f1fa8c">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#f1fa8c"> *  公共方法调用
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#f1fa8c"> */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#ff79c6">function</span> <span style="color:#50fa7b">setheader</span>()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>   <span style="color:#6272a4">// 获取当前跨域域名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>   <span style="color:#8be9fd;font-style:italic">$origin</span> <span style="color:#ff79c6">=</span> isset(<span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>]) <span style="color:#ff79c6">?</span> <span style="color:#8be9fd;font-style:italic">$_SERVER</span>[<span style="color:#f1fa8c">&#39;HTTP_ORIGIN&#39;</span>] <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>   <span style="color:#ff79c6">if</span> (in_array(<span style="color:#8be9fd;font-style:italic">$origin</span>, self<span style="color:#ff79c6">::</span><span style="color:#8be9fd;font-style:italic">$originarr</span>)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      <span style="color:#6272a4">// 允许 $originarr 数组内的 域名跨域访问
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Origin:&#39;</span> <span style="color:#ff79c6">.</span> <span style="color:#8be9fd;font-style:italic">$origin</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#6272a4">// 响应类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Methods:POST,GET&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      <span style="color:#6272a4">// 带 cookie 的跨域访问
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Credentials: true&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      <span style="color:#6272a4">// 响应头设置
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Headers:x-requested-with,Content-Type,X-CSRF-Token&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>   }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>} 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+</code></pre></div><p><code>go</code>代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">crossOrigin</span>( w http.ResponseWriter, req <span style="color:#ff79c6">*</span>http.Request ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">if</span> origin <span style="color:#ff79c6">:=</span> req.Header.<span style="color:#50fa7b">Get</span>(<span style="color:#f1fa8c">&#34;Orgin&#34;</span>); origin <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Origin&#34;</span>, origin)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Methods&#34;</span>, <span style="color:#f1fa8c">&#34;POST, GET, HEAD&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Headers&#34;</span>, <span style="color:#f1fa8c">&#34;x-requested-with,content-type,token&#34;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">if</span> req.Method <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;OPTIONS&#34;</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        result = <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+</code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
