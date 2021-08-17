@@ -38,16 +38,28 @@
                         <ul class="toc-h3"><li>
                     <a href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/#1-%e5%ae%9a%e4%b9%89" class="toc-link">1. 定义</a>
                 </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/#2-%e8%af%8d%e6%b3%95%e4%bd%9c%e7%94%a8%e5%9f%9f" class="toc-link">2. 词法作用域</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/#3-%e5%85%a8%e5%b1%80%e4%bd%9c%e7%94%a8%e5%9f%9f" class="toc-link">3. 全局作用域</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/#4-%e5%87%bd%e6%95%b0%e4%bd%9c%e7%94%a8%e5%9f%9f" class="toc-link">4. 函数作用域</a>
+                </li>
+                <li>
+                    <a href="https://gaoshanwomeng.github.io/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87%E9%97%AD%E5%8C%85/#5-%e5%9d%97%e7%ba%a7%e4%bd%9c%e7%94%a8%e5%9f%9f" class="toc-link">5. 块级作用域</a>
+                </li>
                 </div><div class="single-post container">
     <div class="post">
       <div class="header">
         <span class="title">js 作用域&amp;作用域链&amp;变量提升&amp;闭包</span>
         
         <div class="info">
-          <span>📅 2021-08-13</span>
+          <span>📅 2021-08-17</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 276字</span>
-          <span>⏱ 1分钟</span>
+          <span>📖 852字</span>
+          <span>⏱ 2分钟</span>
         </div>
         
       </div>
@@ -57,14 +69,38 @@
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Scope">MDN Scope</a></p>
 <p><a href="https://www.cnblogs.com/xiaohuochai/p/5699739.html">深入理解javascript作用域系列第一篇——内部原理</a></p>
 <p><a href="https://www.cnblogs.com/xiaohuochai/p/5700095.html">深入理解javascript作用域系列第二篇——词法作用域和动态作用域</a></p>
+<p><a href="https://www.kancloud.cn/kancloud/you-dont-know-js-scope-closures/516609">你不懂JS：作用域与闭包</a></p>
 </blockquote>
 <p><img src="https://pic.xiaohuochai.site/blog/JS_ECMA_grammer_scope1.png" alt="scope1"></p>
 <h2 id="1-作用域">1. 作用域</h2>
 <h3 id="1-定义">1. 定义</h3>
-<p>第一种说法：</p>
+<blockquote>
+<p><strong>第一种说法：</strong></p>
 <p>javascript拥有一套设计良好的规则来存储变量，并且之后可以方便地找到这些变量，这套规则被称为作用域。作用域貌似简单，实则复杂，由于作用域与 this机制 非常容易混淆，使得理解作用域的原理更为重要。</p>
-<p>第二种说法：</p>
+<p><strong>第二种说法：</strong></p>
 <p>作用域是当前的执行上下文。值和表达式在其中 &ldquo;可见&rdquo; 或 &ldquo;可被访问到&rdquo; 。如果一个变量或者表达式不当前的作用域中，那么它就是不可用的。</p>
+<p><strong>第三种说法：</strong></p>
+<blockquote>
+<p>LHS：试图找到变量的容器本身，从而可以对其赋值；</p>
+<p>RHS：就是简单地查找某个变量的值。</p>
+</blockquote>
+<p>作用域是一套规则，用于确定在哪里找，怎么找到某个变量。如果查找的目的是对变量进行赋值，那么就会使用 LHS查询；如果目的是获取变量的值，就会使用 RHS 查询；
+JavaScript 引擎执行代码前会对其进行编译，这个过程中，像 var a = 2 这样的声明会被分解成两个独立的步骤：</p>
+<ol>
+<li>var a 在其作用域中声明变量，这会在最开始的阶段，也就是代码执行前进行（变量提升）；</li>
+<li>a = 2 会查询 (LHS查询)变量 a 并对其进行赋值；</li>
+</ol>
+</blockquote>
+<p><strong>最好的说法：</strong></p>
+<p>几乎所有语言的最基础模型之一就是在变量中存储值，并且在稍后取出或修改这些值的能力。事实上，在变量中存储值和取出值的能力，给程序赋予了 <em>状态</em>。</p>
+<p>如果没有这样的概念，一个程序虽然可以执行一些任务，但是它们将会受到极大的限制而且不会非常有趣。</p>
+<p>但是在我们的程序中纳入变量，引出了我们现在将要解决的最重大的问题：这些变量被存储在哪儿？我们的程序如何在需要它们的时候找到它们？</p>
+<p>回答这些问题需要一组明确定义的规则，它定义如何在某些位置存储变量，以及如何在稍后找到这些变量。我们称这组规则为：<em>作用域</em>。</p>
+<h3 id="2-词法作用域">2. 词法作用域</h3>
+<h3 id="3-全局作用域">3. 全局作用域</h3>
+<h3 id="4-函数作用域">4. 函数作用域</h3>
+<p><strong>ES6 之前 JavaScript 没有块级作用域,只有全局作用域和函数作用域</strong>。ES6 的到来，为我们提供了‘块级作用域’,可通过新增命令 let 和 const 来体现。</p>
+<h3 id="5-块级作用域">5. 块级作用域</h3>
 
       </div>
       <div class="footer">
@@ -97,14 +133,14 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/" data-tooltip="js set详解">
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-symbol%E8%AF%A6%E8%A7%A3/" data-tooltip="js symbol详解">
             <i class="iconfont icon-left item-btn"></i>
             
         </a>
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://gaoshanwomeng.github.io/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/" data-tooltip="浏览器 同源策略详解">
+        <a class="" href="https://gaoshanwomeng.github.io/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/" data-tooltip="js 代码解释执行详解">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
