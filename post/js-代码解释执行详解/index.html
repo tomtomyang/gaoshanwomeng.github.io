@@ -23,7 +23,7 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.50b2601e373617d56bada22a63c4678e95dc55c0ba89859ca0224f471279af33.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.1df5e7d8ee1de7a4fdb9775be49585db30ba3caa781a22b75ed8aab6420cd595.css" integrity="" type="text/css">
 </head><body>
 <div class="main animated fadeInDown">
   <div class="toc sub-container">
@@ -196,11 +196,11 @@
 <h3 id="2-编译型语言">2. 编译型语言</h3>
 <p>编译语言是一种通常被编译而不是解释的编程语言。</p>
 <p>一旦被编译，就在目标机器的指令中表达；这个机器码是人类无法破译的。编译语言的类型——C、C++、C#、GO等。</p>
-<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20200326222732/com4.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/com4.png" alt="img"></p>
 <h3 id="3-解释型语言">3. 解释型语言</h3>
 <p>解释性语言是一种编程语言，通常是解释性的，而不是将程序编译成机器指令。</p>
 <p>在这种情况下，指令不是由目标机器直接执行，而是由其他程序读取和执行。解释语言范围——JavaScript、Python、PHP 等。</p>
-<p><img src="https://media.geeksforgeeks.org/wp-content/uploads/20200326222734/int2.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/int2.png" alt="img"></p>
 <h3 id="4-js是哪种语言">4. js是哪种语言</h3>
 <p>JavaScript 的圣经 —— MDN 明确地说 JavaScript 是一个解释型语言。但是下面几点仍然会让 JavaScript 是否真的是一个解释型语言产生疑问：</p>
 <ul>
@@ -275,12 +275,12 @@
 <p>但是，sum 和 arr[i] 两个数并不保证都是整数。因为在 JavaScript 中类型都是动态类型，在接下来的循环当中，arr[i] 很有可能变成了string 类型。整数加法和字符串连接是完全不同的两个操作，会被编译成不同的机器码。</p>
 <p>JIT 处理这个问题的方法是编译多基线桩。如果一个代码段是单一形态的（即总是以同一类型被调用），则只生成一个桩。如果是多形态的（即调用的过程中，类型不断变化），则会为操作所调用的每一个类型组合生成一个桩。</p>
 <p>这就是说 JIT 在选择一个桩之前，会进行多分枝选择，类似于决策树，问自己很多问题才会确定最终选择哪个，见下图：</p>
-<p><img src="https://pic3.zhimg.com/80/v2-1f05c0e29543722fc08df55e8552beae_720w.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-1f05c0e29543722fc08df55e8552beae_720w.png" alt="img"></p>
 <p>正是因为在基线编译器中每行代码都有自己的桩，所以 JIT 在每行代码被执行的时候都会检查数据类型。在循环的每次迭代，JIT 也都会重复一次分枝选择。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-eda86cdd0b7e0b00c876bf3d053b440f_720w.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-eda86cdd0b7e0b00c876bf3d053b440f_720w.png" alt="img"></p>
 <p>如果代码在执行的过程中，JIT 不是每次都重复检查的话，那么执行的还会更快一些，而这就是优化编译器所需要做的工作之一了。</p>
 <p>优化编译器中，整个函数被统一编译，这样的话就可以在循环开始执行之前进行类型检查。</p>
-<p><img src="https://pic3.zhimg.com/80/v2-b7387c3dc140753eb60482aaede0c046_720w.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-b7387c3dc140753eb60482aaede0c046_720w.png" alt="img"></p>
 <p>一些浏览器的 JIT 优化更加复杂。比如在 Firefox 中，给一些数组设定了特定的类型，比如里面只包含整型。如果 arr 是这种数组类型，那么 JIT 就不需要检查 arr[i] 是不是整型了，这也意味着 JIT 可以在进入循环之前进行所有的类型检查。</p>
 <h5 id="4-总结">4. 总结</h5>
 <p>简而言之 JIT 是什么呢？它是使 JavaScript 运行更快的一种手段，通过监视代码的运行状态，把 hot 代码（重复执行多次的代码）进行优化。通过这种方式，可以使 JavaScript 应用的性能提升很多倍。</p>
@@ -326,7 +326,7 @@
 <h3 id="2-语法分析">2. 语法分析</h3>
 <p>语法分析又叫解析，将词法单元流(token stream)转换成一个由元素逐级嵌套所组成的代表了程序语法结构的树。这个树称为 “抽象语法树” AST（Abstract Syntax Tree）。</p>
 <p>词法分析和语法分析不是完全独立的，而是交错进行的，也就是说，词法分析器不会在读取所有的词法记号后再使用语法分析器来处理。在通常情况下，每取得一个词法记号，就将其送入语法分析器进行分析。</p>
-<p><img src="https://zhaomenghuan.js.org/assets/img/js-token-ast.f635f3cf.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/js-token-ast.f635f3cf.png" alt="img"></p>
 <p>语法分析的过程就是把词法分析所产生的记号生成语法树，通俗地说，就是把从程序中收集的信息存储到数据结构中。注意，在编译中用到的数据结构有两种：符号表和AST语法树。</p>
 <ul>
 <li><strong>符号表</strong>：就是在程序中用来存储所有符号的一个表，包括所有的字符串变量、直接量字符串，以及函数和类。</li>
@@ -744,7 +744,7 @@
 <li>生成(generate): 根据变换后的抽象语法树再生成代码字符串。</li>
 </ol>
 <p>通过这3步我们可以看出，Bable的工作原理其实就是，解析生成AST，将AST转换为另一种AST，再把AST转换成js代码。</p>
-<p><img src="https://zhaomenghuan.js.org/assets/img/babel-function.42267193.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/babel-function.42267193.png" alt="img"></p>
 <h3 id="1-babelparser">1. @babel/parser</h3>
 <p>@babel/parser 将源代码解析成 AST。</p>
 <p>@babel/parser 是 Babel 的 JavaScript 解析器，原名 Babylon。最初是 从 Acorn 项目 fork 出来的。Acorn 非常快，易于使用，并且针对非标准特性(以及那些未来的标准特性)设计了一个基于插件的架构。</p>
