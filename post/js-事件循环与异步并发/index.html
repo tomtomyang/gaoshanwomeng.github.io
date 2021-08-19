@@ -23,7 +23,8 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.09c943b7156acb895e836b904b03210ebb20cff98bfa84a5bb45c19c520b3b5d.css" integrity="" type="text/css">
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.1931cbbfe563f99cc10f8b573ba2d13bbd1b991168bc597eef0d8aee981bd247.css" integrity="" type="text/css">
 </head><body class="animated fadeInDown">
 <div class="main">
   <div class="toc sub-container">
@@ -60,7 +61,22 @@
         
       </div>
       <div class="content markdown-body">
-        <h3 id="1-js事件">1. JS事件</h3>
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://towardsdev.com/event-loop-in-javascript-672c07618dc9">The JavaScript Event Loop: Explained</a></p>
+<p><a href="https://262.ecma-international.org/6.0/">ES2015(ES6)</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop">MDN_并发模型与事件循环</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide/In_depth">MDN_深入：微任务和 JavaScript 运行时环境</a></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide">MDN_在 JavaScript 中通过 queueMicrotask() 使用微任务</a></p>
+<p><a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#what-is-the-event-loop">Node.js_event_loop</a></p>
+<p><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">WHATWG规范_event_loop</a></p>
+<p><a href="https://javascript.info/event-loop">JavaScript Info_event-loop</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1701427">宏任务和微任务到底是什么？</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2014/10/event-loop.html">JavaScript 运行机制详解：再谈Event Loop</a></p>
+<p><a href="https://zh.javascript.info/event-loop">事件循环：微任务和宏任务</a></p>
+<p><a href="https://www.cnblogs.com/wxcbg/p/11040362.html">浏览器事件循环机制（event loop）</a></p>
+</blockquote>
+<h3 id="1-js事件">1. JS事件</h3>
 <blockquote>
 <p>The event loop is the secret behind JavaScript’s asynchronous programming. JS executes all operations on a single thread, but using a few smart data structures, gives us the illusion of multi-threading. The asynchronous behavior is not part of the JavaScript language itself, rather it is built on top of the core JavaScript language in the browser (or the programming environment) and accessed through the browser APIs.</p>
 </blockquote>
@@ -88,7 +104,7 @@
 <h3 id="2-js事件的组织形式">2. JS事件的组织形式</h3>
 <p>按照上面的说法，任务的来源多种多样，而且，同时可能会有好几个任务需要被执行，但是JS是单线程的，同一时间只能执行一个任务，那么就需要一个特定的机制和一块特定的空间来记录这些需要被执行的任务，同时，给这些任务排队，这就是JS的并发模型（浏览器引擎的实现和Node.js并不相同，这里介绍浏览器引擎的实现方式）。</p>
 <p>关于并发模型，有两种图示结构，两种结构都包含了：堆、栈、队列：</p>
-<p><img src="https://miro.medium.com/max/875/1*MnRk2ZVl5acI5BFmmw7IRg.png" alt="img" style="zoom:50%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*MnRk2ZVl5acI5BFmmw7IRg.png" alt="img" style="zoom:50%;" /></p>
 <blockquote>
 <ul>
 <li><strong>Memory Heap</strong> : Objects are allocated in a heap which is just a name to denote a large mostly unstructured region of memory.</li>
@@ -137,11 +153,11 @@
 <h3 id="3-js事件循环">3. JS事件循环</h3>
 <p>了解了JS的并发模型，那么这个模型是如何工作的？根据所查资料，当并发模型按照既定工作方式进行运作时，就形成了JS的事件循环机制，或者说并发模型就是按照事件循环机制进行工作的。</p>
 <p>执行栈的工作模式：</p>
-<p><img src="https://miro.medium.com/max/1228/1*yE9mbYWzwZGpc1jUcUw69Q.png" alt="img" style="zoom:50%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*yE9mbYWzwZGpc1jUcUw69Q.png" alt="img" style="zoom:50%;" /></p>
 <p>任务队列的工作模式：</p>
-<p><img src="https://miro.medium.com/max/1200/1*KRkTIajDBcG2wf21-RdR5Q.png" alt="img" style="zoom:50%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*KRkTIajDBcG2wf21-RdR5Q.png" alt="img" style="zoom:50%;" /></p>
 <p>事件循环机制：</p>
-<p><img src="https://miro.medium.com/max/2396/1*WGEUuqPJu4ti7kBfufwdXw.png" alt="img" style="zoom:50%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*WGEUuqPJu4ti7kBfufwdXw.png" alt="img" style="zoom:50%;" /></p>
 <p>用一段代码来看一下具体的过程：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;First&#34;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> bar <span style="color:#ff79c6">=</span> () =&gt; setTimeout(() =&gt; console.log(<span style="color:#f1fa8c">&#34;Second&#34;</span>), <span style="color:#bd93f9">500</span>);
@@ -155,7 +171,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// First
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// Third 
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// Second
-</span></code></pre></div><p><img src="https://miro.medium.com/max/1400/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  /></p>
+</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  /></p>
 <ol>
 <li>当开始执行 JS 代码时，首先会执行一个 <code>main</code> 函数，然后执行我们的代码；</li>
 <li>bar函数被调用，形成函数调用帧，压入执行栈；</li>
@@ -291,7 +307,7 @@
 <li><code>Task2</code>, <code>Task3</code>, <code>Task4</code>: microtasks, for example, a promise <code>then</code> callback, or a task added with <code>queueMicrotask</code>.</li>
 <li><code>Task5</code>, <code>Task6</code>: a (macro)task, for example, a <code>setTimeout</code> or <code>setImmediate</code> callback.</li>
 </ul>
-<p><img src="https://miro.medium.com/max/875/1*0xDGBNrA1WtfSfYY3FJOdw.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*0xDGBNrA1WtfSfYY3FJOdw.gif" alt="img" style="zoom:80%;" /></p>
 </blockquote>
 <p>再用一个实际的例子来看一下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
@@ -307,29 +323,29 @@
 </code></pre></div><ol>
 <li>在第一行，JS引擎遇到<code>console.log()</code>方法。 它被添加到执行栈，之后会将指定内容输出到控制台。 该方法弹出执行栈，JS引擎继续；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" /></p>
 <ol start="2">
 <li>该发动机遇到了<code>setTimeout</code>方法，该方法添加到执行栈中。 <code>setTimeout</code>方法浏览器提供的API，所以将在JS外部进行执行，其回调函数<code>() =&gt; { console.log('Timeout!'); }</code>将被添加到Web API，直到定时器完成，之后回调函数被添加到宏任务队列；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*a_X8_BfQGJ6oHR-XmuPGRQ.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*a_X8_BfQGJ6oHR-XmuPGRQ.gif" alt="img" style="zoom:80%;" /></p>
 <ol start="3">
 <li>JS引擎继续向下执行，遇到<code>Promise.resolve()</code>方法， 这个方法将添加到执行栈中，当完成<code>resolve</code>之后，<code>.then</code>中指定的回调函数被添加到微任务队列中；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*Q5xtSx914wUAo_msjNk8qQ.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Q5xtSx914wUAo_msjNk8qQ.gif" alt="img" style="zoom:80%;" /></p>
 <ol start="4">
 <li>JS引擎继续执行，遇到<code>console.log()</code>方法。 添加到执行栈中，之后会将指定内容输出到控制台，执行完成弹出执行栈，JS引擎继续向下执行；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*H2QP7Ry7XCXDaD2dHkQYMw.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*H2QP7Ry7XCXDaD2dHkQYMw.gif" alt="img" style="zoom:80%;" /></p>
 <ol start="5">
 <li>第一轮宏任务至此完成，JS引擎发现执行栈是空的，它将检查微任务队列中是否存在排队任务，<code>Promise.then</code>的回调函数正在等待，它会压入执行栈，之后会打印输出<code>Promise!</code>；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*PfxpUO9FJYm05lzA792CrQ.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*PfxpUO9FJYm05lzA792CrQ.gif" alt="img" style="zoom:80%;" /></p>
 <ol start="6">
 <li>JS引擎检查执行栈为空，再次检查微任务队列，微任务队列也为空。 现在应该检查宏任务队列，发现<code>setTimeout</code>的回调函数正在等待，回调函数将压入调用栈， 打印输出<code>Timeout!</code>，执行完成后出栈；</li>
 </ol>
-<p><img src="https://miro.medium.com/max/1760/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" /></p>
 <h3 id="5-async和await">5. async和await</h3>
-<p><img src="https://miro.medium.com/max/1400/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" /></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" /></p>
 <blockquote>
 <ol>
 <li>
@@ -361,21 +377,6 @@
 <p>变量res最终获得值，即<code>promise resolve</code>的值， 调用<code>console.log</code>，进行输出；</p>
 </li>
 </ol>
-</blockquote>
-<blockquote>
-<p>参考：</p>
-<p><a href="https://towardsdev.com/event-loop-in-javascript-672c07618dc9">The JavaScript Event Loop: Explained</a></p>
-<p><a href="https://262.ecma-international.org/6.0/">ES2015(ES6)</a></p>
-<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/EventLoop">MDN_并发模型与事件循环</a></p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide/In_depth">MDN_深入：微任务和 JavaScript 运行时环境</a></p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide">MDN_在 JavaScript 中通过 queueMicrotask() 使用微任务</a></p>
-<p><a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#what-is-the-event-loop">Node.js_event_loop</a></p>
-<p><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">WHATWG规范_event_loop</a></p>
-<p><a href="https://javascript.info/event-loop">JavaScript Info_event-loop</a></p>
-<p><a href="https://cloud.tencent.com/developer/article/1701427">宏任务和微任务到底是什么？</a></p>
-<p><a href="http://www.ruanyifeng.com/blog/2014/10/event-loop.html">JavaScript 运行机制详解：再谈Event Loop</a></p>
-<p><a href="https://zh.javascript.info/event-loop">事件循环：微任务和宏任务</a></p>
-<p><a href="https://www.cnblogs.com/wxcbg/p/11040362.html">浏览器事件循环机制（event loop）</a></p>
 </blockquote>
 
       </div>
@@ -464,7 +465,7 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.116a48de1fb1adecf15596166c88baf367a7eb7864965ca7e1e969abde4b8736d3527693ca3eb2990a41557c70a680764bb8b52cd14eb98529938ba37d08d708.js" integrity=""></script>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.31b82d9314302c9d426cb02dad7cd4582c186c389da64edaca8b571e063f842cce618d4614cdf8dcea4e6d00502b9e5a2aeed163663c6e2fcd044078fe13cae3.js" integrity=""></script>
 <script type="application/javascript">
 var doNotTrack = false;
 if (!doNotTrack) {
