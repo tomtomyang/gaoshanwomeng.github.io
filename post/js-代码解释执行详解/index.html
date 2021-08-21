@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 代码解释执行详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" js 代码解释执行详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [js AST] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/js-%E4%BB%A3%E7%A0%81%E8%A7%A3%E9%87%8A%E6%89%A7%E8%A1%8C%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5378f5b61459716a78220cda416b91726b056d130ac93d0153f6ab3f7efe48e8.css" integrity="" type="text/css">
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                    <span class="toc-link">1. 解释型和编译型</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 编译器和解释器</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 编译器</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 解释器</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 两者对比</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">2. 编译型语言</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 解释型语言</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. js是哪种语言</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. js变量提升</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. JIT</span>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <span class="toc-link">1. 基线编译器</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 优化编译器</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 举例：类型特化</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. 总结</span>
+                </li>
+                
+                        </ul>
+                        </ul>
+                        </ul><li>
+                    <span class="toc-link">2. AST</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 词法分析</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 语法分析</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 拆解AST</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. ESTree</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. AST 工具</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">3. Babel</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. @babel/parser</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. @babel/generator</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. @babel/plugin-transform-?</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. @babel/core</span>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 代码解释执行详解</span>
+        
+        <div class="info">
+          <span>📅 2021-08-17</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 8578字</span>
+          <span>⏱ 18分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://www.geeksforgeeks.org/difference-between-compiled-and-interpreted-language/">编译语言和解释语言的区别</a></p>
+<p><a href="https://www.geeksforgeeks.org/compiler-vs-interpreter-2/">编译器与解释器</a></p>
+<p><a href="https://blog.fundebug.com/2019/01/22/how-does-javascript-compile/">JavaScript的工作原理：解析、抽象语法树（AST）+ 提升编译速度5个技巧</a></p>
+<p><a href="https://www.ibm.com/docs/en/zos-basic-skills?topic=zos-compiled-versus-interpreted-languages">IBM compiled-versus-interpreted-languages</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/99395691">JavaScript 编译 - JIT (just-in-time) compiler 是怎么工作的</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/25669120">WebAssembly 系列（二）JavaScript Just-in-time (JIT) 工作原理</a></p>
+<p><a href="https://gist.github.com/snailkn/b703f68c6c77ff5a75ae80a79e8f6c16">JS - AST基本概念</a></p>
+<p><a href="https://zhaomenghuan.js.org/blog/js-ast-principle-reveals.html">JS AST 原理揭秘</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5699739.html">深入理解javascript作用域系列第一篇——内部原理</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5700095.html">深入理解javascript作用域系列第二篇——词法作用域和动态作用域</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1761430">JavaScript到底是解释型语言还是编译型语言?</a></p>
+</blockquote>
+<h2 id="1-解释型和编译型">1. 解释型和编译型</h2>
+<h3 id="1-编译器和解释器">1. 编译器和解释器</h3>
+<p>编译器和解释器是将程序从编程语言翻译成机器语言的两种不同方式。</p>
+<p>区分编译型语言和解释型语言，就是要看这个语言是使用编译器来执行，还是使用解释器来执行。</p>
+<h4 id="1-编译器">1. 编译器</h4>
+<blockquote>
+<p>A compiler is a computer program (or a set of programs) that transforms source code written in a programming language (the source language) into another computer language (the target language), with the latter often having a binary form known as object code. The most common reason for converting source code is to create an executable program.</p>
+</blockquote>
+<blockquote>
+<p>编译器是一种计算机程序，负责把一种编程语言编写的源码转换成另外一种计算机代码，后者往往是以二进制的形式被称为目标代码(object code)。这个转换的过程通常的目的是生成可执行的程序。</p>
+</blockquote>
+<blockquote>
+<p>In computer science, an interpreter is a computer program that directly executes, i.e. performs, instructions written in a programming or scripting language, without previously compiling them into a machine language program. An interpreter generally uses one of the following strategies for program execution:</p>
+<ol>
+<li>parse the source code and perform its behavior directly.</li>
+<li>translate source code into some efficient intermediate representation and immediately execute this.</li>
+<li>explicitly execute stored precompiled code made by a compiler which is part of the interpreter system.</li>
+</ol>
+</blockquote>
+<ul>
+<li>编译器的产出是「另外一种代码」，然后这些代码等着被别人拿来执行。</li>
+<li>编译器的工作往往是在「执行」之前完成，产出是一种可执行或需要再编译或者解释的「代码」。</li>
+</ul>
+<h4 id="2-解释器">2. 解释器</h4>
+<blockquote>
+<p>解释器是一种计算机程序，它直接执行由编程语言或脚本语言编写的代码，并不会把源代码预编译成机器码。一个解释器，通常会用以下的姿势来执行程序代码：</p>
+<ol>
+<li>分析源代码，并且直接执行。</li>
+<li>把源代码翻译成相对更加高效率的中间码，然后立即执行它。</li>
+<li>执行由解释器内部的编译器预编译后保存的代码</li>
+</ol>
+</blockquote>
+<ul>
+<li>可以把解释器看成一个黑盒子，我们输入源码，它就会实时返回结果。</li>
+<li>不同类型的解释器，黑盒子里面的构造不一样，有些还会集成编译器，缓存编译结果，用来提高执行效率（例如 Chrome V8 也是这么做的）。</li>
+<li>解释器通常是工作在「运行时」，并且对于我们输入的源码，是一行一行的解释然后执行，然后返回结果。</li>
+</ul>
+<h4 id="3-两者对比">3. 两者对比</h4>
+<p><strong>表现 Behavior</strong></p>
+<ul>
+<li><strong>编译器</strong>把源代码转换成其他的更低级的代码(例如二进制码、机器码)，但是不会执行它。</li>
+<li><strong>解释器</strong>会读取源代码，并且直接生成指令让计算机硬件执行，不会输出另外一种代码。</li>
+</ul>
+<p><strong>性能 Performance</strong></p>
+<ul>
+<li><strong>编译器</strong>会事先用比较多的时间把整个程序的源代码编译成另外一种代码，后者往往较前者更加接近机器码，所以执行的效率会更加高。时间是消耗在预编译的过程中。</li>
+<li><strong>解释器</strong>会一行一行的读取源代码，解释，然后立即执行。这中间往往使用相对简单的词法分析、语法分析，压缩解释的时间，最后生成机器码，交由硬件执行。解释器适合比较低级的语言。但是相对于预编译好的代码，效率往往会更低。如何减少解释的次数和复杂性，是提高解释器效率的难题。</li>
+</ul>
+<h3 id="2-编译型语言">2. 编译型语言</h3>
+<p>编译语言是一种通常被编译而不是解释的编程语言。</p>
+<p>一旦被编译，就在目标机器的指令中表达；这个机器码是人类无法破译的。编译语言的类型——C、C++、C#、GO等。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/com4.png" alt="img"></p>
+<h3 id="3-解释型语言">3. 解释型语言</h3>
+<p>解释性语言是一种编程语言，通常是解释性的，而不是将程序编译成机器指令。</p>
+<p>在这种情况下，指令不是由目标机器直接执行，而是由其他程序读取和执行。解释语言范围——JavaScript、Python、PHP 等。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/int2.png" alt="img"></p>
+<h3 id="4-js是哪种语言">4. js是哪种语言</h3>
+<p>JavaScript 的圣经 —— MDN 明确地说 JavaScript 是一个解释型语言。但是下面几点仍然会让 JavaScript 是否真的是一个解释型语言产生疑问：</p>
+<ul>
+<li>如果 JS 是解释型语言那为什么会有变量提升（hoisting）？</li>
+<li>JIT（及时编译）会做代码优化(同时创建代码的编译版本)；解释型语言无法做到这些。</li>
+</ul>
+<h4 id="1-js变量提升">1. js变量提升</h4>
+<p>JavaScript 的变量提升是JS的特性之一，在函数作用域内的任何变量的声明都会被提升到顶部并且值为undeinfed。但是JS作为一个解释型语言，是怎么实现变量提升的？换一个问题就是解释型语言是一边翻译一边执行的，它怎么探测到下面的变量声明然后提升到顶部呢？</p>
+<p>按照正常的思路，我们可能会猜测，js引擎做了如下两种操作：</p>
+<ol>
+<li>解释了同一个脚本文件两次，第一次完成所有的声明提升然后第二次才执行代码。</li>
+<li>先编译整个代码然后运行它？</li>
+</ol>
+<p>其实这两种猜测都不对，下面是 JavaScript 处理声明语句的过程：</p>
+<ul>
+<li>V8 引擎进入一个执行具体代码的执行上下文（函数作用域/全局作用域），它就对代码进行词法分析或者分词。这意味着代码将被分割成像foo = 10这样的原子符号（atomic token），这段其实就是词法分析，下面会讲。</li>
+<li>在对当前的整个作用域分析完成后，引擎将 token 解析翻译成一个AST（抽象语法树），这段就是语法分析，下面也会讲。</li>
+<li>引擎每次遇到声明语句，就会把声明传到作用域（scope）中创建一个绑定。每次声明都会为变量分配内存。只是分配内存，并不会修改源代码将变量声明语句提升。正如你所知道的，在JS中分配内存意味着将变量默认设为undefined。</li>
+<li>在这之后，引擎每一次遇到赋值或者取值，都会通过作用域（scope）查找绑定。如果在当前作用域中没有查找到就接着向上级作用域查找直到找到为止。</li>
+<li>接着引擎生成 CPU 可以执行的机器码。</li>
+<li>最后， 代码执行完毕。</li>
+</ul>
+<p>所以变量提升不过是处理执行上下文时顺手完成的小把戏。这个过程也说明了JS的作用域和作用域链的概念为什么很重要。</p>
+<h4 id="2-jit">2. JIT</h4>
+<p>解释器和编译器作为两种翻译代码的工具，各自有不同的优势：</p>
+<blockquote>
+<p>解释器启动和执行的更快。你不需要等待整个编译过程完成就可以运行你的代码。从第一行开始翻译，就可以依次继续执行了。</p>
+<p>正是因为这个原因，解释器看起来更加适合 JavaScript。对于一个 Web 开发人员来讲，能够快速执行代码并看到结果是非常重要的。</p>
+<p>这就是为什么最开始的浏览器都是用 JavaScript 解释器的原因。</p>
+<p>可是当你运行同样的代码一次以上的时候，解释器的弊处就显现出来了。比如你执行一个循环，那解释器就不得不一次又一次的进行翻译，这是一种效率低下的表现。</p>
+</blockquote>
+<blockquote>
+<p>编译器的问题则恰好相反。</p>
+<p>它需要花一些时间对整个源代码进行编译，然后生成目标文件才能在机器上执行。对于有循环的代码执行的很快，因为它不需要重复的去翻译每一次循环。</p>
+<p>另外一个不同是，编译器可以用更多的时间对代码进行优化，以使的代码执行的更快。而解释器是在 runtime 时进行这一步骤的，这就决定了它不可能在翻译的时候用很多时间进行优化。</p>
+</blockquote>
+<p><strong>Just-in-time 编译器：综合了两者的优点</strong></p>
+<p>为了解决解释器的低效问题，后来的浏览器把编译器也引入进来，形成混合模式。也就是说，这时候的JS解释器，内部其实包含了编译器。</p>
+<p><strong>JIT编译器是如何工作的？</strong></p>
+<p>不同的浏览器实现这一功能的方式不同，不过其基本思想是一致的。</p>
+<p>在 JavaScript 引擎中增加一个监视器（也叫分析器）。监视器监控着代码的运行情况，记录代码一共运行了多少次、如何运行的等信息。</p>
+<p>如果同一行代码运行了几次，这个代码段就被标记成了 “warm”，如果运行了很多次，则被标记成 “hot”。</p>
+<h5 id="1-基线编译器">1. 基线编译器</h5>
+<p>如果一段代码变成了 “warm”，那么 JIT 就把它送到编译器去编译，并且把编译结果存储起来。</p>
+<p>代码段的每一行都会被编译成一个“桩”（stub），同时给这个桩分配一个以“行号 + 变量类型”的索引。如果监视器监视到了执行同样的代码和同样的变量类型，那么就直接把这个已编译的版本 push 出来给浏览器。</p>
+<p>通过这样的做法可以加快执行速度，但是正如前面我所说的，编译器还可以找到更有效地执行代码的方法，也就是做优化。</p>
+<p>基线编译器可以做一部分这样的优化，不过基线编译器优化的时间不能太久，因为会使得程序的执行在这里 hold 住。</p>
+<p>不过如果代码确实非常 “hot”（也就是说几乎所有的执行时间都耗费在这里），那么花点时间做优化也是值得的。</p>
+<h5 id="2-优化编译器">2. 优化编译器</h5>
+<p>如果一个代码段变得 “very hot”，监视器会把它发送到优化编译器中。生成一个更快速和高效的代码版本出来，并且存储起来。</p>
+<p>为了生成一个更快速的代码版本，优化编译器必须做一些假设。例如，它会假设由同一个构造函数生成的实例都有相同的形状——就是说所有的实例都有相同的属性名，并且都以同样的顺序初始化，那么就可以针对这一模式进行优化。</p>
+<p>优化器的完整工作流程是这样的：</p>
+<ol>
+<li>监视器从他所监视代码的执行情况做出自己的判断，接下来把它所整理的信息传递给优化器进行优化。</li>
+<li>如果某个循环中先前每次迭代的对象都有相同的形状，那么就可以认为它以后迭代的对象的形状都是相同的。可是对于 JavaScript 从来就没有保证这么一说，前 99 个对象保持着形状，可能第 100 个就少了某个属性。</li>
+<li>正是由于这样的情况，所以编译代码需要在运行之前检查其假设是不是合理的。如果合理，那么优化的编译代码会运行，如果不合理，那么 JIT 会认为做了一个错误的假设，并且把优化代码丢掉。这时（发生优化代码丢弃的情况）执行过程将会回到解释器或者基线编译器，这一过程叫做<strong>去优化</strong>。</li>
+</ol>
+<p>通常优化编译器会使得代码变得更快，但是一些情况也会引起一些意想不到的性能问题。如果你的代码一直陷入优化&lt;-&gt;去优化的怪圈，那么程序执行将会变慢，还不如基线编译器快。</p>
+<p>大多数的浏览器都做了限制，当优化/去优化循环发生的时候会尝试跳出这种循环。比如，如果 JIT 做了 10 次以上的优化并且又丢弃的操作，那么就不继续尝试去优化这段代码了。</p>
+<h5 id="3-举例类型特化">3. 举例：类型特化</h5>
+<p>有很多不同类型的优化方法，这里我介绍一种，让大家能够明白是如何优化的。优化编译器最成功一个特点叫做类型特化，下面详细解释。</p>
+<p>JavaScript 所使用的动态类型体系在运行时需要进行额外的解释工作，例如下面代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> arraySum(arr) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#8be9fd;font-style:italic">var</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> arr.length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    sum <span style="color:#ff79c6">+=</span> arr[i];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#ff79c6">return</span> sum;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>+= 循环中这一步看起来很简单，只需要进行一步计算，但是恰恰因为是用动态类型，他所需要的步骤要比你所想象的更复杂一些。</p>
+<p>我们假设 arr 是一个有 100 个整数的数组。当代码被标记为 “warm” 时，基线编译器就为函数中的每一个操作生成一个桩。<code>sum += arr[i]</code>会有一个相应的桩，并且把里面的 += 操作当成整数加法。</p>
+<p>但是，sum 和 arr[i] 两个数并不保证都是整数。因为在 JavaScript 中类型都是动态类型，在接下来的循环当中，arr[i] 很有可能变成了string 类型。整数加法和字符串连接是完全不同的两个操作，会被编译成不同的机器码。</p>
+<p>JIT 处理这个问题的方法是编译多基线桩。如果一个代码段是单一形态的（即总是以同一类型被调用），则只生成一个桩。如果是多形态的（即调用的过程中，类型不断变化），则会为操作所调用的每一个类型组合生成一个桩。</p>
+<p>这就是说 JIT 在选择一个桩之前，会进行多分枝选择，类似于决策树，问自己很多问题才会确定最终选择哪个，见下图：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-1f05c0e29543722fc08df55e8552beae_720w.png" alt="img"></p>
+<p>正是因为在基线编译器中每行代码都有自己的桩，所以 JIT 在每行代码被执行的时候都会检查数据类型。在循环的每次迭代，JIT 也都会重复一次分枝选择。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-eda86cdd0b7e0b00c876bf3d053b440f_720w.png" alt="img"></p>
+<p>如果代码在执行的过程中，JIT 不是每次都重复检查的话，那么执行的还会更快一些，而这就是优化编译器所需要做的工作之一了。</p>
+<p>优化编译器中，整个函数被统一编译，这样的话就可以在循环开始执行之前进行类型检查。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-b7387c3dc140753eb60482aaede0c046_720w.png" alt="img"></p>
+<p>一些浏览器的 JIT 优化更加复杂。比如在 Firefox 中，给一些数组设定了特定的类型，比如里面只包含整型。如果 arr 是这种数组类型，那么 JIT 就不需要检查 arr[i] 是不是整型了，这也意味着 JIT 可以在进入循环之前进行所有的类型检查。</p>
+<h5 id="4-总结">4. 总结</h5>
+<p>简而言之 JIT 是什么呢？它是使 JavaScript 运行更快的一种手段，通过监视代码的运行状态，把 hot 代码（重复执行多次的代码）进行优化。通过这种方式，可以使 JavaScript 应用的性能提升很多倍。</p>
+<p>为了使执行速度变快，JIT 会增加很多多余的开销，这些开销包括：</p>
+<ul>
+<li>优化和去优化开销</li>
+<li>监视器记录信息对内存的开销</li>
+<li>发生去优化情况时恢复信息的记录对内存的开销</li>
+<li>对基线版本和优化后版本记录的内存开销</li>
+</ul>
+<h2 id="2-ast">2. AST</h2>
+<p>不管使用什么编程语言，都需要一些软件来处理源代码以便让计算机能够理解。该软件可以是解释器，也可以是编译器。</p>
+<p>无论你使用的是解释型语言还是编译型语言，都有一个共同的部分：将源代码作为纯文本解析为 抽象语法树(abstract syntax tree, AST) 的数据结构。</p>
+<p>AST不仅以结构化的方式显示源代码，而且在语义分析中扮演着重要角色。利用AST，我们可以实现很多需求，例如语法高亮、语法检查、代码混淆等，babel就是以AST作为基础对js代码进行处理的。</p>
+<p>在JS世界中，你可以认为抽象语法树(AST)是最底层。 即JS代码转换为AST就算作是结束，再往下，就是关于转换和编译的“黑魔法”领域了。</p>
+<p>从JS代码到AST，会经历两个步骤，词法分析和语法分析。</p>
+<h3 id="1-词法分析">1. 词法分析</h3>
+<p>词法分析又叫分词，将字符流(char stream)转换为记号流(token stream)，由字符串组成的字符分解成有意义的代码块，这些代码块称为词法单元。</p>
+<p>例如：一段 JS 代码 <code>var name = 'Hello';</code> 会被分解为词法单元：<code>var</code>、<code>name</code>、<code>=</code>、<code>Hello</code>、<code>;</code>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>[
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#f1fa8c">&#34;type&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Keyword&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#f1fa8c">&#34;value&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;var&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#f1fa8c">&#34;type&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Identifier&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#f1fa8c">&#34;value&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;name&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#f1fa8c">&#34;type&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Punctuator&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#f1fa8c">&#34;value&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;=&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#f1fa8c">&#34;type&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;String&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#f1fa8c">&#34;value&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;&#39;Hello Flutter&#39;&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    <span style="color:#f1fa8c">&#34;type&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Punctuator&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#f1fa8c">&#34;value&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;;&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>]
+</code></pre></div><p>最小词法单元主要有空格、注释、字符串、数字、标志符、运算符、括号等。</p>
+<blockquote>
+<p>注意：</p>
+<p>分词和词法分析之间的区别是微妙和学术上的，其中心在于这些 token 是否以 <em>无状态</em> 或 <em>有状态</em> 的方式被识别。</p>
+<p>简而言之，如果分词器去调用有状态的解析规则来弄清<code>a</code>是否应当被考虑为一个不同的 token，还是只是其他 token 的一部分，那么这就是 词法分析。</p>
+</blockquote>
+<h3 id="2-语法分析">2. 语法分析</h3>
+<p>语法分析又叫解析，将词法单元流(token stream)转换成一个由元素逐级嵌套所组成的代表了程序语法结构的树。这个树称为 “抽象语法树” AST（Abstract Syntax Tree）。</p>
+<p>词法分析和语法分析不是完全独立的，而是交错进行的，也就是说，词法分析器不会在读取所有的词法记号后再使用语法分析器来处理。在通常情况下，每取得一个词法记号，就将其送入语法分析器进行分析。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/js-token-ast.f635f3cf.png" alt="img"></p>
+<p>语法分析的过程就是把词法分析所产生的记号生成语法树，通俗地说，就是把从程序中收集的信息存储到数据结构中。注意，在编译中用到的数据结构有两种：符号表和AST语法树。</p>
+<ul>
+<li><strong>符号表</strong>：就是在程序中用来存储所有符号的一个表，包括所有的字符串变量、直接量字符串，以及函数和类。</li>
+<li><strong>语法树</strong>：就是程序结构的一个树形表示，用来生成中间代码，所谓的AST抽象语法树。</li>
+</ul>
+<p>如果 JavaScript 解释器在构造语法树的时候发现无法构造，就会报语法错误，并结束整个代码块的解析。对于传统强类型语言来说，在通过语法分析构造出语法树后，翻译出来的句子可能还会有模糊不清的地方，需要进一步的语义检查。语义检查的主要部分是类型检查。例如，函数的实参和形参类型是否匹配。但是，对于弱类型语言来说，就没有这一步。</p>
+<p>经过语法分析阶段，JavaScript 代码在内存中已经被构建为语法树，然后 JavaScript 引擎就会根据这个语法树结构边解释边执行。</p>
+<h3 id="3-拆解ast">3. 拆解AST</h3>
+<p>那么经过词法分析，语法分析，JS代码变成了什么样？可以用 <a href="https://astexplorer.net/">AST Explorer</a> 来看一看：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>var name = &#39;hello&#39;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>====================&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;Program&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">&#34;start&#34;</span>: <span style="color:#bd93f9">0</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">&#34;end&#34;</span>: <span style="color:#bd93f9">198</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#ff79c6">&#34;body&#34;</span>: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;VariableDeclaration&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      <span style="color:#ff79c6">&#34;start&#34;</span>: <span style="color:#bd93f9">179</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      <span style="color:#ff79c6">&#34;end&#34;</span>: <span style="color:#bd93f9">197</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>      <span style="color:#ff79c6">&#34;declarations&#34;</span>: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>          <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;VariableDeclarator&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>          <span style="color:#ff79c6">&#34;start&#34;</span>: <span style="color:#bd93f9">183</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>          <span style="color:#ff79c6">&#34;end&#34;</span>: <span style="color:#bd93f9">197</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>          <span style="color:#ff79c6">&#34;id&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>            <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;Identifier&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>            <span style="color:#ff79c6">&#34;start&#34;</span>: <span style="color:#bd93f9">183</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>            <span style="color:#ff79c6">&#34;end&#34;</span>: <span style="color:#bd93f9">187</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>            <span style="color:#ff79c6">&#34;name&#34;</span>: <span style="color:#f1fa8c">&#34;name&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>          <span style="color:#ff79c6">&#34;init&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>            <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;Literal&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>            <span style="color:#ff79c6">&#34;start&#34;</span>: <span style="color:#bd93f9">190</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>            <span style="color:#ff79c6">&#34;end&#34;</span>: <span style="color:#bd93f9">197</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>            <span style="color:#ff79c6">&#34;value&#34;</span>: <span style="color:#f1fa8c">&#34;hello&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>            <span style="color:#ff79c6">&#34;raw&#34;</span>: <span style="color:#f1fa8c">&#34;\&#34;hello\&#34;&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>      <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;var&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  <span style="color:#ff79c6">&#34;sourceType&#34;</span>: <span style="color:#f1fa8c">&#34;module&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>}
+</code></pre></div><p>或者，可以使用一些现成的工具，来拆解AST：</p>
+<p><strong>esprima</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i esprima -s
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> esprima <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;esprima&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">const</span> code <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">`var name = &#39;hello&#39;;`</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#ff79c6">const</span> ast <span style="color:#ff79c6">=</span> esprima.parseScript(code);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>console.log(util.inspect(ast, {showHidden<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>, depth<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>}));
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Script {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  type: &#39;Program&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  body: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    VariableDeclaration {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      type: &#39;VariableDeclaration&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      declarations: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        VariableDeclarator {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>          type: &#39;VariableDeclarator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>          id: Identifier { type: &#39;Identifier&#39;, name: &#39;name&#39; },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>          init: Literal { type: &#39;Literal&#39;, value: &#39;hello&#39;, raw: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span> }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>      ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      kind: &#39;var&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  sourceType: &#39;script&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}
+</code></pre></div><p><strong>recast</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i recast -s
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> recast <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;recast&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#ff79c6">const</span> code <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">`var name = &#39;hello&#39;;`</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#ff79c6">const</span> ast <span style="color:#ff79c6">=</span> recast.parse(code);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#ff79c6">const</span> add  <span style="color:#ff79c6">=</span> ast.program.body[<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>console.log(add);
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>node ./test.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>=====&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>VariableDeclaration: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  type: &#39;VariableDeclaration&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  declarations: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    VariableDeclarator {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      type: &#39;VariableDeclarator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      id: [Identifier],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      init: [Literal],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      loc: [Object]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  kind: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    start: { line: 1, column: 0, token: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    end: { line: 1, column: 19, token: 5 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    lines: Lines {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      infos: [Array],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      mappings: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      cachedSourceMap: null,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      cachedTabWidth: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>      length: 1,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      name: null
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    tokens: [ [Object], [Object], [Object], [Object], [Object] ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    indent: <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}
+</code></pre></div><p>如果想展开object对象，可以使用<code>util</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> recast <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;recast&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">const</span> code <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">`var name = &#39;hello&#39;;`</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ff79c6">const</span> ast <span style="color:#ff79c6">=</span> recast.parse(code);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#ff79c6">const</span> add  <span style="color:#ff79c6">=</span> ast.program.body[<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>console.log(util.inspect(add, {showHidden<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>, depth<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>}));
+</code></pre></div><p>输出变为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span>VariableDeclaration {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2</span>  type: &#39;VariableDeclaration&#39;,   
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3</span>  declarations: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4</span>    VariableDeclarator {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5</span>      type: &#39;VariableDeclarator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6</span>      id: Identifier {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7</span>        type: &#39;Identifier&#39;,      
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8</span>        name: &#39;name&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9</span>        loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10</span>          start: { line: 1, column: 4, token: 1 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11</span>          end: { line: 1, column: 8, token: 2 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12</span>          lines: Lines {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13</span>            infos: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14</span>              {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15</span>                line: <span style="color:#ff79c6">&#34;var name = &#39;hello&#39;;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16</span>                indent: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17</span>                locked: false,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18</span>                sliceStart: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19</span>                sliceEnd: 19
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21</span>            ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22</span>            mappings: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23</span>            cachedSourceMap: <span style="color:#ff79c6">null</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24</span>            cachedTabWidth: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25</span>            length: <span style="color:#bd93f9">1</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26</span>            name: <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28</span>          tokens: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30</span>              type: &#39;Keyword&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31</span>              value: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33</span>                start: { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34</span>                end: { line: 1, column: 3 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38</span>              type: &#39;Identifier&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39</span>              value: &#39;name&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41</span>                start: { line: 1, column: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42</span>                end: { line: 1, column: 8 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46</span>              type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47</span>              value: &#39;=&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49</span>                start: { line: 1, column: 9 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50</span>                end: { line: 1, column: 10 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54</span>              type: &#39;String&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55</span>              value: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57</span>                start: { line: 1, column: 11 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58</span>                end: { line: 1, column: 18 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62</span>              type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63</span>              value: &#39;;&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65</span>                start: { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66</span>                end: { line: 1, column: 19 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69</span>          ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70</span>          indent: <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73</span>      init: Literal {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74</span>        type: &#39;Literal&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75</span>        value: &#39;hello&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76</span>        raw: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77</span>        loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78</span>          start: { line: 1, column: 11, token: 3 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79</span>          end: { line: 1, column: 18, token: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80</span>          lines: Lines {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81</span>            infos: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82</span>              {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83</span>                line: <span style="color:#ff79c6">&#34;var name = &#39;hello&#39;;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84</span>                indent: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85</span>                locked: false,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86</span>                sliceStart: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87</span>                sliceEnd: 19
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89</span>            ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90</span>            mappings: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91</span>            cachedSourceMap: <span style="color:#ff79c6">null</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92</span>            cachedTabWidth: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93</span>            length: <span style="color:#bd93f9">1</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94</span>            name: <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96</span>          tokens: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98</span>              type: &#39;Keyword&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99</span>              value: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101</span>                start: { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102</span>                end: { line: 1, column: 3 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106</span>              type: &#39;Identifier&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107</span>              value: &#39;name&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109</span>                start: { line: 1, column: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110</span>                end: { line: 1, column: 8 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114</span>              type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115</span>              value: &#39;=&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117</span>                start: { line: 1, column: 9 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118</span>                end: { line: 1, column: 10 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122</span>              type: &#39;String&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123</span>              value: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125</span>                start: { line: 1, column: 11 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126</span>                end: { line: 1, column: 18 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130</span>              type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131</span>              value: &#39;;&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132</span>              loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133</span>                start: { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134</span>                end: { line: 1, column: 19 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135</span>              }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137</span>          ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138</span>          indent: <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141</span>      loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142</span>        start: { line: 1, column: 4, token: 1 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143</span>        end: { line: 1, column: 18, token: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144</span>        lines: Lines {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145</span>          infos: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">146</span>            {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">147</span>              line: <span style="color:#ff79c6">&#34;var name = &#39;hello&#39;;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">148</span>              indent: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">149</span>              locked: false,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">150</span>              sliceStart: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">151</span>              sliceEnd: 19
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">152</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">153</span>          ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">154</span>          mappings: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">155</span>          cachedSourceMap: <span style="color:#ff79c6">null</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">156</span>          cachedTabWidth: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">157</span>          length: <span style="color:#bd93f9">1</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">158</span>          name: <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">159</span>        },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">160</span>        tokens: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">161</span>          {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">162</span>            type: &#39;Keyword&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">163</span>            value: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">164</span>            loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">165</span>              start: { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">166</span>              end: { line: 1, column: 3 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">167</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">168</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">169</span>          {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">170</span>            type: &#39;Identifier&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">171</span>            value: &#39;name&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">172</span>            loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">173</span>              start: { line: 1, column: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">174</span>              end: { line: 1, column: 8 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">175</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">176</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">177</span>          {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">178</span>            type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">179</span>            value: &#39;=&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">180</span>            loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">181</span>              start: { line: 1, column: 9 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">182</span>              end: { line: 1, column: 10 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">183</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">184</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">185</span>          {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">186</span>            type: &#39;String&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">187</span>            value: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">188</span>            loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">189</span>              start: { line: 1, column: 11 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">190</span>              end: { line: 1, column: 18 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">191</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">192</span>          },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">193</span>          {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">194</span>            type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">195</span>            value: &#39;;&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">196</span>            loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">197</span>              start: { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">198</span>              end: { line: 1, column: 19 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">199</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">200</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">201</span>        ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">202</span>        indent: <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">203</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">204</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">205</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">206</span>  kind: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">207</span>  loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">208</span>    start: { line: 1, column: 0, token: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">209</span>    end: { line: 1, column: 19, token: 5 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">210</span>    lines: Lines {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">211</span>      infos: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">212</span>        {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">213</span>          line: <span style="color:#ff79c6">&#34;var name = &#39;hello&#39;;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">214</span>          indent: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">215</span>          locked: false,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">216</span>          sliceStart: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">217</span>          sliceEnd: 19
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">218</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">219</span>      ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">220</span>      mappings: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">221</span>      cachedSourceMap: <span style="color:#ff79c6">null</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">222</span>      cachedTabWidth: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">223</span>      length: <span style="color:#bd93f9">1</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">224</span>      name: <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">225</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">226</span>    tokens: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">227</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">228</span>        type: &#39;Keyword&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">229</span>        value: &#39;var&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">230</span>        loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 3 } }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">231</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">232</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">233</span>        type: &#39;Identifier&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">234</span>        value: &#39;name&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">235</span>        loc: { start: { line: 1, column: 4 }, end: { line: 1, column: 8 } }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">236</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">237</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">238</span>        type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">239</span>        value: &#39;=&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">240</span>        loc: { start: { line: 1, column: 9 }, end: { line: 1, column: 10 } }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">241</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">242</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">243</span>        type: &#39;String&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">244</span>        value: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">245</span>        loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">246</span>          start: { line: 1, column: 11 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">247</span>          end: { line: 1, column: 18 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">248</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">249</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">250</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">251</span>        type: &#39;Punctuator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">252</span>        value: &#39;;&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">253</span>        loc: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">254</span>          start: { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">255</span>          end: { line: 1, column: 19 }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">256</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">257</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">258</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">259</span>    indent: <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">260</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">261</span>}
+</code></pre></div><p>可以看到使用不同的拆解工具，构造出的AST树也不相同，但是里面都是大同小异的，都包含了<code>Identifier</code>、<code>Literal</code>、<code>Punctuator</code>、<code>String</code> 、<code>Keyword</code>等，那么这些类型都代表了什么意思？</p>
+<h3 id="3-estree">3. ESTree</h3>
+<blockquote>
+<p><a href="https://github.com/estree/estree/blob/master/es5.md">ES5 Tree</a></p>
+<p><a href="https://github.com/estree/estree/blob/master/es2015.md">ES6 Tree</a></p>
+</blockquote>
+<p>一般来说每个js引擎都会有自己的抽象语法树格式，Chrome的v8引擎，firefox的SpiderMonkey引擎等等，MDN提供了详细SpiderMonkey AST format的详细说明，算是业界的标准。</p>
+<h3 id="4-ast-工具">4. AST 工具</h3>
+<p>JS 生态基于 AST 实现的一些工具有很多，例如：</p>
+<ul>
+<li>babel: 实现 JS 编译，转换过程是 AST 的转换</li>
+<li>ESlint: 代码错误或风格的检查，发现一些潜在的错误</li>
+<li>IDE 的错误提示、格式化、高亮、自动补全等</li>
+<li>UglifyJS 压缩代码</li>
+<li>代码打包工具 webpack</li>
+</ul>
+<p>可以参考的 AST 生成及代码合成的项目：</p>
+<ul>
+<li><a href="https://github.com/acornjs/acorn">acorn</a></li>
+<li><a href="https://github.com/babel/babel/tree/master/packages/babel-core">babel-core</a></li>
+<li><a href="https://github.com/jamiebuilds/the-super-tiny-compiler">the-super-tiny-compiler</a></li>
+<li><a href="https://github.com/ftomassetti/LangSandbox">LangSandbox</a></li>
+</ul>
+<h2 id="3-babel">3. Babel</h2>
+<p>Babel 是一个通用的多功能的 JavaScript 编译器，更确切地说是源码到源码的编译器，通常也叫做&quot;转换编译器&rdquo;(transpiler)。很多浏览器目前还不支持 ES6 的代码，但是我们可以通过 Babel 将 ES6 的代码转译成 ES5 代码，让所有的浏览器都能理解的代码，这就是 Babel 的作用。</p>
+<p>Babel 的编译过程和大多数其他语言的编译器大致相同，可以分为三个阶段。</p>
+<ol>
+<li>解析(parse)：将代码字符串解析成抽象语法树。</li>
+<li>转换(transform)：对抽象语法树进行转换操作。</li>
+<li>生成(generate): 根据变换后的抽象语法树再生成代码字符串。</li>
+</ol>
+<p>通过这3步我们可以看出，Bable的工作原理其实就是，解析生成AST，将AST转换为另一种AST，再把AST转换成js代码。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/babel-function.42267193.png" alt="img"></p>
+<h3 id="1-babelparser">1. @babel/parser</h3>
+<p>@babel/parser 将源代码解析成 AST。</p>
+<p>@babel/parser 是 Babel 的 JavaScript 解析器，原名 Babylon。最初是 从 Acorn 项目 fork 出来的。Acorn 非常快，易于使用，并且针对非标准特性(以及那些未来的标准特性)设计了一个基于插件的架构。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm install @babel/parser -s
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> babelParser <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;@babel/parser&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">const</span> code <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">`var name = &#39;hello&#39;;`</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#8be9fd;font-style:italic">let</span> ast <span style="color:#ff79c6">=</span> babelParser.parse(code);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>console.log(util.inspect(ast, {showHidden<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">false</span>, depth<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>}));
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  type: &#39;File&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  start: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  end: 19,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    start: Position { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    end: Position { line: 1, column: 19 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    identifierName: undefined
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  errors: [],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  program: Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    type: &#39;Program&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    start: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    end: 19,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      start: Position { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      end: Position { line: 1, column: 19 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      identifierName: undefined
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    sourceType: &#39;script&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    interpreter: <span style="color:#ff79c6">null</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    body: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>      Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        type: &#39;VariableDeclaration&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        start: 0,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        end: 19,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>          start: Position { line: 1, column: 0 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>          end: Position { line: 1, column: 19 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>          filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>          identifierName: undefined
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>        },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>        declarations: [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>          Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>            type: &#39;VariableDeclarator&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>            start: 4,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>            end: 18,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>            loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>              start: Position { line: 1, column: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>              end: Position { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>              filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>              identifierName: undefined
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>            id: Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>              type: &#39;Identifier&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>              start: 4,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>              end: 8,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>              loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>                start: Position { line: 1, column: 4 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>                end: Position { line: 1, column: 8 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>                filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>                identifierName: &#39;name&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>              },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>              name: &#39;name&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>            },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>            init: Node {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>              type: &#39;StringLiteral&#39;,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>              start: 11,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>              end: 18,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>              loc: SourceLocation {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>                start: Position { line: 1, column: 11 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>                end: Position { line: 1, column: 18 },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>                filename: undefined,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>                identifierName: undefined
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>              },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>              extra: { rawValue: &#39;hello&#39;, raw: <span style="color:#ff79c6">&#34;&#39;hello&#39;&#34;</span> },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>              value: &#39;hello&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>        ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>        kind: &#39;var&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span>    ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>    directives: []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>  comments: []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>}
+</code></pre></div><blockquote>
+<p>Babel 使用一个基于 ESTree 并修改过的 AST，它的内核说明文档可以在 <a href="https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md">ast-spec</a> 查看。</p>
+</blockquote>
+<h3 id="2-babelgenerator">2. @babel/generator</h3>
+<p>@babel/generator 将 AST 解码生 JS 代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i @babel/generator -s
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> babelParser <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;@babel/parser&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> generate <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;@babel/generator&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ff79c6">const</span> astA <span style="color:#ff79c6">=</span> babelParser.parse(<span style="color:#f1fa8c">&#34;var a = 1;&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#ff79c6">const</span> astB <span style="color:#ff79c6">=</span> babelParser.parse(<span style="color:#f1fa8c">&#34;var b = 2;&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ff79c6">const</span> ast <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  type<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Program&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  body<span style="color:#ff79c6">:</span> [].concat(astA.program.body, astB.program.body)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#ff79c6">const</span> { code } <span style="color:#ff79c6">=</span> generate.<span style="color:#ff79c6">default</span>(ast);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>console.log(code);
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</code></pre></div><h3 id="3-babelplugin-transform-">3. @babel/plugin-transform-?</h3>
+<p>Babel 官方提供了一系列用于代码转换的插件，例如 <code>@babel/plugin-transform-typescript</code>，我们通常会通过 babel 的插件来完成代码转换。</p>
+<h3 id="4-babelcore">4. @babel/core</h3>
+<p>包括了整个 Babel 工作流，也就是说在 <code>@babel/core</code> 里面我们会使用到 <code>@babel/parser</code>、<code>transformer[s]</code>、以及<code>@babel/generator</code>。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-symbol%E8%AF%A6%E8%A7%A3/" data-tooltip="js symbol详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-string%E8%AF%A6%E8%A7%A3/" data-tooltip="js string详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    var searchLoading = document.querySelector('#loading');
+
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: query => {
+            if (!!searchLoading) {
+                searchLoading.innerHTML = '查询中';
+                searchLoading.classList.add('show');
+            }
+        },
+        transformData: tips => {
+            if (!!searchLoading && tips instanceof Array && tips.length > 0) {
+                searchLoading.innerHTML = '';
+                searchLoading.classList.remove('show');
+            } else {
+                searchLoading.innerHTML = '没有结果';
+                searchLoading.classList.add('show');
+            }
+        }
+    });
+</script>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.81898d6a244851004145f1b697282d711d450cd465598c7d1f1e6945f83344b6729293d34682bda992f6b7bc0adaf63cb6e8a78e4f0774992c9504eb373cf308.js" integrity=""></script></html>

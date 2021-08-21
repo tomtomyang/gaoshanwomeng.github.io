@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 扩展运算符和rest参数 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" js 扩展运算符和rest参数 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [js 扩展运算符 rest参数] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/js-%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8Crest%E5%8F%82%E6%95%B0/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5378f5b61459716a78220cda416b91726b056d130ac93d0153f6ab3f7efe48e8.css" integrity="" type="text/css">
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div></div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 扩展运算符和rest参数</span>
+        
+        <div class="info">
+          <span>📅 2021-08-20</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 505字</span>
+          <span>⏱ 2分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <p>『&hellip;』 扩展运算符能将『数组』转换为逗号分隔的『参数序列』</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//声明一个数组 ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> tfboys <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;易烊千玺&#39;</span>,<span style="color:#f1fa8c">&#39;王源&#39;</span>,<span style="color:#f1fa8c">&#39;王俊凯&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">// =&gt; &#39;易烊千玺&#39;,&#39;王源&#39;,&#39;王俊凯&#39;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// 声明一个函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> chunwan(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    console.log(arguments);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>chunwan(...tfboys); <span style="color:#6272a4">// chunwan(&#39;易烊千玺&#39;,&#39;王源&#39;,&#39;王俊凯&#39;)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">//1. 数组的合并 情圣  误杀  唐探
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> kuaizi <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;王太利&#39;</span>,<span style="color:#f1fa8c">&#39;肖央&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#ff79c6">const</span> fenghuang <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;曾毅&#39;</span>,<span style="color:#f1fa8c">&#39;玲花&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">//const zuixuanxiaopingguo = kuaizi.concat(fenghuang);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> zuixuanxiaopingguo <span style="color:#ff79c6">=</span> [...kuaizi, ...fenghuang];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>console.log(zuixuanxiaopingguo);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4">//2. 数组的克隆
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> sanzhihua <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;E&#39;</span>,<span style="color:#f1fa8c">&#39;G&#39;</span>,<span style="color:#f1fa8c">&#39;M&#39;</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#ff79c6">const</span> sanyecao <span style="color:#ff79c6">=</span> [...sanzhihua];<span style="color:#6272a4">//  [&#39;E&#39;,&#39;G&#39;,&#39;M&#39;]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>console.log(sanyecao);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">//3. 将伪数组转为真正的数组
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> divs <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.querySelectorAll(<span style="color:#f1fa8c">&#39;div&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#ff79c6">const</span> divArr <span style="color:#ff79c6">=</span> [...divs];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>console.log(divArr); <span style="color:#6272a4">// arguments
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>        
+</code></pre></div><p>ES6 引入 rest 参数，用于获取函数的实参，用来代替 arguments。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// ES5 获取实参的方式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> date(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>	console.log(arguments);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>date(<span style="color:#f1fa8c">&#39;白芷&#39;</span>,<span style="color:#f1fa8c">&#39;阿娇&#39;</span>,<span style="color:#f1fa8c">&#39;思慧&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// rest 参数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> date(...args){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>	console.log(args); <span style="color:#6272a4">// filter some every map 
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>date(<span style="color:#f1fa8c">&#39;阿娇&#39;</span>,<span style="color:#f1fa8c">&#39;柏芝&#39;</span>,<span style="color:#f1fa8c">&#39;思慧&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">//rest 参数必须要放到参数最后
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> fn(a,b,...args){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    console.log(a);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    console.log(b);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    console.log(args);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>fn(<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>,<span style="color:#bd93f9">4</span>,<span style="color:#bd93f9">5</span>,<span style="color:#bd93f9">6</span>);
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE%E9%97%AD%E5%8C%85/" data-tooltip="js 作用域&amp;作用域链&amp;闭包">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript">
+    var searchLoading = document.querySelector('#loading');
+
+    docsearch({
+        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
+        indexName: 'blogsearch',
+        appId: 'SGIZDO9IMB',
+        inputSelector: '.docsearch-input',
+        debug: true,
+        algoliaOptions: {
+            hitsPerPage: 50
+        },
+        
+        
+        
+        queryHook: query => {
+            if (!!searchLoading) {
+                searchLoading.innerHTML = '查询中';
+                searchLoading.classList.add('show');
+            }
+        },
+        transformData: tips => {
+            if (!!searchLoading && tips instanceof Array && tips.length > 0) {
+                searchLoading.innerHTML = '';
+                searchLoading.classList.remove('show');
+            } else {
+                searchLoading.innerHTML = '没有结果';
+                searchLoading.classList.add('show');
+            }
+        }
+    });
+</script>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.81898d6a244851004145f1b697282d711d450cd465598c7d1f1e6945f83344b6729293d34682bda992f6b7bc0adaf63cb6e8a78e4f0774992c9504eb373cf308.js" integrity=""></script></html>

@@ -4,16 +4,16 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  计算机网络 http缓存详解 </title>
-    <meta charset="utf-8"><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
     <meta name="description" itemprop="description"
-        content=" 计算机网络 http缓存详解 ">
+        content=" 计算机网络 http缓存详解 " />
     <meta name="keywords" itemprop="keywords"
-        content=" [http 缓存] ">
-    <base href="https://gaoshanwomeng.github.io/">
-    <link rel="shortcut icon" href="https://gaoshanwomeng.github.io/favicons//favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://gaoshanwomeng.github.io/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://gaoshanwomeng.github.io/favicons/favicon-16x16.png">
-    <link rel="canonical" href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/">
+        content=" [http 缓存] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/">
     <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
     
     
@@ -23,86 +23,85 @@
     
     
     
-    <link rel="stylesheet" href="https://gaoshanwomeng.github.io/css/style.min.70d1a7657a82d7ab87b61f3c2e3ed747c8e22c5c84e3a375847afe2c51bb13f3.css" integrity="sha256-cNGnZXqC16uHth88Lj7XR8jiLFyE46N1hHr&#43;LFG7E/M="
-        type="text/css">
-</head><body>
-<div class="main animated fadeInDown">
-  <div class="toc sub-container">
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5378f5b61459716a78220cda416b91726b056d130ac93d0153f6ab3f7efe48e8.css" integrity="" type="text/css">
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-        <span id="read-percentage"></span>
-    </div>
-    <ul class="toc-h2"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e4%bb%80%e4%b9%88%e6%98%afhttp%e7%bc%93%e5%ad%98" class="toc-link">1. 什么是HTTP缓存</a>
+    </div><ul class="toc-h2"><li>
+                    <span class="toc-link">1. 什么是HTTP缓存</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-http%e7%bc%93%e5%ad%98%e5%88%86%e7%b1%bb" class="toc-link">2. HTTP缓存分类</a>
+                    <span class="toc-link">2. HTTP缓存分类</span>
                 </li>
                 
                         <ul class="toc-h3"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e7%a7%81%e6%9c%89%e7%bc%93%e5%ad%98" class="toc-link">1. 私有缓存</a>
+                    <span class="toc-link">1. 私有缓存</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-%e5%85%b1%e4%ba%ab%e7%bc%93%e5%ad%98" class="toc-link">2. 共享缓存</a>
+                    <span class="toc-link">2. 共享缓存</span>
                 </li>
                 
                         </ul><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#3-http%e7%bc%93%e5%ad%98%e6%8e%a7%e5%88%b6" class="toc-link">3. HTTP缓存控制</a>
+                    <span class="toc-link">3. HTTP缓存控制</span>
                 </li>
                 
                         <ul class="toc-h3"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e5%8f%af%e7%bc%93%e5%ad%98%e6%80%a7" class="toc-link">1. 可缓存性</a>
+                    <span class="toc-link">1. 可缓存性</span>
                 </li>
                 
                         <ul class="toc-h4"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e4%b8%8d%e7%bc%93%e5%ad%98" class="toc-link">1. 不缓存</a>
+                    <span class="toc-link">1. 不缓存</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-%e7%bc%93%e5%ad%98%e4%bd%86%e9%9c%80%e8%a6%81%e9%aa%8c%e8%af%81" class="toc-link">2. 缓存但需要验证</a>
+                    <span class="toc-link">2. 缓存但需要验证</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#3-%e7%a7%81%e6%9c%89%e5%92%8c%e5%85%ac%e5%85%b1%e7%bc%93%e5%ad%98" class="toc-link">3. 私有和公共缓存</a>
+                    <span class="toc-link">3. 私有和公共缓存</span>
                 </li>
                 
                         </ul><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-%e5%88%b0%e6%9c%9f" class="toc-link">2. 到期</a>
+                    <span class="toc-link">2. 到期</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#3-%e9%87%8d%e6%96%b0%e9%aa%8c%e8%af%81%e5%92%8c%e9%87%8d%e6%96%b0%e5%8a%a0%e8%bd%bd" class="toc-link">3. 重新验证和重新加载</a>
+                    <span class="toc-link">3. 重新验证和重新加载</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#4-expires" class="toc-link">4. expires</a>
+                    <span class="toc-link">4. expires</span>
                 </li>
                 
                         </ul><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#3-http%e7%bc%93%e5%ad%98%e6%9c%ba%e5%88%b6" class="toc-link">3. HTTP缓存机制</a>
+                    <span class="toc-link">3. HTTP缓存机制</span>
                 </li>
                 
                         <ul class="toc-h3"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e7%bc%93%e5%ad%98%e6%9d%a1%e4%bb%b6" class="toc-link">1. 缓存条件</a>
+                    <span class="toc-link">1. 缓存条件</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-%e7%bc%93%e5%ad%98%e5%af%bf%e5%91%bd%e7%9a%84%e8%ae%a1%e7%ae%97" class="toc-link">2. 缓存寿命的计算</a>
+                    <span class="toc-link">2. 缓存寿命的计算</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#3-%e7%bc%93%e5%ad%98%e9%a9%b1%e9%80%90" class="toc-link">3. 缓存驱逐</a>
+                    <span class="toc-link">3. 缓存驱逐</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#4-%e7%bc%93%e5%ad%98%e9%aa%8c%e8%af%81" class="toc-link">4. 缓存验证</a>
+                    <span class="toc-link">4. 缓存验证</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#5-%e6%b5%8f%e8%a7%88%e5%99%a8%e7%bc%93%e5%ad%98%e7%ad%96%e7%95%a5" class="toc-link">5. 浏览器缓存策略</a>
+                    <span class="toc-link">5. 浏览器缓存策略</span>
                 </li>
                 
                         <ul class="toc-h4"><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#1-%e5%bc%ba%e5%88%b6%e7%bc%93%e5%ad%98" class="toc-link">1. 强制缓存</a>
+                    <span class="toc-link">1. 强制缓存</span>
                 </li>
                 <li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#2-%e5%8d%8f%e5%95%86%e7%bc%93%e5%ad%98" class="toc-link">2. 协商缓存</a>
+                    <span class="toc-link">2. 协商缓存</span>
                 </li>
                 
                         </ul><li>
-                    <a href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/#6-%e6%95%b4%e4%bd%93%e6%b5%81%e7%a8%8b" class="toc-link">6. 整体流程</a>
+                    <span class="toc-link">6. 整体流程</span>
                 </li>
                 </div><div class="single-post container">
     <div class="post">
@@ -112,7 +111,7 @@
         <div class="info">
           <span>📅 2021-08-12</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 3491字</span>
+          <span>📖 3462字</span>
           <span>⏱ 7分钟</span>
         </div>
         
@@ -154,161 +153,55 @@
 <p>通过它提供的不同的值来定义缓存策略。</p>
 <p>请求头和响应头中可以添加多个<code>Cache-Control</code>。</p>
 <p><strong>缓存请求指令</strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-Cache-Control: max-stale[=&lt;<span style="color:#ff79c6">seconds</span>&gt;]
-Cache-Control: min-fresh=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-Cache-control: no-cache
-Cache-control: no-store
-Cache-control: no-transform
-Cache-control: only-if-cached
-</code></pre></td></tr></table>
-</div>
-</div><p><strong>缓存相应指令</strong></p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-control: must-revalidate
-Cache-control: no-cache
-Cache-control: no-store
-Cache-control: no-transform
-Cache-control: public
-Cache-control: private
-Cache-control: proxy-revalidate
-Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-Cache-control: s-maxage=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><h3 id="1-可缓存性">1. 可缓存性</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Cache-Control: max-stale[=&lt;<span style="color:#ff79c6">seconds</span>&gt;]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Cache-Control: min-fresh=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>Cache-control: no-cache
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>Cache-control: no-store
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>Cache-control: no-transform
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>Cache-control: only-if-cached
+</code></pre></div><p><strong>缓存相应指令</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-control: must-revalidate
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Cache-control: no-cache
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>Cache-control: no-store
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>Cache-control: no-transform
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>Cache-control: public
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>Cache-control: private
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>Cache-control: proxy-revalidate
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>Cache-control: s-maxage=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+</code></pre></div><h3 id="1-可缓存性">1. 可缓存性</h3>
 <h4 id="1-不缓存">1. 不缓存</h4>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: no-store
-</code></pre></td></tr></table>
-</div>
-</div><p>缓存中不得存储任何关于客户端请求和服务端响应的内容。每次由客户端发起的请求都会下载完整的响应内容。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: no-store
+</code></pre></div><p>缓存中不得存储任何关于客户端请求和服务端响应的内容。每次由客户端发起的请求都会下载完整的响应内容。</p>
 <h4 id="2-缓存但需要验证">2. 缓存但需要验证</h4>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: no-cache
-</code></pre></td></tr></table>
-</div>
-</div><p>每次有请求发出时，缓存会将此请求发到服务器（译者注：该请求应该会带有与本地缓存相关的验证字段），服务器端会验证请求中所描述的缓存是否过期，若未过期（注：实际就是返回304），则缓存才使用本地缓存副本。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: no-cache
+</code></pre></div><p>每次有请求发出时，缓存会将此请求发到服务器（译者注：该请求应该会带有与本地缓存相关的验证字段），服务器端会验证请求中所描述的缓存是否过期，若未过期（注：实际就是返回304），则缓存才使用本地缓存副本。</p>
 <h4 id="3-私有和公共缓存">3. 私有和公共缓存</h4>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: private
-Cache-Control: public
-</code></pre></td></tr></table>
-</div>
-</div><p>&ldquo;public&rdquo; 指令表示该响应可以被任何中间人（比如中间代理、CDN等）缓存。若指定了&quot;public&rdquo;，则一些通常不被中间人缓存的页面（因为默认是private）（比如 带有HTTP验证信息（帐号密码）的页面 或 某些特定状态码的页面），将会被其缓存。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: private
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>Cache-Control: public
+</code></pre></div><p>&ldquo;public&rdquo; 指令表示该响应可以被任何中间人（比如中间代理、CDN等）缓存。若指定了&quot;public&rdquo;，则一些通常不被中间人缓存的页面（因为默认是private）（比如 带有HTTP验证信息（帐号密码）的页面 或 某些特定状态码的页面），将会被其缓存。</p>
 <p>&ldquo;private&rdquo; 则表示该响应是专用于某单个用户的，中间人不能缓存此响应，该响应只能应用于浏览器私有缓存中。</p>
 <h3 id="2-到期">2. 到期</h3>
 <p>前两个比较重要，后面的看啊可能就好：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>设置缓存存储的最大周期，超过这个时间缓存被认为过期(单位秒)。与<code>Expires</code>相反，时间是相对于请求的时间。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: s-maxage=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>覆盖<code>max-age</code>或者<code>Expires</code>头，但是仅适用于共享缓存(比如各个代理)，私有缓存会忽略它。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: max-stale=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>表明客户端愿意接收一个已经过期的资源。可以设置一个可选的秒数，表示响应不能已经过时超过该给定的时间。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: min-fresh=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div><p>表示客户端希望获取一个能在指定的秒数内保持其最新状态的响应。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+</code></pre></div><p>设置缓存存储的最大周期，超过这个时间缓存被认为过期(单位秒)。与<code>Expires</code>相反，时间是相对于请求的时间。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: s-maxage=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+</code></pre></div><p>覆盖<code>max-age</code>或者<code>Expires</code>头，但是仅适用于共享缓存(比如各个代理)，私有缓存会忽略它。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: max-stale=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+</code></pre></div><p>表明客户端愿意接收一个已经过期的资源。可以设置一个可选的秒数，表示响应不能已经过时超过该给定的时间。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: min-fresh=&lt;<span style="color:#ff79c6">seconds</span>&gt;
+</code></pre></div><p>表示客户端希望获取一个能在指定的秒数内保持其最新状态的响应。</p>
 <h3 id="3-重新验证和重新加载">3. 重新验证和重新加载</h3>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: must-revalidate
-</code></pre></td></tr></table>
-</div>
-</div><p>一旦资源过期（比如已经超过<code>max-age</code>），在成功向原始服务器验证之前，缓存不能用该资源响应后续请求。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: proxy-revalidate
-</code></pre></td></tr></table>
-</div>
-</div><p>与must-revalidate作用相同，但它仅适用于共享缓存（例如代理），并被私有缓存忽略。</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Cache-Control: immutable
-</code></pre></td></tr></table>
-</div>
-</div><p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如<code>If-None-Match</code>或I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: must-revalidate
+</code></pre></div><p>一旦资源过期（比如已经超过<code>max-age</code>），在成功向原始服务器验证之前，缓存不能用该资源响应后续请求。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: proxy-revalidate
+</code></pre></div><p>与must-revalidate作用相同，但它仅适用于共享缓存（例如代理），并被私有缓存忽略。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Cache-Control: immutable
+</code></pre></div><p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如<code>If-None-Match</code>或I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。</p>
 <h3 id="4-expires">4. expires</h3>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">Expires: Wed, 21 Oct 2015 07:28:00 GMT
-</code></pre></td></tr></table>
-</div>
-</div><p><code>Expires</code> 响应头包含日期/时间， 即在此时候之后，响应过期。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Expires: Wed, 21 Oct 2015 07:28:00 GMT
+</code></pre></div><p><code>Expires</code> 响应头包含日期/时间， 即在此时候之后，响应过期。</p>
 <p>无效的日期，比如 0, 代表着过去的日期，即该资源已经过期。</p>
 <p>如果在响应头<code>Cache-Control</code>设置了 &ldquo;max-age&rdquo; 或者 &ldquo;s-max-age&rdquo; 指令，那么 <code>Expires</code> 头会被忽略。</p>
 <h2 id="3-http缓存机制">3. HTTP缓存机制</h2>
@@ -356,15 +249,8 @@ Cache-Control: public
 <p>强制缓存，在缓存数据未失效的情况下，可以直接使用缓存数据，不需要再请求服务器，那么浏览器是如何判断缓存数据是否失效呢？这个就是上面讲的——缓存寿命的计算。</p>
 <blockquote>
 <p>举个例子：</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">cache-control: public, max-age=31536000
-</code></pre></td></tr></table>
-</div>
-</div><p>那么这个资源会被缓存31536000秒（365天），在365天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>cache-control: public, max-age=31536000
+</code></pre></div><p>那么这个资源会被缓存31536000秒（365天），在365天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
 <p>我们试试再次访问资源，会有以下的响应：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1601280277-5e40f5a32b32e_articlex" alt="img"></p>
 <p>HTTP状态码是200，Size这个字段显示：disk cache，说明HTTP响应报文大小是0，浏览器确实走了强制缓存，没有再跟浏览器交互。</p>
@@ -384,43 +270,36 @@ Cache-Control: public
 
       </div>
       <div class="footer">
-        <span><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="category" href="https://gaoshanwomeng.github.io/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
-        <span><a class="tag" href="https://gaoshanwomeng.github.io/%20tags/http/">#http</a></span>
-        
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/http/">http</a></span>
       </div>
     </div>
 
     <ul class="menu">
     <li class="menu-item">
-        <a href="https://gaoshanwomeng.github.io/" id="back-btn">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
             <i class="iconfont icon-home item-btn"></i>
         </a>
     </li>
     <li class="menu-item">
-        <a href="javascript:void(0);" id="back-top-btn">
-            <i class="iconfont icon-top item-btn"></i>
-        </a>
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
     </li>
     <li class="menu-item">
-        <a href="javascript:void(0);" id="switch-btn">
-            <i class="iconfont icon-switch item-btn"></i>
-        </a>
-    </li>
-    <li class="menu-item">
-        <a href="javascript:void(0);" id="search-btn">
-            <i class="iconfont icon-search item-btn"></i>
-        </a>
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://gaoshanwomeng.github.io/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E8%AF%A6%E8%A7%A3/" data-tooltip="计算机网络 http请求与响应详解">
+        <a class="" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94%E8%AF%A6%E8%A7%A3/" data-tooltip="计算机网络 http请求与响应详解">
             <i class="iconfont icon-left item-btn"></i>
             
         </a>
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://gaoshanwomeng.github.io/post/js-set%E8%AF%A6%E8%A7%A3/" data-tooltip="js set详解">
+        <a class="" href="https://tomtomyoung.top/post/js-set%E8%AF%A6%E8%A7%A3/" data-tooltip="js set详解">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
@@ -430,14 +309,15 @@ Cache-Control: public
   </div>
 </div>
 
-<div class="search-container animated fadeInShow">
+<div class="cover" id="cover">
+        <div class="search-container">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
-    <div  id="loading" class="loading-container">
-        <span>搜索中...</span>
-    </div>
+    <div id="loading" class="loading-container"></div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
 <script type="text/javascript">
+    var searchLoading = document.querySelector('#loading');
+
     docsearch({
         apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
         indexName: 'blogsearch',
@@ -450,28 +330,29 @@ Cache-Control: public
         
         
         
-        queryHook: (query) => {
-            $('#loading').css('display', 'flex');
+        queryHook: query => {
+            if (!!searchLoading) {
+                searchLoading.innerHTML = '查询中';
+                searchLoading.classList.add('show');
+            }
         },
-        transformData: (tips) => {
-            $('#loading').css('display', 'none');
+        transformData: tips => {
+            if (!!searchLoading && tips instanceof Array && tips.length > 0) {
+                searchLoading.innerHTML = '';
+                searchLoading.classList.remove('show');
+            } else {
+                searchLoading.innerHTML = '没有结果';
+                searchLoading.classList.add('show');
+            }
         }
-    })
+    });
 </script>
-        <div class="cover animated fadeInShow"></div>
-    </body>
+    </div>
+</body>
 
 
 
-<script type="text/javascript" src="https://gaoshanwomeng.github.io/js/util.min.92a28685458d59fc79b8c7254cecd2c876e55c35445733dd86c829decab54c810890b94d4a0dd4377dae40dce147cef363dc3bf0d6d9d68dbddcf55a071a5d61.js" integrity=""></script>
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-168042857-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-<script async src='https://www.google-analytics.com/analytics.js'></script>
-</html>
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.81898d6a244851004145f1b697282d711d450cd465598c7d1f1e6945f83344b6729293d34682bda992f6b7bc0adaf63cb6e8a78e4f0774992c9504eb373cf308.js" integrity=""></script></html>
