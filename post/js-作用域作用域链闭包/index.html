@@ -25,6 +25,9 @@
     
     
     <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.608d5f6eb7d3bef7fb77e68134e9d443d28c063fd052f373d833151e658b94fc.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.d2a066fa58944dfe913f902510138601832bcbd647aebc56acd60cf1c43e73bf27fd35bcb72dc25adbd9c3b5d1c9bcfc4ec1f28a10e9b0e1dded49013b8276f8.js" integrity=""></script>
 </head><body class="animated fadeInDown">
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -62,11 +65,28 @@
                         </ul><li>
                     <span class="toc-link">3. 嵌套作用域/作用域链</span>
                 </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 定义</span>
+                </li>
                 <li>
+                    <span class="toc-link">2. 遍历作用域链</span>
+                </li>
+                
+                        </ul><li>
                     <span class="toc-link">4. 词法作用域</span>
                 </li>
                 
                         <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 定义</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 生成词法作用域</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 查询词法作用域</span>
+                </li>
+                <li>
                     <span class="toc-link">3. 全局作用域</span>
                 </li>
                 <li>
@@ -83,7 +103,7 @@
         <div class="info">
           <span>📅 2021-08-19</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 4583字</span>
+          <span>📖 4902字</span>
           <span>⏱ 10分钟</span>
         </div>
         
@@ -285,8 +305,10 @@
 <p>&hellip;</p>
 </blockquote>
 <h2 id="3-嵌套作用域作用域链">3. 嵌套作用域/作用域链</h2>
+<h3 id="1-定义">1. 定义</h3>
 <p><em>作用域</em> 是通过标识符名称查询变量的一组规则。一个作用域会维护一个变量列表，但是在实际的场景下，通常是多于一个的 <em>作用域</em> 嵌套。一个代码块或函数被嵌套在另一个代码块或函数中，作用域被嵌套在其他的作用域中。</p>
-<p>所以，如果在当前作用域中找不到一个变量的话，<em>引擎</em> 就会咨询下一个外层作用域，如此继续直到找到这个变量或者到达最外层作用域（也就是全局作用域）。</p>
+<h3 id="2-遍历作用域链">2. 遍历作用域链</h3>
+<p>如果在当前作用域中找不到一个变量的话，<em>引擎</em> 就会咨询下一个外层作用域，如此继续直到找到这个变量或者到达最外层作用域（也就是全局作用域）。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a <span style="color:#ff79c6">+</span> b );
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
@@ -313,9 +335,42 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/fig1.png" alt="img"></p>
 <h2 id="4-词法作用域">4. 词法作用域</h2>
 <p>我们将<em>作用域</em>定义为一组规则，它决定着 <em>引擎</em> 如何通过变量名称在当前的 <em>作用域</em>，或者在包含它的任意 <em>嵌套作用域</em> 中来查询一个变量。</p>
-<p><em>作用域</em>的工作方式有两种占统治地位的模型。第一种是最最常见，在绝大多数的编程语言中被使用的。它称为 词法作用域，我们将深入学习它。另一种仍然被一些语言（比如 Bash 脚本等）使用的模型，称为 动态作用域。</p>
-<p>JS代码执行的第一个传统步骤称为词法分析（也就是分词）。如果你回忆一下，词法分析处理是检查一串源代码字符，并给 token 赋予语法含义作为某种有状态解析的输出。</p>
-<p>正是这个概念给理解词法作用域提供了基础，也是词法作用域名字的来源。</p>
+<p><em>作用域</em>的工作方式有两种占统治地位的模型：</p>
+<ol>
+<li>
+<p>词法作用域：</p>
+<p>最常见，在绝大多数的编程语言中被使用。</p>
+</li>
+<li>
+<p>动态作用域：</p>
+<p>比较少见，但仍然被一些语言（比如 Bash 脚本等）使用。</p>
+</li>
+</ol>
+<h3 id="1-定义-1">1. 定义</h3>
+<p>JS代码解释执行的第一步是词法分析，将一连串字符分成有意义的片段，称为 token（记号）。</p>
+<p>词法作用域就是在词法分析时被定义的作用域。</p>
+<p>换句话说，词法作用域是你在写程序时，变量和作用域的块儿在何处被编写决定的，因此它在词法分析器处理你的代码时（基本上）是固定不变的。</p>
+<p>有一些方法可以骗过词法作用域，从而在词法分析器处理过后改变它。</p>
+<h3 id="2-生成词法作用域">2. 生成词法作用域</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#8be9fd;font-style:italic">function</span> bar(c) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		console.log( a, b, c );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>	bar(b <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">3</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>foo( <span style="color:#bd93f9">2</span> ); <span style="color:#6272a4">// 2 4 12
+</span></code></pre></div><p>在这个代码实例中有三个固有的嵌套作用域。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/fig2.png" alt="img"></p>
+<ul>
+<li>气泡1 包围着全局作用域，它里面只有一个标识符：<code>foo</code>。</li>
+<li>气泡2 包围着作用域 <code>foo</code>，它含有三个标识符：<code>a</code>，<code>bar</code> 和 <code>b</code>。</li>
+<li>气泡3 包围着作用域 <code>bar</code>，它里面只包含一个标识符：<code>c</code>。</li>
+</ul>
+<p><code>bar</code> 的气泡完全被包含在 <code>foo</code> 的气泡中，因为（而且只因为）这就是我们定义函数 <code>bar</code> 的位置。</p>
+<p>注意这些嵌套的气泡是严格嵌套的。换句话说，没有哪个函数的气泡可以同时（部分地）存在于另外两个外部的作用域气泡中，就像没有函数可以部分地存在于它的两个父函数中一样。</p>
+<h3 id="3-查询词法作用域">3. 查询词法作用域</h3>
 <h3 id="3-全局作用域">3. 全局作用域</h3>
 <h3 id="4-函数作用域">4. 函数作用域</h3>
 <p><strong>ES6 之前 JavaScript 没有块级作用域,只有全局作用域和函数作用域</strong>。ES6 的到来，为我们提供了‘块级作用域’,可通过新增命令 let 和 const 来体现。</p>
@@ -367,37 +422,6 @@
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
     <div id="loading" class="loading-container"></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script type="text/javascript">
-    var searchLoading = document.querySelector('#loading');
-
-    docsearch({
-        apiKey: 'f7f9aeb8485880cfd0e747129ea4ddf9',
-        indexName: 'blogsearch',
-        appId: 'SGIZDO9IMB',
-        inputSelector: '.docsearch-input',
-        debug: true,
-        algoliaOptions: {
-            hitsPerPage: 50
-        },
-        
-        
-        
-        queryHook: query => {
-                searchLoading.innerHTML = '查询中';
-                searchLoading.classList.add('show'); 
-        },
-        transformData: tips => {
-            if (tips instanceof Array && tips.length > 0) {
-                searchLoading.innerHTML = '';
-                searchLoading.classList.remove('show');
-            } else {
-                searchLoading.innerHTML = '无结果';
-                searchLoading.classList.add('show');
-            }
-        }
-    });
-</script>
     </div>
 </body>
 
@@ -406,4 +430,4 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.68d53691acef9fb6a1452f6f2c8303178b9295fd9bb512b3480d7bcea0976b8030871bca117ddb1718c167d916b2c13e7ddeff475aa6f32b28437cc14e797151.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.7a086fdb80be1b9e56a0dd9adfc9f361c364869061daed63fd61a4cd23d0819573c52b89a87cfc1c33f6a2c8a6b0a0ec6e8de6e4d3085b85bcc45f92a49e1ffa.js" integrity=""></script></html>
