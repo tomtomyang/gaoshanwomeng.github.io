@@ -4,7 +4,7 @@
     <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
     <meta name="baidu-site-verification" content="iPC3wUcQLL" />
     <title>  浏览器 xss&amp;csrf </title>
-    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
     <meta name="description" itemprop="description"
         content=" 浏览器 xss&amp;csrf " />
     <meta name="keywords" itemprop="keywords"
@@ -24,7 +24,7 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.713a2864166e839ceda6248ec992f96b96f24c28f0f553cb27738a0dcd68f3de.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.608d5f6eb7d3bef7fb77e68134e9d443d28c063fd052f373d833151e658b94fc.css" integrity="" type="text/css">
 </head><body class="animated fadeInDown">
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -138,7 +138,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#6272a4">// 设置头类型, 如果不设置，会直接下载该页面
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>  ctx.type <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;html&#39;</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  <span style="color:#6272a4">// 读取文件
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> pathUrl <span style="color:#ff79c6">=</span> path.join(__dirname, <span style="color:#f1fa8c">&#39;/static/index.html&#39;</span>);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> pathUrl <span style="color:#ff79c6">=</span> path.join(<span style="color:#bd93f9">__</span>dirname, <span style="color:#f1fa8c">&#39;/static/index.html&#39;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  ctx.body <span style="color:#ff79c6">=</span> fs.createReadStream(pathUrl);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  next();
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>});
@@ -152,7 +152,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  next();
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>});
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>app.use(<span style="color:#ff79c6">static</span>(path.join(__dirname)));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>app.use(<span style="color:#ff79c6">static</span>(path.join(<span style="color:#bd93f9">__</span>dirname)));
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>app.use(router.routes());
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>app.use(router.allowedMethods());
@@ -164,7 +164,7 @@
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231214099-1234219577.png" alt="img"></p>
 <p>当用户点击 testcookie 攻击 这个链接的时候，首先要保证页面上有cookie，比如我请求如下的cookie:</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231229205-1557810526.png" alt="img"></p>
-<p>然后我们点击 testcookie 该链接，也会调用node中的 router.get('/testcookie&rsquo;, (ctx, next) =&gt; {}) 这个请求获取到cookie，如下所示：
+<p>然后我们点击 testcookie 该链接，也会调用node中的 router.get('/testcookie', (ctx, next) =&gt; {}) 这个请求获取到cookie，如下所示：
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/561794-20190522231254328-364209115.png" alt="img"></p>
 <p>我们就通过xss攻击拿到对方的cookie信息了。</p>
 </blockquote>
@@ -523,4 +523,4 @@ hash 列出允许执行的脚本代码的Hash值，页面内嵌脚本的哈希�
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.81898d6a244851004145f1b697282d711d450cd465598c7d1f1e6945f83344b6729293d34682bda992f6b7bc0adaf63cb6e8a78e4f0774992c9504eb373cf308.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.68d53691acef9fb6a1452f6f2c8303178b9295fd9bb512b3480d7bcea0976b8030871bca117ddb1718c167d916b2c13e7ddeff475aa6f32b28437cc14e797151.js" integrity=""></script></html>
