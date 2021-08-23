@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 作用域&amp;作用域链 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.85.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" js 作用域&amp;作用域链 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [作用域] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.9669c99925b43d7c3c66b1893bd70828f133f7159d68997c07e0088f9b0a7426.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.f53d04245c5bb600631905bbd7dee25cf0cedd8c643ef5c62c2847820d449b1ade25e510cfb5ef2c7f35db1a0bc968ec0312369cc2ba037dbe367c8f7734a5ce.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                    <span class="toc-link">1. 作用域</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 作用域工作流程</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. js代码执行机制</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 作用域规则</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 演员</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 演员的表演</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 引擎的LHS和RHS</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. 演员之间的对话</span>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <span class="toc-link">3. 嵌套作用域/作用域链</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 定义</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 遍历作用域链</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">4. 词法作用域</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 定义</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 生成词法作用域</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 查询词法作用域</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. 欺骗词法作用域</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. eval</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. with</span>
+                </li>
+                
+                        </ul>
+                        </ul><li>
+                    <span class="toc-link">5. 形成词法作用域</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 函数作用域</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 定义</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 妙用</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">2. 块级作用域</span>
+                </li>
+                </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 作用域&amp;作用域链</span>
+        
+        <div class="info">
+          <span>📅 2021-08-23</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 7183字</span>
+          <span>⏱ 15分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Scope">MDN Scope</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5699739.html">深入理解javascript作用域系列第一篇——内部原理</a></p>
+<p><a href="https://www.cnblogs.com/xiaohuochai/p/5700095.html">深入理解javascript作用域系列第二篇——词法作用域和动态作用域</a></p>
+<p><a href="https://www.kancloud.cn/kancloud/you-dont-know-js-scope-closures/516609">你不懂JS：作用域与闭包</a></p>
+<p><a href="https://www.jianshu.com/p/0f6333d27cad">let, const和块级作用域</a></p>
+</blockquote>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/JS_ECMA_grammer_scope1.png" alt="scope1"></p>
+<h2 id="1-作用域">1. 作用域</h2>
+<blockquote>
+<p><strong>第一种说法：</strong></p>
+<p>javascript拥有一套设计良好的规则来存储变量，并且之后可以方便地找到这些变量，这套规则被称为作用域。作用域貌似简单，实则复杂，由于作用域与 this机制 非常容易混淆，使得理解作用域的原理更为重要。</p>
+<p><strong>第二种说法：</strong></p>
+<p>作用域是当前的执行上下文。值和表达式在其中 &ldquo;可见&rdquo; 或 &ldquo;可被访问到&rdquo; 。如果一个变量或者表达式不当前的作用域中，那么它就是不可用的。</p>
+</blockquote>
+<p><strong>最好的说法：</strong></p>
+<p>几乎所有语言的最基础模型之一就是在变量中存储值，并且在稍后取出或修改这些值的能力。事实上，在变量中存储值和取出值的能力，给程序赋予了 <em>状态</em>。</p>
+<p>如果没有这样的概念，一个程序虽然可以执行一些任务，但是它们将会受到极大的限制。</p>
+<p>但是在我们的程序中纳入变量，引出了我们现在将要解决的最重大的问题：这些变量被存储在哪儿？我们的程序如何在需要它们的时候找到它们？</p>
+<p>回答这些问题需要一组明确定义的规则，它定义如何在某些位置存储变量，以及如何在稍后找到这些变量。我们称这组规则为：<em>作用域</em>。</p>
+<h2 id="2-作用域工作流程">2. 作用域工作流程</h2>
+<h3 id="1-js代码执行机制">1. js代码执行机制</h3>
+<p>在开始学习作用域的相关知识之前，必须先了解编译器，解释器，词法分析，语法分析等该概念，这一点在另一篇文章中做了介绍。</p>
+<p>简单来说大概分为了以下几步：</p>
+<blockquote>
+<ol>
+<li>
+<p>分词/词法分析：</p>
+<p>将一连串字符分成有意义的片段，称为 token（记号）。</p>
+<p>举例来说，<code>var a = 2;</code>。这段程序会被分成这几个 token：<code>var</code>，<code>a</code>，<code>=</code>，<code>2</code>，和 <code>;</code>。空格也许会被保留为一个 token，这要看它是否是有意义的。</p>
+</li>
+<li>
+<p>解析/语法分析：</p>
+<p>将一个 token 的流（数组）转换为一个嵌套的AST树，它综合地表示了程序的语法结构。</p>
+<p><code>var a = 2;</code> 的树也许开始于称为 <code>VariableDeclaration</code>（变量声明）顶层节点，带有一个称为 <code>Identifier</code>（标识符）的子节点（它的值为 <code>a</code>），和另一个称为 <code>AssignmentExpression</code>（赋值表达式）的子节点，而这个子节点本身带有一个称为 <code>NumericLiteral</code>（数字字面量）的子节点（它的值为<code>2</code>）。</p>
+</li>
+<li>
+<p>代码生成：</p>
+<p>将抽象语法树转换为可执行的代码。这一部分将根据语言，它的目标平台等因素有很大的不同。</p>
+<p>所以，与其深陷细节，我们不如笼统地说，有一种方法将我们上面描述的 <code>var a = 2;</code> 的抽象语法树转换为机器指令，来实际上 <em>创建</em> 一个称为 <code>a</code> 的变量（包括分配内存等等），然后在 <code>a</code> 中存入一个值。</p>
+<p>注意： 引擎如何管理系统资源的细节远比我们要挖掘的东西深刻，所以我们将理所当然地认为引擎有能力按其需要创建和存储变量。</p>
+</li>
+</ol>
+</blockquote>
+<p>和大多数其他语言的编译器一样，JavaScript 引擎要比这区区三步复杂太多了。例如，在解析和代码生成的处理中，一定会存在优化执行效率的步骤，比如压缩冗余等等。所以这里描绘的只是大框架。</p>
+<p>JavaScript 引擎没有（像其他语言的编译器那样）大把的时间去优化，因为 JavaScript 的编译和其他语言不同，不是提前发生在一个构建的步骤中（因为JS是解释型，不是编译型）。</p>
+<p>对 JavaScript 来说，在许多情况下，编译发生在代码被执行前的仅仅几微秒之内（或更少！）。为了确保最快的性能，JS 引擎将使用所有的招数（比如 JIT），而这远超出了关于“作用域”的讨论。</p>
+<p>为了简单起见，可以说，任何 JavaScript 代码段在它执行之前（通常是 <em>刚好</em> 在它执行之前！）都必须被编译。所以，JS 编译器将把程序 <code>var a = 2;</code> 拿过来，并首先编译它，然后准备运行它，通常是立即的。</p>
+<h3 id="2-作用域规则">2. 作用域规则</h3>
+<p>我们将js代码的处理过程想象为一场对话。但是，<em>谁</em> 在进行这场对话呢？</p>
+<h4 id="1-演员">1. 演员</h4>
+<p>让我们见一见处理程序 <code>var a = 2;</code> 时进行互动的演员吧，这样我们就能理解稍后将要听到的它们的对话：</p>
+<ol>
+<li>
+<p><em>引擎</em>：</p>
+<p>负责从始至终的编译和执行我们的 JavaScript 程序。</p>
+</li>
+<li>
+<p><em>编译器</em>：<em>引擎</em> 的朋友之一；</p>
+<p>处理所有的解析和代码生成的重活。</p>
+</li>
+<li>
+<p><em>作用域</em>：<em>引擎</em> 的另一个朋友（其实不是一个，是一群）；</p>
+<p>收集并维护一张所有被声明的标识符（变量）的列表，并对当前执行中的代码如何访问这些变量强制实施一组严格的规则。</p>
+</li>
+</ol>
+<p>为了 <em>全面理解</em> JavaScript 是如何工作的，你需要开始像 <em>引擎</em>（和它的朋友们）那样 <em>思考</em>，问它们问的问题，并像它们一样回答。</p>
+<h4 id="2-演员的表演">2. 演员的表演</h4>
+<p>那么，让我们来分析 <em>引擎</em> 和它的朋友们将如何处理程序 <code>var a = 2;</code>。</p>
+<p><em>编译器</em> 将会这样处理：</p>
+<ol>
+<li>
+<p>处理 <code>var a</code>：</p>
+<p><em>编译器</em> 会找到负责这块的 <em>作用域</em> ，让它去查自己的变量列表，看看变量 <code>a</code> 是否已经存在了。</p>
+<p>如果是，<em>编译器</em> 就忽略这个声明并继续前进。</p>
+<p>否则，<em>编译器</em> 就让 <em>作用域</em> 把这个新变量加到变量列表中。</p>
+<p>为什么会先遇到<code>var a</code>，因为在词法分析之前就会先收集变量声明，把变量加入到<em>作用域</em>维护的表中，这就是所谓的变量提升。</p>
+</li>
+<li>
+<p>然后 <em>编译器</em> 为 <em>引擎</em> 生成稍后要执行的代码，来处理 <code>a = 2</code>，换一个说法就是<code>var a</code>的变量收集是又编译器来做的，而<code>a = 2</code>的赋值是由引擎来做的，因为需要给a这个变量分配内存空间了。</p>
+</li>
+<li>
+<p>处理<code>a = 2</code>：</p>
+<p><em>引擎</em> 运行的代码，首先让 <em>作用域</em> 去查看在当前的作用域集合中是否有一个称为 <code>a</code> 的变量。</p>
+<p>如果有，<em>引擎</em> 就使用这个变量。</p>
+<p>如果没有，<em>引擎</em> 就查看 <em>其他作用域</em>（嵌套 <em>作用域</em> ）。</p>
+</li>
+<li>
+<p>如果 <em>引擎</em> 最终找到名为<code>a</code>的变量，它就将值 <code>2</code> 赋予它。如果没有，<em>引擎</em> 将会抛出出一个错误。</p>
+</li>
+</ol>
+<h4 id="3-引擎的lhs和rhs">3. 引擎的LHS和RHS</h4>
+<p>当 <em>引擎</em> 执行 <em>编译器</em> 在第二步为它产生的代码时，它必须查询变量 <code>a</code> 来看它是否已经被声明过了，而且这个查询是咨询 <em>作用域</em> 的。但是 <em>引擎</em> 所实施的查询的类型会影响查询的结果。</p>
+<p>为了更深入地理解这个查询过程，我们需要了解一点编译器术语。在上面的例子中，<em>引擎</em> 将会对变量 <code>a</code> 实施一个“LHS”查询。另一种类型的查询称为“RHS”。</p>
+<p>这两个术语表示“Left-hand Side（左手边）”和“Right-hand Side（右手边）”。即当一个变量出现在赋值操作的左手边时，会进行 LHS 查询，当一个变量出现在赋值操作的右手边时，会进行 RHS 查询。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> a;
+</code></pre></div><p><code>var a = 2</code>中，指向 <code>a</code> 的引用是一个 LHS 引用，因为我们实际上不关心当前的值是什么，我们只是想找到这个变量，将它作为 <code>= 2</code> 赋值操作的目标。</p>
+<p><code>var b = a</code>中，指向<code>a</code>的引用是一个RHS引用，因为这里没有东西被赋值给 <code>a</code>。而是我们在查询 <code>a</code> 并取得它的值。</p>
+<blockquote>
+<p>注意：</p>
+<p>LHS 和 RHS 所指的 “赋值的左/右手边” 未必像字面上那样意味着“ <code>=</code> 赋值操作符的左/右边”。赋值有几种其他的发生形式，所以最好在概念上将它考虑为：“容器内的值（LHS）”和“承载值的容器（RHS）”。</p>
+</blockquote>
+<blockquote>
+<p>LHS查询指的是找到变量的容器本身，从而可以对其进行赋值。也就是找到赋值操作的目标。LHS查询的时候会沿着作用域链进行查询。</p>
+<ul>
+<li>找到的话就会将值赋值给这个变量；</li>
+<li>如果到达作用域顶端仍然找不到，就会在作用域链顶端创建这个变量；</li>
+<li>在严格模式中 LHS 查询失败时， 并不会创建并返回一个全局变量， 引擎会抛出同 RHS 查询失败时类似的 ReferenceError 异常。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>RHS查询就是查询变量的值，RHS查询的时候会沿着作用域链进行查询。</p>
+<ul>
+<li>如果找到的话就会取得这个值并返回；</li>
+<li>如果 RHS 查询找到了一个变量， 但是你尝试对这个变量的值进行不合理的操作，比如试图对一个非函数类型的值进行函数调用， 或着引用 null 或 undefined 类型的值中属性， 那么引擎会抛出另外一种类型的异常， 叫作 TypeError。</li>
+<li>如果到达作用域顶端仍然找不到，引擎就会抛出 ReferenceError异常。</li>
+<li>ReferenceError同作用域判别失败相关， 而TypeError则代表作用域判别成功了， 但是对结果的操作是非法或不合理的。</li>
+</ul>
+</blockquote>
+<p>下面这段程序，它既有 LHS 引用又有 RHS 引用：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a ); <span style="color:#6272a4">// 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>foo( <span style="color:#bd93f9">2</span> );
+</code></pre></div><ul>
+<li>
+<p>调用 <code>foo(..)</code> ：</p>
+<p>作为一个函数调用要求一个指向 <code>foo</code> 的 RHS 引用，意味着，“去查询 <code>foo</code> 的值，并把它交给我”。另外，<code>()</code> 意味着 <code>foo</code> 的值应当被执行，所以它最好实际上是一个函数！</p>
+</li>
+<li>
+<p>隐含的 <code>a = 2</code>：</p>
+<p>发生在当值 <code>2</code> 作为参数值传递给 <code>foo(..)</code> 函数时，值 <code>2</code> 被赋值 给了参数 <code>a</code>。为了（隐含地）给参数 <code>a</code> 赋值，进行了一个 LHS 查询。</p>
+</li>
+<li>
+<p><code>console.log(..)</code> 的查询：</p>
+<p>对<code>console</code> 对象进行 RHS 查询，然后进行属性解析来看它是否拥有一个称为 <code>log</code> 的方法。</p>
+</li>
+<li>
+<p><code>a</code> 值的 RHS查询：</p>
+</li>
+</ul>
+<p><code>a</code>的RHS查询的结果值被传入 <code>console.log(..)</code>。</p>
+<blockquote>
+<p>注意：</p>
+<p>你可能会认为函数声明 <code>function foo(a) {...</code> 是一个普通的变量声明和赋值，比如 <code>var foo</code> 和 <code>foo = function(a){...</code>。这样做会诱使你认为函数声明涉及了一次 LHS 查询。</p>
+<p>然而，在这种情况下 <em>编译器</em> 在代码生成期间会同时处理声明和值的定义，所以当 <em>引擎</em> 执行代码时，没有必要将一个函数值“赋予” <code>foo</code>。因此，将函数声明看作是一个 LHS 查询赋值是不太合适的。</p>
+<p>可以认为是函数的声明，初始化，赋值都被提升了；</p>
+<p>var定义的变，声明，初始化被提升了；</p>
+<p>let定义的变量，声明被提升了；</p>
+</blockquote>
+<h4 id="4-演员之间的对话">4. 演员之间的对话</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a ); <span style="color:#6272a4">// 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>foo( <span style="color:#bd93f9">2</span> );
+</code></pre></div><p>让我们将上面的（处理这个代码段的）交互想象为一场对话。这场对话将会有点儿像这样进行：</p>
+<blockquote>
+<p><em>引擎</em>：<em>作用域</em>，我有一个 <code>foo</code> 的 RHS 引用。听说过它吗？</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：听说过。<em>编译器</em> 刚在一秒钟之前声明了它。它是一个函数。给你。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：谢谢！那我要执行 <code>foo</code> 了。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：<em>作用域</em>，我得到了一个 <code>a</code> 的 LHS 引用，听说过它吗？</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：听说过。<em>编译器</em> 刚才将它声明为 <code>foo</code> 的一个正式参数了。给你。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：再次感谢你。现在，该把 <code>2</code> 赋值给 <code>a</code> 了。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：<em>作用域</em>，我需要 RHS 查询 <code>console</code>。听说过它吗？</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：是的，我找到 <code>console</code> 了。它是一个内建对象。给你。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：完美。查找 <code>log(..)</code>。很好，它是一个函数。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：<em>作用域</em>。你能帮我查一下 <code>a</code> 的 RHS 引用吗？我想我记得它，但只是想再次确认一下。</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：你是对的，没变。给你。</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：传递 <code>a</code> 的值，也就是 <code>2</code>，给 <code>log(..)</code>。</p>
+</blockquote>
+<blockquote>
+<p>&hellip;</p>
+</blockquote>
+<h2 id="3-嵌套作用域作用域链">3. 嵌套作用域/作用域链</h2>
+<h3 id="1-定义">1. 定义</h3>
+<p><em>作用域</em> 是通过标识符名称查询变量的一组规则。一个作用域会维护一个变量列表，但是在实际的场景下，通常是多于一个的 <em>作用域</em> 嵌套。一个代码块或函数被嵌套在另一个代码块或函数中，作用域被嵌套在其他的作用域中。</p>
+<h3 id="2-遍历作用域链">2. 遍历作用域链</h3>
+<p>如果在当前作用域中找不到一个变量的话，<em>引擎</em> 就会咨询下一个外层作用域，如此继续直到找到这个变量或者到达最外层作用域（也就是全局作用域）。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a <span style="color:#ff79c6">+</span> b );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>foo( <span style="color:#bd93f9">2</span> ); <span style="color:#6272a4">// 4
+</span></code></pre></div><p>重返 <em>引擎</em> 和 <em>作用域</em> 的对话，我们会听到：</p>
+<blockquote>
+<p><em>引擎</em>：“嘿，<code>foo</code> 的 <em>作用域</em>，听说过 <code>b</code> 吗？我得到一个它的 RHS 引用。”</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：“从没听说过，问问别人吧。”</p>
+</blockquote>
+<blockquote>
+<p><em>引擎</em>：“嘿，<code>foo</code> 外面的 <em>作用域</em>，哦，你是全局 <em>作用域</em>，酷。听说过 <code>b</code> 吗？我得到一个它的 RHS 引用。”</p>
+</blockquote>
+<blockquote>
+<p><em>作用域</em>：“是的，当然有。给你。”</p>
+</blockquote>
+<p>遍历嵌套 <em>作用域</em> 的简单规则：</p>
+<p><em>引擎</em> 从当前执行的 <em>作用域</em> 开始，在那里查找变量，如果没有找到，就向上走一级继续查找，如此类推。如果到了最外层的全局作用域，那么查找就会停止，无论它是否找到了变量。</p>
+<p>遍历作用域链的过程，就像我们爬楼梯上楼一样：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/fig1.png" alt="img"></p>
+<h2 id="4-词法作用域">4. 词法作用域</h2>
+<p>我们将<em>作用域</em>定义为一组规则，它决定着 <em>引擎</em> 如何通过变量名称在当前的 <em>作用域</em>，或者在包含它的任意 <em>嵌套作用域</em> 中来查询一个变量。</p>
+<p><em>作用域</em>的工作方式有两种占统治地位的模型：</p>
+<ol>
+<li>
+<p>词法作用域：</p>
+<p>最常见，在绝大多数的编程语言中被使用。</p>
+</li>
+<li>
+<p>动态作用域：</p>
+<p>比较少见，但仍然被一些语言（比如 Bash 脚本等）使用。</p>
+</li>
+</ol>
+<h3 id="1-定义-1">1. 定义</h3>
+<p>JS代码解释执行的第一步是词法分析，将一连串字符分成有意义的片段，称为 token（记号）。</p>
+<p>词法作用域就是在词法分析时被定义的作用域。</p>
+<p>换句话说，词法作用域是你在写程序时，变量和作用域的块儿在何处被编写决定的，因此它在词法分析器处理你的代码时（基本上）是固定不变的。</p>
+<p>有一些方法可以骗过词法作用域，从而在词法分析器处理过后改变它。</p>
+<h3 id="2-生成词法作用域">2. 生成词法作用域</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#8be9fd;font-style:italic">function</span> bar(c) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		console.log( a, b, c );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>	bar(b <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">3</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>foo( <span style="color:#bd93f9">2</span> ); <span style="color:#6272a4">// 2 4 12
+</span></code></pre></div><p>在这个代码实例中有三个固有的嵌套作用域。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/fig2.png" alt="img"></p>
+<ul>
+<li>气泡1 包围着全局作用域，它里面只有一个标识符：<code>foo</code>。</li>
+<li>气泡2 包围着作用域 <code>foo</code>，它含有三个标识符：<code>a</code>，<code>bar</code> 和 <code>b</code>。</li>
+<li>气泡3 包围着作用域 <code>bar</code>，它里面只包含一个标识符：<code>c</code>。</li>
+</ul>
+<p><code>bar</code> 的气泡完全被包含在 <code>foo</code> 的气泡中，因为（而且只因为）这就是我们定义函数 <code>bar</code> 的位置。</p>
+<p>注意这些嵌套的气泡是严格嵌套的。换句话说，没有哪个函数的气泡可以同时（部分地）存在于另外两个外部的作用域气泡中，就像没有函数可以部分地存在于它的两个父函数中一样。</p>
+<h3 id="3-查询词法作用域">3. 查询词法作用域</h3>
+<p>这些作用域气泡的结构和相对位置解释了 <em>引擎</em>  在查找一个标识符时，需要查看的所有地方。</p>
+<p>在上面的代码段中，<em>引擎</em> 执行语句 <code>console.log(..)</code> 并开始查找三个被引用的变量 <code>a</code>，<code>b</code> 和 <code>c</code>。</p>
+<ul>
+<li>引擎首先从最内部的作用域气泡开始，也就是 <code>bar(..)</code> 函数的作用域。在这里找到了<code>c</code>的声明，找不到 <code>a</code>和<code>b</code>。</li>
+<li>所以引擎向上走一层，到下一个最近的作用域气泡——<code>foo(..)</code> 的作用域。它在这里找到了 <code>a</code>和<code>b</code>的声明，于是它就使用这里的<code>a</code>和<code>b</code>。</li>
+</ul>
+<p>如果在 <code>bar(..)</code> 内部和 <code>foo(..)</code> 内部都有一个 <code>c</code>，那么 <code>console.log(..)</code> 语句将会找到并使用 <code>bar(..)</code> 中的那一个，绝不会使用 <code>foo(..)</code> 中的那一个。也就是说，一旦找到第一个匹配，作用域查询就停止了。</p>
+<p>相同的标识符名称可以在嵌套作用域的多个层中被指定，这称为“遮蔽（shadowing）”。</p>
+<blockquote>
+<p>注意：</p>
+<p>全局变量也自动地是全局对象（在浏览器中是 <code>window</code>）的属性，所以不直接通过全局变量的词法名称，而通过将它作为全局对象的一个属性引用来间接地引用。</p>
+<p>这种技术给出了访问全局变量的方法，没有它全局变量将因为被遮蔽而不可访问。</p>
+</blockquote>
+<blockquote>
+<p>词法作用域查询只在处理标识符时进行，比如 <code>a</code>，<code>b</code>，和 <code>c</code>。</p>
+<p>如果你在一段代码中拥有一个 <code>foo.bar.baz</code> 的引用，词法作用域查询将在查找 <code>foo</code> 标识符时实施，但一旦定位这个变量，对象属性访问规则将会分别接管 <code>bar</code> 和 <code>baz</code> 属性的解析。</p>
+</blockquote>
+<h3 id="4-欺骗词法作用域">4. 欺骗词法作用域</h3>
+<p>如果词法作用域是由函数被声明的位置唯一定义的，而且这个位置完全是编写时决定，那么怎么可能有办法在运行时“修改”词法作用域呢？</p>
+<p>JavaScript 有两种机制可以实现欺骗词法作用域：</p>
+<h4 id="1-eval">1. eval</h4>
+<p>JavaScript 中的 <code>eval(..)</code> 函数接收一个字符串作为参数值，并把这个字符串作为一段<code>js</code>代码进行执行。</p>
+<p>换句话说，你可以用编程的方式在你编写好的代码内部生成代码，而且你可以运行这个生成的代码，就好像它在编写时就已经在那里了一样。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(str, a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">eval</span>( str ); <span style="color:#6272a4">// 作弊！
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>	console.log( a, b );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>foo( <span style="color:#f1fa8c">&#34;var b = 3;&#34;</span>, <span style="color:#bd93f9">1</span> ); <span style="color:#6272a4">// 1 3
+</span></code></pre></div><p>通过上面的代码，可以理解 <code>eval(..)</code> 是如何允许修改词法作用域环境的：假装这段代码在编写时就一直就在那里。</p>
+<p>在 <code>eval(..)</code> 调用的位置上，字符串 <code>&quot;var b = 3&quot;</code> 被看作是一直就存在在那里的代码。因为这个代码恰巧声明了一个新的变量 <code>b</code>，它就修改了现存的 <code>foo(..)</code> 的词法作用域。</p>
+<p><code>&quot;var b = 3&quot;</code>在 <code>foo(..)</code> 内部创建了变量 <code>b</code>，它遮蔽了声明在外部（全局）作用域中的 <code>b</code>。</p>
+<p>当 <code>console.log(..)</code> 调用发生时，它会在 <code>foo(..)</code> 的作用域中找到 <code>a</code> 和 <code>b</code>，而且绝不会找到外部的 <code>b</code>。这样，我们就打印出 &ldquo;1 3&rdquo; 而不是一般情况下的 &ldquo;1 2&rdquo;。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 使用严格模式，解除欺骗
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> foo(str, a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#f1fa8c">&#34;use strict&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#8be9fd;font-style:italic">eval</span>( str ); <span style="color:#6272a4">// 作弊！
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>	console.log( a, b );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>foo( <span style="color:#f1fa8c">&#34;var b = 3;&#34;</span>, <span style="color:#bd93f9">1</span> ); <span style="color:#6272a4">// 1 3
+</span></code></pre></div><h4 id="2-with">2. with</h4>
+<p>JavaScript 的另一个可以欺骗词法作用域的特性是 <code>with</code> 关键字，已经被废弃了。</p>
+<h2 id="5-形成词法作用域">5. 形成词法作用域</h2>
+<p>作用域由一系列“气泡”组成，这些“气泡”的每一个就像一个容器或篮子，标识符（变量，函数）就在它里面被声明。这些气泡整齐地互相嵌套在一起，而且这种嵌套是在编写时定义的。</p>
+<p>但是到底是什么才能制造一个新气泡？只能是函数吗？JavaScript 中的其他结构可以创建气泡吗？</p>
+<h3 id="1-函数作用域">1. 函数作用域</h3>
+<h4 id="1-定义-2">1. 定义</h4>
+<p>JavaScript 拥有基于函数的作用域，也就是，你声明的每一个函数都为自己创建了一个气泡。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#8be9fd;font-style:italic">function</span> bar() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		<span style="color:#8be9fd;font-style:italic">var</span> d <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>	<span style="color:#8be9fd;font-style:italic">var</span> c <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><ul>
+<li><code>foo(..)</code> 的作用域气泡包含标识符 <code>a</code>，<code>b</code>，<code>c</code> 和 <code>bar</code>。</li>
+<li><code>bar(..)</code> 拥有它自己的作用域气泡，它拥有一个标识符：<code>d</code></li>
+<li>全局作用域也拥有自己的作用域气泡，它仅含有一个标识符：<code>foo</code>。</li>
+</ul>
+<p>因为 <code>a</code>，<code>b</code>，<code>c</code>，和 <code>bar</code> 都属于 <code>foo(..)</code> 的作用域气泡，所以它们在 <code>foo(..)</code> 外部是不可访问的。</p>
+<p>在<code>foo</code>的外层引用 <code>a</code>，<code>b</code>，<code>c</code>，和 <code>bar</code> 都会得到 <code>ReferenceError</code> 错误，因为这些标识符在全局作用域中都不可用。</p>
+<p><code>a</code>，<code>b</code>，<code>c</code>，和 <code>bar</code>在 <code>foo(..)</code><em>内部</em> 都是可以访问的，而且在 <code>bar(..)</code> 内部也都是可用的（假定在 <code>bar(..)</code> 内部没有遮蔽标识符的声明）。</p>
+<blockquote>
+<p>函数作用域支持这样的思想：</p>
+<p>所有变量都属于函数，而且贯穿整个函数始终都可以使用和重用（甚至可以在嵌套的作用域中访问）。这种设计方式可以十分有用，而且肯定可以完全利用 JavaScript 的“动态”性质 —— 变量可以根据需要接受不同种类型的值。</p>
+</blockquote>
+<h4 id="2-妙用">2. 妙用</h4>
+<p>定义一个函数的传统方式是，你声明一个函数，并在它内部添加代码。</p>
+<p>但是相反的想法也同样强大和有用：拿你所编写的代码的任意一部分，在它周围包装一个函数声明，这实质上“隐藏”了这段代码。实际结果是在这段代码周围创建了一个作用域气泡，这意味着现在在这段代码中的任何声明都将绑在这个新的包装函数的作用域上，而不是前一个包含它们的作用域。</p>
+<p>也就是，你可以通过将变量和函数围在一个函数的作用域中来“隐藏”它们。</p>
+<p>通过这种包装和隐藏，可以解决很多问题，比如命名冲突，模块管理等。这一部分的内容在IIFE里面可以学到。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> doSomething(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	b <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">+</span> doSomethingElse( a <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	console.log( b <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">3</span> );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">function</span> doSomethingElse(a) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>	<span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">var</span> b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>doSomething( <span style="color:#bd93f9">2</span> ); <span style="color:#6272a4">// 15
+</span></code></pre></div><h3 id="2-块级作用域">2. 块级作用域</h3>
+<p>虽然函数是最常见的作用域单位，但是其他的作用域单位也是可能的，而且使用这些作用域单位可以导致更好、对于维护来说更干净的代码。</p>
+<p>ES6 之前 JavaScript 没有块级作用域，只有全局作用域和函数作用域。ES6 的到来，为我们提供了块级作用域的功能，通过新增命令 <code>let</code> 和 <code>const</code> 来体现。</p>
+<p>换一种说法就是块级作用域、<code>let</code>、<code>const</code>三者是一起提出来的。这一点从<code>let</code>的定义就可以看出来：</p>
+<blockquote>
+<p><strong>let</strong> 语句声明一个块级作用域的本地变量，并且可选的将其初始化为一个值。</p>
+<p>**<code>let</code>**允许你声明一个作用域被限制在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/block"><code>块</code></a>级中的变量、语句或者表达式。与 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 关键字不同的是， <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a>声明的变量只能是全局或者整个函数块的。 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 和 <code>let</code> 的不同之处在于后者是在编译时才初始化。</p>
+</blockquote>
+<p><code>var</code>是不受块级作用域的约束的，在分析<code>var</code>时，完全可以忽略掉块级作用域。关于<code>let</code>、<code>const</code>、块级作用域以及<code>let</code>、<code>const</code>和<code>var</code>的区别还很复杂，所以单开一篇文章讲解。</p>
+<p>本文是js执行机制的第二篇，下一篇是《js let&amp;const与块级作用域》。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-%E6%A8%A1%E5%9D%97%E5%8C%96%E4%B8%8Eumd%E8%AF%A6%E8%A7%A3/" data-tooltip="js 模块化与UMD详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-letconst%E4%B8%8E%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F/" data-tooltip="js let&amp;const与块级作用域">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.e38dd197f7ffedb30403e143c862cd02e0a420987dccbc7861df4410a7290faad9b50323632e8f54d23a5c0ad47012f998473b1e2c155d8a7bc63b84015f919b.js" integrity=""></script></html>
