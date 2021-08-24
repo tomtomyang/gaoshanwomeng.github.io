@@ -24,7 +24,7 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.9669c99925b43d7c3c66b1893bd70828f133f7159d68997c07e0088f9b0a7426.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.1520101377cacf62c1d38b9af640dbeb10096f8d879abe1884610df70facd032.css" integrity="" type="text/css">
     
     
     <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.f53d04245c5bb600631905bbd7dee25cf0cedd8c643ef5c62c2847820d449b1ade25e510cfb5ef2c7f35db1a0bc968ec0312369cc2ba037dbe367c8f7734a5ce.js" integrity=""></script>
@@ -45,17 +45,17 @@
                     <span class="toc-link">1. 暂时性死区</span>
                 </li>
                 <li>
-                    <span class="toc-link">2. 不为全局变量window设置属性</span>
+                    <span class="toc-link">2. 不为window设置属性</span>
                 </li>
                 <li>
                     <span class="toc-link">3. 不能重复声明</span>
                 </li>
                 
                         </ul><li>
-                    <span class="toc-link">3. for循环中的 let 和 var</span>
+                    <span class="toc-link">3. for循环中的let和var</span>
                 </li>
                 <li>
-                    <span class="toc-link">4. let到底有没有变量提升</span>
+                    <span class="toc-link">4. let存不存在变量提升</span>
                 </li>
                 </div><div class="single-post container">
     <div class="post">
@@ -65,7 +65,7 @@
         <div class="info">
           <span>📅 2021-08-23</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2846字</span>
+          <span>📖 2911字</span>
           <span>⏱ 6分钟</span>
         </div>
         
@@ -128,10 +128,10 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><p>那么我们是不是可以说，解释器进入作用域后，不会对let声明的变量进行提升，其实这种说法不准确，更准确的说法是，let声明的变量的声明被提升了，但是初始化和赋值没有被提升，通俗的说是，已经在内存中开辟了一块空间，但是没有给这块空间起名字，所以你找不到，更没有向这片空间里存储内容。</p>
 <p>暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</p>
-<h3 id="2-不为全局变量window设置属性">2. 不为全局变量window设置属性</h3>
+<h3 id="2-不为window设置属性">2. 不为window设置属性</h3>
 <p>我们知道，因为存在变量的遮蔽问题，所以我们在全局作用域使用var声明变量时，会给window对象设置与变量名相同的属性以及值。</p>
 <p>而使用let声明的变量不会这样做，那在全局作用域中使用let声明的变量会出现在哪里？</p>
-<p><img src="https://img.kancloud.cn/7f/a2/7fa20f469f0065511b996fbf64b5f60d_1105x379.png" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/7fa20f469f0065511b996fbf64b5f60d_1105x379.png" alt="img"></p>
 <p>通过上图也可以看到，在全局作用域中，用 let 和 const 声明的全局变量并没有在全局对象中，只是一个块级作用域（Script）中。</p>
 <h3 id="3-不能重复声明">3. 不能重复声明</h3>
 <p>在同一个块中，不能重复声明：</p>
@@ -145,7 +145,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        <span style="color:#8be9fd;font-style:italic">let</span> x <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
-</code></pre></div><h2 id="3-for循环中的-let-和-var">3. for循环中的 let 和 var</h2>
+</code></pre></div><h2 id="3-for循环中的let和var">3. for循环中的let和var</h2>
 <p>带着上面的知识，我们来分析一段代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    setTimeout(() =&gt; {
@@ -161,21 +161,21 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// 0 1 2 3 4
 </span></code></pre></div><p>这种区别是为什么？来试着分析一下：</p>
-<p>首先for循环可以理解成这样的状态：</p>
+<p>首先，根据网络上的一个说法是for循环可以理解成这样的状态：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> i;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">for</span>( i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> liList.length; i<span style="color:#ff79c6">++</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  liList[i].onclick <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(i)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        console.log(i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }, <span style="color:#bd93f9">1000</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// 循环时 i的值从1变到5
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// 点击时 引擎去查找i的引用，在全局作用域下找到，值为5
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4">// 因此全是5
 </span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> i;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">for</span>( i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> liList.length; i<span style="color:#ff79c6">++</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  liList[i].onclick <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(i)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        console.log(i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }, <span style="color:#bd93f9">1000</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// 循环时 i的值从1变到5
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// 点击时 引擎去查找i的引用，在全局作用域下找到，值为5
@@ -183,11 +183,11 @@
 </span></code></pre></div><p>这样分析与结果不符啊，但是按照我们已有的知识，let就是在全局作用域下的，执行点击时，i的值肯定会是5啊！</p>
 <p>而事实上，我们运行上面的代码，结果真的是都是5。</p>
 <p>既然事实没错，我们对let的理解没错，那就说明事实上的<code>let i; for(i)</code>和<code>for(let i)</code>并不一样，那不一样的点肯定就在<code>let i</code>的位置不在外层作用域，那有没有可能在块级作用域内？</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span>( i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> liList.length; i<span style="color:#ff79c6">++</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#8be9fd;font-style:italic">let</span> i;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  liList[i].onclick <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(i)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#8be9fd;font-style:italic">let</span> i;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        console.log(i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }, <span style="color:#bd93f9">1000</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// undefinrd x 5
 </span></code></pre></div><p>看来<code>let i</code>也不是定义在块级作用域内部啊，那它在哪？</p>
@@ -195,17 +195,16 @@
 <p>于是我去看 MDN 的例子，发现鸡贼的 MDN 巧妙地避开了这个问题，它的例子是这样的：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-e2db72f8ad3358e0b89bad2f2e86ef6f_720w.png" alt="img"></p>
 <p>你看 MDN 的例子，在每次循环的时候用 let j 保留的 i 的值，所以在 i 变化的时候，j 并不会变化。而console.log 的是 j，所以不会出现 5 个 5。</p>
-<p><strong>为什么 MDN 要故意声明一个 j 呢，为什么不直接用 i 呢？</strong></p>
-<p><strong>我猜测 MDN 为了简化知识，隐瞒了什么。</strong></p>
+<p>为什么 MDN 要故意声明一个 j 呢，为什么不直接用 i 呢？我猜测 MDN 为了简化知识，隐瞒了什么。</p>
 <p>于是我去看了看 ES 文档，其中的 <a href="https://link.zhihu.com/?target=http%3A//www.ecma-international.org/ecma-262/6.0/%23sec-for-statement-runtime-semantics-labelledevaluation">13.7.4.7 章节</a> 清楚地说明了个中缘由，但是由于说得太清楚了，很多人都看不下去，不信你可以试试。</p>
 <p>我说一下我的理解：</p>
 <ol>
-<li><strong>for( let i = 0; i&lt; 5; i++) 这句话的圆括号之间，有一个隐藏的作用域</strong></li>
-<li><strong>for( let i = 0; i&lt; 5; i++) { 循环体 } 在每次执行循环体之前，JS 引擎会把 i 在循环体的上下文中重新声明及初始化一次。</strong></li>
+<li><code>for( let i = 0; i&lt; 5; i++)</code> 这句话的圆括号之间，有一个隐藏的作用域</li>
+<li><code>for( let i = 0; i&lt; 5; i++) { 循环体 } </code>在每次执行循环体之前，JS 引擎会把 i 在循环体的上下文中重新声明及初始化一次。</li>
 <li>其他细节就不说了，太细碎了</li>
 </ol>
 </blockquote>
-<p>那么刚才这段代码：</p>
+<p>也就是说，在<code>for</code>设置循环变量的地方存在一个父作用域，循环体<code>{}</code>中是一个子作用域，那么刚才这段代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    setTimeout(() =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        console.log(i)
@@ -214,12 +213,12 @@
 </code></pre></div><p>可以近似的理解为：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">for</span>( <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> 隐藏作用域中的i <span style="color:#6272a4">// 看这里看这里看这里
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>  liList[i].onclick <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(i)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>  setTimeout(() =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        console.log(i)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  }, <span style="color:#bd93f9">1000</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
 </code></pre></div><p>这样才能把一切解释通。</p>
-<h2 id="4-let到底有没有变量提升">4. let到底有没有变量提升</h2>
+<h2 id="4-let存不存在变量提升">4. let存不存在变量提升</h2>
 <p>先看第一段代码</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>{
@@ -280,7 +279,7 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/js-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" data-tooltip="js 数据类型与类型转换">
+        <a class="" href="https://tomtomyoung.top/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E4%BA%8B%E4%BB%B6%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/" data-tooltip="浏览器 事件模型详解">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
@@ -303,4 +302,4 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.e38dd197f7ffedb30403e143c862cd02e0a420987dccbc7861df4410a7290faad9b50323632e8f54d23a5c0ad47012f998473b1e2c155d8a7bc63b84015f919b.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.0c5396a4b7ade19eecd196822dac557e7f88651945a9250e2637e3599bf75311bd492e4c47a193db31a5f8c81066690739fb5503f502ac2142d52e4e477aa08f.js" integrity=""></script></html>
