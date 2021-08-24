@@ -34,7 +34,10 @@
 </div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-    </div></div><div class="single-post container">
+    </div><ul class="toc-h2"><li>
+                    <span class="toc-link">1. 定义闭包</span>
+                </li>
+                </div><div class="single-post container">
     <div class="post">
       <div class="header">
         <span class="title">js 闭包详解</span>
@@ -42,19 +45,52 @@
         <div class="info">
           <span>📅 2021-08-24</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 121字</span>
-          <span>⏱ 1分钟</span>
+          <span>📖 626字</span>
+          <span>⏱ 2分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
         <blockquote>
 <p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures">MDN_闭包</a></p>
 <p><a href="https://www.kancloud.cn/kancloud/you-dont-know-js-scope-closures/516609">你不懂JS：作用域与闭包</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html">学习Javascript闭包（Closure）</a></p>
 </blockquote>
 <p>在 JavaScript 中闭包无所不在，你必须识别并接纳它。</p>
 <p>闭包是词法作用域导致的结果。闭包在你的代码中一直在被创建和使用，你在毫无意识的状态下就使用了闭包。</p>
 <p>我们现在要做的事补充我们缺少的思维，来识别，接纳，并以自己的意志利用闭包。</p>
+<h2 id="1-定义闭包">1. 定义闭包</h2>
+<p>闭包是和词法作用域的概念紧密的结合的在一起的，了解闭包之前必须了解词法作用域。简单来说词法作用域就是执行上下文，里面包含了当前作用域下声明的变量集合。</p>
+<blockquote>
+<p>一个函数和对其周围状态（词法作用域）捆绑在一起（或者说函数被作用域包围），这样的组合就是闭包（closure）。也就是说，闭包让你可以在一个内层函数中访问到其外层函数的作用域。</p>
+<p>在 JavaScript 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> init() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Mozilla&#34;</span>; 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">function</span> displayName() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        alert(name); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    displayName();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>init();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// Mozilla
+</span></code></pre></div><p>在上面的代码中，引擎执行<code>alert(name)</code>时，会进行RHS，在当前作用域中查找<code>name</code>，没有找到，则沿着作用域链，向上一层<code>init</code>的作用域查找，找到了<code>name</code>的值为<code>Mozilla</code>，则交给<code>alert</code>执行。</p>
+<p>这是我们已经知道的知识，是作用域和作用域链、LHS和RHS的工作方式。那么换一种情况：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Mozilla&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">function</span> displayName() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        alert(name);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">return</span> displayName;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">var</span> myFunc <span style="color:#ff79c6">=</span> makeFunc();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>myFunc();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>
+</code></pre></div><p>这里是将<code>makeFunc</code>函数执行的返回值赋值给<code>myFunc</code>，也就是<code>displayName</code>，那么在执行<code>myFunc</code>时，实际执行的是<code>displayName</code>，</p>
 
       </div>
       <div class="footer">
