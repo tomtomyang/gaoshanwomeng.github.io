@@ -35,15 +35,98 @@
     <div class="toc-header">
         <span>目录</span>
     </div><ul class="toc-h2"><li>
-                    <span class="toc-link">1. 模块化发展历程</span>
+                    <span class="toc-link">1. 模块化源起</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. 没有模块化的艰辛</span>
                 </li>
                 <li>
+                    <span class="toc-link">2. 命名空间</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 闭包与IIFE</span>
+                </li>
+                
+                        </ul><li>
                     <span class="toc-link">2. CommonJS和node.js</span>
                 </li>
-                <li>
-                    <span class="toc-link">3. AMD和require.js</span>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. JS在服务端运行的问题</span>
                 </li>
                 <li>
+                    <span class="toc-link">2. CommonJS的诞生</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. Node.js的诞生</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. CommonJS和Node.js的关系</span>
+                </li>
+                <li>
+                    <span class="toc-link">5. CommonJS模块规范</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 引入模块</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 模块标识</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 定义模块</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">6. CommonJS的局限</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">3. AMD和require.js</span>
+                </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. AMD</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. require.js</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 引入require.js</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 定义模块</span>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <span class="toc-link">1. 独立模块</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 非独立模块</span>
+                </li>
+                
+                        </ul><li>
+                    <span class="toc-link">3. 引入模块</span>
+                </li>
+                
+                        <ul class="toc-h5"><li>
+                    <span class="toc-link">1. 直接调用</span>
+                </li>
+                <li>
+                    <span class="toc-link">2. 动态加载</span>
+                </li>
+                <li>
+                    <span class="toc-link">3. 网络请求</span>
+                </li>
+                <li>
+                    <span class="toc-link">4. 错误处理</span>
+                </li>
+                
+                        </ul>
+                        </ul>
+                        </ul><li>
                     <span class="toc-link">4. CMD和sea.js</span>
                 </li>
                 <li>
@@ -55,10 +138,10 @@
         <span class="title">js 模块化与UMD详解</span>
         
         <div class="info">
-          <span>📅 2021-08-23</span>
+          <span>📅 2021-08-24</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2799字</span>
-          <span>⏱ 6分钟</span>
+          <span>📖 8014字</span>
+          <span>⏱ 16分钟</span>
         </div>
         
       </div>
@@ -66,106 +149,420 @@
         <blockquote>
 <p>参考：</p>
 <p><a href="https://juejin.cn/post/6844903576309858318">前端模块化：CommonJS,AMD,CMD,ES6</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/CommonJS">wikipedia_CommonJS</a></p>
+<p><a href="https://www.kancloud.cn/simon_chang/srqcnodejs/199236">深入浅出Node.js</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/113009496">前端科普系列-CommonJS：不是前端却革命了前端</a></p>
+<p><a href="https://github.com/seajs/seajs/issues/269">从 CommonJS 到 Sea.js</a></p>
+<p><a href="http://wiki.commonjs.org/wiki/CommonJS">CommonJS wiki</a></p>
+<p><a href="https://wiki.mozilla.org/ServerJS">mozillaWiki_ServerJS</a></p>
+<p><a href="https://segmentfault.com/a/1190000023017398">《编程时间简史系列》JavaScript 模块化的历史进程</a></p>
+<p><a href="https://nodejs.org/api/modules.html#modules_modules_commonjs_modules">Node.js_CommonJS modules</a></p>
+<p><a href="https://javascript.ruanyifeng.com/tool/requirejs.html">RequireJS和AMD规范</a></p>
+<p><a href="https://requirejs.org/docs/whyamd.html">requirejs_why amd</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">Javascript模块化编程（二）：AMD规范</a></p>
 </blockquote>
-<h2 id="1-模块化发展历程">1. 模块化发展历程</h2>
-<p>在本站另一篇博客：《js webpack简介》的第一个章节：为什么使用webpack中，我们介绍了js代码编写的不同阶段：</p>
-<blockquote>
-<p><strong>远古阶段</strong></p>
-<p>在打包工具出现之前，我们是如何在 web 中使用 JavaScript 的？</p>
-<p>在浏览器中运行 JavaScript 有两种方法：</p>
-<ol>
-<li>引用一些脚本来存放每个功能；此解决方案很难扩展，因为加载大量脚本会导致网络瓶颈。</li>
-<li>使用一个包含所有项目代码的大型 <code>.js</code> 文件，但是这会导致作用域、文件大小、可读性和可维护性方面的问题。</li>
-</ol>
-<p><strong>立即调用函数表达式阶段</strong></p>
-<p>立即调用函数表达式(IIFE - Immediately invoked function expressions)</p>
-<p>IIFE 解决大型项目的作用域问题：当脚本文件被封装在 IIFE 内部时，你可以安全地拼接或安全地组合所有文件，而不必担心作用域冲突。</p>
-<p>IIFE 使用方式产生出 Make, Gulp, Grunt, Broccoli 或 Brunch 等工具。这些工具称为任务执行器，它们将所有项目文件拼接在一起。</p>
-<p>但是，修改一个文件意味着必须重新构建整个文件。拼接可以做到很容易地跨文件重用脚本，但是却使构建结果的优化变得更加困难。如何判断代码是否实际被使用？</p>
-<p>即使你只用到 lodash 中的某个函数，也必须在构建结果中加入整个库，然后将它们压缩在一起。如何 treeshake 代码依赖？难以大规模地实现延迟加载代码块，这需要开发人员手动地进行大量工作。</p>
-<p><strong>node.js模块化+commonJS</strong></p>
-<p>Node.js 是一个 JavaScript 运行时环境，可以在浏览器环境之外的计算机和服务器中使用。webpack 运行在 Node.js 中。</p>
-<p>既然不是在浏览器中运行 JavaScript，现在已经没有了可以添加到浏览器中的 html 文件和 script 标签。那么 Node.js 应用程序要如何加载新的代码 chunk 呢？</p>
-<p>CommonJS 问世并引入了 <code>require</code> 机制，它允许你在当前文件中加载和使用某个模块。导入需要的每个模块，这一开箱即用的功能，帮助我们解决了作用域问题。</p>
-<p><strong>ECMAScript 模块</strong></p>
-<p>模块正在成为 ECMAScript 标准的官方功能。然而，浏览器支持不完整，版本迭代速度也不够快，目前还是推荐上面那些早期模块实现。</p>
-<p><strong>webpack</strong></p>
-<p>是否可以有一种方式，不仅可以让我们编写模块，而且还支持任何模块格式（至少在我们到达 ESM 之前），并且可以同时处理资源和资产？</p>
-<p>这就是 webpack 存在的原因。它是一个工具，可以打包你的 JavaScript 应用程序（支持 ESM 和 CommonJS），可以扩展为支持许多不同的静态资源，例如：images, fonts 和 stylesheets。</p>
-<p><strong>vite</strong></p>
-<p>Vite是Vue的作者尤雨溪开发的Web开发构建工具，它是一个基于浏览器原生ES模块导入的开发服务器，在开发环境下，利用浏览器去解析import，在服务器端按需编译返回，完全跳过了打包这个概念，服务器随启随用。</p>
-</blockquote>
-<p>在这其中，我只简单了解了热门技术webpack，那么网上所谓的CommonJs、AMD、CMD等一些概念都是什么？</p>
-<p>其实是模块化发展过程中，诞生的几种实现js模块化的技术标准。</p>
-<h2 id="2-commonjs和nodejs">2. CommonJS和node.js</h2>
-<p>Node.js是commonJS规范的主要实践者，它有四个重要的环境变量为模块化的实现提供支持：<code>module</code>、<code>exports</code>、<code>require</code>、<code>global</code>。实际使用时，用<code>module.exports</code>定义当前模块对外输出的接口（不推荐直接用<code>exports</code>），用<code>require</code>加载模块。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 定义模块math.js
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> basicNum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> add(a, b) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">+</span> b;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>module.exports <span style="color:#ff79c6">=</span> { <span style="color:#6272a4">//在这里写上需要向外暴露的函数、变量
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>  add<span style="color:#ff79c6">:</span> add,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  basicNum<span style="color:#ff79c6">:</span> basicNum
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// 引用自定义的模块时，参数包含路径，可省略.js
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> math <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;./math&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>math.add(<span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">5</span>);
+<h2 id="1-模块化源起">1. 模块化源起</h2>
+<p>在本站另一篇博客：《js webpack简介》的第一个章节：为什么使用webpack中，我们介绍了js代码编写的不同阶段。这里更详细的说明一下。</p>
+<h3 id="1-没有模块化的艰辛">1. 没有模块化的艰辛</h3>
+<p>JavaScript 诞生之初只是作为一个脚本语言来使用，做一些简单的表单校验等等。所以代码量很少，最开始都是直接写到 <code>&lt;script&gt;</code> 标签里，如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>// index.html
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;morrain&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#8be9fd;font-style:italic">var</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>随着业务进一步复杂，Ajax 诞生以后，前端能做的事情越来越多，代码量飞速增长，开发者们开始把 JavaScript 写到独立的 js 文件中，与 html 文件解耦。像下面这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// index.html
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">&lt;</span>script src<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./mine.js&#34;</span><span style="color:#ff79c6">&gt;&lt;</span>/script&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// mine.js
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;morrain&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#8be9fd;font-style:italic">var</span> age <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">18</span>
+</code></pre></div><p>再后来，更多的开发者参与进来，更多的 js 文件被引入进来:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// index.html
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./mine.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./a.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./b.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>// mine.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>var name = &#39;morrain&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>var age = 18
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>// a.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>var name = &#39;lilei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>var age = 15
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>// b.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>var name = &#39;hanmeimei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>var age = 13
+</code></pre></div><p>不难发现，问题已经来了！ JavaScript 在 ES6 之前是没有模块系统，所以上面三个 js 文件里申明的变量都会存在于全局作用域中。不同的开发者维护不同的 js 文件，很难保证不和其它 js 文件冲突。全局变量污染开始成为开发者的噩梦。</p>
+<h3 id="2-命名空间">2. 命名空间</h3>
+<p>为了解决全局变量污染的问题，开发者开始使用命名空间的方法，既然命名会冲突，那就加上命名空间呗，如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// index.html
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./mine.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./a.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./b.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>// mine.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>app.mine = {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>app.mine.name = &#39;morrain&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>app.mine.age = 18
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>// a.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>app.moduleA = {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>app.moduleA.name = &#39;lilei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>app.moduleA.age = 15
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">// 引用核心模块时，不需要带路径
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> http <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;http&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>http.createService(...).listen(<span style="color:#bd93f9">3000</span>);
-</code></pre></div><p>commonJS用同步的方式加载模块。在服务端，模块文件都存在本地磁盘，读取非常快，所以这样做不会有问题。但是在浏览器端，限于网络原因，更合理的方案是使用异步加载。</p>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>// b.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>app.moduleB = {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>app.moduleB.name = &#39;hanmeimei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>app.moduleB.age = 13
+</code></pre></div><p>此时，已经开始有隐隐约约的模块化的概念，只不过是用命名空间实现的。这样在一定程度上是解决了命名冲突的问题， b.js 模块的开发者，可以很方便的通过 <code>app.moduleA.name</code> 来取到模块A中的名字，但是也可以通过 <code>app.moduleA.name = 'rename'</code> 来任意改掉模块A中的名字，而这件事情，模块A却毫不知情！这显然是不被允许的。</p>
+<p>这一时期的代表是雅虎的YUI Library：</p>
+<blockquote>
+<p>2006 年 1 月，当时还是国际互联网巨头的 Yahoo（雅虎），开源了其内部使用已久的组件库 <strong>YUI Library</strong>。</p>
+<p>YUI Library 采用了类似于 Java 命名空间的方式，来隔离各个模块之间的变量，避免全局变量造成的冲突。其写法类似于：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>YUI.util.module.doSomthing();
+</code></pre></div><p>这种写法无论是封装还是调用时都十分繁琐，而且当时的 IDE 对于 JavaScript 来说智能感知非常弱，开发者很难知道他需要的某个方法存在于哪个命名空间下，经常需要频繁地查阅开发手册，导致开发体验十分不友好。</p>
+</blockquote>
+<h3 id="3-闭包与iife">3. 闭包与IIFE</h3>
+<p>聪明的开发者又开始利用 JavaScript 语言的函数作用域，使用闭包的特性来解决上面的这一问题。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>// index.html
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./mine.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./a.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./b.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>// mine.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>app.mine = (function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    var name = &#39;morrain&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    var age = 18
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    return {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        getName: function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            return name
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>})()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>// a.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>app.moduleA = (function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    var name = &#39;lilei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    var age = 15
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    return {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        getName: function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>            return name
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>})()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>// b.js
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>app.moduleB = (function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    var name = &#39;hanmeimei&#39;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    var age = 13
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    return {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>        getName: function(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>            return name
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>})()
+</code></pre></div><p>现在 b.js 模块可以通过 <code>app.moduleA.getName()</code> 来取到模块A的名字，但是各个模块的名字都保存在各自的函数内部，没有办法被其它模块更改。这样的设计，已经有了模块化的影子，每个模块内部维护私有的东西，开放接口给其它模块使用，但依然不够优雅，不够完美。譬如上例中，模块B可以取到模块A的东西，但模块A却取不到模块B的，因为上面这三个模块加载有先后顺序，互相依赖。当一个前端应用业务规模足够大后，这种依赖关系又变得异常难以维护。</p>
+<p>这一时期的代表是JQuery：</p>
+<blockquote>
+<p>YUI 发布之后不久，<em>John Resig</em> 发布了 <strong>jQuery</strong>。当时年仅 23 岁的他，不会知道自己这一时兴起在 BarCamp 会议上写下的代码，将占据未来十几年的 Web 领域。</p>
+<p><strong>jQuery</strong> 使用了一种新的组织方式，它利用了 JavaScript 的 IIFE（立即执行函数表达式）和闭包的特性，将所依赖的外部变量传给一个包装了自身代码的匿名函数，在函数内部就可以使用这些依赖，最后在函数的结尾把自身暴露给 <code>window</code>。这种写法被很多后来的框架所模仿，其写法类似于：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>(<span style="color:#8be9fd;font-style:italic">function</span>(root){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#6272a4">// balabala
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>    root.jQuery <span style="color:#ff79c6">=</span> root.$ <span style="color:#ff79c6">=</span> jQuery;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>})(<span style="color:#8be9fd;font-style:italic">window</span>);
+</code></pre></div></blockquote>
+<p>综上所述，前端需要模块化，并且模块化不光要处理全局变量污染、数据保护的问题，还要很好的解决模块之间依赖关系的维护。</p>
+<p>对于JS模块化在客户端的探讨我们告一段落，下面讲的是另一回事。</p>
+<h2 id="2-commonjs和nodejs">2. CommonJS和node.js</h2>
+<h3 id="1-js在服务端运行的问题">1. JS在服务端运行的问题</h3>
+<p>早期JavaScript主要在浏览器环境中运行。</p>
+<p>由于官方规范（ECMAScript）规范化的时间较早，规范涵盖的范畴非常小。这些规范中包含词法、类型、上下文、表达式、声明（statement）、方法、对象等语言的基本要素。</p>
+<p>在实际应用中，JavaScript的表现能力取决于宿主环境中的API支持程度。在Web1.0时代，只有对DOM、BOM等基本的支持。随着Web2.0的推进，HTML5崭露头角，它将Web网页带入Web应用的时代，在浏览器中出现了更多、更强大的API供JavaScript调用，这得感谢W3C组织对HTML5规范的推进以及各大浏览器厂商对规范的支持。浏览器对JS的支持越来越强，JS在前端的表现越来越好，但是JS脱离了浏览器环境之后，能不能发挥作用？</p>
+<p>与前端情景不同的是，后端JavaScript的规范却远远落后，导致了JS作为一种后端语言时，存在以下缺点：</p>
+<ul>
+<li>
+<p>没有模块系统</p>
+</li>
+<li>
+<p>标准库较少</p>
+<p>ECMAScript仅定义了部分核心库，对于文件系统，I/O流等常见需求却没有标准的API。</p>
+<p>就HTML5的发展状况而言，W3C标准化在一定意义上是在推进这个过程，但它仅限于浏览器端。</p>
+</li>
+<li>
+<p>缺少标准接口</p>
+<p>在JavaScript中，几乎没有定义过如Web服务器或者数据库之类的标准统一接口。</p>
+</li>
+<li>
+<p>缺乏包管理系统</p>
+<p>这导致JavaScript应用中基本没有自动加载和安装依赖的能力。</p>
+</li>
+</ul>
+<p>也就是说让JS运行在服务端，还只能是一种假设，JS还不具备作为后端语言的能力。</p>
+<h3 id="2-commonjs的诞生">2. CommonJS的诞生</h3>
+<p>2009 年 1 月，Mozilla 旗下的工程师 <em>Kevin Dangoor</em>，在工作之余，与同事们一起制订了一套 JavaScript 模块化的标准规范，并取名为 <strong>ServerJS</strong>。</p>
+<p><strong>ServerJS</strong> 最早用于服务端 JavaScript，旨在给js提供运行在服务端的标准库以及为配合自动化测试等工作而提供模块导入功能。这就是CommonJS的雏形。</p>
+<p>也就是说，<strong>ServerJS</strong>很大程度上解决了JS作为服务端语言最致命的问题：</p>
+<blockquote>
+<p><strong>Current Efforts</strong></p>
+<p>his is a list of issues currently being discussed / standardized. They come from the &ldquo;Low level&rdquo; department, as we need to have a solid basics prior to building a tower.</p>
+<ol>
+<li><a href="https://wiki.mozilla.org/ServerJS/Modules">Modules</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Filesystem_API">Filesystem API</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Binary">Binary Data Objects</a> (byte arrays and/or strings)</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/IO">I/O Streams</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Encodings">Encodings and character sets</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/System">System Interface</a> (stdin, stdout, stderr, &amp;c)</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/C_API">C unified API</a> to our Target Platforms</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Unit_Testing">Unit testing</a></li>
+</ol>
+<p><strong>Future Efforts</strong></p>
+<p><strong>Low-level APIs</strong></p>
+<p>This is the collection of APIs that we&rsquo;d like to see behaving consistently across JavaScript interpreters.</p>
+<ul>
+<li><a href="https://wiki.mozilla.org/ServerJS/Runtime_Services">Language and Runtime Services</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Sockets">Socket I/O</a> (TCP/IP)</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Command_Line">Command line processing</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Logging">Logging</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/RDBMS">Relational database interface</a></li>
+<li>ResultSets (collections of data maybe from RDBMS, maybe from other sources)</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/WSGI">Web server to application interface</a> (plus middleware)</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Concurrency">Concurrency</a></li>
+<li><a href="https://wiki.mozilla.org/index.php?title=ServerJS/String_IO&amp;action=edit&amp;redlink=1">String / ByteString I/O</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Promises">Promises</a></li>
+</ul>
+<p><strong>High-level APIs</strong></p>
+<p>This is the collection of APIs that implement common functionality on top of the low-level API.</p>
+<ul>
+<li><a href="https://wiki.mozilla.org/ServerJS/HTTP_Client">HTTP client</a> APIs</li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Email">Email</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/XMPP">Jabber (XMPP)</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/i18n">Internationalization</a></li>
+<li><a href="https://wiki.mozilla.org/ServerJS/Promise_Manager">Promise Manager</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>题外话：</p>
+<p>早在 1995 年，Netsacpe（网景）公司就提供了有在服务端执行 JavaScript 能力的产品，名为 Netscape Enterprise Server。但此时服务端能做的 JavaScript 还是基于浏览器来实现的，本身没有脱离其自带的 API 范围。直到 2009 年 5 月，Node.js 诞生，赋予了其文件系统、I/O 流、网络通信等能力，才真正意义上的成为了一门服务端编程语言。</p>
+</blockquote>
+<h3 id="3-nodejs的诞生">3. Node.js的诞生</h3>
+<p>2009 年年初，<em>Ryan Dahl</em> 产生了创造一个跨平台编程框架的想法，想要基于 Google（谷歌）的 Chromium V8 引擎来实现。</p>
+<p>经过几个月紧张的开发工作，在 5 月中旬，Node.js 首个预览版本的开发工作已全部结束。同年 8 月，欧洲 JSConf 开发者大会上，<strong>Node.js</strong> 惊艳亮相。</p>
+<p>此时，Node.js 还没有一款包管理工具，外部依赖依然要手动下载到项目目录内再引用。</p>
+<p>欧洲 JSConf 大会结束后，<em>Isaac Z. Schlueter</em> 注意到了 <em>Ryan Dahl</em> 的 Node.js，两人一拍即合，决定开发一款包管理工具，也就是后来大名鼎鼎的 Node Package Manager（即 npm）。</p>
+<p>在开发包管理器之初，摆在二人面前的第一个问题就是，采用何种模块化方案？</p>
+<p>二人将目光锁定在了几个月前（2009 年 4 月）举办的美国 JSConf 大会上公布的 ServerJS。此时的 ServerJS 已经更名为 CommonJS，并重新制订了标准规范，即 Modules/1.0 ，展现了更大的野心，企图一统所有编程语言的模块化方案。</p>
+<blockquote>
+<p>Modules/1.0 标准规范包含以下内容：</p>
+<ol>
+<li>模块的标识应遵循一定的书写规则。</li>
+<li>定义全局函数 <code>require(dependency)</code>，通过传入模块标识来引入模块，执行的结果即为模块暴漏出来的 API。</li>
+<li>如果被 <code>require</code> 函数引入的模块中也包含外部依赖，则依次加载这些依赖。</li>
+<li>如果引入模块失败，那么 <code>require</code> 函数应该抛出一个异常。</li>
+<li>模块通过变量 <code>exports</code> 来向外暴露 API，<code>exports</code> 只能是一个 <code>object</code> 对象，暴漏的 API 须作为该对象的属性。</li>
+</ol>
+</blockquote>
+<p>由于这个规范简单而直接，Node.js 和 npm 很快就决定采用这种模块化的方案。至此，第一个 JavaScript 模块化方案正式登上了历史舞台。</p>
+<h3 id="4-commonjs和nodejs的关系">4. CommonJS和Node.js的关系</h3>
+<p>CommonJS对自己的定义是：</p>
+<blockquote>
+<p>Welcome to <a href="http://commonjs.org/">CommonJS</a>, a group with a goal of building up the JavaScript ecosystem for web servers, desktop and command line apps and in the browser.</p>
+<p>欢迎来到 CommonJS，该组织的目标是为 Web 服务器、桌面和命令行应用程序以及浏览器构建 JavaScript 生态系统。</p>
+</blockquote>
+<p>CommonJS作为一个不断完善JS的组织，提出了一系列的标准规范，从最早 ServerJS 时的 <em>Modules/0.1</em>，到更名为 CommonJS 后的 <em>Modules/1.0</em>，再到现在成为主流的 <em>Modules/1.1</em>。</p>
+<p>这些规范有很多具体的实现，且不只局限于 JavaScript 这一种语言，只要遵循了这一规范，都可以称之为 CommonJS。其中，Node.js 的实现叫做 Common Node Modules。</p>
+<p>最终CommonJS 虽然没有进入 ECMAScript 标准范围内，但 CommonJS 项目组的很多成员，也都是 TC39（即制订 ECMAScript 标准的委员会组织）的成员。这也为日后 ES6 引入模块化特性打下了坚实的基础。</p>
+<h3 id="5-commonjs模块规范">5. CommonJS模块规范</h3>
+<h4 id="1-引入模块">1. 引入模块</h4>
+<p>模块引用的示例代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> math <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;math&#39;</span>);
+</code></pre></div><p>在CommonJS规范中，存在 require()方法，这个方法接受模块标识符，以此引入一个模块的API到当前上下文中。</p>
+<h4 id="2-模块标识">2. 模块标识</h4>
+<p>模块标识其实就是传递给require()方法的参数，它必须是符合小驼峰命名的字符串，或者以.、..开头的相对路径、绝对路径。可以没有文件名后缀 .js 。</p>
+<p>模块的定义非常简单，接口也十分简洁。它的意义在于将类聚的方法和变量等限定在私有的作用域中，同时支持引入和导出功能以顺畅的连接上下游的依赖。每个模块都有独立的空间，它们互不打扰，在引用时也显得干净利落，如图：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/2016-08-25_57bdc8fb7dbd0.png" alt="img"></p>
+<p>CommonJS构建的这套模块导出和引入机制使得用户完全不必考虑变量污染，命名空间等方案与之相比相形见绌。</p>
+<h4 id="3-定义模块">3. 定义模块</h4>
+<p>在模块中，上下文提供require()方法来引入外部模块。对应引入的功能，上下文提供了exports 对象用于导出当前模块的方法或者变量，并且它是唯一导出的入口。在模块中，还存在一个module对象，它代表模块自身，而exports是module的属性。在Node中，一个文件就是一个模块，将方法挂载在exports对象上作为属性即可定义导出的方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//math.js
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>exports.add <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">let</span> sum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    i<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    args <span style="color:#ff79c6">=</span> arguments,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    l <span style="color:#ff79c6">=</span> args.length;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">while</span>(i<span style="color:#ff79c6">&lt;</span>l){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        sum <span style="color:#ff79c6">+=</span> args[i<span style="color:#ff79c6">++</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">return</span> sum;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>};
+</code></pre></div><p>在另一个文件中，我们通过require()方法引入模块后，就能调用定义的属性或者方法了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;use strict&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">//program.js
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> math <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;./math&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log(math.add(<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>exports.increment <span style="color:#ff79c6">=</span> (val)=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  <span style="color:#ff79c6">return</span> math.add(val, <span style="color:#bd93f9">1</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>};
+</code></pre></div><ul>
+<li>CommonJS规范加载模块是同步的，也就是说，只有加载完成，才能执行后面的操作。</li>
+<li>对于基本数据类型，属于复制。即会被模块缓存。同时，在另一个模块可以对该模块输出的变量重新赋值。</li>
+<li>对于复杂数据类型，属于浅拷贝。由于两个模块引用的对象指向同一个内存空间，因此对该模块的值做修改时会影响另一个模块。</li>
+<li>当使用require命令加载某个模块时，就会运行整个模块的代码。</li>
+<li>当使用require命令加载同一个模块时，不会再执行该模块，而是取到缓存之中的值。也就是说，CommonJS模块无论加载多少次，都只会在第一次加载时运行一次，以后再加载，就返回第一次运行的结果，除非手动清除系统缓存。</li>
+<li>commonJS用同步的方式加载模块。在服务端，模块文件都存在本地磁盘，读取非常快，所以这样做不会有问题。但是在浏览器端，限于网络原因，更合理的方案是使用异步加载。</li>
+</ul>
+<h3 id="6--commonjs的局限">6.  CommonJS的局限</h3>
+<p>我们对 CommonJS 的规范已经非常熟悉了，<code>require</code> 命令的基本功能是，读入并执行一个 js 文件，然后返回该模块的 exports 对象，这在服务端是可行的，因为服务端加载并执行一个文件的时间消费是可以忽略的，模块的加载是运行时同步加载的，<code>require</code> 命令执行完后，文件就执行完了，并且成功拿到了模块导出的值。</p>
+<p>这种规范天生就不适用于浏览器，因为它是同步的。可想而知，浏览器端每加载一个文件，要发网络请求去取，如果网速慢，就非常耗时，浏览器就要一直等 <code>require</code> 返回，就会一直卡在那里，阻塞后面代码的执行，从而阻塞页面渲染，使得页面出现假死状态。</p>
+<p>为了解决这个问题，后面发展起来了众多的前端模块化规范，包括 CommonJS 大致有如下几种：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-daf2d469b3376d042e11c58782170e55_720w.jpg" alt="img"></p>
 <h2 id="3-amd和requirejs">3. AMD和require.js</h2>
-<p>AMD规范采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。这里介绍用require.js实现AMD规范的模块化：用<code>require.config()</code>指定引用路径等，用<code>define()</code>定义模块，用<code>require()</code>加载模块。</p>
-<p>首先我们需要引入require.js文件和一个入口文件main.js。main.js中配置<code>require.config()</code>并规定项目中用到的基础模块。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/** 网页中引入require.js及main.js **/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">&lt;</span>script src<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;js/require.js&#34;</span> data<span style="color:#ff79c6">-</span>main<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;js/main&#34;</span><span style="color:#ff79c6">&gt;&lt;</span>/script&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">/** main.js 入口文件/主模块 **/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// 首先用config()指定各模块路径和引用名
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>require.config({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  baseUrl<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;js/lib&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  paths<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#f1fa8c">&#34;jquery&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;jquery.min&#34;</span>,  <span style="color:#6272a4">//实际路径为js/lib/jquery.min.js
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    <span style="color:#f1fa8c">&#34;underscore&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;underscore.min&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">// 执行基本操作
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>require([<span style="color:#f1fa8c">&#34;jquery&#34;</span>,<span style="color:#f1fa8c">&#34;underscore&#34;</span>],<span style="color:#8be9fd;font-style:italic">function</span>($,<span style="color:#bd93f9">_</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#6272a4">// some code here
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>复制代码
-</code></pre></div><p>引用模块的时候，我们将模块名放在<code>[]</code>中作为<code>reqiure()</code>的第一参数；如果我们定义的模块本身也依赖其他模块,那就需要将它们放在<code>[]</code>中作为<code>define()</code>的第一参数。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 定义math.js模块
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>define(<span style="color:#8be9fd;font-style:italic">function</span> () {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">var</span> basicNum <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">var</span> add <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (x, y) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#ff79c6">return</span> x <span style="color:#ff79c6">+</span> y;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    };
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">return</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        add<span style="color:#ff79c6">:</span> add,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        basicNum <span style="color:#ff79c6">:</span>basicNum
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    };
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// 定义一个依赖underscore.js的模块
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>define([<span style="color:#f1fa8c">&#39;underscore&#39;</span>],<span style="color:#8be9fd;font-style:italic">function</span>(<span style="color:#bd93f9">_</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  <span style="color:#8be9fd;font-style:italic">var</span> classify <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(list){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#bd93f9">_</span>.countBy(list,<span style="color:#8be9fd;font-style:italic">function</span>(num){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      <span style="color:#ff79c6">return</span> num <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">30</span> <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;old&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;young&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    })
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  };
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  <span style="color:#ff79c6">return</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    classify <span style="color:#ff79c6">:</span>classify
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  };
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>})
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// 引用模块，将模块放在[]内
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>require([<span style="color:#f1fa8c">&#39;jquery&#39;</span>, <span style="color:#f1fa8c">&#39;math&#39;</span>],<span style="color:#8be9fd;font-style:italic">function</span>($, math){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  <span style="color:#8be9fd;font-style:italic">var</span> sum <span style="color:#ff79c6">=</span> math.add(<span style="color:#bd93f9">10</span>,<span style="color:#bd93f9">20</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  $(<span style="color:#f1fa8c">&#34;#sum&#34;</span>).html(sum);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>});
+<p>了解了CommonJS应用在浏览器端表现出来的弊端后，再来了解适合浏览器端模块化的方案，首先是AMD。</p>
+<h3 id="1-amd">1. AMD</h3>
+<p>AMD是&quot;Asynchronous Module Definition&quot;的缩写，意思就是&quot;异步模块定义&quot;。它采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。</p>
+<h3 id="2-requirejs">2. require.js</h3>
+<p>AMD和require.js的关系，就像CommonJS和Node.js的关系一样，AMD是一种实现前端模块化的标准，require.js是一个工具库，主要用于客户端的模块管理，而require.js使用的模块化规范就是AMD。</p>
+<h4 id="1-引入requirejs">1. 引入require.js</h4>
+<p>require.js的使用和其他js库的使用方法一样，直接使用<code>&lt;script&gt;</code>标签进行引入，然后就能在网页中进行模块化编程了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">data-main</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;scripts/main&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;scripts/require.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
+</code></pre></div><p>上面代码的data-main属性不可省略，用于指定主代码所在的脚本文件，在上例中为scripts子目录下的main.js文件。用户自定义的代码就放在这个main.js文件中。</p>
+<p><code>main.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 首先用config()指定各模块路径和引用名
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>require.config({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  baseUrl<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;js/lib&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  paths<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#f1fa8c">&#34;jquery&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;jquery.min&#34;</span>,  <span style="color:#6272a4">//实际路径为js/lib/jquery.min.js
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>    <span style="color:#f1fa8c">&#34;underscore&#34;</span><span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;underscore.min&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>require([<span style="color:#f1fa8c">&#34;jquery&#34;</span>,<span style="color:#f1fa8c">&#34;underscore&#34;</span>],<span style="color:#8be9fd;font-style:italic">function</span>($,<span style="color:#bd93f9">_</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#6272a4">// some code here
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>});
+</code></pre></div><h4 id="2-定义模块">2. 定义模块</h4>
+<p>define方法用于定义模块，require.js要求每个模块放在一个单独的文件里。</p>
+<p>按照是否依赖其他模块，可以分成两种情况讨论。第一种情况是定义独立模块，即所定义的模块不依赖其他模块；第二种情况是定义非独立模块，即所定义的模块依赖于其他模块。</p>
+<h5 id="1-独立模块">1. 独立模块</h5>
+<p>如果被定义的模块是一个独立模块，不需要依赖任何其他模块，可以直接用define方法生成。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    method1<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    method2<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>});
+</code></pre></div><p>上面代码生成了一个拥有method1、method2两个方法的模块。</p>
+<p>另一种等价的写法是，把对象写成一个函数，该函数的返回值就是输出的模块。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define(<span style="color:#8be9fd;font-style:italic">function</span> () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	    method1<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		method2<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {},
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>});
+</code></pre></div><p>后一种写法的自由度更高一点，可以在函数体内写一些模块初始化代码。</p>
+<p>值得指出的是，define定义的模块可以返回任何值，不限于对象。</p>
+<h5 id="2-非独立模块">2. 非独立模块</h5>
+<p>如果被定义的模块需要依赖其他模块，则define方法必须采用下面的格式。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#39;module1&#39;</span>, <span style="color:#f1fa8c">&#39;module2&#39;</span>], <span style="color:#8be9fd;font-style:italic">function</span>(m1, m2) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   ...
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>});
+</code></pre></div><p>define方法的第一个参数是一个数组，它的成员是当前模块所依赖的模块。比如，[‘module1’, ‘module2’]表示我们定义的这个新模块依赖于module1模块和module2模块，只有先加载这两个模块，新模块才能正常运行。一般情况下，module1模块和module2模块指的是，当前目录下的module1.js文件和module2.js文件，等同于写成[’./module1’, ‘./module2’]。</p>
+<p>define方法的第二个参数是一个函数，当前面数组的所有成员加载成功后，它将被调用。它的参数与数组的成员一一对应，比如function(m1, m2)就表示，这个函数的第一个参数m1对应module1模块，第二个参数m2对应module2模块。这个函数必须返回一个对象，供其他模块调用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#39;module1&#39;</span>, <span style="color:#f1fa8c">&#39;module2&#39;</span>], <span style="color:#8be9fd;font-style:italic">function</span>(m1, m2) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        method<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>            m1.methodA();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>		   m2.methodB();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>});
+</code></pre></div><p>上面代码表示新模块返回一个对象，该对象的method方法就是外部调用的接口，menthod方法内部调用了m1模块的methodA方法和m2模块的methodB方法。</p>
+<p>需要注意的是，回调函数必须返回一个对象，这个对象就是你定义的模块。</p>
+<p>如果依赖的模块很多，参数与模块一一对应的写法非常麻烦。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    [<span style="color:#f1fa8c">&#39;dep1&#39;</span>, <span style="color:#f1fa8c">&#39;dep2&#39;</span>, <span style="color:#f1fa8c">&#39;dep3&#39;</span>, <span style="color:#f1fa8c">&#39;dep4&#39;</span>, <span style="color:#f1fa8c">&#39;dep5&#39;</span>, <span style="color:#f1fa8c">&#39;dep6&#39;</span>, <span style="color:#f1fa8c">&#39;dep7&#39;</span>, <span style="color:#f1fa8c">&#39;dep8&#39;</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#8be9fd;font-style:italic">function</span>(dep1,   dep2,   dep3,   dep4,   dep5,   dep6,   dep7,   dep8){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        ...
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>);
+</code></pre></div><p>为了避免像上面代码那样繁琐的写法，RequireJS提供一种更简单的写法。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>define(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">function</span> (require) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        <span style="color:#8be9fd;font-style:italic">var</span> dep1 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep1&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>            dep2 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep2&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>            dep3 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep3&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>            dep4 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep4&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>            dep5 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep5&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>            dep6 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep6&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>            dep7 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep7&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>            dep8 <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;dep8&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>            ...
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>});
+</code></pre></div><p>下面是一个define实际运用的例子。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#39;math&#39;</span>, <span style="color:#f1fa8c">&#39;graph&#39;</span>], 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#8be9fd;font-style:italic">function</span> ( math, graph ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>		<span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>            plot<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(x, y){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>                <span style="color:#ff79c6">return</span> graph.drawPie(math.randomGrid(x,y));
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>);
+</code></pre></div><p>上面代码定义的模块依赖math和graph两个库，然后返回一个具有plot接口的对象。</p>
+<h4 id="3-引入模块">3. 引入模块</h4>
+<h5 id="1-直接调用">1. 直接调用</h5>
+<p>require方法用于调用模块。它的参数与define方法类似。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>require([<span style="color:#f1fa8c">&#39;foo&#39;</span>, <span style="color:#f1fa8c">&#39;bar&#39;</span>], <span style="color:#8be9fd;font-style:italic">function</span> ( foo, bar ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>        foo.doSomething();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>});
+</code></pre></div><p>上面方法表示加载foo和bar两个模块，当这两个模块都加载成功后，执行一个回调函数。该回调函数就用来完成具体的任务。</p>
+<p>require方法也可以用在define方法内部。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define(<span style="color:#8be9fd;font-style:italic">function</span> (require) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   <span style="color:#8be9fd;font-style:italic">var</span> otherModule <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;otherModule&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>});
+</code></pre></div><h5 id="2-动态加载">2. 动态加载</h5>
+<p>下面的例子显示了如何动态加载模块。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>define(<span style="color:#8be9fd;font-style:italic">function</span> ( require ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> isReady <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>, foobar;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    require([<span style="color:#f1fa8c">&#39;foo&#39;</span>, <span style="color:#f1fa8c">&#39;bar&#39;</span>], <span style="color:#8be9fd;font-style:italic">function</span> (foo, bar) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        isReady <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        foobar <span style="color:#ff79c6">=</span> foo() <span style="color:#ff79c6">+</span> bar();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        isReady<span style="color:#ff79c6">:</span> isReady,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        foobar<span style="color:#ff79c6">:</span> foobar
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>});
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span> 
+</code></pre></div><p>上面代码所定义的模块，内部加载了foo和bar两个模块，在没有加载完成前，isReady属性值为false，加载完成后就变成了true。因此，可以根据isReady属性的值，决定下一步的动作。</p>
+<p>下面的例子是模块的输出结果是一个promise对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#39;lib/Deferred&#39;</span>], <span style="color:#8be9fd;font-style:italic">function</span>( Deferred ){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#8be9fd;font-style:italic">var</span> defer <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Deferred(); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    require([<span style="color:#f1fa8c">&#39;lib/templates/?index.html&#39;</span>,<span style="color:#f1fa8c">&#39;lib/data/?stats&#39;</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        <span style="color:#8be9fd;font-style:italic">function</span>( template, data ){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>            defer.resolve({ template<span style="color:#ff79c6">:</span> template, data<span style="color:#ff79c6">:</span>data });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    );
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    <span style="color:#ff79c6">return</span> defer.promise();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>});
+</code></pre></div><p>上面代码的define方法返回一个promise对象，可以在该对象的then方法，指定下一步的动作。</p>
+<h5 id="3-网络请求">3. 网络请求</h5>
+<p>如果服务器端采用JSONP模式，则可以直接在require中调用，方法是指定JSONP的callback参数为define。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>require( [ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#f1fa8c">&#34;http://someapi.com/foo?callback=define&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>], <span style="color:#8be9fd;font-style:italic">function</span> (data) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(data);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>});
+</code></pre></div><h5 id="4-错误处理">4. 错误处理</h5>
+<p>require方法允许添加第三个参数，即错误处理的回调函数。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>require(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    [ <span style="color:#f1fa8c">&#34;backbone&#34;</span> ], 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#8be9fd;font-style:italic">function</span> ( Backbone ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>        <span style="color:#ff79c6">return</span> Backbone.View.extend({ <span style="color:#6272a4">/* ... */</span> });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    }, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    <span style="color:#8be9fd;font-style:italic">function</span> (err) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>		<span style="color:#6272a4">// ...
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>);
 </code></pre></div><h2 id="4-cmd和seajs">4. CMD和sea.js</h2>
 <p>require.js在申明依赖的模块时会在第一之间加载并执行模块内的代码：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#34;a&#34;</span>, <span style="color:#f1fa8c">&#34;b&#34;</span>, <span style="color:#f1fa8c">&#34;c&#34;</span>, <span style="color:#f1fa8c">&#34;d&#34;</span>, <span style="color:#f1fa8c">&#34;e&#34;</span>, <span style="color:#f1fa8c">&#34;f&#34;</span>], <span style="color:#8be9fd;font-style:italic">function</span>(a, b, c, d, e, f) { 
@@ -258,14 +655,14 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/js-%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6%E5%92%8Crest%E5%8F%82%E6%95%B0/" data-tooltip="js 扩展运算符和rest参数">
+        <a class="" href="https://tomtomyoung.top/post/js-%E9%97%AD%E5%8C%85%E8%AF%A6%E8%A7%A3/" data-tooltip="js 闭包详解">
             <i class="iconfont icon-left item-btn"></i>
             
         </a>
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/js-%E4%BD%9C%E7%94%A8%E5%9F%9F%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE/" data-tooltip="js 作用域&amp;作用域链">
+        <a class="" href="https://tomtomyoung.top/post/js-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" data-tooltip="js 数据类型与类型转换">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
