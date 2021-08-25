@@ -24,7 +24,7 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5c320ff635a8888897b2b46c380dd2e8101b05c38bc5f1ea52ee91c3f49c9712.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.36a0debf3480fac2dd891e127be102de18207af5b2ad30fa6fc3450c6de3d480.css" integrity="" type="text/css">
     
     
     <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.d5ae28a04c0ed8fe05c1dcff4e6a45bbbe67882cbf8550b45fb8d8d9dbb6f6dbf7c476b926c955a06e54d94959c1571c60ac9abdcdb386615ac5b445241be88d.js" integrity=""></script>
@@ -34,7 +34,20 @@
 </div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-    </div></div><div class="single-post container">
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 定义this</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 不断变化的this</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 全局作用域</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 函数作用域</span>
+            </li>
+            </div><div class="single-post container">
     <div class="post">
       <div class="header">
         <span class="title">js this详解</span>
@@ -42,17 +55,66 @@
         <div class="info">
           <span>📅 2021-08-25</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 0字</span>
-          <span>⏱ 0分钟</span>
+          <span>📖 567字</span>
+          <span>⏱ 2分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
-        
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this">MDN_this</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2018/06/javascript-this.html">JavaScript 的 this 原理</a></p>
+</blockquote>
+<h2 id="1-定义this">1. 定义this</h2>
+<blockquote>
+<p>与其他语言相比，函数的 <code>this</code> 关键字在 JavaScript 中的表现略有不同，此外，在<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">严格模式</a>和非严格模式之间也会有一些差别。</p>
+<p>在绝大多数情况下，函数的调用方式决定了 <code>this</code> 的值（运行时绑定）。</p>
+<p><code>this</code> 不能在执行期间被赋值，并且在每次函数被调用时 <code>this</code> 的值也可能会不同。</p>
+<p>ES5 引入了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a> 方法来设置函数的 <code>this</code> 值，而不用考虑函数如何被调用的。</p>
+<p>ES2015 引入了<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions">箭头函数</a>，箭头函数不提供自身的 this 绑定（<code>this</code> 的值将保持为闭合词法上下文的值）。</p>
+</blockquote>
+<h2 id="2-不断变化的this">2. 不断变化的this</h2>
+<h3 id="1-全局作用域">1. 全局作用域</h3>
+<p>无论是否在严格模式下，在全局执行环境中（在任何函数体外部）<code>this</code> 都指向全局对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 在浏览器中, window 对象同时也是全局对象：
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>console.log(<span style="color:#ff79c6">this</span> <span style="color:#ff79c6">===</span> <span style="color:#8be9fd;font-style:italic">window</span>); <span style="color:#6272a4">// true
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">37</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>console.log(<span style="color:#8be9fd;font-style:italic">window</span>.a); <span style="color:#6272a4">// 37
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#ff79c6">this</span>.b <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;MDN&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>console.log(<span style="color:#8be9fd;font-style:italic">window</span>.b)  <span style="color:#6272a4">// &#34;MDN&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4"></span>console.log(b)         <span style="color:#6272a4">// &#34;MDN&#34;
+</span></code></pre></div><blockquote>
+<p>可以使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/globalThis"><code>globalThis</code></a> 获取全局对象，无论你的代码是否在当前上下文运行。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>globalThis
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>Window {<span style="color:#bd93f9">0</span><span style="color:#ff79c6">:</span> global, <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> Window, <span style="color:#8be9fd;font-style:italic">window</span><span style="color:#ff79c6">:</span> Window, self<span style="color:#ff79c6">:</span> Window, <span style="color:#8be9fd;font-style:italic">document</span><span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">document</span>, name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;&#34;</span>, location<span style="color:#ff79c6">:</span> Location, …}
+</code></pre></div></blockquote>
+<h3 id="2-函数作用域">2. 函数作用域</h3>
+<p>在函数内部，<code>this</code>的值取决于函数被调用的方式。</p>
+<p>非严格模式下，下面代码中<code>f1()</code>在全局中被调用，没有某个对象对象调用<code>f1()</code>，所以 <code>this</code> 的值默认指向全局对象，浏览器中就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window"><code>window</code></a>。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> f1(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">//在浏览器中
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>f1() <span style="color:#ff79c6">===</span> <span style="color:#8be9fd;font-style:italic">window</span>;   <span style="color:#6272a4">//在浏览器中，全局对象是window
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">//在Node中
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>f1() <span style="color:#ff79c6">===</span> globalThis;
+</code></pre></div><p>然而，在严格模式下，如果进入执行环境时没有设置 <code>this</code> 的值，<code>this</code> 会保持为 <code>undefined</code>，如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> f2(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#f1fa8c">&#34;use strict&#34;</span>; <span style="color:#6272a4">// 这里是严格模式
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>f2() <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// true
+</span></code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
-        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a><a class="tag" href="https://tomtomyoung.top/%20tags/this/">this</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a><a class="tag" href="https://tomtomyoung.top/%20tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/">作用域</a></span>
       </div>
     </div>
 
@@ -103,4 +165,4 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.1b665f70a497a869df80b2039e3083c8bca8dff6c828a14dcc1b32660058bc7fca26a5d58b4176881a9ddc02aa25bb91c3981986876ea9e67301dd0408cfb0df.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.e0c465f3bff28ca7174df49a60895f8cc6db6c1c8a1811626d1f4b10daf123666e1eefa7ebc5e5f8ffb9e3056411ec5cb066e24e93233cb014bc93056ce5b82b.js" integrity=""></script></html>
