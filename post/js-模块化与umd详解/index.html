@@ -24,10 +24,10 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.1520101377cacf62c1d38b9af640dbeb10096f8d879abe1884610df70facd032.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d9d72f111be831e146643b2212d85cfc9b719ab54ee40822f291e945c782baf1.css" integrity="" type="text/css">
     
     
-    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.f53d04245c5bb600631905bbd7dee25cf0cedd8c643ef5c62c2847820d449b1ade25e510cfb5ef2c7f35db1a0bc968ec0312369cc2ba037dbe367c8f7734a5ce.js" integrity=""></script>
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.d5ae28a04c0ed8fe05c1dcff4e6a45bbbe67882cbf8550b45fb8d8d9dbb6f6dbf7c476b926c955a06e54d94959c1571c60ac9abdcdb386615ac5b445241be88d.js" integrity=""></script>
 </head><body class="animated fadeInDown">
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -129,7 +129,20 @@
                         </ul><li>
                     <span class="toc-link">4. CMD和sea.js</span>
                 </li>
+                
+                        <ul class="toc-h3"><li>
+                    <span class="toc-link">1. CMD</span>
+                </li>
                 <li>
+                    <span class="toc-link">2. sea.js</span>
+                </li>
+                
+                        <ul class="toc-h4"><li>
+                    <span class="toc-link">1. 定义模块</span>
+                </li>
+                
+                        </ul>
+                        </ul><li>
                     <span class="toc-link">5. ES6 Module</span>
                 </li>
                 </div><div class="single-post container">
@@ -140,8 +153,8 @@
         <div class="info">
           <span>📅 2021-08-24</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 8014字</span>
-          <span>⏱ 16分钟</span>
+          <span>📖 9311字</span>
+          <span>⏱ 19分钟</span>
         </div>
         
       </div>
@@ -160,6 +173,8 @@
 <p><a href="https://javascript.ruanyifeng.com/tool/requirejs.html">RequireJS和AMD规范</a></p>
 <p><a href="https://requirejs.org/docs/whyamd.html">requirejs_why amd</a></p>
 <p><a href="https://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">Javascript模块化编程（二）：AMD规范</a></p>
+<p><a href="https://github.com/cmdjs/specification/blob/master/draft/module.md">Common Module Definition / draft</a></p>
+<p><a href="https://seajs.github.io/seajs/docs/">sea.js_docs</a></p>
 </blockquote>
 <h2 id="1-模块化源起">1. 模块化源起</h2>
 <p>在本站另一篇博客：《js webpack简介》的第一个章节：为什么使用webpack中，我们介绍了js代码编写的不同阶段。这里更详细的说明一下。</p>
@@ -420,6 +435,7 @@
 <p>AMD是&quot;Asynchronous Module Definition&quot;的缩写，意思就是&quot;异步模块定义&quot;。它采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。</p>
 <h3 id="2-requirejs">2. require.js</h3>
 <p>AMD和require.js的关系，就像CommonJS和Node.js的关系一样，AMD是一种实现前端模块化的标准，require.js是一个工具库，主要用于客户端的模块管理，而require.js使用的模块化规范就是AMD。</p>
+<p>和CommonJS和Node.js不同的是，并不是现有AMD再有require.js，而是在开发require.js的过程中，逐步形成了AMD规范。</p>
 <h4 id="1-引入requirejs">1. 引入require.js</h4>
 <p>require.js的使用和其他js库的使用方法一样，直接使用<code>&lt;script&gt;</code>标签进行引入，然后就能在网页中进行模块化编程了。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">data-main</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;scripts/main&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;scripts/require.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
@@ -506,6 +522,10 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>    };
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>);
 </code></pre></div><p>上面代码定义的模块依赖math和graph两个库，然后返回一个具有plot接口的对象。</p>
+<blockquote>
+<p>非独立的模块的定义体现了：</p>
+<p>AMD的理念是依赖前置，也就是在定义模块时，要提前声明其依赖的其他模块。</p>
+</blockquote>
 <h4 id="3-引入模块">3. 引入模块</h4>
 <h5 id="1-直接调用">1. 直接调用</h5>
 <p>require方法用于调用模块。它的参数与define方法类似。</p>
@@ -564,14 +584,27 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4"></span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>);
 </code></pre></div><h2 id="4-cmd和seajs">4. CMD和sea.js</h2>
-<p>require.js在申明依赖的模块时会在第一之间加载并执行模块内的代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define([<span style="color:#f1fa8c">&#34;a&#34;</span>, <span style="color:#f1fa8c">&#34;b&#34;</span>, <span style="color:#f1fa8c">&#34;c&#34;</span>, <span style="color:#f1fa8c">&#34;d&#34;</span>, <span style="color:#f1fa8c">&#34;e&#34;</span>, <span style="color:#f1fa8c">&#34;f&#34;</span>], <span style="color:#8be9fd;font-style:italic">function</span>(a, b, c, d, e, f) { 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#6272a4">// 等于在最前面声明并初始化了要用到的所有模块
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">false</span>) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>      <span style="color:#6272a4">// 即便没用到某个模块 b，但 b 还是提前执行了
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>      b.foo()
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    } 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>});
+<h3 id="1-cmd">1. CMD</h3>
+<p>CMD的全称是“Common Module Definition”， 这里也出现了Common这个单词，那么CMD是不是和CommonJS有点关系呢，答案是确实有关系。</p>
+<p>很多博客中都介绍CMD和CommonJS是一个东西，其实并不是，但是两者确实有千丝万缕的关系。</p>
+<p>这里涉及到一个人：蚂蚁金服的玉伯，他是CMD和sea.js的缔造者，同时他还有一个厉害的产品就是Ant Design。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/8de420a889a8441f9e53dc571a782f24.png" alt="mceclip1_20200509104332_PT8K.png"></p>
+<p>在设计sea.js的过程中，肯定是借鉴了</p>
+<h3 id="2-seajs">2. sea.js</h3>
+<p>sea.js就是基于CMD规范开发的JS库：</p>
+<blockquote>
+<p>Sea.js 追求简单、自然的代码书写和组织方式，具有以下核心特性：</p>
+<ul>
+<li>简单友好的模块定义规范：Sea.js 遵循 CMD规范，可以像 Node.js一般书写模块代码。</li>
+<li>自然直观的代码组织方式：依赖的自动加载、配置的简洁清晰，可以让我们更多地享受编码的乐趣。</li>
+</ul>
+<p>Sea.js 还提供常用插件，非常有助于开发调试和性能优化，并具有丰富的可扩展接口。</p>
+</blockquote>
+<p>sea.js是CMD规范的实现，但是sea.js和CMD是同时被提出的，而不是先有规范再有技术实践，换一种说法就是CMD规范是在开发sea.js的过程中形成的。</p>
+<h4 id="1-定义模块">1. 定义模块</h4>
+<p>在 Sea.js 中，所有 JavaScript 模块都遵循 CMD（<a href="https://github.com/cmdjs/specification/blob/master/draft/module.md">Common Module Definition</a>） 模块定义规范。该规范明确了模块的基本书写格式和基本交互规则。</p>
+<p>在 CMD 规范中，一个模块就是一个文件。代码的书写格式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>define(factory);
 </code></pre></div><p>CMD是另一种js模块化方案，它与AMD很类似，不同点在于：AMD 推崇依赖前置、提前执行，CMD推崇依赖就近、延迟执行。此规范其实是在sea.js推广过程中产生的。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/** AMD写法 **/</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>define([<span style="color:#f1fa8c">&#34;a&#34;</span>, <span style="color:#f1fa8c">&#34;b&#34;</span>, <span style="color:#f1fa8c">&#34;c&#34;</span>, <span style="color:#f1fa8c">&#34;d&#34;</span>, <span style="color:#f1fa8c">&#34;e&#34;</span>, <span style="color:#f1fa8c">&#34;f&#34;</span>], <span style="color:#8be9fd;font-style:italic">function</span>(a, b, c, d, e, f) { 
@@ -630,6 +663,14 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    ele.textContent <span style="color:#ff79c6">=</span> math.add(<span style="color:#bd93f9">99</span> <span style="color:#ff79c6">+</span> math.basicNum);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>ES6的模块不是对象，<code>import</code>命令会被 JavaScript 引擎静态分析，在编译时就引入模块代码，而不是在代码运行时加载，所以无法实现条件加载。也正因为这个，使得静态分析成为可能。</p>
+<p>最后的最后，附一段玉伯的访谈对话：</p>
+<blockquote>
+<p>我从开始做前端到现在已经有13年。一直以来，我觉得自己做技术时，追求的就是保持简单，追求技术的简单性，也追求做技术时心态的简单性。</p>
+<p>在很多圈，包括技术圈，都有鄙视链的存在，比如说做Java的可能看不起做前端的，做前端的可能看不起做测试的，做产品的可能看不起做技术的，做运营的觉得产品都是为业务打工的。在这个鄙视链里，很多岗位的同学或多或少都会有职业上的困惑。</p>
+<p>我知道很多前端同学，都会问自己一个问题，前端职业发展的天花板在什么地方？我究竟应该做几年前端？临近 35 岁要不要转型？很多同学都会有疑惑。但在这几年的工作经历里，我觉得其实每个岗位都很重要。我印象中逍遥子说过一句话，他说在公司里面，如果一个岗位不重要的话，其实早就取消了。每一位前端同学，每一位技术岗位的同学，职业上的困惑往往源自心态，要想在某个领域做到好，心态一定要保持简单，这一点很关键。</p>
+<p>我经历过从前端转Java，在做前端之前我是写C++的。在转行过程中，我会问自己一个问题，究竟什么样的工作能让自己进入心流状态，能够让自己开心、有成就感、有价值感。然后我会发现在做前端写界面时，在做人机交互实现时，自己会没日没夜地去写代码，最终调试产出后很有喜悦感。只要一个岗位能够带给自己这种心流和喜悦感，那这个岗位对自己来说，就是很重要的。其实没必要去做很多横向比较。</p>
+<p>比如说现在AI很火，算法很火，是不是我们都要去转型做人工智能？如果AI这一块确实能让你感觉到心流状态，能持续兴奋，去做就好。但如果只是为了去趁一个热点，那千万别去做。每一个岗位都很重要，不必去做比较。踢足球跟打篮球谁更重要？并不存在这种比较，每个人都很重要。这是我想分享的第一个点。</p>
+</blockquote>
 
       </div>
       <div class="footer">
@@ -685,4 +726,4 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.0c5396a4b7ade19eecd196822dac557e7f88651945a9250e2637e3599bf75311bd492e4c47a193db31a5f8c81066690739fb5503f502ac2142d52e4e477aa08f.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.d686a5cc2a8b2377d083d78699ae75daf7dc2d416aa5e24b95039551b91280dde25c91adebd0bd57c97c68e734a57a01b86fb8c951f640dd25400437de468146.js" integrity=""></script></html>
