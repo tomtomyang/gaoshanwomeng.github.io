@@ -251,7 +251,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">var</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>);
 </code></pre></div><p>这里我们可以知道，通过<code>new</code>关键字，我们将<code>p1</code>挂载到了<code>Person.prototype</code>上，形成了这样一个结构：</p>
-<p><img src="D:/Pictures/20210901125031.jpg" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210901125031.jpg" alt=""></p>
 <p>此时，我们希望再定义一个类（也就是构造函数的原型对象），具备<code>Person</code>所构造出来的<code>p1</code>的全部属性和方法，除此之外还可以拓展，那么根据原型链的知识，结合上面的链图，我们很容易想到，将新的构造函数原型，连接到<code>p1</code>后面：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 子类
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student() {
@@ -264,7 +264,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// console output
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// 小明 20 ƒ () { } ƒ () { }
 </span></code></pre></div><p>上面的链图变成了这样的结构：</p>
-<p><img src="D:/Pictures/20210901125104.jpg" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210901125104.jpg" alt=""></p>
 <p>那么如果我们想给子类添加以下新的属性和方法，怎么做？</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 子类
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(grade) {
@@ -360,7 +360,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">//     this.grade = grade;
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// }
 </span></code></pre></div><p>说明<code>s1</code>的原型链是这样的：</p>
-<p><img src="D:/Pictures/20210901135255.jpg" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210901135255.jpg" alt=""></p>
 <p><code>s1</code>还在她原本的链上，并没有通过原型链获取<code>Person</code>以及<code>Person.prototype</code>的属性及方法，只是通过<code>Person</code>函数将这些属性添加到自己内部。</p>
 <p>这也很好的解释了我们打印输出<code>s1.sleep</code>结果为<code>undefined</code>，因为<code>sleep</code>存在于<code>Person.prototype</code>上，<code>s1</code>通过原型链查找，找不到。</p>
 <h4 id="2-优点-1">2. 优点</h4>
@@ -492,7 +492,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4">//     this.play = function () { }
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span style="color:#6272a4">// }
 </span></code></pre></div><p>这里和上面的组合继承不同，改变了原型链的结构，变成了如下图所示：</p>
-<p><img src="D:/Pictures/20210901143322.jpg" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210901143322.jpg" alt=""></p>
 <p>通过图片可以看到，<code>s1</code>和<code>p1</code>变成了并列的关系，两者之间不再有关系了，但是又出现了一个新的问题，就是我们打印输出<code>s1.constructor</code>和<code>p1.constructor</code>，都是<code>Person</code>，没有办法区分了。</p>
 <h4 id="2-优点-3">2. 优点</h4>
 <ul>
@@ -527,7 +527,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>console.log(s2);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
 </code></pre></div><p>原型链如图所示：</p>
-<p><img src="D:/Pictures/20210901145306.jpg" alt=""></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210901145306.jpg" alt=""></p>
 <h4 id="2-缺点">2. 缺点</h4>
 <ul>
 <li>丢失了子类的构造函数</li>
@@ -587,7 +587,7 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/js-new%E8%AF%A6%E8%A7%A3/" data-tooltip="js new详解">
+        <a class="" href="https://tomtomyoung.top/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%9B%9E%E6%B5%81%E4%B8%8E%E9%87%8D%E7%BB%98%E8%AF%A6%E8%A7%A3/" data-tooltip="浏览器 回流与重绘详解">
             <i class="iconfont icon-left item-btn"></i>
             
         </a>
