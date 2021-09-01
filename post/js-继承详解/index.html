@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js 继承详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" js 继承详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [继承] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/js-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 为什么是原型式继承</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. js诞生</span>
+            </li>
+            <li>
+                <span class="toc-link">2. js的继承机制</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. new</span>
+            </li>
+            <li>
+                <span class="toc-link">2. new的缺陷</span>
+            </li>
+            <li>
+                <span class="toc-link">3. prototype</span>
+            </li>
+            
+                    </ul>
+                    </ul><li>
+                <span class="toc-link">2. 实现继承的几种方式</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1 . 原型链继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. 借用构造函数继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. 组合继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">4. 原型式继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">5. 寄生式继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">6. 寄生组合式继承</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 实现方式</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">7. ES6 类与继承</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js 继承详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-01</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 5181字</span>
+          <span>⏱ 11分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Objects/Inheritance">MDN_JavaScript 中的继承</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/37735247">js继承的几种方式</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html">Javascript继承机制的设计思想</a></p>
+<p><a href="https://blog.vjeux.com/2011/javascript/how-prototypal-inheritance-really-works.html">Javascript – How Prototypal Inheritance really works</a></p>
+<p><a href="https://www.huaweicloud.com/articles/a4e74114bd901aa952606d5d1ce48a58.html">javascript 中实现继承的六种方式</a></p>
+<p><a href="https://segmentfault.com/a/1190000021306417">ES6里Class的Extends继承原理</a></p>
+</blockquote>
+<blockquote>
+<p>有些人认为JavaScript并不是真正的面向对象语言，在经典的面向对象语言中，您可能倾向于定义类对象，然后您可以简单地定义哪些类继承哪些类，JavaScript使用了另一套实现方式，继承的对象函数并不是通过复制而来，而是通过原型链继承（通常被称为 原型式继承 —— prototypal inheritance）。</p>
+</blockquote>
+<h2 id="1-为什么是原型式继承">1. 为什么是原型式继承</h2>
+<blockquote>
+<p>以下部分转载于阮一峰的网络日志：</p>
+<p><a href="https://www.ruanyifeng.com/blog/2011/06/designing_ideas_of_inheritance_mechanism_in_javascript.html">Javascript继承机制的设计思想</a></p>
+</blockquote>
+<h3 id="1-js诞生">1. js诞生</h3>
+<p>要理解Javascript的设计思想，必须从它的诞生说起。</p>
+<p>1994年，网景公司（Netscape）发布了Navigator浏览器0.9版。这是历史上第一个比较成熟的网络浏览器，轰动一时。但是，这个版本的浏览器只能用来浏览，不具备与访问者互动的能力。</p>
+<p>比如，如果网页上有一栏&quot;用户名&quot;要求填写，浏览器就无法判断访问者是否真的填写了，只有让服务器端判断。如果没有填写，服务器端就返回错误，要求用户重新填写，这太浪费时间和服务器资源了。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2011060502.png" alt="img"></p>
+<p>因此，网景公司急需一种网页脚本语言，使得浏览器可以与网页互动。</p>
+<p>工程师 <a href="https://brendaneich.com/">Brendan Eich</a> 负责开发这种新语言。他觉得，没必要设计得很复杂，这种语言只要能够完成一些简单操作就够了，比如判断用户有没有填写表单。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2011060503.jpg" alt="img"></p>
+<p>1994年正是面向对象编程（object-oriented programming）最兴盛的时期，C++是当时最流行的语言，而Java语言的1.0版即将于第二年推出，Sun公司正在大肆造势。</p>
+<p>Brendan Eich无疑受到了影响，Javascript里面所有的数据类型都是对象（object），这一点与Java非常相似。但是，他随即就遇到了一个难题，到底要不要设计&quot;继承&quot;机制呢？</p>
+<h3 id="2-js的继承机制">2. js的继承机制</h3>
+<p>如果真的是一种简易的脚本语言，其实不需要有&quot;继承&quot;机制。但是，Javascript里面都是对象，必须有一种机制，将所有对象联系起来。所以，Brendan Eich最后还是设计了&quot;继承&rdquo;。</p>
+<h4 id="1-new">1. new</h4>
+<p>但是，他不打算引入&quot;类&rdquo;（class）的概念，因为一旦有了&quot;类&rdquo;，Javascript就是一种完整的面向对象编程语言了，这好像有点太正式了，而且增加了初学者的入门难度。</p>
+<p>他考虑到，C++和Java语言都使用new命令，生成实例。</p>
+<p>C++的写法是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>ClassName <span style="color:#ff79c6">*</span>object <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> ClassName(param);
+</code></pre></div><p>Java的写法是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>Foo foo <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Foo<span style="color:#ff79c6">();</span>
+</code></pre></div><p>因此，他就把new命令引入了Javascript，用来从原型对象生成一个实例对象。</p>
+<p>但是，Javascript没有&quot;类&rdquo;，怎么来表示原型对象呢？这时，他想到C++和Java使用new命令时，都会调用&quot;类&quot;的构造函数（constructor）。</p>
+<p>他就做了一个简化的设计，在Javascript语言中，new命令后面跟的不是类，而是构造函数。</p>
+<p>举例来说，现在有一个叫做DOG的构造函数，表示狗对象的原型。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> DOG(name){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>对这个构造函数使用new，就会生成一个狗对象的实例。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> dogA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DOG(<span style="color:#f1fa8c">&#39;大毛&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>alert(dogA.name); <span style="color:#6272a4">// 大毛
+</span></code></pre></div><h4 id="2-new的缺陷">2. new的缺陷</h4>
+<p>但是new 构造函数这种写法存在缺陷，那就是无法共享属性和方法。</p>
+<p>比如，在DOG对象的构造函数中，设置一个实例对象的共有属性species。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> DOG(name){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">this</span>.species <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;犬科&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+</code></pre></div><p>然后，生成两个实例对象：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> dogA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DOG(<span style="color:#f1fa8c">&#39;大毛&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> dogB <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DOG(<span style="color:#f1fa8c">&#39;二毛&#39;</span>);　
+</code></pre></div><p>这两个对象的species属性是独立的，修改其中一个，不会影响到另一个。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>dogA.species <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;猫科&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>alert(dogB.species); 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// 显示&#34;犬科&#34;，不受dogA的影响
+</span></code></pre></div><p>每一个实例对象，都有自己的属性和方法的副本。这不仅无法做到数据共享，也是极大的资源浪费。</p>
+<h4 id="3-prototype">3. prototype</h4>
+<p>考虑到这一点，Brendan Eich决定为构造函数设置一个prototype属性。</p>
+<p>这个属性包含一个对象（以下简称&quot;prototype对象&rdquo;），所有实例对象需要共享的属性和方法，都放在这个对象里面；那些不需要共享的属性和方法，就放在构造函数里面。</p>
+<p>实例对象一旦创建，将自动引用prototype对象的属性和方法。也就是说，实例对象的属性和方法，分成两种，一种是本地的，另一种是引用的。</p>
+<p>还是以DOG构造函数为例，现在用prototype属性进行改写：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> DOG(name){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>DOG.prototype <span style="color:#ff79c6">=</span> { species <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;犬科&#39;</span> };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#8be9fd;font-style:italic">var</span> dogA <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DOG(<span style="color:#f1fa8c">&#39;大毛&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">var</span> dogB <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> DOG(<span style="color:#f1fa8c">&#39;二毛&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>alert(dogA.species); <span style="color:#6272a4">// 犬科
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>alert(dogB.species); <span style="color:#6272a4">// 犬科
+</span></code></pre></div><p>现在，species属性放在prototype对象里，是两个实例对象共享的。只要修改了prototype对象，就会同时影响到两个实例对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>DOG.prototype.species <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;猫科&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>alert(dogA.species); <span style="color:#6272a4">// 猫科
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>alert(dogB.species); <span style="color:#6272a4">// 猫科
+</span></code></pre></div><p>由于所有的实例对象共享同一个prototype对象，那么从外界看起来，prototype对象就好像是实例对象的原型，而实例对象则好像&quot;继承&quot;了prototype对象一样。</p>
+<h2 id="2-实现继承的几种方式">2. 实现继承的几种方式</h2>
+<p>首先要明确一件事，就是继承是两个类之间的继承，js中没有类的概念，所以应该是两个构造函数原型之间的继承。</p>
+<h3 id="1--原型链继承">1 . 原型链继承</h3>
+<p>这种方式关键在于：子类型的原型为父类型的一个实例对象。</p>
+<h4 id="1-实现方式">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// 实例对象上会有name age属性，play方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>   <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>   <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 原型对象上会有方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">var</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>);
+</code></pre></div><p>这里我们可以知道，通过<code>new</code>关键字，我们将<code>p1</code>挂载到了<code>Person.prototype</code>上，形成了这样一个结构：</p>
+<p><img src="D:/Pictures/20210901125031.jpg" alt=""></p>
+<p>此时，我们希望再定义一个类（也就是构造函数的原型对象），具备<code>Person</code>所构造出来的<code>p1</code>的全部属性和方法，除此之外还可以拓展，那么根据原型链的知识，结合上面的链图，我们很容易想到，将新的构造函数原型，连接到<code>p1</code>后面：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">// 将子类的构造函数原型连接到p1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>Student.prototype <span style="color:#ff79c6">=</span> p1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>console.log(s1.name, s1.age, s1.play, s1.sleep);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// 小明 20 ƒ () { } ƒ () { }
+</span></code></pre></div><p>上面的链图变成了这样的结构：</p>
+<p><img src="D:/Pictures/20210901125104.jpg" alt=""></p>
+<p>那么如果我们想给子类添加以下新的属性和方法，怎么做？</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(grade) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">this</span>.grade <span style="color:#ff79c6">=</span> grade;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// 将子类的构造函数原型连接到p1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4"></span>Student.prototype <span style="color:#ff79c6">=</span> p1;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>console.log(s1.grade, s1.name, s1.age, s1.play, s1.sleep);
+</code></pre></div><p>现在还有一个问题就是，我们打印输出<code>s1.constructor</code>时，根据原型链，会找到<code>Person.prototype.constructor</code>，打印输出<code>Person</code>，这是不正确的。</p>
+<p>在<code>Student.prototype = new Person()</code>时，<code>new Person()</code>返回的对象中并没有<code>constructor</code>属性，所以才一直向下查找，我们需要给他添加一个<code>constructor</code>。</p>
+<p>再规范一下代码，原型链继承的最终代码类似这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// 实例对象上会有name age属性，play方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>   <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>   <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 原型对象上会有方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">// 将子类的构造函数原型连接到p1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>Student.prototype <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>Student.prototype.constructor <span style="color:#ff79c6">=</span> Student;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student()
+</code></pre></div><h4 id="2-优点">2. 优点</h4>
+<ul>
+<li>父类新增原型方法/原型属性，子类都能访问到</li>
+<li>简单，易于实现</li>
+</ul>
+<h4 id="3-缺点">3. 缺点</h4>
+<ul>
+<li>无法实现多继承</li>
+<li>来自原型对象的所有属性被所有实例共享</li>
+<li>创建子类实例时，无法向父类构造函数传参</li>
+</ul>
+<h3 id="2-借用构造函数继承">2. 借用构造函数继承</h3>
+<p>为了解决上面的缺点，主要是多继承，和传参问题，又提出了一种借用构造函数的继承方式，就是在子类构造函数中，调用父类构造函数。</p>
+<h4 id="1-实现方式-1">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// 实例对象上会有name age属性，play方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>   <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>   <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 原型对象上会有方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#8be9fd;font-style:italic">var</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(name, age, grade) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#6272a4">// 调用Person对this进行构造
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    Person.call(<span style="color:#ff79c6">this</span>, name, age);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">this</span>.grade <span style="color:#ff79c6">=</span> grade;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>console.log(s1.name, s1.age, s1. grade, s1.play, s1.sleep);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// 小明 20 2 ƒ () { } undefined
+</span></code></pre></div><p>这里需要解释一下<code>Person.call(this, name, age);</code>，这一句只是调用了<code>Person</code>，并修改了this的指向，使用<code>Person</code>对this进行构造，添加了<code>name</code>、<code>age</code>、<code>play</code>属性及方法。</p>
+<p>这些属性都添加到了<code>s1</code>内部，而不是通过原型链进行查找的，我们可以对<code>s1</code>进行分析：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>console.log(Student.prototype);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">// {constructor: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">//     constructor: ƒ Student(name, age, grade)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">//     [[Prototype]]: Object
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>console.log(Student.prototype.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// ƒ Student(name, age, grade) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">//     Person.call(this, name, age);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">//     this.grade = grade;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>console.log(s1.__proto__, s1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4">// {constructor: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4">//     constructor: ƒ Student(name, age, grade)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4">//     [[Prototype]]: Object
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">// ƒ Student(name, age, grade) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">//     Person.call(this, name, age);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">//     this.grade = grade;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// }
+</span></code></pre></div><p>说明<code>s1</code>的原型链是这样的：</p>
+<p><img src="D:/Pictures/20210901135255.jpg" alt=""></p>
+<p><code>s1</code>还在她原本的链上，并没有通过原型链获取<code>Person</code>以及<code>Person.prototype</code>的属性及方法，只是通过<code>Person</code>函数将这些属性添加到自己内部。</p>
+<p>这也很好的解释了我们打印输出<code>s1.sleep</code>结果为<code>undefined</code>，因为<code>sleep</code>存在于<code>Person.prototype</code>上，<code>s1</code>通过原型链查找，找不到。</p>
+<h4 id="2-优点-1">2. 优点</h4>
+<ul>
+<li>创建子类实例时，可以向父类传递参数</li>
+<li>可以实现多继承(call多个父类对象)</li>
+</ul>
+<h4 id="3-缺点-1">3. 缺点</h4>
+<ul>
+<li>只能继承父类的实例属性和方法，不能继承父类原型属性和方法</li>
+<li>无法实现函数复用，每个子类都有父类实例函数的副本，影响性能</li>
+<li>违反了js原型继承的原则</li>
+</ul>
+<h3 id="3-组合继承">3. 组合继承</h3>
+<p>综合原型链和借用构造函数两种方式的优点，人们又研究出了组合继承。</p>
+<p>通过调用父类构造函数，继承父类的属性并保留传参的优点，然后通过将父类实例作为子类原型，实现函数复用。</p>
+<h4 id="1-实现方式-2">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(name, age, grade) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    Person.call(<span style="color:#ff79c6">this</span>, name, age);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">this</span>.garde <span style="color:#ff79c6">=</span> grade;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>Student.prototype <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>Student.prototype.constructor <span style="color:#ff79c6">=</span> Student;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#8be9fd;font-style:italic">var</span> s2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小刚&#39;</span>, <span style="color:#bd93f9">22</span>, <span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#8be9fd;font-style:italic">var</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;人&#39;</span>, <span style="color:#bd93f9">40</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>console.log(s1, s2);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">// Student {name: &#34;小明&#34;, age: 20, garde: 1, play: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">//    age: 20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">//    garde: 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">//    name: &#34;小明&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4">//    play: ƒ ()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4">//    [[Prototype]]: Person
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4">// Student {name: &#34;小刚&#34;, age: 22, garde: 2, play: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4">//    age: 22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4">//    garde: 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4">//    name: &#34;小刚&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4">//    play: ƒ ()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4">//    [[Prototype]]: Person
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>console.log(s1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#6272a4">// ƒ Student(name, age, grade) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#6272a4">//     Person.call(this, name, age);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4">//     this.garde = grade;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4"></span>console.log(p1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4">// ƒ Person(name, age) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#6272a4">//     this.name = name;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4">//     this.age = age;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#6272a4">//     this.play = function () { }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4">// }
+</span></code></pre></div><p>这样看起来好多了，有了继承的样子，该有的功能都有了。</p>
+<p>这种方式融合原型链继承和构造函数的优点，是 JavaScript 中最常用的继承模式。</p>
+<p>不过也存在缺点：就是无论在什么情况下，都会调用两次构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数的内部，子类型最终会包含父类型对象的全部实例属性。</p>
+<h4 id="2-优点-2">2. 优点</h4>
+<ul>
+<li>可以继承实例属性/方法，也可以继承原型属性/方法</li>
+<li>不存在引用属性共享问题</li>
+<li>可传参</li>
+</ul>
+<h4 id="3-缺点-2">3. 缺点</h4>
+<ul>
+<li>调用了两次父类构造函数，同样的属性存在于子类实例和父类实例中。</li>
+</ul>
+<h3 id="4-原型式继承">4. 原型式继承</h3>
+<p>原型式继承是对组合继承的一种改进，解决调用了两次父类构造函数的问题。</p>
+<h4 id="1-实现方式-3">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(name, age, grade) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    Person.call(<span style="color:#ff79c6">this</span>, name, age);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">this</span>.garde <span style="color:#ff79c6">=</span> grade;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">// 原型式继承关键点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>Student.prototype <span style="color:#ff79c6">=</span> Person.prototype;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">1</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#8be9fd;font-style:italic">var</span> s2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小刚&#39;</span>, <span style="color:#bd93f9">22</span>, <span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#8be9fd;font-style:italic">var</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;人&#39;</span>, <span style="color:#bd93f9">40</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>console.log(s1, s2);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">// Student {name: &#34;小明&#34;, age: 20, garde: 1, play: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">//    age: 20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">//    garde: 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">//    name: &#34;小明&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4">//    play: ƒ ()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4">//    [[Prototype]]: Object
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4">// Student {name: &#34;小刚&#34;, age: 22, garde: 2, play: ƒ}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#6272a4">// {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4">//    age: 22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4">//    garde: 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4">//    name: &#34;小刚&#34;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4">//    play: ƒ ()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4">//    [[Prototype]]: Object
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>console.log(s1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#6272a4">// ƒ Person(name, age) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#6272a4">//     this.name = name;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4">//     this.age = age;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#6272a4">//     this.play = function () { }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4">// }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4"></span>console.log(p1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#6272a4">// ƒ Person(name, age) {
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4">//     this.name = name;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#6272a4">//     this.age = age;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4">//     this.play = function () { }
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span style="color:#6272a4">// }
+</span></code></pre></div><p>这里和上面的组合继承不同，改变了原型链的结构，变成了如下图所示：</p>
+<p><img src="D:/Pictures/20210901143322.jpg" alt=""></p>
+<p>通过图片可以看到，<code>s1</code>和<code>p1</code>变成了并列的关系，两者之间不再有关系了，但是又出现了一个新的问题，就是我们打印输出<code>s1.constructor</code>和<code>p1.constructor</code>，都是<code>Person</code>，没有办法区分了。</p>
+<h4 id="2-优点-3">2. 优点</h4>
+<ul>
+<li>不会初始化两次实例方法/属性，避免的组合继承的缺点</li>
+</ul>
+<h4 id="3-缺点-3">3. 缺点</h4>
+<ul>
+<li>没办法辨别是实例是子类还是父类创造的，子类和父类的构造函数指向是同一个</li>
+</ul>
+<h3 id="5-寄生式继承">5. 寄生式继承</h3>
+<p>寄生式继承主要是利用了<code>Object.create()</code>，创建一个原型是<code>Person.prototype</code>的对象。</p>
+<h4 id="1-实现方式-4">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 子类不通过构造函数生成
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> createStudent(person){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#8be9fd;font-style:italic">var</span> student <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create(person);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    student.learn <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>() { };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#ff79c6">return</span> student;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> createStudent(<span style="color:#ff79c6">new</span> Person);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#8be9fd;font-style:italic">var</span> s2 <span style="color:#ff79c6">=</span> createStudent(<span style="color:#ff79c6">new</span> Person);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>console.log(s1);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>console.log(s2);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+</code></pre></div><p>原型链如图所示：</p>
+<p><img src="D:/Pictures/20210901145306.jpg" alt=""></p>
+<h4 id="2-缺点">2. 缺点</h4>
+<ul>
+<li>丢失了子类的构造函数</li>
+</ul>
+<h3 id="6-寄生组合式继承">6. 寄生组合式继承</h3>
+<p>最完善最完美的方式。</p>
+<h4 id="1-实现方式-5">1. 实现方式</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 父类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Person(name, age) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">this</span>.play <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>Person.prototype.sleep <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () { }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">// 子类
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Student(name, age, grade) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    Person.call(<span style="color:#ff79c6">this</span>, name, age);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">this</span>.garde <span style="color:#ff79c6">=</span> grade;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">// 创造一个以person.prototype为原型的对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>Student.prototype <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create(Person.prototype)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">// 添加constructor
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>Student.prototype.constructor <span style="color:#ff79c6">=</span> Student;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#8be9fd;font-style:italic">var</span> s1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Student(<span style="color:#f1fa8c">&#39;小明&#39;</span>, <span style="color:#bd93f9">20</span>, <span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>console.log(s1.constructor);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">// console output
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">// Student
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4"></span>console.log(s1);
+</code></pre></div><h3 id="7-es6-类与继承">7. ES6 类与继承</h3>
+<p>实际上使用的就是寄生组合式继承。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a><a class="tag" href="https://tomtomyoung.top/%20tags/%E5%8E%9F%E5%9E%8B%E9%93%BE/">原型链</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-new%E8%AF%A6%E8%A7%A3/" data-tooltip="js new详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-object%E4%B8%8Efunction%E8%AF%A6%E8%A7%A3/" data-tooltip="js Object与Function详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>

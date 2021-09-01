@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  js Object与Function详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" js Object与Function详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [Object] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/js-object%E4%B8%8Efunction%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. Object</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 属性</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 方法</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. create()</span>
+            </li>
+            
+                    </ul>
+                    </ul><li>
+                <span class="toc-link">2. Object.prototype</span>
+            </li>
+            <li>
+                <span class="toc-link">3. Function</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 属性和方法</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">4. Function.prototype</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 属性</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 方法</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. apply()</span>
+            </li>
+            <li>
+                <span class="toc-link">2. call()</span>
+            </li>
+            <li>
+                <span class="toc-link">3. bind()</span>
+            </li>
+            <li>
+                <span class="toc-link">4. toString()</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">js Object与Function详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-01</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 813字</span>
+          <span>⏱ 2分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object">MDN_Object</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function">MDN_Function</a></p>
+</blockquote>
+<h2 id="1-object">1. Object</h2>
+<p>在JavaScript中，几乎所有的对象都是<code>Object</code>类型的实例，它们都会从<code>Object.prototype</code>继承属性和方法。<code>Object</code> 构造函数为给定值创建一个对象包装器。<code>Object</code>构造函数，会根据给定的参数创建对象，具体有以下情况：</p>
+<ul>
+<li>如果给定值是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null"><code>null</code></a> 或 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>，将会创建并返回一个空对象</li>
+<li>如果传进去的是一个基本类型的值，则会构造其包装类型的对象</li>
+<li>如果传进去的是引用类型的值，仍然会返回这个值，经他们复制的变量保有和源对象相同的引用地址</li>
+</ul>
+<p>当以非构造函数形式被调用时，<code>Object</code> 的行为等同于 <code>new Object()</code>。</p>
+<h3 id="1-属性">1. 属性</h3>
+<ul>
+<li>
+<p><code>Object.length</code></p>
+<p>值为 1</p>
+</li>
+<li>
+<p><code>Object.prototype</code></p>
+<p>原型</p>
+</li>
+</ul>
+<h3 id="2-方法">2. 方法</h3>
+<h4 id="1-create">1. create()</h4>
+<p><code>Object.create()</code>方法创建一个新对象，使用现有的对象来提供新创建的对象的<code>__proto__</code>。</p>
+<h2 id="2-objectprototype">2. Object.prototype</h2>
+<h2 id="3-function">3. Function</h2>
+<p><code>Function</code> 构造函数创建一个新的 <code>Function</code> 对象。直接调用此构造函数可用动态创建函数，但会遇到和 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/eval"><code>eval</code></a> 类似的的安全问题和(相对较小的)性能问题。</p>
+<p>使用 <code>Function</code> 构造器生成的 <code>Function</code> 对象是在函数创建时解析的。这比你使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/function">函数声明</a>或者<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/function">函数表达式</a>并在你的代码中调用更为低效，因为使用后者创建的函数是跟其他代码一起解析的。</p>
+<h3 id="1-属性和方法">1. 属性和方法</h3>
+<p>全局的 <code>Function</code> 对象没有自己的属性和方法，但是，因为它本身也是一个函数，所以它也会通过原型链从自己的原型链 <code>Function.prototype</code> 上继承一些属性和方法。</p>
+<h2 id="4-functionprototype">4. Function.prototype</h2>
+<h3 id="1-属性-1">1. 属性</h3>
+<h3 id="2-方法-1">2. 方法</h3>
+<h4 id="1-apply">1. apply()</h4>
+<p><code>apply()</code> 方法调用一个具有给定<code>this</code>值的函数，以及以一个数组形式提供的参数。</p>
+<p><strong>语法</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>func.apply(thisArg, [argsArray])
+</code></pre></div><p><strong>参数</strong></p>
+<ul>
+<li>
+<p><code>thisArg</code></p>
+<p>必选的。在 <em><code>func</code></em> 函数运行时使用的 <code>this</code> 值。请注意，<code>this</code>可能不是该方法看到的实际值：如果这个函数处于<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">非严格模式</a>下，则指定为 <code>null</code> 或 <code>undefined</code> 时会自动替换为指向全局对象，原始值会被包装。</p>
+</li>
+<li>
+<p><code>argsArray</code></p>
+<p>可选的。一个数组或者类数组对象，其中的数组元素将作为单独的参数传给 <code>func</code> 函数。如果该参数的值为 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/null"><code>null</code></a> 或 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined"><code>undefined</code></a>，则表示不需要传入任何参数。从ECMAScript 5 开始可以使用类数组对象。 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/apply#browser_compatibility">浏览器兼容性</a> 请参阅本文底部内容。</p>
+</li>
+</ul>
+<p><strong>返回值</strong></p>
+<p>调用有指定<code>this</code>值和参数的函数的结果。</p>
+<h4 id="2-call">2. call()</h4>
+<h4 id="3-bind">3. bind()</h4>
+<h4 id="4-tostring">4. toString()</h4>
+<h4 id="heading"></h4>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/js/">js</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/" data-tooltip="js 继承详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
