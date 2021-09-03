@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue 数据双向绑定详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" vue 数据双向绑定详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [vue 数据双向绑定] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/vue-%E6%95%B0%E6%8D%AE%E5%8F%8C%E5%90%91%E7%BB%91%E5%AE%9A%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 双向绑定原理</span>
+            </li>
+            <li>
+                <span class="toc-link">2. Observer</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. observe()</span>
+            </li>
+            <li>
+                <span class="toc-link">2. Observer()</span>
+            </li>
+            <li>
+                <span class="toc-link">3. defineReactive()</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. Dep</span>
+            </li>
+            <li>
+                <span class="toc-link">4. Watcher</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">vue 数据双向绑定详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-03</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 5768字</span>
+          <span>⏱ 12分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://cn.vuejs.org/v2/guide/reactivity.html#%E5%A6%82%E4%BD%95%E8%BF%BD%E8%B8%AA%E5%8F%98%E5%8C%96">Vue.js_深入响应式原理</a></p>
+<p><a href="https://www.cnblogs.com/demonxian3/p/13546525.html">Vue源码分析之实现一个简易版的Vue</a></p>
+<p><a href="https://github.com/DMQ/mvvm">DMQ/mvvm</a></p>
+<p><a href="https://www.cnblogs.com/moon3/p/12200807.html">vue源码解读（一）Observer/Dep/Watcher是如何实现数据绑定的</a></p>
+</blockquote>
+<h2 id="1-双向绑定原理">1. 双向绑定原理</h2>
+<p>vue.js 是采用数据劫持结合发布者-订阅者模式的方式，通过<code>Object.defineProperty()</code>来劫持各个属性的<code>setter</code>，<code>getter</code>，在数据变动时发布消息给订阅者，触发相应的监听回调，下面是几个至关重要的角色：</p>
+<ol>
+<li>Observer数据监听器，对data数据进行递归遍历，都加上 setter和getter。这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化，可以拿到最新值，添加到发布者，进而通知订阅者；</li>
+<li>Dep订阅器，身份是发布者，维护一个数组，当数据发生变化时，触发</li>
+<li>Compiler解析器，根据指令，将模板中的变量替换成数据，同时绑定更新这个数据的更新函数；</li>
+<li>Watcher变化观察器，身份时订阅者，连接Observer和Compiler的桥梁，能够通过Dep收到每个属性的变化通知，执行Compiler添加的更新函数，从而更新视图；</li>
+<li>MVVM对象，作为数据绑定的入口，整合Observer、Compiler和Watcher三者，通过Observer来监听自己的data数据变化，通过Compiler来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 -&gt; 视图更新；视图变化-&gt; 数据更新的双向绑定效果。</li>
+</ol>
+<p><img src="https://img-blog.csdnimg.cn/20190528174339999.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2FsaXVqaXVqaWFuZw==,size_16,color_FFFFFF,t_70" alt="img"></p>
+<h2 id="2-observer">2. Observer</h2>
+<p>Observer的作用是对整个Data进行监听，在initData这个初始方法里使用<code>observe(data)</code>，Observer类内部通过defineReactive方法劫持data的每一个属性的getter和setter。</p>
+<h3 id="1-observe">1. observe()</h3>
+<p>首先看一下<code>observe</code>函数的源码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#8be9fd;font-style:italic">function</span> observe (value: <span style="color:#8be9fd">any</span>, asRootData: <span style="color:#8be9fd">?boolean</span>)<span style="color:#ff79c6">:</span> Observer <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">void</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#6272a4">/*判断Data是否是一个对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>isObject(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#6272a4">// 存储Observer
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>  <span style="color:#8be9fd;font-style:italic">let</span> ob: <span style="color:#8be9fd">Observer</span> <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">void</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  <span style="color:#6272a4">/*这里用__ob__这个属性来判断是否已经有Observer实例，如果没有Observer实例则会新建一个Observer实例并赋值给__ob__这个属性，如果已有Observer实例则直接返回该Observer实例*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">if</span> (hasOwn(value, <span style="color:#f1fa8c">&#39;__ob__&#39;</span>) <span style="color:#ff79c6">&amp;&amp;</span> value.__ob__ <span style="color:#ff79c6">instanceof</span> Observer) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    ob <span style="color:#ff79c6">=</span> value.__ob__
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#6272a4">/*这里的判断是为了确保value是单纯的对象，而不是函数或者是Regexp等情况。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    observerState.shouldConvert <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#ff79c6">!</span>isServerRendering() <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    (<span style="color:#8be9fd;font-style:italic">Array</span>.isArray(value) <span style="color:#ff79c6">||</span> isPlainObject(value)) <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#8be9fd;font-style:italic">Object</span>.isExtensible(value) <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#ff79c6">!</span>value._isVue
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#6272a4">// 创建一个Observer实例，绑定data进行监听
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span>    ob <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Observer(value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  <span style="color:#ff79c6">if</span> (asRootData <span style="color:#ff79c6">&amp;&amp;</span> ob) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    <span style="color:#6272a4">/*如果是根数据则计数，后面Observer中的observe的asRootData非true*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    ob.vmCount<span style="color:#ff79c6">++</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  <span style="color:#ff79c6">return</span> ob
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>}
+</code></pre></div><p>给data绑定一个<code>__ob__</code>属性，用来存放<code>Observer</code>实例，避免重复绑定；</p>
+<h3 id="2-observer-1">2. Observer()</h3>
+<p>再看一下<code>Observer</code>类的源码:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"> * Observer class that are attached to each observed
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"> * object. Once attached, the observer converts target
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"> * object&#39;s property keys into getter/setters that
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"> * collect dependencies and dispatches updates.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"> */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">class</span>  {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  value: <span style="color:#8be9fd">any</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  dep: <span style="color:#8be9fd">Dep</span>; <span style="color:#6272a4">// 每一个Data的属性都会绑定一个dep，用于存放watcher arr
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>  vmCount: <span style="color:#8be9fd">number</span>; <span style="color:#6272a4">// number of vms that has this object as root $data
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ff79c6">constructor</span> (value: <span style="color:#8be9fd">any</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    <span style="color:#ff79c6">this</span>.dep <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dep()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#ff79c6">this</span>.vmCount <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#6272a4">// 这个def的意思就是把Observer实例绑定到Data的__ob__属性上去
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>    def(value, <span style="color:#f1fa8c">&#39;__ob__&#39;</span>, <span style="color:#ff79c6">this</span>) 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">Array</span>.isArray(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">          如果是数组，将修改后可以截获响应的数组方法替换掉该数组的原型中的原生方法，达到监听数组数据变化响应的效果。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">      */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      <span style="color:#ff79c6">const</span> augment <span style="color:#ff79c6">=</span> hasProto <span style="color:#ff79c6">?</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        protoAugment  <span style="color:#6272a4">/*直接覆盖原型的方法来修改目标对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        <span style="color:#ff79c6">:</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>        copyAugment   <span style="color:#6272a4">/*定义（覆盖）目标对象或数组的某一个方法*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>      augment(value, arrayMethods, arrayKeys)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      <span style="color:#6272a4">/*如果是数组则需要遍历数组的每一个成员进行observe*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      <span style="color:#ff79c6">this</span>.observeArray(value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>      <span style="color:#6272a4">/*如果是对象则直接walk进行绑定*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      <span style="color:#ff79c6">this</span>.walk(value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  walk (obj: <span style="color:#8be9fd">Object</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    <span style="color:#ff79c6">const</span> keys <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.keys(obj)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#6272a4">    walk方法会遍历对象的每一个属性进行defineReactive绑定
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4">    defineReactive: 劫持data的getter和setter
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4">    */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> keys.length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>      defineReactive(obj, keys[i], obj[keys[i]])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>  observeArray (items: <span style="color:#8be9fd">Array</span>&lt;<span style="color:#ff79c6">any</span>&gt;) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>    <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span style="color:#6272a4">    数组需要遍历每一个成员进行observe
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span style="color:#6272a4">    */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>, l <span style="color:#ff79c6">=</span> items.length; i <span style="color:#ff79c6">&lt;</span> l; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>      observe(items[i])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>}
+</code></pre></div><p>可以看到，<code>Observer</code>类主要干了以下几件事：</p>
+<ul>
+<li>如果data是Object，遍历对象的每一个属性进行<code>defineReactive</code>监听；</li>
+<li>如果data是Array，则需要对每一个成员进行<code>observe</code>。Vue会重写Array的push、pop、shift、unshift、splice、sort、reverse这7个方法，保证之后pop/push等操作进去的对象也有进行双向绑定；</li>
+</ul>
+<h3 id="3-definereactive">3. defineReactive()</h3>
+<p>如上述源码所示，<code>Observer</code>类主要是靠遍历data的每一个属性，使用<code>defineReactive()</code>方法劫持<code>getter</code>和<code>setter</code>方法, 下面来具体看一下<code>defineReactive</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#8be9fd;font-style:italic">function</span> defineReactive (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  obj: <span style="color:#8be9fd">Object</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  key: <span style="color:#8be9fd">string</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  val: <span style="color:#8be9fd">any</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  customSetter?: <span style="color:#8be9fd">Function</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#6272a4">/*在闭包中定义一个dep对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#ff79c6">const</span> dep <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Dep()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">const</span> property <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.getOwnPropertyDescriptor(obj, key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#ff79c6">if</span> (property <span style="color:#ff79c6">&amp;&amp;</span> property.configurable <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">false</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  <span style="color:#6272a4">/*如果之前该对象已经预设了getter以及setter函数则将其取出来，新定义的getter/setter中会将其执行，保证不会覆盖之前已经定义的getter/setter。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#6272a4">// cater for pre-defined getter/setters
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> getter <span style="color:#ff79c6">=</span> property <span style="color:#ff79c6">&amp;&amp;</span> property.get
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  <span style="color:#ff79c6">const</span> setter <span style="color:#ff79c6">=</span> property <span style="color:#ff79c6">&amp;&amp;</span> property.set
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  <span style="color:#6272a4">/*对象的子对象也会进行observe*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  <span style="color:#8be9fd;font-style:italic">let</span> childOb <span style="color:#ff79c6">=</span> observe(val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  <span style="color:#8be9fd;font-style:italic">Object</span>.defineProperty(obj, key, {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    enumerable: <span style="color:#8be9fd">true</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    configurable: <span style="color:#8be9fd">true</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    get: <span style="color:#8be9fd">function</span> reactiveGetter () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      <span style="color:#6272a4">/*如果原本对象拥有getter方法则执行*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      <span style="color:#ff79c6">const</span> value <span style="color:#ff79c6">=</span> getter <span style="color:#ff79c6">?</span> getter.call(obj) <span style="color:#ff79c6">:</span> val
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#6272a4">//   Dep.target：全局属性，用于指向某一个watcher，用完即丢
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span> (Dep.target) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4">        进行依赖收集
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4">        dep.depend()内部实现addDep，往dep中添加watcher实例 (具体参考Dep.prototype.depend的代码)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4">        depend的时候会根据id判断watcher有没有添加过，避免重复添加依赖
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4">        */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>        dep.depend()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>        <span style="color:#ff79c6">if</span> (childOb) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>          <span style="color:#6272a4">/*子对象进行依赖收集，其实就是将同一个watcher观察者实例放进了两个depend中，一个是正在本身闭包中的depend，另一个是子元素的depend*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>          childOb.dep.depend()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>        <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">Array</span>.isArray(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>          <span style="color:#6272a4">/*是数组则需要对每一个成员都进行依赖收集，如果数组的成员还是数组，则递归。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>          dependArray(value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>      <span style="color:#ff79c6">return</span> value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    set: <span style="color:#8be9fd">function</span> reactiveSetter (newVal) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>      <span style="color:#6272a4">/*通过getter方法获取当前值，与新值进行比较，一致则不需要执行下面的操作*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>      <span style="color:#ff79c6">const</span> value <span style="color:#ff79c6">=</span> getter <span style="color:#ff79c6">?</span> getter.call(obj) <span style="color:#ff79c6">:</span> val
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>      <span style="color:#6272a4">/* eslint-disable no-self-compare */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>      <span style="color:#ff79c6">if</span> (newVal <span style="color:#ff79c6">===</span> value <span style="color:#ff79c6">||</span> (newVal <span style="color:#ff79c6">!==</span> newVal <span style="color:#ff79c6">&amp;&amp;</span> value <span style="color:#ff79c6">!==</span> value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>        <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>      <span style="color:#6272a4">/* eslint-enable no-self-compare */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>      <span style="color:#ff79c6">if</span> (process.env.NODE_ENV <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;production&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> customSetter) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>        customSetter()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>      <span style="color:#ff79c6">if</span> (setter) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>        <span style="color:#6272a4">/*如果原本对象拥有setter方法则执行setter*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>        setter.call(obj, newVal)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>      } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>        val <span style="color:#ff79c6">=</span> newVal
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>      <span style="color:#6272a4">/*新的值需要重新进行observe，保证数据响应式*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>      childOb <span style="color:#ff79c6">=</span> observe(newVal)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>      <span style="color:#6272a4">/*dep对象通知所有的观察者*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>      dep.notify()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>}
+</code></pre></div><p>defineReactive()方法主要通过Object.defineProperty()做了以下几件事:</p>
+<ul>
+<li>在闭包里定义一个Dep实例；</li>
+<li>getter用来收集依赖，Dep.target是一个全局的属性，指向的那个watcher收集到dep里来（如果之前添加过就不会重复添加）；</li>
+<li>setter是在更新value的时候通知所有getter时候通知所有收集的依赖进行更新（dep.notify）。这边会做一个判断，如果newVal和oldVal一样，就不会有操作。</li>
+</ul>
+<h2 id="3-dep">3. Dep</h2>
+<p>在上面的defineReactive中提到了Dep，于是接下来看一下Dep的源码, dep主要是用来在数据更新的时候通知watchers进行更新：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"> * A dep is an observable that can have multiple
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"> * directives subscribing to it.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"> */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">class</span> Dep {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">static</span> target: <span style="color:#8be9fd">?Watcher</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  id: <span style="color:#8be9fd">number</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  subs: <span style="color:#8be9fd">Array</span>&lt;<span style="color:#ff79c6">Watcher</span>&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">constructor</span> () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">this</span>.id <span style="color:#ff79c6">=</span> uid<span style="color:#ff79c6">++</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#6272a4">// subs: Array&lt;Watcher&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.subs <span style="color:#ff79c6">=</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  <span style="color:#6272a4">/*添加一个观察者对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  addSub (sub: <span style="color:#8be9fd">Watcher</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    <span style="color:#ff79c6">this</span>.subs.push(sub)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  <span style="color:#6272a4">/*移除一个观察者对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  removeSub (sub: <span style="color:#8be9fd">Watcher</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    remove(<span style="color:#ff79c6">this</span>.subs, sub)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  <span style="color:#6272a4">/*依赖收集，当存在Dep.target的时候添加观察者对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4">//   在defineReactive的getter中会用到dep.depend()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>  depend () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    <span style="color:#ff79c6">if</span> (Dep.target) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        <span style="color:#6272a4">// Dep.target指向的是一个watcher
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>      Dep.target.addDep(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  <span style="color:#6272a4">/*通知所有订阅者*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>  notify () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    <span style="color:#6272a4">// stabilize the subscriber list first
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">const</span> subs <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.subs.slice()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>, l <span style="color:#ff79c6">=</span> subs.length; i <span style="color:#ff79c6">&lt;</span> l; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>        <span style="color:#6272a4">// 调用每一个watcher的update
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4"></span>      subs[i].update()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4">// the current target watcher being evaluated.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#6272a4">// this is globally unique because there could be only one
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4">// watcher being evaluated at any time.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span style="color:#6272a4"></span>Dep.target <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span style="color:#6272a4">/*依赖收集完需要将Dep.target设为null，防止后面重复添加依赖。*/</span>
+</code></pre></div><ul>
+<li>Dep是一个发布者，可以订阅多个观察者，依赖收集之后Dep中会有一个subs存放一个或多个观察者，在数据变更的时候通知所有的watcher。</li>
+<li>再复习一下，Dep和Observer的关系就是Observer监听整个data，遍历data的每个属性给每个属性绑定defineReactive方法劫持getter和setter, 在getter的时候往Dep类里塞依赖（dep.depend），在setter的时候通知所有watcher进行update(dep.notify)</li>
+</ul>
+<h2 id="4-watcher">4. Watcher</h2>
+<p>watcher接受到通知之后，会通过回调函数进行更新。</p>
+<p>接下来我们要仔细看一下watcher的源码。由之前的Dep代码可知的是，watcher需要实现以下两个作用：</p>
+<ul>
+<li>dep.depend()的时候往dep里添加自己；</li>
+<li>dep.notify()的时候调用watcher.update()方法，对视图进行更新；</li>
+</ul>
+<p>同时要注意的是，watcher有三种：render watcher/ computed watcher/ user watcher(就是vue方法中的那个watch)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">class</span> Watcher {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2</span>  vm: <span style="color:#8be9fd">Component</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3</span>  expression: <span style="color:#8be9fd">string</span>; <span style="color:#6272a4">// 每一个DOM attr对应的string
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4</span><span style="color:#6272a4"></span>  cb: <span style="color:#8be9fd">Function</span>; <span style="color:#6272a4">// update的时候的回调函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5</span><span style="color:#6272a4"></span>  id: <span style="color:#8be9fd">number</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6</span>  deep: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7</span>  user: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8</span>  lazy: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9</span>  sync: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10</span>  dirty: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11</span>  active: <span style="color:#8be9fd">boolean</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12</span>  deps: <span style="color:#8be9fd">Array</span>&lt;<span style="color:#ff79c6">Dep</span>&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13</span>  newDeps: <span style="color:#8be9fd">Array</span>&lt;<span style="color:#ff79c6">Dep</span>&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14</span>  depIds: <span style="color:#8be9fd">ISet</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15</span>  newDepIds: <span style="color:#8be9fd">ISet</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16</span>  getter: <span style="color:#8be9fd">Function</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17</span>  value: <span style="color:#8be9fd">any</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19</span>  <span style="color:#ff79c6">constructor</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20</span>    vm: <span style="color:#8be9fd">Component</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21</span>    expOrFn: <span style="color:#8be9fd">string</span> <span style="color:#ff79c6">|</span> <span style="color:#8be9fd;font-style:italic">Function</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22</span>    cb: <span style="color:#8be9fd">Function</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23</span>    options?: <span style="color:#8be9fd">Object</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24</span>  ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25</span>    <span style="color:#ff79c6">this</span>.vm <span style="color:#ff79c6">=</span> vm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26</span>    <span style="color:#6272a4">/*_watchers存放订阅者实例*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27</span>    vm._watchers.push(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28</span>    <span style="color:#6272a4">// options
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (options) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30</span>      <span style="color:#ff79c6">this</span>.deep <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">!!</span>options.deep
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31</span>      <span style="color:#ff79c6">this</span>.user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">!!</span>options.user
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32</span>      <span style="color:#ff79c6">this</span>.lazy <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">!!</span>options.lazy
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33</span>      <span style="color:#ff79c6">this</span>.sync <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">!!</span>options.sync
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35</span>      <span style="color:#ff79c6">this</span>.deep <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.user <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.lazy <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.sync <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37</span>    <span style="color:#ff79c6">this</span>.cb <span style="color:#ff79c6">=</span> cb
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38</span>    <span style="color:#ff79c6">this</span>.id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">++</span>uid <span style="color:#6272a4">// uid for batching
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.active <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40</span>    <span style="color:#ff79c6">this</span>.dirty <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.lazy <span style="color:#6272a4">// for lazy watchers
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.deps <span style="color:#ff79c6">=</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42</span>    <span style="color:#ff79c6">this</span>.newDeps <span style="color:#ff79c6">=</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43</span>    <span style="color:#ff79c6">this</span>.depIds <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44</span>    <span style="color:#ff79c6">this</span>.newDepIds <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45</span>    <span style="color:#ff79c6">this</span>.expression <span style="color:#ff79c6">=</span> process.env.NODE_ENV <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;production&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46</span>      <span style="color:#ff79c6">?</span> expOrFn.toString()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47</span>      <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48</span>    <span style="color:#6272a4">// parse expression for getter
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/*把表达式expOrFn解析成getter*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">typeof</span> expOrFn <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;function&#39;</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51</span>      <span style="color:#ff79c6">this</span>.getter <span style="color:#ff79c6">=</span> expOrFn
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53</span>      <span style="color:#ff79c6">this</span>.getter <span style="color:#ff79c6">=</span> parsePath(expOrFn)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54</span>      <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>.getter) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55</span>        <span style="color:#ff79c6">this</span>.getter <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56</span>        process.env.NODE_ENV <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;production&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> warn(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57</span>          <span style="color:#f1fa8c">`Failed watching path: &#34;</span><span style="color:#f1fa8c">${</span>expOrFn<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34; `</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58</span>          <span style="color:#f1fa8c">&#39;Watcher only accepts simple dot-delimited paths. &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59</span>          <span style="color:#f1fa8c">&#39;For full control, use a function instead.&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60</span>          vm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64</span>    <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.lazy
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65</span>      <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">undefined</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66</span>      <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">this</span>.get()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70</span><span style="color:#6272a4">   * Evaluate the getter, and re-collect dependencies.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72</span>   <span style="color:#6272a4">/*获得getter的值并且重新进行依赖收集*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73</span>  get () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74</span>    <span style="color:#6272a4">/*将自身watcher观察者实例设置给Dep.target，用以依赖收集。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75</span>    pushTarget(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76</span>    <span style="color:#8be9fd;font-style:italic">let</span> value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77</span>    <span style="color:#ff79c6">const</span> vm <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.vm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79</span>    <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80</span><span style="color:#6272a4">      执行了getter操作，看似执行了渲染操作，其实是执行了依赖收集。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81</span><span style="color:#6272a4">      在将Dep.target设置为自身观察者实例以后，执行getter操作。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82</span><span style="color:#6272a4">      譬如说现在的的data中可能有a、b、c三个数据，getter渲染需要依赖a跟c，
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83</span><span style="color:#6272a4">      那么在执行getter的时候就会触发a跟c两个数据的getter函数，
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84</span><span style="color:#6272a4">      在getter函数中即可判断Dep.target是否存在然后完成依赖收集，
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85</span><span style="color:#6272a4">      将该观察者对象放入闭包中的Dep的subs中去。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86</span><span style="color:#6272a4">    */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.user) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88</span>        <span style="color:#6272a4">// this.user: 判断是不是vue中那个watch方法绑定的watcher
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">try</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90</span>        value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.getter.call(vm, vm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91</span>      } <span style="color:#ff79c6">catch</span> (e) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92</span>        handleError(e, vm, <span style="color:#f1fa8c">`getter for watcher &#34;</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.expression<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;`</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95</span>      value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.getter.call(vm, vm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97</span>    <span style="color:#6272a4">// &#34;touch&#34; every property so they are all tracked as
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// dependencies for deep watching
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/*如果存在deep，则触发每个深层对象的依赖，追踪其变化*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.deep) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101</span>      <span style="color:#6272a4">/*递归每一个对象或者数组，触发它们的getter，使得对象或数组的每一个成员都被依赖收集，形成一个“深（deep）”依赖关系*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102</span>      traverse(value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105</span>    <span style="color:#6272a4">/*将观察者实例从target栈中取出并设置给Dep.target*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106</span>    popTarget()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107</span>    <span style="color:#ff79c6">this</span>.cleanupDeps()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108</span>    <span style="color:#ff79c6">return</span> value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112</span><span style="color:#6272a4">   * Add a dependency to this directive.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114</span>   <span style="color:#6272a4">/*添加一个依赖关系到Deps集合中*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115</span> <span style="color:#6272a4">//  在dep.depend()中调用的是Dep.target.addDep()
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116</span><span style="color:#6272a4"></span>  addDep (dep: <span style="color:#8be9fd">Dep</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117</span>    <span style="color:#ff79c6">const</span> id <span style="color:#ff79c6">=</span> dep.id
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>.newDepIds.has(id)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119</span>        <span style="color:#6272a4">// newDepIds和newDeps记录watcher实例所用到的dep，比如某个computed watcher其实用到了data里的a/b/c三个属性，那就需要记录3个dep
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">this</span>.newDepIds.add(id)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121</span>      <span style="color:#ff79c6">this</span>.newDeps.push(dep)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122</span>      <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>.depIds.has(id)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123</span>        <span style="color:#6272a4">//  作用是往dep的subs里添加自己（Watcher实例）
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">//  但是会先判断一下id，如果subs里有相同的id就不会重复添加
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125</span><span style="color:#6272a4"></span>        dep.addSub(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131</span><span style="color:#6272a4">   * Clean up for dependency collection.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133</span>   <span style="color:#6272a4">/*清理依赖收集*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134</span>  cleanupDeps () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135</span>    <span style="color:#6272a4">/*移除所有观察者对象*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136</span>    <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.deps.length
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137</span>    <span style="color:#ff79c6">while</span> (i<span style="color:#ff79c6">--</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138</span>      <span style="color:#ff79c6">const</span> dep <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.deps[i]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139</span>      <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>.newDepIds.has(dep.id)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140</span>        dep.removeSub(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143</span>    <span style="color:#8be9fd;font-style:italic">let</span> tmp <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.depIds
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144</span>    <span style="color:#ff79c6">this</span>.depIds <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.newDepIds
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145</span>    <span style="color:#ff79c6">this</span>.newDepIds <span style="color:#ff79c6">=</span> tmp
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">146</span>    <span style="color:#ff79c6">this</span>.newDepIds.clear()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">147</span>    tmp <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.deps
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">148</span>    <span style="color:#ff79c6">this</span>.deps <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.newDeps
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">149</span>    <span style="color:#ff79c6">this</span>.newDeps <span style="color:#ff79c6">=</span> tmp
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">150</span>    <span style="color:#ff79c6">this</span>.newDeps.length <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">151</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">152</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">153</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">154</span><span style="color:#6272a4">   * Subscriber interface.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">155</span><span style="color:#6272a4">   * Will be called when a dependency changes.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">156</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">157</span><span style="color:#6272a4">//   dep.notify的时候会逐个调用watcher的update方法
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">158</span><span style="color:#6272a4"></span>  update () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">159</span>    <span style="color:#6272a4">/* istanbul ignore else */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">160</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.lazy) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">161</span>      <span style="color:#ff79c6">this</span>.dirty <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">162</span>    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.sync) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">163</span>      <span style="color:#6272a4">/*同步则执行run直接渲染视图*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">164</span>      <span style="color:#6272a4">// 基本不会用到sync
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">165</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">this</span>.run()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">166</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">167</span>      <span style="color:#6272a4">/*异步推送到观察者队列中，由调度者调用。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">168</span>      queueWatcher(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">169</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">170</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">171</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">172</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">173</span><span style="color:#6272a4">   * Scheduler job interface.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">174</span><span style="color:#6272a4">   * Will be called by the scheduler.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">175</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">176</span>   <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">177</span><span style="color:#6272a4">      调度者工作接口，将被调度者回调。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">178</span><span style="color:#6272a4">    */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">179</span>  run () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">180</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.active) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">181</span>      <span style="color:#ff79c6">const</span> value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.get()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">182</span>      <span style="color:#ff79c6">if</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">183</span>        value <span style="color:#ff79c6">!==</span> <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">||</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">184</span>        <span style="color:#6272a4">// Deep watchers and watchers on Object/Arrays should fire even
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">185</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// when the value is the same, because the value may
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">186</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// have mutated.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">187</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">188</span><span style="color:#6272a4">            即便值相同，拥有Deep属性的观察者以及在对象／数组上的观察者应该被触发更新，因为它们的值可能发生改变。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">189</span><span style="color:#6272a4">        */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">190</span>        isObject(value) <span style="color:#ff79c6">||</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">191</span>        <span style="color:#ff79c6">this</span>.deep
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">192</span>      ) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">193</span>        <span style="color:#6272a4">// set new value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">194</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">const</span> oldValue <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">195</span>        <span style="color:#6272a4">/*设置新的值*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">196</span>        <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">197</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">198</span>        <span style="color:#6272a4">/*触发回调渲染视图*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">199</span>        <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.user) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">200</span>          <span style="color:#ff79c6">try</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">201</span>            <span style="color:#ff79c6">this</span>.cb.call(<span style="color:#ff79c6">this</span>.vm, value, oldValue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">202</span>          } <span style="color:#ff79c6">catch</span> (e) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">203</span>            handleError(e, <span style="color:#ff79c6">this</span>.vm, <span style="color:#f1fa8c">`callback for watcher &#34;</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.expression<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;`</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">204</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">205</span>        } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">206</span>          <span style="color:#ff79c6">this</span>.cb.call(<span style="color:#ff79c6">this</span>.vm, value, oldValue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">207</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">208</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">209</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">210</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">211</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">212</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">213</span><span style="color:#6272a4">   * Evaluate the value of the watcher.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">214</span><span style="color:#6272a4">   * This only gets called for lazy watchers.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">215</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">216</span>   <span style="color:#6272a4">/*获取观察者的值*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">217</span>  evaluate () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">218</span>    <span style="color:#ff79c6">this</span>.value <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.get()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">219</span>    <span style="color:#ff79c6">this</span>.dirty <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">220</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">221</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">222</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">223</span><span style="color:#6272a4">   * Depend on all deps collected by this watcher.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">224</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">225</span>   <span style="color:#6272a4">/*收集该watcher的所有deps依赖*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">226</span>  depend () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">227</span>    <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.deps.length
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">228</span>    <span style="color:#ff79c6">while</span> (i<span style="color:#ff79c6">--</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">229</span>      <span style="color:#ff79c6">this</span>.deps[i].depend()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">230</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">231</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">232</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">233</span>  <span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">234</span><span style="color:#6272a4">   * Remove self from all dependencies&#39; subscriber list.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">235</span><span style="color:#6272a4">   */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">236</span>   <span style="color:#6272a4">/*将自身从所有依赖收集订阅列表删除*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">237</span>  teardown () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">238</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.active) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">239</span>      <span style="color:#6272a4">// remove self from vm&#39;s watcher list
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">240</span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// this is a somewhat expensive operation so we skip it
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">241</span><span style="color:#6272a4"></span>      <span style="color:#6272a4">// if the vm is being destroyed.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">242</span><span style="color:#6272a4"></span>      <span style="color:#6272a4">/*从vm实例的观察者列表中将自身移除，由于该操作比较耗费资源，所以如果vm实例正在被销毁则跳过该步骤。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">243</span>      <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span><span style="color:#ff79c6">this</span>.vm._isBeingDestroyed) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">244</span>        remove(<span style="color:#ff79c6">this</span>.vm._watchers, <span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">245</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">246</span>      <span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.deps.length
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">247</span>      <span style="color:#ff79c6">while</span> (i<span style="color:#ff79c6">--</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">248</span>        <span style="color:#ff79c6">this</span>.deps[i].removeSub(<span style="color:#ff79c6">this</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">249</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">250</span>      <span style="color:#ff79c6">this</span>.active <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">251</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">252</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">253</span>}
+</code></pre></div><p>要注意的是，watcher中有个sync属性，绝大多数情况下，watcher并不是同步更新的，而是采用异步更新的方式，也就是调用<code>queueWatcher(this)</code>推送到观察者队列当中，待nextTick的时候进行调用。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/vue/">vue</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/vue%E4%B8%8Ereact%E7%9A%84%E5%AF%B9%E6%AF%94/" data-tooltip="Vue与React对比">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/vue-virtualdom%E4%B8%8Ediff%E8%AF%A6%E8%A7%A3/" data-tooltip="vue VirtualDOM与Diff详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>

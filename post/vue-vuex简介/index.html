@@ -34,56 +34,27 @@
 </div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-    </div><ul class="toc-h3"><li>
-                <span class="toc-link">1.Vuex概述</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 概述</span>
             </li>
             <li>
-                <span class="toc-link">2.配置Vuex</span>
+                <span class="toc-link">2. 优势</span>
             </li>
             <li>
-                <span class="toc-link">3.使用Vuex完成计数器案例</span>
-            </li>
-            <li>
-                <span class="toc-link">4.Vuex中的核心特性</span>
+                <span class="toc-link">2. 核心特性</span>
             </li>
             
-                    <ul class="toc-h4"><li>
-                <span class="toc-link">1.State</span>
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. State</span>
             </li>
             <li>
-                <span class="toc-link">2.Mutation</span>
+                <span class="toc-link">2. Mutation</span>
             </li>
             <li>
-                <span class="toc-link">3.Action</span>
+                <span class="toc-link">3. Action</span>
             </li>
             <li>
-                <span class="toc-link">4.Getter</span>
-            </li>
-            
-                    </ul><li>
-                <span class="toc-link">5.vuex案例</span>
-            </li>
-            
-                    <ul class="toc-h4"><li>
-                <span class="toc-link">1.初始化案例</span>
-            </li>
-            <li>
-                <span class="toc-link">2.完成添加事项</span>
-            </li>
-            <li>
-                <span class="toc-link">3.完成删除事项</span>
-            </li>
-            <li>
-                <span class="toc-link">4.完成选中状态的改变</span>
-            </li>
-            <li>
-                <span class="toc-link">5.剩余项统计</span>
-            </li>
-            <li>
-                <span class="toc-link">6.清除完成事项</span>
-            </li>
-            <li>
-                <span class="toc-link">7.点击选项卡切换事项</span>
+                <span class="toc-link">4. Getter</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -93,114 +64,34 @@
         <div class="info">
           <span>📅 2020-10-23</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 4365字</span>
-          <span>⏱ 9分钟</span>
+          <span>📖 1305字</span>
+          <span>⏱ 3分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
-        <h3 id="1vuex概述">1.Vuex概述</h3>
-<p>Vuex是实现组件全局状态（数据）管理的一种机制，可以方便的实现组件之间的数据共享</p>
-<p>使用Vuex管理数据的好处：
-A.能够在vuex中集中管理共享的数据，便于开发和后期进行维护
-B.能够高效的实现组件之间的数据共享，提高开发效率
-C.存储在vuex中的数据是响应式的，当数据发生改变时，页面中的数据也会同步更新</p>
-<h3 id="2配置vuex">2.配置Vuex</h3>
-<p>创建带有vuex的vue项目，打开终端，输入命令：vue ui
-当项目仪表盘打开之后，我们点击页面左上角的项目管理下拉列表，再点击Vue项目管理器
-点击创建项目，如下图所示
-第一步，设置项目名称和包管理器
-<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/%E5%88%9B%E5%BB%BAvuex%E9%A1%B9%E7%9B%AE01.png" alt="">
-第二步，设置手动配置项目
-<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/%E5%88%9B%E5%BB%BAvuex%E9%A1%B9%E7%9B%AE02.png" alt="">
-第三步，设置功能项
-<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/%E5%88%9B%E5%BB%BAvuex%E9%A1%B9%E7%9B%AE03.png" alt="">
-第四步，创建项目
-<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/%E5%88%9B%E5%BB%BAvuex%E9%A1%B9%E7%9B%AE05.png" alt=""></p>
-<h3 id="3使用vuex完成计数器案例">3.使用Vuex完成计数器案例</h3>
-<p>打开刚刚创建的vuex项目，找到src目录中的App.vue组件，将代码重新编写如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    &lt;<span style="color:#ff79c6">my-addition</span>&gt;<span style="color:#ff79c6">&lt;</span>/my-addition&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;<span style="color:#ff79c6">p</span>&gt;<span style="color:#ff79c6">----------------------------------------</span>&lt;/<span style="color:#ff79c6">p</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    &lt;<span style="color:#ff79c6">my-subtraction</span>&gt;<span style="color:#ff79c6">&lt;</span>/my-subtraction&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>&lt;<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#ff79c6">import</span> Addition from <span style="color:#f1fa8c">&#39;./components/Addition.vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#ff79c6">import</span> Subtraction from <span style="color:#f1fa8c">&#39;./components/Subtraction.vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  data() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">return</span> {}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  components<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#f1fa8c">&#39;my-subtraction&#39;</span><span style="color:#ff79c6">:</span> Subtraction,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#f1fa8c">&#39;my-addition&#39;</span><span style="color:#ff79c6">:</span> Addition
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>&lt;<span style="color:#ff79c6">style</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
-</code></pre></div><p>在components文件夹中创建Addition.vue组件，代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    &lt;<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        &lt;<span style="color:#ff79c6">h3</span>&gt;当前最新的count值为：&lt;/<span style="color:#ff79c6">h3</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        &lt;<span style="color:#ff79c6">button</span>&gt;<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>&lt;/<span style="color:#ff79c6">button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;/<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  data() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">return</span> {}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>&lt;<span style="color:#ff79c6">style</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
-</code></pre></div><p>在components文件夹中创建Subtraction.vue组件，代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    &lt;<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        &lt;<span style="color:#ff79c6">h3</span>&gt;当前最新的count值为：&lt;/<span style="color:#ff79c6">h3</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        &lt;<span style="color:#ff79c6">button</span>&gt;<span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>&lt;/<span style="color:#ff79c6">button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;/<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>&lt;<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  data() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">return</span> {}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>&lt;<span style="color:#ff79c6">style</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
-</code></pre></div><p>最后在项目根目录(与src平级)中创建 .prettierrc 文件，编写代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;semi&#34;</span>:<span style="color:#ff79c6">false</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;singleQuote&#34;</span>:<span style="color:#ff79c6">true</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
-</code></pre></div><h3 id="4vuex中的核心特性">4.Vuex中的核心特性</h3>
-<h4 id="1state">1.State</h4>
-<p>​    State提供唯一的公共数据源，所有共享的数据都要统一放到Store中的State中存储
-​    例如，打开项目中的store.js文件，在State对象中可以添加我们要共享的数据，如：count:0
+        <h2 id="1-概述">1. 概述</h2>
+<p>Vuex是实现组件全局状态（数据）管理的一种机制，可以方便的实现组件之间的数据共享。</p>
+<h2 id="2-优势">2. 优势</h2>
+<p>使用Vuex管理数据的好处：</p>
+<ol>
+<li>能够在vuex中集中管理共享的数据，便于开发和后期进行维护</li>
+<li>能够高效的实现组件之间的数据共享，提高开发效率</li>
+<li>存储在vuex中的数据是响应式的，当数据发生改变时，页面中的数据也会同步更新</li>
+</ol>
+<h2 id="2-核心特性">2. 核心特性</h2>
+<h3 id="1-state">1. State</h3>
+<p><code>State</code>提供唯一的公共数据源，所有共享的数据都要统一放到<code>Store</code>中的<code>State</code>中存储。</p>
+<p>例如，打开项目中的<code>store.js</code>文件，在<code>State</code>对象中可以添加我们要共享的数据：
 ​</p>
 <pre><code>在组件中访问State的方式：
 1).this.$store.state.全局数据名称  如：this.$store.state.count
 2).先按需导入mapState函数： import { mapState } from 'vuex'
 然后数据映射为计算属性： computed:{ ...mapState(['全局数据名称']) }
 </code></pre>
-<h4 id="2mutation">2.Mutation</h4>
-<p>Mutation用于修改变更$store中的数据
-使用方式：
-打开store.js文件，在mutations中添加代码如下</p>
+<h3 id="2-mutation">2. Mutation</h3>
+<p><code>Mutation</code>用于修改变更<code>state</code>中的数据，使用方式：</p>
+<p>打开<code>store.js</code>文件，在<code>mutations</code>中添加代码如下</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>mutations<span style="color:#ff79c6">:</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    add(state,step){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>      <span style="color:#6272a4">//第一个形参永远都是state也就是$state对象
@@ -208,7 +99,7 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>      state.count<span style="color:#ff79c6">+=</span>step;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  }
-</code></pre></div><p>然后在Addition.vue中给按钮添加事件代码如下：</p>
+</code></pre></div><p>然后在<code>Addition.vue</code>中给按钮添加事件代码如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">button</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;Add&#34;</span>&gt;+<span style="color:#50fa7b">1</span>&lt;/<span style="color:#ff79c6">button</span>&gt;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#50fa7b">methods</span><span style="color:#ff79c6">:</span>{
@@ -219,7 +110,7 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#50fa7b">this.</span>$<span style="color:#50fa7b">store.commit</span>(&#39;<span style="color:#50fa7b">add</span>&#39;,<span style="color:#50fa7b">10</span>)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
-</code></pre></div><p>使用mutations的第二种方式如下：</p>
+</code></pre></div><p>使用<code>mutations</code>的第二种方式如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> { mapState,mapMutations } from <span style="color:#f1fa8c">&#39;vuex&#39;</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
@@ -240,11 +131,9 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>}
-</code></pre></div><h4 id="3action">3.Action</h4>
-<p>在mutations中不能编写异步的代码，会导致vue调试器的显示出错。
-在vuex中我们可以使用Action来执行异步操作。
-操作步骤如下：
-打开store.js文件，修改Action，如下：</p>
+</code></pre></div><h3 id="3-action">3. Action</h3>
+<p>在<code>mutations</code>中不能编写异步的代码，会导致<code>vue</code>调试器的显示出错，我们可以使用<code>Action</code>来执行异步操作。操作步骤如下：</p>
+<p>打开<code>store.js</code>文件，修改<code>Action</code>，如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>actions<span style="color:#ff79c6">:</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  addAsync(context,step){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    setTimeout(()=&gt;{
@@ -252,7 +141,7 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    },<span style="color:#bd93f9">2000</span>)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
-</code></pre></div><p>然后在Addition.vue中给按钮添加事件代码如下：</p>
+</code></pre></div><p>然后在<code>Addition.vue</code>中给按钮添加事件代码如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">button</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;AddAsync&#34;</span>&gt;<span style="color:#50fa7b">...</span>+<span style="color:#50fa7b">1</span>&lt;/<span style="color:#ff79c6">button</span>&gt;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#50fa7b">methods</span><span style="color:#ff79c6">:</span>{
@@ -286,10 +175,9 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>}
-</code></pre></div><h4 id="4getter">4.Getter</h4>
-<p>Getter用于对Store中的数据进行加工处理形成新的数据
-它只会包装Store中保存的数据，并不会修改Store中保存的数据，当Store中的数据发生变化时，Getter生成的内容也会随之变化
-打开store.js文件，添加getters，如下：</p>
+</code></pre></div><h3 id="4-getter">4. Getter</h3>
+<p><code>Getter</code>用于对<code>Store</code>中的数据进行加工处理形成新的数据，它只会包装<code>Store</code>中保存的数据，并不会修改<code>Store</code>中保存的数据，当<code>Store</code>中的数据发生变化时，<code>Getter</code>生成的内容也会随之变化。</p>
+<p>打开<code>store.js</code>文件，添加<code>getters</code>，如下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  .......
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  getters<span style="color:#ff79c6">:</span>{
@@ -299,377 +187,13 @@ C.存储在vuex中的数据是响应式的，当数据发生改变时，页面�
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span>})
-</code></pre></div><p>然后打开Addition.vue中，添加插值表达式使用getters</p>
+</code></pre></div><p>然后打开<code>Addition.vue</code>中，添加插值表达式使用<code>getters</code>：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">h3</span>&gt;{{$store.getters.showNum}}&lt;/<span style="color:#ff79c6">h3</span>&gt;
-</code></pre></div><p>或者也可以在Addition.vue中，导入mapGetters，并将之映射为计算属性
-import { mapGetters } from &lsquo;vuex&rsquo;
-computed:{
-&hellip;mapGetters([&lsquo;showNum&rsquo;])
-}</p>
-<h3 id="5vuex案例">5.vuex案例</h3>
-<h4 id="1初始化案例">1.初始化案例</h4>
-<p>首先使用vue ui初始化一个使用vuex的案例
-然后打开public文件夹，创建一个list.json文件，文件代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>[
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">0</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#ff79c6">&#34;info&#34;</span>: <span style="color:#f1fa8c">&#34;Racing car sprays burning fuel into crowd.&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#ff79c6">&#34;done&#34;</span>: <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">1</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        <span style="color:#ff79c6">&#34;info&#34;</span>: <span style="color:#f1fa8c">&#34;Japanese princess to wed commoner.&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#ff79c6">&#34;done&#34;</span>: <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">2</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        <span style="color:#ff79c6">&#34;info&#34;</span>: <span style="color:#f1fa8c">&#34;Australian walks 100km after outback crash.&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        <span style="color:#ff79c6">&#34;done&#34;</span>: <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">3</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        <span style="color:#ff79c6">&#34;info&#34;</span>: <span style="color:#f1fa8c">&#34;Man charged over missing wedding girl.&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        <span style="color:#ff79c6">&#34;done&#34;</span>: <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">4</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        <span style="color:#ff79c6">&#34;info&#34;</span>: <span style="color:#f1fa8c">&#34;Los Angeles battles huge wildfires.&#34;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#ff79c6">&#34;done&#34;</span>: <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>]
-</code></pre></div><p>再接着，打开main.js,添加store.js的引入，如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> Vue from <span style="color:#f1fa8c">&#39;vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">import</span> App from <span style="color:#f1fa8c">&#39;./App.vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">import</span> store from <span style="color:#f1fa8c">&#39;./store.js&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// 1. 导入 ant-design-vue 组件库
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span><span style="color:#ff79c6">import</span> Antd from <span style="color:#f1fa8c">&#39;ant-design-vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// 2. 导入组件库的样式表
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#ff79c6">import</span> <span style="color:#f1fa8c">&#39;ant-design-vue/dist/antd.css&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>Vue.config.productionTip <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// 3. 安装组件库
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>Vue.use(Antd)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#ff79c6">new</span> Vue({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  store,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  render<span style="color:#ff79c6">:</span> h =&gt; h(App)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}).$mount(<span style="color:#f1fa8c">&#39;#app&#39;</span>)
-</code></pre></div><p>再接着打开store.js，添加axios请求json文件获取数据的代码，如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> Vue from <span style="color:#f1fa8c">&#39;vue&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">import</span> Vuex from <span style="color:#f1fa8c">&#39;vuex&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">import</span> axios from <span style="color:#f1fa8c">&#39;axios&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>Vue.use(Vuex)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  state<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#6272a4">//所有任务列表
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    list<span style="color:#ff79c6">:</span> [],
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#6272a4">//文本输入框中的值
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>    inputValue<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;AAA&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    initList(state, list) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      state.list <span style="color:#ff79c6">=</span> list
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    setInputValue(state,value){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      state.inputValue <span style="color:#ff79c6">=</span> value
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  actions<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    getList(context) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      axios.get(<span style="color:#f1fa8c">&#39;/list.json&#39;</span>).then(({ data }) =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        console.log(data);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        context.commit(<span style="color:#f1fa8c">&#39;initList&#39;</span>, data)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      })
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>})
-</code></pre></div><p>最后，代开App.vue文件，将store中的数据获取并展示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;app&#34;</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    &lt;<span style="color:#ff79c6">a-input</span> <span style="color:#50fa7b">placeholder</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;请输入任务&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;my_ipt&#34;</span> <span style="color:#ff79c6">:value</span><span style="color:#f1fa8c">=&#34;inputValue&#34;</span> <span style="color:#ff79c6">@change</span><span style="color:#f1fa8c">=&#34;handleInputChange&#34;</span> /&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">a-button</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;primary&#34;</span>&gt;添加事项<span style="color:#ff79c6">&lt;</span>/a-button&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;<span style="color:#ff79c6">a-list</span> <span style="color:#50fa7b">bordered</span> <span style="color:#ff79c6">:dataSource</span><span style="color:#f1fa8c">=&#34;list&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;dt_list&#34;</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      &lt;<span style="color:#ff79c6">a-list-item</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;renderItem&#34;</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">-scope</span>=&#34;<span style="color:#50fa7b">item</span>&#34;&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#6272a4">&lt;!--</span> 复选框 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>        &lt;<span style="color:#ff79c6">a-checkbox</span> <span style="color:#ff79c6">:checked</span><span style="color:#f1fa8c">=&#34;item.done&#34;</span>&gt;{{item.info}}<span style="color:#ff79c6">&lt;</span>/a-checkbox&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#6272a4">&lt;!--</span> 删除链接 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        &lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;actions&#34;</span>&gt;删除&lt;/<span style="color:#ff79c6">a</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>      <span style="color:#ff79c6">&lt;</span>/a-list-item&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      <span style="color:#6272a4">&lt;!--</span> footer区域 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;footer&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;footer&#34;</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        <span style="color:#6272a4">&lt;!--</span> 未完成的任务个数 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        &lt;<span style="color:#ff79c6">span</span>&gt;<span style="color:#bd93f9">0</span>条剩余&lt;/<span style="color:#ff79c6">span</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        <span style="color:#6272a4">&lt;!--</span> 操作按钮 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        &lt;<span style="color:#ff79c6">a-button-group</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>          &lt;<span style="color:#ff79c6">a-button</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;primary&#34;</span>&gt;全部<span style="color:#ff79c6">&lt;</span>/a-button&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>          &lt;<span style="color:#ff79c6">a-button</span>&gt;未完成<span style="color:#ff79c6">&lt;</span>/a-button&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>          &lt;<span style="color:#ff79c6">a-button</span>&gt;已完成<span style="color:#ff79c6">&lt;</span>/a-button&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        <span style="color:#ff79c6">&lt;</span>/a-button-group&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        <span style="color:#6272a4">&lt;!--</span> 把已经完成的任务清空 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        &lt;<span style="color:#ff79c6">a</span>&gt;清除已完成&lt;/<span style="color:#ff79c6">a</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      &lt;/<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#ff79c6">&lt;</span>/a-list&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  &lt;/<span style="color:#ff79c6">div</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>&lt;/<span style="color:#ff79c6">template</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>&lt;<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#ff79c6">import</span> { mapState } from <span style="color:#f1fa8c">&#39;vuex&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;app&#39;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>  data() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    <span style="color:#ff79c6">return</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>      <span style="color:#6272a4">// list:[]
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#6272a4"></span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  created(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    <span style="color:#6272a4">// console.log(this.$store);
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.$store.dispatch(<span style="color:#f1fa8c">&#39;getList&#39;</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>  methods<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>    handleInputChange(e){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>      <span style="color:#6272a4">// console.log(e.target.value)
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;setInputValue&#39;</span>,e.target.value)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>  computed<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>    ...mapState([<span style="color:#f1fa8c">&#39;list&#39;</span>,<span style="color:#f1fa8c">&#39;inputValue&#39;</span>])
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>&lt;/<span style="color:#ff79c6">script</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>&lt;<span style="color:#ff79c6">style</span> <span style="color:#50fa7b">scoped</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>#app {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>  padding<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span>px;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>.my_ipt {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>  width<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">500</span>px;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>  margin<span style="color:#ff79c6">-</span>right<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span>px;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>.dt_list {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>  width<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">500</span>px;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>  margin<span style="color:#ff79c6">-</span>top<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">10</span>px;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>.footer {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>  display<span style="color:#ff79c6">:</span> flex;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>  justify<span style="color:#ff79c6">-</span>content<span style="color:#ff79c6">:</span> space<span style="color:#ff79c6">-</span>between;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span>  align<span style="color:#ff79c6">-</span>items<span style="color:#ff79c6">:</span> center;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>&lt;/<span style="color:#ff79c6">style</span>&gt;
-</code></pre></div><h4 id="2完成添加事项">2.完成添加事项</h4>
-<p>首先，打开App.vue文件，给“添加事项”按钮绑定点击事件，编写处理函数</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//绑定事件
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>&lt;<span style="color:#ff79c6">a-button</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;primary&#34;</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;addItemToList&#34;</span>&gt;<span style="color:#50fa7b">添加事项</span>&lt;/<span style="color:#50fa7b">a</span><span style="color:#ff79c6">-button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">//编写事件处理函数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>methods<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    addItemToList(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      <span style="color:#6272a4">//向列表中新增事项
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">this</span>.inputValue.trim().length <span style="color:#ff79c6">&lt;=</span> <span style="color:#bd93f9">0</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.$message.warning(<span style="color:#f1fa8c">&#39;文本框内容不能为空&#39;</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;addItem&#39;</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  }
-</code></pre></div><p>然后打开store.js编写addItem</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  state<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#6272a4">//所有任务列表
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>    list<span style="color:#ff79c6">:</span> [],
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#6272a4">//文本输入框中的值
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>    inputValue<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;AAA&#39;</span>,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#6272a4">//下一个id
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    nextId<span style="color:#ff79c6">:</span><span style="color:#bd93f9">5</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    ........
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#6272a4">//添加列表项
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    addItem(state){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      <span style="color:#ff79c6">const</span> obj <span style="color:#ff79c6">=</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        id <span style="color:#ff79c6">:</span>state.nextId,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        info<span style="color:#ff79c6">:</span> state.inputValue.trim(),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        done<span style="color:#ff79c6">:</span><span style="color:#ff79c6">false</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      <span style="color:#6272a4">//将创建好的事项添加到数组list中
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>      state.list.push(obj)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      <span style="color:#6272a4">//将nextId值自增
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>      state.nextId<span style="color:#ff79c6">++</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      state.inputValue <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>})
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>
-</code></pre></div><h4 id="3完成删除事项">3.完成删除事项</h4>
-<p>首先，打开App.vue文件，给“删除”按钮绑定点击事件，编写处理函数</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//绑定事件
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">slot</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;actions&#34;</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;removeItemById(item.id)&#34;</span>&gt;<span style="color:#50fa7b">删除</span>&lt;/<span style="color:#ff79c6">a</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>//<span style="color:#50fa7b">编写事件处理函数</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#50fa7b">methods</span><span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#50fa7b">......</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#50fa7b">removeItemById</span>(<span style="color:#50fa7b">id</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      //<span style="color:#50fa7b">根据id删除事项</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      <span style="color:#50fa7b">this.</span>$<span style="color:#50fa7b">store.commit</span>(&#39;<span style="color:#50fa7b">removeItem</span>&#39;,<span style="color:#50fa7b">id</span>)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  }
-</code></pre></div><p>然后打开store.js编写addItem</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    ........
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    removeItem(state,id){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#6272a4">//根据id删除事项数据
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">const</span> index <span style="color:#ff79c6">=</span> state.list.findIndex( x =&gt; x.id <span style="color:#ff79c6">===</span> id )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      <span style="color:#6272a4">// console.log(index);
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">if</span>(index <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>) state.list.splice(index,<span style="color:#bd93f9">1</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>})
-</code></pre></div><h4 id="4完成选中状态的改变">4.完成选中状态的改变</h4>
-<p>首先，打开App.vue文件，给“复选”按钮绑定点击事件，编写处理函数</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//绑定事件
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span>&lt;<span style="color:#ff79c6">a-checkbox</span> <span style="color:#ff79c6">:checked</span><span style="color:#f1fa8c">=&#34;item.done&#34;</span> <span style="color:#ff79c6">@change</span><span style="color:#f1fa8c">=&#34;cbStateChanged(item.id,$event)&#34;</span>&gt;{{<span style="color:#50fa7b">item.info</span>}}&lt;/<span style="color:#50fa7b">a</span><span style="color:#ff79c6">-checkbox</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">//编写事件处理函数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>methods<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    cbStateChanged(id,e){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      <span style="color:#6272a4">//复选框状态改变时触发
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">const</span> param <span style="color:#ff79c6">=</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        id<span style="color:#ff79c6">:</span>id,
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>        status<span style="color:#ff79c6">:</span>e.target.checked
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      <span style="color:#6272a4">//根据id更改事项状态
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;changeStatus&#39;</span>,param)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  }
-</code></pre></div><p>然后打开store.js编写addItem</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    ........
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    changeStatus(state,param){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#6272a4">//根据id改变对应事项的状态
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">const</span> index <span style="color:#ff79c6">=</span> state.list.findIndex( x =&gt; x.id <span style="color:#ff79c6">===</span> param.id )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      <span style="color:#ff79c6">if</span>(index <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>) state.list[index].done <span style="color:#ff79c6">=</span> param.status
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>})
-</code></pre></div><h4 id="5剩余项统计">5.剩余项统计</h4>
-<p>打开store.js，添加getters完成剩余项统计</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>getters<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  unDoneLength(state){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">const</span> temp <span style="color:#ff79c6">=</span> state.list.filter( x =&gt; x.done <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">false</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    console.log(temp)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#ff79c6">return</span> temp.length
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
-</code></pre></div><p>打开App.vue，使用getters展示剩余项</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>//使用映射好的计算属性展示剩余项
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;!-- 未完成的任务个数 --&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>&lt;span&gt;{{unDoneLength}}条剩余&lt;/span&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>//导入getters
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>import { mapState,mapGetters } from &#39;vuex&#39;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>//映射
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>computed:{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  ...mapState([&#39;list&#39;,&#39;inputValue&#39;]),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  ...mapGetters([&#39;unDoneLength&#39;])
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
-</code></pre></div><h4 id="6清除完成事项">6.清除完成事项</h4>
-<p>首先，打开App.vue文件，给“清除已完成”按钮绑定点击事件，编写处理函数</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">&lt;!--</span> 把已经完成的任务清空 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;clean&#34;</span>&gt;<span style="color:#50fa7b">清除已完成</span>&lt;/<span style="color:#ff79c6">a</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>//<span style="color:#50fa7b">编写事件处理函数</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#50fa7b">methods</span><span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#50fa7b">......</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  <span style="color:#50fa7b">clean</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    //<span style="color:#50fa7b">清除已经完成的事项</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#50fa7b">this.</span>$<span style="color:#50fa7b">store.commit</span>(&#39;<span style="color:#50fa7b">cleanDone</span>&#39;)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
-</code></pre></div><p>然后打开store.js编写addItem</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    ........
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    cleanDone(state){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      state.list <span style="color:#ff79c6">=</span> state.list.filter( x =&gt; x.done <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">false</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>})
-</code></pre></div><h4 id="7点击选项卡切换事项">7.点击选项卡切换事项</h4>
-<p>打开App.vue，给“全部”，“未完成”，“已完成”三个选项卡绑定点击事件，编写处理函数
-并将列表数据来源更改为一个getters。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">a-list</span> <span style="color:#50fa7b">bordered</span> <span style="color:#ff79c6">:dataSource</span><span style="color:#f1fa8c">=&#34;infoList&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;dt_list&#34;</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#6272a4">&lt;!--</span> 操作按钮 <span style="color:#ff79c6">--&gt;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  &lt;<span style="color:#ff79c6">a-button-group</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    &lt;<span style="color:#ff79c6">a-button</span> <span style="color:#ff79c6">:</span><span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;viewKey ===&#39;all&#39;?&#39;primary&#39;:&#39;default&#39;&#34;</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;changeList(&#39;all&#39;)&#34;</span>&gt;<span style="color:#50fa7b">全部</span>&lt;/<span style="color:#50fa7b">a</span><span style="color:#ff79c6">-button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;<span style="color:#ff79c6">a-button</span> <span style="color:#ff79c6">:</span><span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;viewKey ===&#39;undone&#39;?&#39;primary&#39;:&#39;default&#39;&#34;</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;changeList(&#39;undone&#39;)&#34;</span>&gt;<span style="color:#50fa7b">未完成</span>&lt;/<span style="color:#50fa7b">a</span><span style="color:#ff79c6">-button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    &lt;<span style="color:#ff79c6">a-button</span> <span style="color:#ff79c6">:</span><span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;viewKey ===&#39;done&#39;?&#39;primary&#39;:&#39;default&#39;&#34;</span> <span style="color:#ff79c6">@click</span><span style="color:#f1fa8c">=&#34;changeList(&#39;done&#39;)&#34;</span>&gt;<span style="color:#50fa7b">已完成</span>&lt;/<span style="color:#50fa7b">a</span><span style="color:#ff79c6">-button</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#ff79c6">&lt;</span>/a-button-group&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">&lt;</span>/a-list&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">//编写事件处理函数以及映射计算属性
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>methods<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  changeList( key ){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#6272a4">//点击“全部”，“已完成”，“未完成”时触发
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.$store.commit(<span style="color:#f1fa8c">&#39;changeKey&#39;</span>,key)
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>},
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>computed<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  ...mapState([<span style="color:#f1fa8c">&#39;list&#39;</span>,<span style="color:#f1fa8c">&#39;inputValue&#39;</span>,<span style="color:#f1fa8c">&#39;viewKey&#39;</span>]),
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  ...mapGetters([<span style="color:#f1fa8c">&#39;unDoneLength&#39;</span>,<span style="color:#f1fa8c">&#39;infoList&#39;</span>])
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
-</code></pre></div><p>打开store.js，添加getters，mutations，state</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vue" data-lang="vue"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> <span style="color:#ff79c6">new</span> Vuex.Store({
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  state<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#6272a4">//保存默认的选项卡值
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>    viewKey<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;all&#39;</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  mutations<span style="color:#ff79c6">:</span> {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    changeKey(state,key){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      <span style="color:#6272a4">//当用户点击“全部”，“已完成”，“未完成”选项卡时触发
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>      state.viewKey <span style="color:#ff79c6">=</span> key
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  },
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  ......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  getters<span style="color:#ff79c6">:</span>{
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    .......
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    infoList(state){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      <span style="color:#ff79c6">if</span>(state.viewKey <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;all&#39;</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        <span style="color:#ff79c6">return</span> state.list
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      <span style="color:#ff79c6">if</span>(state.viewKey <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;undone&#39;</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>        <span style="color:#ff79c6">return</span> state.list.filter( x =&gt; x.done <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">false</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      <span style="color:#ff79c6">if</span>(state.viewKey <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;done&#39;</span>){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#ff79c6">return</span> state.list.filter( x =&gt; x.done <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">true</span> )
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>})
+</code></pre></div><p>或者也可以在<code>Addition.vue</code>中，导入<code>mapGetters</code>，并将之映射为计算属性：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">import</span> { mapGetters } from <span style="color:#f1fa8c">&#39;vuex&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>computed<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  ...mapGetters([<span style="color:#f1fa8c">&#39;showNum&#39;</span>])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div>
       </div>
       <div class="footer">

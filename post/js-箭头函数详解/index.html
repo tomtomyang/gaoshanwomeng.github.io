@@ -34,39 +34,20 @@
 </div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-    </div><ul class="toc-h3"><li>
-                <span class="toc-link">声明一个函数</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 定义</span>
             </li>
             <li>
-                <span class="toc-link">调用函数</span>
+                <span class="toc-link">2. 声明</span>
             </li>
             <li>
-                <span class="toc-link">箭头函数特性</span>
-            </li>
-            
-                    <ul class="toc-h4"><li>
-                <span class="toc-link">this 始终指向函数声明时所在作用域下的 this</span>
+                <span class="toc-link">3. 调用</span>
             </li>
             <li>
-                <span class="toc-link">不能作为构造实例化对象</span>
+                <span class="toc-link">4. 特性</span>
             </li>
             <li>
-                <span class="toc-link">不能使用 arguments 变量</span>
-            </li>
-            
-                    </ul><li>
-                <span class="toc-link">箭头函数的简写</span>
-            </li>
-            
-                    <ul class="toc-h4"><li>
-                <span class="toc-link">省略小括号</span>
-            </li>
-            <li>
-                <span class="toc-link">省略花括号</span>
-            </li>
-            
-                    </ul><li>
-                <span class="toc-link">箭头函数的使用</span>
+                <span class="toc-link">5. 简写</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -76,26 +57,27 @@
         <div class="info">
           <span>📅 2021-08-10</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 867字</span>
+          <span>📖 650字</span>
           <span>⏱ 2分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
         <p>ES6标准新增了一种新的函数：Arrow Function（箭头函数）。</p>
+<h2 id="1-定义">1. 定义</h2>
 <p>为什么叫Arrow Function？因为它的定义用的就是一个箭头：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>x =&gt; x * x
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>x =&gt; x <span style="color:#ff79c6">*</span> x
 </code></pre></div><p>上面的箭头函数相当于：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>function (x) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    return x * x;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> (x) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">return</span> x <span style="color:#ff79c6">*</span> x;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 </code></pre></div><p>箭头函数相当于匿名函数，并且简化了函数定义。箭头函数有两种格式，一种像上面的，只包含一个表达式，连<code>{ ... }</code>和<code>return</code>都省略掉了。还有一种可以包含多条语句，这时候就不能省略<code>{ ... }</code>和<code>return</code>：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>x =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    if (x &gt; 0) {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        return x * x;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>x =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">if</span> (x <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>        <span style="color:#ff79c6">return</span> x <span style="color:#ff79c6">*</span> x;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    }
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    else {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        return - x * x;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>    <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">-</span> x <span style="color:#ff79c6">*</span> x;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
 </code></pre></div><p>如果参数不是一个，就需要用括号<code>()</code>括起来：</p>
@@ -114,24 +96,24 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#ff79c6">return</span> sum;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>}
 </code></pre></div><p>如果要返回一个对象，就要注意，如果是单表达式，这么写的话会报错</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>// SyntaxError:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>x =&gt; { foo: x }
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// SyntaxError:
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>x =&gt; { foo<span style="color:#ff79c6">:</span> x }
 </code></pre></div><p>因为和函数体的<code>{ ... }</code>有语法冲突，所以要改为</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>// ok:
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>x =&gt; ({ foo: x })
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// ok:
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span>x =&gt; ({ foo<span style="color:#ff79c6">:</span> x })
 </code></pre></div><p>ES6 允许使用「箭头」（=&gt;）定义函数。</p>
-<h3 id="声明一个函数">声明一个函数</h3>
+<h2 id="2-声明">2. 声明</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> (<span style="color:#ff79c6">*</span>a<span style="color:#ff79c6">*</span>,<span style="color:#ff79c6">*</span>b<span style="color:#ff79c6">*</span>) =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>	<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">*</span>a<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">*</span>b<span style="color:#ff79c6">*</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
-</code></pre></div><h3 id="调用函数">调用函数</h3>
+</code></pre></div><h2 id="3-调用">3. 调用</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> result <span style="color:#ff79c6">=</span> fn(<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log(result);
-</code></pre></div><h3 id="箭头函数特性">箭头函数特性</h3>
-<h4 id="this-始终指向函数声明时所在作用域下的-this">this 始终指向函数声明时所在作用域下的 this</h4>
+</code></pre></div><h2 id="4-特性">4. 特性</h2>
+<p>this 始终指向函数声明时所在作用域下的 this</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> getName(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	console.log(<span style="color:#ff79c6">this</span>.name);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>}
@@ -154,65 +136,30 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>getName2.call(school);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>
-</code></pre></div><h4 id="heading"></h4>
-<h4 id="不能作为构造实例化对象">不能作为构造实例化对象</h4>
+</code></pre></div><p>不能作为构造实例化对象</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> Person <span style="color:#ff79c6">=</span> (name, age) =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#ff79c6">this</span>.name <span style="color:#ff79c6">=</span> name;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#ff79c6">this</span>.age <span style="color:#ff79c6">=</span> age;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#8be9fd;font-style:italic">let</span> me <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Person(<span style="color:#f1fa8c">&#39;xiao&#39;</span>,<span style="color:#bd93f9">30</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>console.log(me);
-</code></pre></div><h4 id="不能使用-arguments-变量">不能使用 arguments 变量</h4>
+</code></pre></div><p>不能使用 arguments 变量</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> fn <span style="color:#ff79c6">=</span> () =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log(arguments);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>fn(<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">2</span>,<span style="color:#bd93f9">3</span>);
-</code></pre></div><h3 id="箭头函数的简写">箭头函数的简写</h3>
-<h4 id="省略小括号">省略小括号</h4>
+</code></pre></div><h2 id="5-简写">5. 简写</h2>
+<p>省略小括号</p>
 <p>当形参有且只有一个的时候</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> add <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#ff79c6">return</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">+</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log(add(<span style="color:#bd93f9">9</span>));
-</code></pre></div><h4 id="省略花括号">省略花括号</h4>
+</code></pre></div><p>省略花括号</p>
 <p>当代码体只有一条语句的时候, 此时 return 必须省略，而且语句的执行结果就是函数的返回值。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">let</span> pow <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> =&gt; <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span> <span style="color:#ff79c6">*</span> <span style="color:#ff79c6">*</span>n<span style="color:#ff79c6">*</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log(pow(<span style="color:#bd93f9">8</span>));
-</code></pre></div><h3 id="箭头函数的使用">箭头函数的使用</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">//需求-1  点击 div 2s 后颜色变成『粉色』
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">//获取元素
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> ad <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;ad&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">//绑定事件
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>ad.addEventListener(<span style="color:#f1fa8c">&#34;click&#34;</span>, <span style="color:#8be9fd;font-style:italic">function</span>(){
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#6272a4">//保存 this 的值
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// let _this = this;
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">//定时器
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    setTimeout(() =&gt; {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>        <span style="color:#6272a4">//修改背景颜色 this
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// console.log(this);
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// _this.style.background = &#39;pink&#39;;
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.style.background <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;pink&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }, <span style="color:#bd93f9">2000</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>});
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4">//需求-2  从数组中返回偶数的元素
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>,<span style="color:#bd93f9">6</span>,<span style="color:#bd93f9">9</span>,<span style="color:#bd93f9">10</span>,<span style="color:#bd93f9">100</span>,<span style="color:#bd93f9">25</span>];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4">// const result = arr.filter(function(item){
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">//     if(item % 2 === 0){
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4">//         return true;
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">//     }else{
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">//         return false;
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">//     }
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#6272a4">// });
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#6272a4"></span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#ff79c6">const</span> result <span style="color:#ff79c6">=</span> arr.filter(item =&gt; item <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">2</span> <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">0</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>console.log(result);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>
-</code></pre></div><p>箭头函数适合与 this 无关的回调. 定时器, 数组的方法回调
-箭头函数不适合与 this 有关的回调.  事件回调, 对象的方法</p>
-
+</code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>

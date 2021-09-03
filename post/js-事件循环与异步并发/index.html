@@ -57,7 +57,7 @@
         <div class="info">
           <span>📅 2021-06-25</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 6275字</span>
+          <span>📖 6376字</span>
           <span>⏱ 13分钟</span>
         </div>
         
@@ -347,6 +347,7 @@
 </ol>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" /></p>
 <h3 id="5-async和await">5. async和await</h3>
+<p>首先我们要知道，<code>async</code>和<code>await</code>是异步微任务的另一种实现方式，解决了在<code>Promise</code>中不能进行异常捕获的问题，关于<code>async</code>和<code>await</code>的详细讲解，在另一篇文章《js async与await详解》。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" /></p>
 <blockquote>
 <ol>
@@ -363,11 +364,11 @@
 <p>JS引擎继续，来到函数体内第二行，看到了await关键词，我们需要等待函数<code>one</code>执行完成后获取一个值，函数<code>one</code>会压入到执行栈，最终返回<code>resolve</code>状态的<code>promise</code>，<code>one</code>执行完成，出栈；</p>
 </li>
 <li>
-<p>When encountering an <code>await</code> keyword, the <code>async</code> function gets <em>suspended</em>. ✋🏼 The execution of the function body <strong>gets paused</strong>, and the rest of the async function gets to run in a <em>microtask</em> instead of a regular task!</p>
+<p>When encountering an <code>await</code> keyword, the <code>async</code> function gets <em>suspended</em>. ✋🏼 The execution of the function body gets paused, and the rest of the async function gets to run in a <em>microtask</em> instead of a regular task!</p>
 <p>遇到<code>await</code>关键字时，<code>async</code>函数会被暂停， 函数正文的执行暂停，其余的异步代码则在<code>await</code>后面的语句执行完后，加入微任务队列中，而不再是常规任务！</p>
 </li>
 <li>
-<p>Now that the async function <code>myFunc</code> is suspended as it encountered the <code>await</code> keyword, the engine jumps out of the async function and continues executing the code in the execution context in which the async function got called: the <strong>global execution context</strong> in this case! 🏃🏽‍♀️</p>
+<p>Now that the async function <code>myFunc</code> is suspended as it encountered the <code>await</code> keyword, the engine jumps out of the async function and continues executing the code in the execution context in which the async function got called: the global execution context in this case! 🏃🏽‍♀️</p>
 <p>既然异步函数<code>myfunc</code>被暂停，因为它遇到了<code>await</code>关键字，引擎跳出函数，<code>myfunc</code>函数出栈，并继续向下执行（下面就是输出<code>After function</code>）；</p>
 </li>
 <li>

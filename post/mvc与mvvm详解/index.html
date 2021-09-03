@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  MVC与MVVM详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" MVC与MVVM详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [MVC MVVM] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/mvc%E4%B8%8Emvvm%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 架构模式</span>
+            </li>
+            <li>
+                <span class="toc-link">2. MVC</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 组成</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 运作模式</span>
+            </li>
+            <li>
+                <span class="toc-link">4. React与MVC</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. MVVM</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 概念</span>
+            </li>
+            <li>
+                <span class="toc-link">2. Vue与MVVM</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">MVC与MVVM详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-02</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 1725字</span>
+          <span>⏱ 4分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html">MVC，MVP 和 MVVM 的图示</a></p>
+<p><a href="https://draveness.me/mvx/">浅谈 MVC、MVP 和 MVVM 架构模式</a></p>
+<p><a href="https://www.cnblogs.com/ivaneye/p/10096598.html">架构模式：MVC与MVVM</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/64257809">结合vue、react、angular谈谈MVC、MVP、MVVM框架</a></p>
+</blockquote>
+<h2 id="1-架构模式">1. 架构模式</h2>
+<p>MVC和MVVM都是架构模式！</p>
+<ul>
+<li>MVC描述了「Model,View,Controller」三者之间的关系</li>
+<li>MVVM描述了[Model,View,ViewModel(和Binder)」三者之间的关系</li>
+</ul>
+<p>可以看出MVC和MVVM都是为了解耦「界面」和「数据」，只是解决方案不同！也可以说MVVM是MVC的一种变体，ViewModel+Binder可以说是Controller的一种实现方式。</p>
+<p><strong>为什么要解耦「界面」和「数据」？</strong></p>
+<p>早期的界面系统开发时，展示逻辑与数据是糅合在一起的！以早期的<code>Java</code>为例，所有的展示逻辑和业务逻辑都写在了<code>Servlet/JSP</code>中，导致了：</p>
+<ul>
+<li>单个文件的代码量较多，既包含了展示代码又包含了业务逻辑</li>
+<li>违背了职责单一性原则</li>
+<li>修改麻烦</li>
+<li>复用性差</li>
+<li>不易于维护</li>
+<li>&hellip;&hellip;</li>
+</ul>
+<h2 id="2-mvc">2. MVC</h2>
+<h3 id="1-组成">1. 组成</h3>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2015020104.png" alt="img"></p>
+<p>MVC将系统拆分为控制器、视图和模型来解决上面的问题：</p>
+<ul>
+<li>
+<p><strong>控制器（Controller）</strong></p>
+<p>执行业务逻辑</p>
+</li>
+<li>
+<p><strong>视图（View）</strong></p>
+<p>构建用户界面</p>
+</li>
+<li>
+<p><strong>模型（Model）</strong></p>
+<p>对数据进行保存</p>
+</li>
+</ul>
+<h3 id="2-优点">2. 优点</h3>
+<p>这样的拆分，提高了系统的：</p>
+<ul>
+<li>
+<p><strong>可扩展性</strong>：</p>
+<p>View、Model和Controller分别负责视图、数据和逻辑，可独立进化。能较方便的增加新功能。</p>
+</li>
+<li>
+<p><strong>可维护性</strong>：</p>
+<p>结构清晰，多个View可以复用一个Model，减少了代码重复</p>
+</li>
+<li>
+<p><strong>灵活性</strong>：</p>
+<p>Controller 可以用来连接不同的 Model 和 View 去完成用户的需求</p>
+</li>
+</ul>
+<h3 id="3-运作模式">3. 运作模式</h3>
+<p>用js来实现一个最最最简单的MVC架构就是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/** 模拟 Model, View, Controller */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#8be9fd;font-style:italic">var</span> M <span style="color:#ff79c6">=</span> {}, V <span style="color:#ff79c6">=</span> {}, C <span style="color:#ff79c6">=</span> {};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">/** Model 数据 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>M.data <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;hello world&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">/** View 展示 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>V.render <span style="color:#ff79c6">=</span> (M) =&gt; { alert(M.data); }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">/** Controller 逻辑 */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>C.handleOnload <span style="color:#ff79c6">=</span> () =&gt; { V.render(M); }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">/** 在页面加载的时候调用Controller*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#8be9fd;font-style:italic">window</span>.onload <span style="color:#ff79c6">=</span> C.handleOnload;
+</code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2015020105.png" alt="img"></p>
+<ol>
+<li>View 传送指令到 Controller</li>
+<li>Controller 完成业务逻辑后，要求 Model 改变状态</li>
+<li>Model 将新的数据发送到 View，用户得到反馈</li>
+</ol>
+<h3 id="4-react与mvc">4. React与MVC</h3>
+<p>虽然React一再强调自己只是一个构建界面的库，在宏观的角度，或者整个应用的角度来看，React只是充当了一个v的角色，但是当我们站在前端的角度思考问题，就会发现React组件内视图与数据的组织模式也是符合这种规范的。</p>
+<p>在React组件内，我们要关注的是两个问题：</p>
+<ol>
+<li>数据变了，视图如何变？</li>
+<li>视图变了，数据如何变？</li>
+</ol>
+<h2 id="3-mvvm">3. MVVM</h2>
+<p>MVVM是在MVC的基础上发展起来的，</p>
+<h3 id="1-概念">1. 概念</h3>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2015020110.png" alt="img"></p>
+<p>View 与 Model 不发生联系，都通过<code>ViewModel</code>进行联络，也就是说提供一个中间层，实现数据驱动视图，视图修改数据，而视图和数据时不能直接进行对话的。</p>
+<h3 id="2-vue与mvvm">2. Vue与MVVM</h3>
+<p>宏观来说，Vue也只是一个构建视图的框架，那么在整个WEB应用中，只是负责页面的构建。但是我们把目光放小，站在前端的角度上，关注前端如何把数据与视图组织起来，以及数据和视图发生变化时的工作模式，这时候我们会发现，有另一层数据与逻辑的处理存在。</p>
+<p>在Vue实例中，我们要关注的是两个问题：</p>
+<ol>
+<li>数据变了，视图如何变？</li>
+<li>视图变了，数据如何变？</li>
+</ol>
+<p>先来分析第一个问题，数据变了，视图如何变？</p>
+<p>发生这种情况，肯定是我们操作了Vue实例中的data数据，data数据发生改变，Vue实例中的数据监听机制就会被触发，监听到数据发生改变，更新页面。从这套流程中，我们可以分析出这么一套流程，<code>Model</code>-&gt;<code>ViewModel</code>-&gt;<code>View</code>。</p>
+<p>再来分析第二个问题，视图变了，数据如何改变？</p>
+<p>发生这种情况，肯定是用户进行了页面的操作，比如改变了input框中的值，Vue实例监听到了页面上发生了一些事件，那么就会去修改相应的data数据，这套流程中，我们可以分析出另一套流程，<code>View</code>-&gt;<code>ViewModel</code>-&gt;<code>Model</code>。</p>
+<blockquote>
+<p>这里我们只分析Vue的工作流程，关于Vue是如何实现监听，实现数据双向绑定的，我们在另一篇文章中进行探讨《vue 数据双向绑定详解》</p>
+</blockquote>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-30fd0bf6abc96531c157659cc74be2c7_720w.jpg" alt="img"></p>
+<p>在这两个流程中我们分析出了，Vue的各个部分各自的职责，以及在MVVM中的身份：</p>
+<ul>
+<li><code>View</code>：最后生成的真实页面（HTML），这里要注意<code>template</code>是用来构建页面的模板，而不是最终真实的页面。</li>
+<li><code>ViewModel</code>：Vue实例，负责将视图和数据组织起来</li>
+<li><code>Binder</code>：Vue实例内部的观察者模式，双向数据绑定</li>
+<li><code>Model</code>：Vue实例中的data</li>
+</ul>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/%20categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/%20tags/mvc/">MVC</a><a class="tag" href="https://tomtomyoung.top/%20tags/mvvm/">MVVM</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-hooks%E8%AF%A6%E8%A7%A3/" data-tooltip="react Hooks详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E4%B8%8E%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" data-tooltip="js 数据类型与类型转换">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>

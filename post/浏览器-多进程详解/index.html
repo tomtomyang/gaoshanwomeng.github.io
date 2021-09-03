@@ -34,8 +34,15 @@
 </div><div class="toc sub-container">
     <div class="toc-header">
         <span>目录</span>
-    </div><ul class="toc-h3"><li>
-                <span class="toc-link">1. 浏览器是多进程的</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 进程与线程</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 浏览器的多进程</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 有哪些进程</span>
             </li>
             <li>
                 <span class="toc-link">2. 多进程的优势</span>
@@ -44,7 +51,7 @@
                 <span class="toc-link">3. Render进程</span>
             </li>
             <li>
-                <span class="toc-link">4. Browser进程和Renderer进程通信</span>
+                <span class="toc-link">4. Browser进程和Render进程通信</span>
             </li>
             <li>
                 <span class="toc-link">5. Render进程中各线程的关系</span>
@@ -60,11 +67,12 @@
                 <span class="toc-link">3. WebWorker和JS的多线程</span>
             </li>
             
+                    </ul>
                     </ul><li>
-                <span class="toc-link">6. 浏览器渲染页面的流程</span>
+                <span class="toc-link">3. 浏览器渲染页面的流程</span>
             </li>
             <li>
-                <span class="toc-link">7. 从Event Loop谈JS的运行机制</span>
+                <span class="toc-link">4. 从Event Loop谈JS的运行机制</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -74,13 +82,14 @@
         <div class="info">
           <span>📅 2021-05-20</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 4423字</span>
+          <span>📖 4397字</span>
           <span>⏱ 9分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
-        <blockquote>
+        <h2 id="1-进程与线程">1. 进程与线程</h2>
+<blockquote>
 <p>windows打开任务管理器，可以看到后台进程列表。可以看到每个进程的内存资源信息以及cpu占有率。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000012925877" alt="img"></p>
 <p>所以，应该更容易理解了：进程是cpu资源分配的最小单位（系统会给它分配内存）</p>
@@ -90,7 +99,7 @@
 <li>线程是cpu调度的最小单位（线程是建立在进程的基础上的一次程序运行单位，一个进程中可以有多个线程）</li>
 </ul>
 </blockquote>
-<h3 id="1-浏览器是多进程的">1. 浏览器是多进程的</h3>
+<h2 id="2-浏览器的多进程">2. 浏览器的多进程</h2>
 <p>理解了进程与线程了区别后，接下来对浏览器进行一定程度上的认识：</p>
 <ul>
 <li>浏览器是多进程的；</li>
@@ -104,26 +113,38 @@
 <p>在这里浏览器应该也有自己的优化机制，有时候打开多个tab页后，可以在Chrome任务管理器中看到，有些进程被合并了
 （所以每一个Tab标签对应一个进程并不一定是绝对的）</p>
 </blockquote>
+<h3 id="1-有哪些进程">1. 有哪些进程</h3>
 <p>知道了浏览器是多进程后，再来看看它到底包含哪些进程：</p>
 <ol>
-<li>Browser进程：浏览器的主进程（负责协调、主控），只有一个，作用有：
+<li>
+<p>Browser进程：浏览器的主进程，只有一个，负责协调和控制：</p>
 <ul>
 <li>负责浏览器界面显示，与用户交互。如前进，后退等；</li>
 <li>负责各个页面的管理，创建和销毁其他进程；</li>
-<li>将Renderer进程得到的内存中的Bitmap，绘制到用户界面上；</li>
+<li>将Render进程得到的内存中的Bitmap，绘制到用户界面上；</li>
 <li>网络资源的管理，下载等；</li>
 </ul>
 </li>
-<li>第三方插件进程：每种类型的插件对应一个进程，仅当使用该插件时才创建；</li>
-<li>GPU进程：最多一个，用于3D绘制等；</li>
-<li>浏览器渲染进程（浏览器内核）（Renderer进程，内部是多线程的）：默认每个Tab页面一个进程，互不影响。主要作用：
+<li>
+<p>第三方插件进程：</p>
+<p>每种类型的插件对应一个进程，仅当使用该插件时才创建；</p>
+</li>
+<li>
+<p>GPU进程：</p>
+<p>最多一个，用于3D绘制等；</p>
+</li>
+<li>
+<p>Render进程，内部是多线程的：</p>
 <ul>
+<li>默认每个Tab页面一个进程，互不影响；</li>
 <li>页面渲染，脚本执行，事件处理等；</li>
 </ul>
 </li>
 </ol>
-<p>在浏览器中打开一个网页相当于新起了一个进程（进程内有自己的多线程）。当然，浏览器有时会将多个进程合并（譬如打开多个空白标签页后，会发现多个空白标签页被合并成了一个进程），如图</p>
+<blockquote>
+<p>在浏览器中打开一个网页相当于新起了一个Render进程。当然，浏览器有时会将多个进程合并（譬如打开多个空白标签页后，会发现多个空白标签页被合并成了一个进程），如图：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000012925879" alt="img"></p>
+</blockquote>
 <h3 id="2-多进程的优势">2. 多进程的优势</h3>
 <p>相比于单进程浏览器，多进程有如下优点：</p>
 <ul>
@@ -177,7 +198,7 @@
 </li>
 </ol>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000012925880" alt="img"></p>
-<h3 id="4-browser进程和renderer进程通信">4. Browser进程和Renderer进程通信</h3>
+<h3 id="4-browser进程和render进程通信">4. Browser进程和Render进程通信</h3>
 <p>如果自己打开任务管理器，然后打开一个浏览器，就可以看到：任务管理器中出现了两个进程（一个是主控进程，一个则是打开Tab页的渲染进程），在这前提下，看下整个的过程：</p>
 <ul>
 <li>Browser进程收到用户请求，首先需要获取页面内容（譬如通过网络下载资源），随后将该任务通过RendererHost接口传递给Render进程</li>
@@ -220,7 +241,7 @@ GUI更新则会被保存在一个队列中等到JS引擎线程空闲时立即被
 </ul>
 <p>所以，如果有非常耗时的工作，请单独开一个Worker线程，这样里面不管如何翻天覆地都不会影响JS引擎主线程，
 只待计算出结果后，将结果通信给主线程即可。</p>
-<h3 id="6-浏览器渲染页面的流程">6. 浏览器渲染页面的流程</h3>
+<h2 id="3-浏览器渲染页面的流程">3. 浏览器渲染页面的流程</h2>
 <p>这一块的内容，在另一篇文章《浏览器 页面渲染详解》中介绍。</p>
 <blockquote>
 <p>上述都一直在谈浏览器，直接跳到JS可能再突兀，因此，中间再补充下浏览器的渲染流程。</p>
@@ -255,7 +276,7 @@ GUI更新则会被保存在一个队列中等到JS引擎线程空闲时立即被
 <li>但会阻塞render树渲染（渲染时需等css加载完毕，因为render树需要css信息）</li>
 </ul>
 </blockquote>
-<h3 id="7-从event-loop谈js的运行机制">7. 从Event Loop谈JS的运行机制</h3>
+<h2 id="4-从event-loop谈js的运行机制">4. 从Event Loop谈JS的运行机制</h2>
 <p>到此时，已经是属于浏览器页面初次渲染完毕后的事情，JS引擎的一些运行机制分析。这里主要是结合<code>Event Loop</code>来谈JS代码是如何执行的。</p>
 <p>读这部分的前提是已经知道了JS引擎是单线程，而且这里会用到上文中的几个概念：</p>
 <ul>
