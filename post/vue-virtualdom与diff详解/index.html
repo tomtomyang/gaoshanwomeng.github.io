@@ -38,22 +38,22 @@
                 <span class="toc-link">1. VNode</span>
             </li>
             <li>
-                <span class="toc-link">修改视图</span>
+                <span class="toc-link">2. 修改视图</span>
             </li>
             <li>
-                <span class="toc-link">patch</span>
+                <span class="toc-link">3. patch</span>
             </li>
             <li>
-                <span class="toc-link">sameVnode</span>
+                <span class="toc-link">4. sameVnode</span>
             </li>
             <li>
-                <span class="toc-link">patchVnode</span>
+                <span class="toc-link">5. patchVnode</span>
             </li>
             <li>
-                <span class="toc-link">updateChildren</span>
+                <span class="toc-link">6. updateChildren</span>
             </li>
             <li>
-                <span class="toc-link">DOM操作</span>
+                <span class="toc-link">7. DOM操作</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -63,7 +63,7 @@
         <div class="info">
           <span>📅 2021-09-03</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 7573字</span>
+          <span>📖 7579字</span>
           <span>⏱ 16分钟</span>
         </div>
         
@@ -81,7 +81,7 @@
 <p>在对VNode树进行修改后，经过diff算法得出一些需要修改的最小单位，再将这些小单位的视图进行更新。这样做减少了很多不需要的DOM操作，大大提高了性能。</p>
 <p>Vue就使用了这样的抽象节点VNode，它是对真实DOM的一层抽象，而不依赖某个平台，它可以是浏览器平台，也可以是weex，甚至是node平台也可以对这样一棵抽象DOM树进行创建删除修改等操作，这也为前后端同构提供了可能。</p>
 <p>具体VNode的细节可以看VNode节点。</p>
-<h2 id="修改视图">修改视图</h2>
+<h2 id="2-修改视图">2. 修改视图</h2>
 <p>众所周知，Vue通过数据绑定来修改视图，当某个数据被修改的时候，set方法会让闭包中的Dep调用notify通知所有订阅者Watcher，Watcher通过get方法执行<code>vm._update(vm._render(), hydrating)</code>。</p>
 <p>这里看一下_update方法：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.prototype._update <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (vnode<span style="color:#ff79c6">:</span> VNode, hydrating<span style="color:#ff79c6">?:</span> <span style="color:#ff79c6">boolean</span>) {
@@ -127,7 +127,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4"></span>  }
 </code></pre></div><p><em>update方法的第一个参数是一个VNode对象，在内部会将该VNode对象与之前旧的VNode对象进行__patch</em>_。</p>
 <p>什么是__patch__呢？</p>
-<h2 id="__patch__"><strong>patch</strong></h2>
+<h2 id="3-__patch__">3. <strong>patch</strong></h2>
 <p>patch将新老VNode节点进行比对，然后将根据两者的比较结果进行最小单位地修改视图，而不是将整个视图根据新的VNode重绘。patch的核心在于diff算法，这套算法可以高效地比较virtual DOM的变更，得出变化以修改视图。</p>
 <p>那么patch如何工作的呢？</p>
 <p>首先说一下patch的核心diff算法，diff算法是通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，所以时间复杂度只有O(n)，是一种相当高效的算法。</p>
@@ -236,7 +236,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99</span>  }
 </code></pre></div><p>从代码中不难发现，当oldVnode与vnode在sameVnode的时候才会进行patchVnode，也就是新旧VNode节点判定为同一节点的时候才会进行patchVnode这个过程，否则就是创建新的DOM，移除旧的DOM。</p>
 <p>怎么样的节点算sameVnode呢？</p>
-<h2 id="samevnode">sameVnode</h2>
+<h2 id="4-samevnode">4. sameVnode</h2>
 <p>我们来看一下sameVnode的实现。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/*
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">  判断两个VNode节点是否是同一个节点，需要满足以下条件
@@ -270,7 +270,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  <span style="color:#ff79c6">return</span> typeA <span style="color:#ff79c6">===</span> typeB
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>}
 </code></pre></div><p>当两个VNode的tag、key、isComment都相同，并且同时定义或未定义data的时候，且如果标签为input则type必须相同。这时候这两个VNode则算sameVnode，可以直接进行patchVnode操作。</p>
-<h2 id="patchvnode">patchVnode</h2>
+<h2 id="5-patchvnode">5. patchVnode</h2>
 <p>还是先来看一下patchVnode的代码。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  <span style="color:#6272a4">/*patch VNode节点*/</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">function</span> patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
@@ -340,7 +340,7 @@
 <p>3.如果老节点没有子节点而新节点存在子节点，先清空老节点DOM的文本内容，然后为当前DOM节点加入子节点。</p>
 <p>4.当新节点没有子节点而老节点有子节点的时候，则移除该DOM节点的所有子节点。</p>
 <p>5.当新老节点都无子节点的时候，只是文本的替换。</p>
-<h2 id="updatechildren">updateChildren</h2>
+<h2 id="6-updatechildren">6. updateChildren</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  <span style="color:#8be9fd;font-style:italic">function</span> updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldStartIdx <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">let</span> newStartIdx <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
@@ -458,7 +458,7 @@ newEndIdx =&gt; newEndVnode</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/f7c9290b5c9912e033372be205004842.png" alt="img"></p>
 <p>2。同理，当newStartIdx &gt; newEndIdx时，新的VNode节点已经遍历完了，但是老的节点还有剩余，说明真实DOM节点多余了，需要从文档中删除，这时候调用removeVnodes将这些多余的真实DOM删除。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/dfc41a99701946feb12a0f50c88e5381.png" alt="img"></p>
-<h2 id="dom操作">DOM操作</h2>
+<h2 id="7-dom操作">7. DOM操作</h2>
 <p>由于Vue使用了虚拟DOM，所以虚拟DOM可以在任何支持JavaScript语言的平台上操作，譬如说目前Vue支持的浏览器平台或是weex，在虚拟DOM的实现上是一致的。那么最后虚拟DOM如何映射到真实的DOM节点上呢？</p>
 <p>Vue为平台做了一层适配层。不同平台之间通过适配层对外提供相同的接口，虚拟DOM进行操作真实DOM节点的时候，只需要调用这些适配层的接口即可，而内部实现则不需要关心，它会根据平台的改变而改变。</p>
 <p>现在又出现了一个问题，我们只是将虚拟DOM映射成了真实的DOM。那如何给这些DOM加入attr、class、style等DOM属性呢？</p>
