@@ -53,7 +53,7 @@
                 <span class="toc-link">1. 函数式编程</span>
             </li>
             <li>
-                <span class="toc-link">2. 数据驱动试图</span>
+                <span class="toc-link">2. 数据驱动视图</span>
             </li>
             <li>
                 <span class="toc-link">3. jsx 语法</span>
@@ -122,16 +122,16 @@
 <p>在每16.6ms时间内，需要完成3个工作：JS执行 -&gt;布局 -&gt; 绘制。</p>
 </blockquote>
 <p>我们对上面Demo的渲染过程进行分析，其中js的执行占用了73.65ms：</p>
-<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/7a1b99c463324014ac23b9909bf830d7~tplv-k3u1fbpfcp-watermark.awebp" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/7a1b99c463324014ac23b9909bf830d7~tplv-k3u1fbpfcp-watermark.awebp" alt="img"></p>
 <p>那么如果JS执行时间过长，超出了16.6ms，这次刷新就没有时间执行布局和绘制了。以至于这次刷新没有进行样式的渲染，这也就是所谓的页面掉帧，卡顿。那么该如何解决这个问题？</p>
 <p>我们可以在浏览器每一帧的16.6ms中，预留一些时间给JS线程，React利用这部分时间更新组件（可以看到，在<a href="https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L119">源码</a>中，预留的初始时间是5ms）。当预留的时间不够用时，React将线程控制权交还给浏览器使其有时间渲染UI，React则等待下一帧时间到来继续被中断的工作。</p>
 <p>也就是说，我们在每一帧中给JS的执行设限，超过了5ms，你就不要再执行了，等下一帧你再执行。这种将长任务分拆到每一帧中，像蚂蚁搬家一样一次执行一小段任务的操作，被称为时间切片（time slice）。</p>
 <p>而React的很多结构和思想，都是为了实现这个优化逻辑而提出来的。</p>
 <p>我们的长任务被拆分到每一帧不同的 task 中，JS 脚本执行时间大体在 5ms 左右，这样浏览器就有剩余时间执行样式布局和样式绘制，减少掉帧的可能性。</p>
-<p><img src="https://blog.towavephone.com/static/2021-01-20-11-16-52-39203a12a2cd216cf4fb8010900ad6b7-fee1c.png" alt="2021 01 20 11 16 52"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/2021-01-20-11-16-52-39203a12a2cd216cf4fb8010900ad6b7-fee1c.png" alt="2021 01 20 11 16 52"></p>
 <h2 id="4-react核心概念">4. React核心概念</h2>
 <h3 id="1-函数式编程">1. 函数式编程</h3>
-<h3 id="2-数据驱动试图">2. 数据驱动试图</h3>
+<h3 id="2-数据驱动视图">2. 数据驱动视图</h3>
 <h3 id="3-jsx-语法">3. jsx 语法</h3>
 <h3 id="4-fiber">4. Fiber</h3>
 <h3 id="5-diff-算法">5. Diff 算法</h3>
