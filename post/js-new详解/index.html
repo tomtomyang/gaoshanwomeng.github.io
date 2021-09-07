@@ -35,13 +35,19 @@
     <div class="toc-header">
         <span>目录</span>
     </div><ul class="toc-h2"><li>
-                <span class="toc-link">1. 构造函数</span>
+                <span class="toc-link">1. new</span>
             </li>
             <li>
-                <span class="toc-link">2. new关键字</span>
+                <span class="toc-link">1. 构造函数定义类</span>
             </li>
             <li>
-                <span class="toc-link">3. 手写new</span>
+                <span class="toc-link">2. Class定义类</span>
+            </li>
+            <li>
+                <span class="toc-link">3. new 的流程</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 手写new</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -51,7 +57,7 @@
         <div class="info">
           <span>📅 2021-08-31</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 527字</span>
+          <span>📖 610字</span>
           <span>⏱ 2分钟</span>
         </div>
         
@@ -62,13 +68,18 @@
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/new">MDN_new</a></p>
 <p><a href="https://blog.csdn.net/PILIpilipala/article/details/114535866">js中关键字new的原理（含实现代码）</a></p>
 </blockquote>
-<h2 id="1-构造函数">1. 构造函数</h2>
+<h2 id="1-new">1. new</h2>
+<p>new会实例化类的实例对象，或者说，使用构造函数，构造一个我们想要的对象。</p>
+<p>关于类的定义有两种，使用构造函数定义的类，使用Class关键字定义的类。</p>
+<h2 id="1-构造函数定义类">1. 构造函数定义类</h2>
 <p>在MDN中，其实找不到关于构造函数的准确定义，甚至可以说没有构造函数这中说法，唯一和构造有关的定义是构造方法，指的是<code>class</code>中的<code>constructor()</code>，但是我们这里讨论的是，使用<code>new</code>关键字调用，实现构造对象功能的函数。</p>
 <blockquote>
 <p>在 JavaScript 中，用 new 关键字来调用的函数，称为构造函数。构造函数首字母一般大写。</p>
 <p>可以这样定义，使用<code>new</code>关键字，执行构造对象功能的函数，统一称为构造函数。</p>
 </blockquote>
-<h2 id="2-new关键字">2. new关键字</h2>
+<h2 id="2-class定义类">2. Class定义类</h2>
+<p>关于Class的详细说明，可以看《js Class详解》。</p>
+<h2 id="3-new-的流程">3. new 的流程</h2>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bVbaV35" alt="图片描述"></p>
 <p><code>new</code> 关键字会进行如下的操作：</p>
 <ol>
@@ -83,7 +94,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>obj.__proto__ <span style="color:#ff79c6">=</span> Animal.prototype;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> result <span style="color:#ff79c6">=</span> A.call(obj);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">return</span> <span style="color:#ff79c6">typeof</span> result <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;object&#39;</span><span style="color:#ff79c6">?</span> result <span style="color:#ff79c6">:</span> obj;
-</code></pre></div><h2 id="3-手写new">3. 手写new</h2>
+</code></pre></div><h2 id="4-手写new">4. 手写new</h2>
 <p>其实和上面的代码基本一致，只是包装了一下：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> _new(fn, ...rest){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    l newObj <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Object</span>.create(obj.prototype);
@@ -97,8 +108,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#8be9fd;font-style:italic">let</span> result <span style="color:#ff79c6">=</span> fn.call(newObj, rest)
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">typeof</span> result <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;object&#39;</span> <span style="color:#ff79c6">?</span> result <span style="color:#ff79c6">:</span> obj
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
-</code></pre></div><p>本文是js 原型与继承的第2篇文章，下一篇是《js 继承详解》。</p>
-
+</code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
