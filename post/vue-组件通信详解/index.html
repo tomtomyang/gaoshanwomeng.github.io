@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue 组件通信详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" vue 组件通信详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [vue 组件通信] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/vue-%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. props和$emit</span>
+            </li>
+            <li>
+                <span class="toc-link">2. $attrs和$listeners</span>
+            </li>
+            <li>
+                <span class="toc-link">3. bus(中央事件总线)</span>
+            </li>
+            <li>
+                <span class="toc-link">4. provide和inject</span>
+            </li>
+            <li>
+                <span class="toc-link">5. v-model</span>
+            </li>
+            <li>
+                <span class="toc-link">6. $parent和$​children</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">vue 组件通信详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-08</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2055字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <h2 id="1-props和emit">1. props和$emit</h2>
+<p>父组件向子组件传递数据是通过prop传递的，子组件传递数据给父组件是通过$emit触发事件来做到的.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#ff79c6">this</span>.message
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    template<span style="color:#ff79c6">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#f1fa8c">`&lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @input=&#34;passData(mymessage)&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#f1fa8c">	 &lt;/div&gt;`</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    props<span style="color:#ff79c6">:</span>[<span style="color:#f1fa8c">&#39;message&#39;</span>],<span style="color:#6272a4">//设置props属性值，得到父组件传递过来的数据
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      passData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        <span style="color:#6272a4">//触发父组件中的事件，向父组件传值
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.$emit(<span style="color:#f1fa8c">&#39;getChildData&#39;</span>,val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  Vue.component(<span style="color:#f1fa8c">&#39;parent&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#f1fa8c">        &lt;p&gt;this is parent compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#f1fa8c">        &lt;child :message=&#34;message&#34; v-on:getChildData=&#34;getChildData&#34;&gt;&lt;/child&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        message<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>      <span style="color:#6272a4">//执行子组件触发的事件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>      getChildData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>        console.log(val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>  })
+</code></pre></div><p>在上面的例子中，有父组件parent和子组件child。</p>
+<p>　　1. 父组件传递了message数据给子组件，并且通过v-on绑定了一个getChildData事件来监听子组件的触发事件；
+　　2. 子组件通过props得到相关的message数据,最后通过this.$emit触发了getChildData事件</p>
+<h2 id="2-attrs和listeners">2. $attrs和$listeners</h2>
+<p>第一种方式处理父子组件之间的数据传输有一个问题：</p>
+<p>如果父组件A下面有子组件B，组件B下面有组件C，这时如果组件A想传递数据给组件C怎么办呢？ 如果采用第一种方法，我们必须让组件A通过prop传递消息给组件B，组件B在通过prop传递消息给组件C；要是组件A和组件C之间有更多的组件，那采用这种方式就很复杂了。Vue 2.4开始提供了<code>$attrs</code>和<code>$listeners</code>来解决这个问题，能够让组件A之间传递消息给组件C。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;C&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;$attrs.messagec&#34; @input=&#34;passCData($attrs.messagec)&#34;&gt; &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      passCData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#6272a4">//触发父组件A中的事件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.$emit(<span style="color:#f1fa8c">&#39;getCData&#39;</span>,val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  Vue.component(<span style="color:#f1fa8c">&#39;B&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#ff79c6">this</span>.message
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @input=&#34;passData(mymessage)&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#f1fa8c">        &lt;!-- C组件中能直接触发getCData的原因在于 B组件调用C组件时 使用 v-on 绑定了$listeners 属性 --&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#f1fa8c">        &lt;!-- 通过v-bind 绑定$attrs属性，C组件可以直接获取到A组件中传递下来的props（除了B组件中props声明的） --&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#f1fa8c">        &lt;C v-bind=&#34;$attrs&#34; v-on=&#34;$listeners&#34;&gt;&lt;/C&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    props<span style="color:#ff79c6">:</span>[<span style="color:#f1fa8c">&#39;message&#39;</span>],<span style="color:#6272a4">//得到父组件传递过来的数据
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>      passData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        <span style="color:#6272a4">//触发父组件中的事件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">this</span>.$emit(<span style="color:#f1fa8c">&#39;getChildData&#39;</span>,val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  Vue.component(<span style="color:#f1fa8c">&#39;A&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#f1fa8c">        &lt;p&gt;this is parent compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#f1fa8c">        &lt;B :messagec=&#34;messagec&#34; :message=&#34;message&#34; v-on:getCData=&#34;getCData&#34; v-on:getChildData=&#34;getChildData(message)&#34;&gt;&lt;/B&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>        message<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>        messagec<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello c&#39;</span> <span style="color:#6272a4">//传递给c组件的数据
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4"></span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>      getChildData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>        console.log(<span style="color:#f1fa8c">&#39;这是来自B组件的数据&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>      },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>      <span style="color:#6272a4">//执行C子组件触发的事件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span style="color:#6272a4"></span>      getCData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>        console.log(<span style="color:#f1fa8c">&#34;这是来自C组件的数据：&#34;</span><span style="color:#ff79c6">+</span>val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>  })
+</code></pre></div><h2 id="3-bus中央事件总线">3. bus(中央事件总线)</h2>
+<p>上面两种方式处理的都是父子组件之间的数据传递，而如果两个组件不是父子关系呢？这种情况下可以使用中央事件总线的方式。新建一个Vue事件bus对象，然后通过<code>bus.$emit</code>触发事件，<code>bus.$on</code>监听触发的事件。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;brother1&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello brother1&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#f1fa8c">        &lt;p&gt;this is brother1 compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @input=&#34;passData(mymessage)&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>      passData(val){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        <span style="color:#6272a4">//触发全局事件globalEvent
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>        bus.$emit(<span style="color:#f1fa8c">&#39;globalEvent&#39;</span>,val)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  Vue.component(<span style="color:#f1fa8c">&#39;brother2&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#f1fa8c">        &lt;p&gt;this is brother2 compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#f1fa8c">        &lt;p&gt;brother1传递过来的数据：{{brothermessage}}&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello brother2&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        brothermessage<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    mounted(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      <span style="color:#6272a4">//绑定全局事件globalEvent
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span style="color:#6272a4"></span>      bus.$on(<span style="color:#f1fa8c">&#39;globalEvent&#39;</span>,(val)=&gt;{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>        <span style="color:#ff79c6">this</span>.brothermessage<span style="color:#ff79c6">=</span>val;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  <span style="color:#6272a4">//中央事件总线
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4"></span>  <span style="color:#8be9fd;font-style:italic">var</span> bus<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Vue();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  <span style="color:#8be9fd;font-style:italic">var</span> app<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Vue({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>    el<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;#app&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#f1fa8c">        &lt;brother1&gt;&lt;/brother1&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#f1fa8c">        &lt;brother2&gt;&lt;/brother2&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span style="color:#f1fa8c">    `</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>  })
+</code></pre></div><h2 id="4-provide和inject">4. provide和inject</h2>
+<p>在 Vue.js 的 <code>2.2.0+</code> 版本中添加加了 provide 和 inject 选项。他们成对出现，用于父级组件向下传递数据。</p>
+<p>父组件中通过provider来提供变量，然后在子组件中通过inject来注入变量。不论子组件有多深，只要调用了inject那么就可以注入provider中的数据。而不是局限于只能从当前父组件的prop属性来获取数据，只要在父组件的生命周期内，子组件都可以调用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    inject<span style="color:#ff79c6">:</span>[<span style="color:#f1fa8c">&#39;for&#39;</span>],<span style="color:#6272a4">//得到父组件传递过来的数据
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#ff79c6">this</span>.<span style="color:#ff79c6">for</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#f1fa8c">        &lt;input type=&#34;tet&#34; v-model=&#34;mymessage&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#f1fa8c">    `</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  Vue.component(<span style="color:#f1fa8c">&#39;parent&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#f1fa8c">        &lt;p&gt;this is parent compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#f1fa8c">        &lt;child&gt;&lt;/child&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    provide<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>      <span style="color:#ff79c6">for</span><span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;test&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        message<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  })
+</code></pre></div><h2 id="5-v-model">5. v-model</h2>
+<p>父组件通过v-model传递值给子组件时，会自动传递一个value的prop属性，在子组件中通过this.$emit(‘input&rsquo;,val)自动修改v-model绑定的值</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    props<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>      value<span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">String</span>, <span style="color:#6272a4">//v-model会自动传递一个字段为value的prop属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#ff79c6">this</span>.value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      changeValue(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#ff79c6">this</span>.$emit(<span style="color:#f1fa8c">&#39;input&#39;</span>,<span style="color:#ff79c6">this</span>.mymessage);<span style="color:#6272a4">//通过如此调用可以改变父组件上v-model绑定的值
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @change=&#34;changeValue&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#f1fa8c">	`</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  Vue.component(<span style="color:#f1fa8c">&#39;parent&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#f1fa8c">        &lt;p&gt;this is parent compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#f1fa8c">        &lt;p&gt;{{message}}&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#f1fa8c">        &lt;child v-model=&#34;message&#34;&gt;&lt;/child&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>        message<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  <span style="color:#8be9fd;font-style:italic">var</span> app<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Vue({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    el<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;#app&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span style="color:#f1fa8c">        &lt;parent&gt;&lt;/parent&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#f1fa8c">    `</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  })
+</code></pre></div><h2 id="6-parent和children">6. $parent和$​children</h2>
+<p>在组件内部可以直接通过子组件<code>$parent</code>对父组件进行操作，父组件通过<code>$​children</code>对子组件进行操作.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    props<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>      value<span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">String</span>, <span style="color:#6272a4">//v-model会自动传递一个字段为value的prop属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        mymessage<span style="color:#ff79c6">:</span><span style="color:#ff79c6">this</span>.value
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      changeValue(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>        <span style="color:#ff79c6">this</span>.$parent.message <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.mymessage;<span style="color:#6272a4">//通过如此调用可以改变父组件的值
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @change=&#34;changeValue&#34;&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#f1fa8c">    `</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  Vue.component(<span style="color:#f1fa8c">&#39;parent&#39;</span>,{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#f1fa8c">        &lt;p&gt;this is parent compoent!&lt;/p&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#f1fa8c">        &lt;button @click=&#34;changeChildValue&#34;&gt;test&lt;/button &gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span style="color:#f1fa8c">        &lt;child&gt;&lt;/child&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#f1fa8c">    `</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    methods<span style="color:#ff79c6">:</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      changeChildValue(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>        <span style="color:#ff79c6">this</span>.$children[<span style="color:#bd93f9">0</span>].mymessage <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;hello&#39;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    data(){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>        message<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;hello&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  <span style="color:#8be9fd;font-style:italic">var</span> app<span style="color:#ff79c6">=</span><span style="color:#ff79c6">new</span> Vue({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    el<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#39;#app&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#f1fa8c">      &lt;div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#f1fa8c">        &lt;parent&gt;&lt;/parent&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#f1fa8c">      &lt;/div&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#f1fa8c">    `</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>  })
+</code></pre></div>
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/vue/">vue</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-class%E8%AF%A6%E8%A7%A3/" data-tooltip="js Class详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue vdom与diff详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" vue vdom与diff详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [vue vdom diff] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/vue-vdom%E4%B8%8Ediff%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. VNode</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 修改视图</span>
+            </li>
+            <li>
+                <span class="toc-link">3. patch</span>
+            </li>
+            <li>
+                <span class="toc-link">4. sameVnode</span>
+            </li>
+            <li>
+                <span class="toc-link">5. patchVnode</span>
+            </li>
+            <li>
+                <span class="toc-link">6. updateChildren</span>
+            </li>
+            <li>
+                <span class="toc-link">7. DOM操作</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">vue vdom与diff详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-03</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 7546字</span>
+          <span>⏱ 16分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://xiaozhuanlan.com/topic/5970683214">VirtualDOM 与 diff( Vue 实现)</a></p>
+</blockquote>
+<h2 id="1-vnode">1. VNode</h2>
+<p>在刀耕火种的年代，我们需要在各个事件方法中直接操作DOM来达到修改视图的目的。但是当应用一大就会变得难以维护。</p>
+<p>那我们是不是可以把真实DOM树抽象成一棵以JavaScript对象构成的抽象树，在修改抽象树数据后将抽象树转化成真实DOM重绘到页面上呢？</p>
+<p>所以Vue.js将DOM树抽象成一个以JavaScript对象为节点的虚拟DOM树，以VNode节点模拟真实DOM节点，可以对这颗抽象树进行创建节点、删除节点以及修改节点等操作，在这过程中都不需要操作真实DOM，只需要操作JavaScript对象，大大提升了性能。</p>
+<p>但是这样的JavaScript操作DOM进行重绘整个视图是相当消耗性能的，我们是不是可以每次只更新它的修改呢？</p>
+<p>在对VNode树进行修改后，经过diff算法得出一些需要修改的最小单位，再将这些小单位的视图进行更新。这样做减少了很多不需要的DOM操作，大大提高了性能。</p>
+<p>Vue就使用了这样的抽象节点VNode，它是对真实DOM的一层抽象，而不依赖某个平台，它可以是浏览器平台，也可以是weex，甚至是node平台也可以对这样一棵抽象DOM树进行创建删除修改等操作，这也为前后端同构提供了可能。</p>
+<h2 id="2-修改视图">2. 修改视图</h2>
+<p>众所周知，Vue通过数据绑定来修改视图，当某个数据被修改的时候，set方法会让闭包中的Dep调用notify通知所有订阅者Watcher，Watcher通过get方法执行<code>vm._update(vm._render(), hydrating)</code>。</p>
+<p>这里看一下_update方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>Vue.prototype._update <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (vnode<span style="color:#ff79c6">:</span> VNode, hydrating<span style="color:#ff79c6">?:</span> <span style="color:#ff79c6">boolean</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">const</span> vm<span style="color:#ff79c6">:</span> Component <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#6272a4">/*如果已经该组件已经挂载过了则代表进入这个步骤是个更新的过程，触发beforeUpdate钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">if</span> (vm._isMounted) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      callHook(vm, <span style="color:#f1fa8c">&#39;beforeUpdate&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">const</span> prevEl <span style="color:#ff79c6">=</span> vm.$el
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#ff79c6">const</span> prevVnode <span style="color:#ff79c6">=</span> vm._vnode
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">const</span> prevActiveInstance <span style="color:#ff79c6">=</span> activeInstance
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    activeInstance <span style="color:#ff79c6">=</span> vm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    vm._vnode <span style="color:#ff79c6">=</span> vnode
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#6272a4">// Vue.prototype.__patch__ is injected in entry points
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// based on the rendering backend used.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/*基于后端渲染Vue.prototype.__patch__被用来作为一个入口*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>prevVnode) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      <span style="color:#6272a4">// initial render
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span style="color:#6272a4"></span>      vm.$el <span style="color:#ff79c6">=</span> vm.__patch__(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        vm.$el, vnode, hydrating, <span style="color:#ff79c6">false</span> <span style="color:#6272a4">/* removeOnly */</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        vm.$options._parentElm,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>        vm.$options._refElm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      <span style="color:#6272a4">// updates
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4"></span>      vm.$el <span style="color:#ff79c6">=</span> vm.__patch__(prevVnode, vnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    activeInstance <span style="color:#ff79c6">=</span> prevActiveInstance
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#6272a4">// update __vue__ reference
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/*更新新的实例对象的__vue__*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    <span style="color:#ff79c6">if</span> (prevEl) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      prevEl.__vue__ <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#ff79c6">if</span> (vm.$el) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>      vm.$el.__vue__ <span style="color:#ff79c6">=</span> vm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>    <span style="color:#6272a4">// if parent is an HOC, update its $el as well
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (vm.$vnode <span style="color:#ff79c6">&amp;&amp;</span> vm.$parent <span style="color:#ff79c6">&amp;&amp;</span> vm.$vnode <span style="color:#ff79c6">===</span> vm.$parent._vnode) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>      vm.$parent.$el <span style="color:#ff79c6">=</span> vm.$el
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    <span style="color:#6272a4">// updated hook is called by the scheduler to ensure that children are
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// updated in a parent&#39;s updated hook.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span style="color:#6272a4"></span>  }
+</code></pre></div><p>_update方法的第一个参数是一个VNode对象，在内部会将该VNode对象与之前旧的VNode对象进行<code>__patch__</code>。</p>
+<h2 id="3-__patch__">3. <strong>patch</strong></h2>
+<p>patch将新老VNode节点进行比对，然后将根据两者的比较结果进行最小单位地修改视图，而不是将整个视图根据新的VNode重绘。patch的核心在于diff算法，这套算法可以高效地比较virtual DOM的变更，得出变化以修改视图。</p>
+<p>那么patch如何工作的呢？</p>
+<p>首先说一下patch的核心diff算法，diff算法是通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，所以时间复杂度只有O(n)，是一种相当高效的算法。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/db00c818c1da8f0dcc7919eb3577e37b.png" alt="img"></p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/f09aa38b6efcaf90698d60c0d7cda10f.png" alt="img"></p>
+<p>这两张图代表旧的VNode与新VNode进行patch的过程，他们只是在同层级的VNode之间进行比较得到变化（第二张图中相同颜色的方块代表互相进行比较的VNode节点），然后修改变化的视图，所以十分高效。</p>
+<p>让我们看一下patch的代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  <span style="color:#6272a4">/*createPatchFunction的返回值，一个patch函数*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span> patch (oldVnode, vnode, hydrating, removeOnly, parentElm, refElm) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#6272a4">/*vnode不存在则直接调用销毁钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">if</span> (isUndef(vnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      <span style="color:#ff79c6">if</span> (isDef(oldVnode)) invokeDestroyHook(oldVnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#8be9fd;font-style:italic">let</span> isInitialPatch <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">false</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">const</span> insertedVnodeQueue <span style="color:#ff79c6">=</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#ff79c6">if</span> (isUndef(oldVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      <span style="color:#6272a4">// empty mount (likely as component), create new root element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>      <span style="color:#6272a4">/*oldVnode未定义的时候，其实也就是root节点，创建一个新的节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      isInitialPatch <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>      createElm(vnode, insertedVnodeQueue, parentElm, refElm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      <span style="color:#6272a4">/*标记旧的VNode是否有nodeType*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      <span style="color:#ff79c6">const</span> isRealElement <span style="color:#ff79c6">=</span> isDef(oldVnode.nodeType)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>isRealElement <span style="color:#ff79c6">&amp;&amp;</span> sameVnode(oldVnode, vnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        <span style="color:#6272a4">// patch existing root node
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">/*是同一个节点的时候直接修改现有的节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        patchVnode(oldVnode, vnode, insertedVnodeQueue, removeOnly)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#ff79c6">if</span> (isRealElement) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>          <span style="color:#6272a4">// mounting to a real element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// check if this is server-rendered content and if we can perform
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// a successful hydration.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span style="color:#6272a4"></span>          <span style="color:#ff79c6">if</span> (oldVnode.nodeType <span style="color:#ff79c6">===</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&amp;&amp;</span> oldVnode.hasAttribute(SSR_ATTR)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>            <span style="color:#6272a4">/*当旧的VNode是服务端渲染的元素，hydrating记为true*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>            oldVnode.removeAttribute(SSR_ATTR)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>            hydrating <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>          <span style="color:#ff79c6">if</span> (isTrue(hydrating)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>            <span style="color:#6272a4">/*需要合并到真实DOM上*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>            <span style="color:#ff79c6">if</span> (hydrate(oldVnode, vnode, insertedVnodeQueue)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>              <span style="color:#6272a4">/*调用insert钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>              invokeInsertHook(vnode, insertedVnodeQueue, <span style="color:#ff79c6">true</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>              <span style="color:#ff79c6">return</span> oldVnode
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>            } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (process.env.NODE_ENV <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;production&#39;</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>              warn(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>                <span style="color:#f1fa8c">&#39;The client-side rendered virtual DOM tree is not matching &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>                <span style="color:#f1fa8c">&#39;server-rendered content. This is likely caused by incorrect &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>                <span style="color:#f1fa8c">&#39;HTML markup, for example nesting block-level elements inside &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>                <span style="color:#f1fa8c">&#39;&lt;p&gt;, or missing &lt;tbody&gt;. Bailing hydration and performing &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>                <span style="color:#f1fa8c">&#39;full client-side render.&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>              )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>          <span style="color:#6272a4">// either not server-rendered, or hydration failed.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// create an empty node and replace it
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">/*如果不是服务端渲染或者合并到真实DOM失败，则创建一个空的VNode节点替换它*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>          oldVnode <span style="color:#ff79c6">=</span> emptyNodeAt(oldVnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>        <span style="color:#6272a4">// replacing existing element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">/*取代现有元素*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>        <span style="color:#ff79c6">const</span> oldElm <span style="color:#ff79c6">=</span> oldVnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>        <span style="color:#ff79c6">const</span> parentElm <span style="color:#ff79c6">=</span> nodeOps.parentNode(oldElm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>        createElm(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>          vnode,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>          insertedVnodeQueue,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>          <span style="color:#6272a4">// extremely rare edge case: do not insert if old element is in a
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// leaving transition. Only happens when combining transition +
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// keep-alive + HOCs. (#4590)
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span style="color:#6272a4"></span>          oldElm._leaveCb <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">:</span> parentElm,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>          nodeOps.nextSibling(oldElm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>        )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>        <span style="color:#ff79c6">if</span> (isDef(vnode.parent)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>          <span style="color:#6272a4">// component root element replaced.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">// update parent placeholder node element, recursively
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">/*组件根节点被替换，遍历更新父节点element*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>          <span style="color:#8be9fd;font-style:italic">let</span> ancestor <span style="color:#ff79c6">=</span> vnode.parent
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>          <span style="color:#ff79c6">while</span> (ancestor) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span>            ancestor.elm <span style="color:#ff79c6">=</span> vnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>            ancestor <span style="color:#ff79c6">=</span> ancestor.parent
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>          <span style="color:#ff79c6">if</span> (isPatchable(vnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>            <span style="color:#6272a4">/*调用create回调*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>            <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> cbs.create.length; <span style="color:#ff79c6">++</span>i) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>              cbs.create[i](emptyNode, vnode.parent)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span>            }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span>        <span style="color:#ff79c6">if</span> (isDef(parentElm)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span>          <span style="color:#6272a4">/*移除老节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span>          removeVnodes(parentElm, [oldVnode], <span style="color:#bd93f9">0</span>, <span style="color:#bd93f9">0</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89</span>        } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isDef(oldVnode.tag)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span>          <span style="color:#6272a4">/*调用destroy钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91</span>          invokeDestroyHook(oldVnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">94</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">95</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96</span>    <span style="color:#6272a4">/*调用insert钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span>    invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98</span>    <span style="color:#ff79c6">return</span> vnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99</span>  }
+</code></pre></div><p>从代码中不难发现，当oldVnode与vnode在sameVnode的时候才会进行patchVnode，也就是新旧VNode节点判定为同一节点的时候才会进行patchVnode这个过程，否则就是创建新的DOM，移除旧的DOM。</p>
+<p>怎么样的节点算sameVnode呢？</p>
+<h2 id="4-samevnode">4. sameVnode</h2>
+<p>我们来看一下sameVnode的实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4">  判断两个VNode节点是否是同一个节点，需要满足以下条件
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">  key相同
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4">  tag（当前节点的标签名）相同
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">  isComment（是否为注释节点）相同
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4">  是否data（当前节点对应的对象，包含了具体的一些数据信息，是一个VNodeData类型，可以参考VNodeData类型中的数据信息）都有定义
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">  当标签是&lt;input&gt;的时候，type必须相同
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#8be9fd;font-style:italic">function</span> sameVnode (a, b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">return</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    a.key <span style="color:#ff79c6">===</span> b.key <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    a.tag <span style="color:#ff79c6">===</span> b.tag <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    a.isComment <span style="color:#ff79c6">===</span> b.isComment <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    isDef(a.data) <span style="color:#ff79c6">===</span> isDef(b.data) <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    sameInputType(a, b)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span style="color:#6272a4">// Some browsers do not support dynamically changing type for &lt;input&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">// so they need to be treated as different nodes
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#6272a4"></span><span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4">  判断当标签是&lt;input&gt;的时候，type是否相同
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4">  某些浏览器不支持动态修改&lt;input&gt;类型，所以他们被视为不同类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#6272a4">*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span style="color:#8be9fd;font-style:italic">function</span> sameInputType (a, b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  <span style="color:#ff79c6">if</span> (a.tag <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;input&#39;</span>) <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  <span style="color:#8be9fd;font-style:italic">let</span> i
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  <span style="color:#ff79c6">const</span> typeA <span style="color:#ff79c6">=</span> isDef(i <span style="color:#ff79c6">=</span> a.data) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.attrs) <span style="color:#ff79c6">&amp;&amp;</span> i.type
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  <span style="color:#ff79c6">const</span> typeB <span style="color:#ff79c6">=</span> isDef(i <span style="color:#ff79c6">=</span> b.data) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.attrs) <span style="color:#ff79c6">&amp;&amp;</span> i.type
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  <span style="color:#ff79c6">return</span> typeA <span style="color:#ff79c6">===</span> typeB
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>}
+</code></pre></div><p>当两个VNode的tag、key、isComment都相同，并且同时定义或未定义data的时候，且如果标签为input则type必须相同。这时候这两个VNode则算sameVnode，可以直接进行patchVnode操作。</p>
+<h2 id="5-patchvnode">5. patchVnode</h2>
+<p>还是先来看一下patchVnode的代码。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  <span style="color:#6272a4">/*patch VNode节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">function</span> patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#6272a4">/*两个VNode节点相同则直接返回*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">if</span> (oldVnode <span style="color:#ff79c6">===</span> vnode) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#6272a4">// reuse element for static trees.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// note we only do this if the vnode is cloned -
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// if the new node is not cloned it means the render functions have been
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// reset by the hot-reload-api and we need to do a proper re-render.
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">      如果新旧VNode都是静态的，同时它们的key相同（代表同一节点），
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">      并且新的VNode是clone或者是标记了once（标记v-once属性，只渲染一次），
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4">      那么只需要替换elm以及componentInstance即可。
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">    */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#ff79c6">if</span> (isTrue(vnode.isStatic) <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        isTrue(oldVnode.isStatic) <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        vnode.key <span style="color:#ff79c6">===</span> oldVnode.key <span style="color:#ff79c6">&amp;&amp;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        (isTrue(vnode.isCloned) <span style="color:#ff79c6">||</span> isTrue(vnode.isOnce))) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      vnode.elm <span style="color:#ff79c6">=</span> oldVnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>      vnode.componentInstance <span style="color:#ff79c6">=</span> oldVnode.componentInstance
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>      <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#8be9fd;font-style:italic">let</span> i
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    <span style="color:#ff79c6">const</span> data <span style="color:#ff79c6">=</span> vnode.data
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#ff79c6">if</span> (isDef(data) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> data.hook) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.prepatch)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      <span style="color:#6272a4">/*i = data.hook.prepatch，如果存在的话，见&#34;./create-component componentVNodeHooks&#34;。*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>      i(oldVnode, vnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    <span style="color:#ff79c6">const</span> elm <span style="color:#ff79c6">=</span> vnode.elm <span style="color:#ff79c6">=</span> oldVnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    <span style="color:#ff79c6">const</span> oldCh <span style="color:#ff79c6">=</span> oldVnode.children
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#ff79c6">const</span> ch <span style="color:#ff79c6">=</span> vnode.children
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    <span style="color:#ff79c6">if</span> (isDef(data) <span style="color:#ff79c6">&amp;&amp;</span> isPatchable(vnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      <span style="color:#6272a4">/*调用update回调以及update钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> cbs.update.length; <span style="color:#ff79c6">++</span>i) cbs.update[i](oldVnode, vnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>      <span style="color:#ff79c6">if</span> (isDef(i <span style="color:#ff79c6">=</span> data.hook) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.update)) i(oldVnode, vnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>    <span style="color:#6272a4">/*如果这个VNode节点没有text文本时*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>    <span style="color:#ff79c6">if</span> (isUndef(vnode.text)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>      <span style="color:#ff79c6">if</span> (isDef(oldCh) <span style="color:#ff79c6">&amp;&amp;</span> isDef(ch)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>        <span style="color:#6272a4">/*新老节点均有children子节点，则对子节点进行diff操作，调用updateChildren*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>        <span style="color:#ff79c6">if</span> (oldCh <span style="color:#ff79c6">!==</span> ch) updateChildren(elm, oldCh, ch, insertedVnodeQueue, removeOnly)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isDef(ch)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>        <span style="color:#6272a4">/*如果老节点没有子节点而新节点存在子节点，先清空elm的文本内容，然后为当前节点加入子节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>        <span style="color:#ff79c6">if</span> (isDef(oldVnode.text)) nodeOps.setTextContent(elm, <span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>        addVnodes(elm, <span style="color:#ff79c6">null</span>, ch, <span style="color:#bd93f9">0</span>, ch.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isDef(oldCh)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>        <span style="color:#6272a4">/*当新节点没有子节点而老节点有子节点的时候，则移除所有ele的子节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>        removeVnodes(elm, oldCh, <span style="color:#bd93f9">0</span>, oldCh.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isDef(oldVnode.text)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>        <span style="color:#6272a4">/*当新老节点都无子节点的时候，只是文本的替换，因为这个逻辑中新节点text不存在，所以直接去除ele的文本*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>        nodeOps.setTextContent(elm, <span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (oldVnode.text <span style="color:#ff79c6">!==</span> vnode.text) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>      <span style="color:#6272a4">/*当新老节点text不一样时，直接替换这段文本*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>      nodeOps.setTextContent(elm, vnode.text)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>    <span style="color:#6272a4">/*调用postpatch钩子*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>    <span style="color:#ff79c6">if</span> (isDef(data)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>      <span style="color:#ff79c6">if</span> (isDef(i <span style="color:#ff79c6">=</span> data.hook) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.postpatch)) i(oldVnode, vnode)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>  }
+</code></pre></div><p>patchVnode的规则是这样的：</p>
+<p>1.如果新旧VNode都是静态的，同时它们的key相同（代表同一节点），并且新的VNode是clone或者是标记了once（标记v-once属性，只渲染一次），那么只需要替换elm以及componentInstance即可。</p>
+<p>2.新老节点均有children子节点，则对子节点进行diff操作，调用updateChildren，这个updateChildren也是diff的核心。</p>
+<p>3.如果老节点没有子节点而新节点存在子节点，先清空老节点DOM的文本内容，然后为当前DOM节点加入子节点。</p>
+<p>4.当新节点没有子节点而老节点有子节点的时候，则移除该DOM节点的所有子节点。</p>
+<p>5.当新老节点都无子节点的时候，只是文本的替换。</p>
+<h2 id="6-updatechildren">6. updateChildren</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>  <span style="color:#8be9fd;font-style:italic">function</span> updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldStartIdx <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">let</span> newStartIdx <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldEndIdx <span style="color:#ff79c6">=</span> oldCh.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldStartVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldEndVnode <span style="color:#ff79c6">=</span> oldCh[oldEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#8be9fd;font-style:italic">let</span> newEndIdx <span style="color:#ff79c6">=</span> newCh.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#8be9fd;font-style:italic">let</span> newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#bd93f9">0</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#8be9fd;font-style:italic">let</span> newEndVnode <span style="color:#ff79c6">=</span> newCh[newEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#8be9fd;font-style:italic">let</span> oldKeyToIdx, idxInOld, elmToMove, refElm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    <span style="color:#6272a4">// removeOnly is a special flag used only by &lt;transition-group&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// to ensure removed elements stay in correct relative positions
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// during leaving transitions
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">const</span> canMove <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">!</span>removeOnly
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">while</span> (oldStartIdx <span style="color:#ff79c6">&lt;=</span> oldEndIdx <span style="color:#ff79c6">&amp;&amp;</span> newStartIdx <span style="color:#ff79c6">&lt;=</span> newEndIdx) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      <span style="color:#ff79c6">if</span> (isUndef(oldStartVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        oldStartVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">++</span>oldStartIdx] <span style="color:#6272a4">// Vnode has been moved left
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4"></span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isUndef(oldEndVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>        oldEndVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">--</span>oldEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (sameVnode(oldStartVnode, newStartVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>        <span style="color:#6272a4">/*前四种情况其实是指定key的时候，判定为同一个VNode，则直接patchVnode即可，分别比较oldCh以及newCh的两头节点2*2=4种情况*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        patchVnode(oldStartVnode, newStartVnode, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        oldStartVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">++</span>oldStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">++</span>newStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (sameVnode(oldEndVnode, newEndVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        patchVnode(oldEndVnode, newEndVnode, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        oldEndVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">--</span>oldEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>        newEndVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">--</span>newEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (sameVnode(oldStartVnode, newEndVnode)) { <span style="color:#6272a4">// Vnode moved right
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span style="color:#6272a4"></span>        patchVnode(oldStartVnode, newEndVnode, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>        canMove <span style="color:#ff79c6">&amp;&amp;</span> nodeOps.insertBefore(parentElm, oldStartVnode.elm, nodeOps.nextSibling(oldEndVnode.elm))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>        oldStartVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">++</span>oldStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>        newEndVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">--</span>newEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (sameVnode(oldEndVnode, newStartVnode)) { <span style="color:#6272a4">// Vnode moved left
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#6272a4"></span>        patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>        canMove <span style="color:#ff79c6">&amp;&amp;</span> nodeOps.insertBefore(parentElm, oldEndVnode.elm, oldStartVnode.elm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>        oldEndVnode <span style="color:#ff79c6">=</span> oldCh[<span style="color:#ff79c6">--</span>oldEndIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>        newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">++</span>newStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>      } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>        <span style="color:#6272a4">/*
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span style="color:#6272a4">          生成一个key与旧VNode的key对应的哈希表（只有第一次进来undefined的时候会生成，也为后面检测重复的key值做铺垫）
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4">          比如childre是这样的 [{xx: xx, key: &#39;key0&#39;}, {xx: xx, key: &#39;key1&#39;}, {xx: xx, key: &#39;key2&#39;}]  beginIdx = 0   endIdx = 2  
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span style="color:#6272a4">          结果生成{key0: 0, key1: 1, key2: 2}
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4">        */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>        <span style="color:#ff79c6">if</span> (isUndef(oldKeyToIdx)) oldKeyToIdx <span style="color:#ff79c6">=</span> createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>        <span style="color:#6272a4">/*如果newStartVnode新的VNode节点存在key并且这个key在oldVnode中能找到则返回这个节点的idxInOld（即第几个节点，下标）*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>        idxInOld <span style="color:#ff79c6">=</span> isDef(newStartVnode.key) <span style="color:#ff79c6">?</span> oldKeyToIdx[newStartVnode.key] <span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>        <span style="color:#ff79c6">if</span> (isUndef(idxInOld)) { <span style="color:#6272a4">// New element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span style="color:#6272a4"></span>          <span style="color:#6272a4">/*newStartVnode没有key或者是该key没有在老节点中找到则创建一个新的节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>          createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>          newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">++</span>newStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>        } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>          <span style="color:#6272a4">/*获取同key的老节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>          elmToMove <span style="color:#ff79c6">=</span> oldCh[idxInOld]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>          <span style="color:#6272a4">/* istanbul ignore if */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>          <span style="color:#ff79c6">if</span> (process.env.NODE_ENV <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;production&#39;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>elmToMove) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>            <span style="color:#6272a4">/*如果elmToMove不存在说明之前已经有新节点放入过这个key的DOM中，提示可能存在重复的key，确保v-for的时候item有唯一的key值*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>            warn(
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>              <span style="color:#f1fa8c">&#39;It seems there are duplicate keys that is causing an update error. &#39;</span> <span style="color:#ff79c6">+</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>              <span style="color:#f1fa8c">&#39;Make sure each v-for item has a unique key.&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span>            )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>          <span style="color:#ff79c6">if</span> (sameVnode(elmToMove, newStartVnode)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>            <span style="color:#6272a4">/*如果新VNode与得到的有相同key的节点是同一个VNode则进行patchVnode*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>            patchVnode(elmToMove, newStartVnode, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>            <span style="color:#6272a4">/*因为已经patchVnode进去了，所以将这个老节点赋值undefined，之后如果还有新节点与该节点key相同可以检测出来提示已有重复的key*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>            oldCh[idxInOld] <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">undefined</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>            <span style="color:#6272a4">/*当有标识位canMove实可以直接插入oldStartVnode对应的真实DOM节点前面*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>            canMove <span style="color:#ff79c6">&amp;&amp;</span> nodeOps.insertBefore(parentElm, newStartVnode.elm, oldStartVnode.elm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>            newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">++</span>newStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>          } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>            <span style="color:#6272a4">// same key but different element. treat as new element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span style="color:#6272a4"></span>            <span style="color:#6272a4">/*当新的VNode与找到的同样key的VNode不是sameVNode的时候（比如说tag不一样或者是有不一样type的input标签），创建一个新的节点*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>            createElm(newStartVnode, insertedVnodeQueue, parentElm, oldStartVnode.elm)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>            newStartVnode <span style="color:#ff79c6">=</span> newCh[<span style="color:#ff79c6">++</span>newStartIdx]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>          }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span>    <span style="color:#ff79c6">if</span> (oldStartIdx <span style="color:#ff79c6">&gt;</span> oldEndIdx) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span>      <span style="color:#6272a4">/*全部比较完成以后，发现oldStartIdx &gt; oldEndIdx的话，说明老节点已经遍历完了，新节点比老节点多，所以这时候多出来的新节点需要一个一个创建出来加入到真实DOM中*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span>      refElm <span style="color:#ff79c6">=</span> isUndef(newCh[newEndIdx <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>]) <span style="color:#ff79c6">?</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">:</span> newCh[newEndIdx <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>].elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span>      addVnodes(parentElm, refElm, newCh, newStartIdx, newEndIdx, insertedVnodeQueue)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span>    } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (newStartIdx <span style="color:#ff79c6">&gt;</span> newEndIdx) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span>      <span style="color:#6272a4">/*如果全部比较完成以后发现newStartIdx &gt; newEndIdx，则说明新节点已经遍历完了，老节点多余新节点，这个时候需要将多余的老节点从真实DOM中移除*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span>      removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span>  }
+</code></pre></div><p>直接看源码可能比较难以捋清其中的关系，我们通过图来看一下。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/188d83e446bc03254b29bb0b270d2b6b.png" alt="img"></p>
+<p>首先，在新老两个VNode节点的左右头尾两侧都有一个变量标记，在遍历过程中这几个变量都会向中间靠拢。当oldStartIdx &lt;= oldEndIdx或者newStartIdx &lt;= newEndIdx时结束循环。</p>
+<p>索引与VNode节点的对应关系：
+oldStartIdx =&gt; oldStartVnode
+oldEndIdx =&gt; oldEndVnode
+newStartIdx =&gt; newStartVnode
+newEndIdx =&gt; newEndVnode</p>
+<p>在遍历中，如果存在key，并且满足sameVnode，会将该DOM节点进行复用，否则则会创建一个新的DOM节点。</p>
+<p>首先，oldStartVnode、oldEndVnode与newStartVnode、newEndVnode两两比较一共有2*2=4种比较方法。</p>
+<p>当新老VNode节点的start或者end满足sameVnode时，也就是sameVnode(oldStartVnode, newStartVnode)或者sameVnode(oldEndVnode, newEndVnode)，直接将该VNode节点进行patchVnode即可。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/3869f4b9618807f6aed3f86be8d3f4e0.png" alt="img"></p>
+<p>如果oldStartVnode与newEndVnode满足sameVnode，即sameVnode(oldStartVnode, newEndVnode)。</p>
+<p>这时候说明oldStartVnode已经跑到了oldEndVnode后面去了，进行patchVnode的同时还需要将真实DOM节点移动到oldEndVnode的后面。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/946b676fd6381f038aa7b9aafb3f9645.png" alt="img"></p>
+<p>如果oldEndVnode与newStartVnode满足sameVnode，即sameVnode(oldEndVnode, newStartVnode)。</p>
+<p>这说明oldEndVnode跑到了oldStartVnode的前面，进行patchVnode的同时真实的DOM节点移动到了oldStartVnode的前面。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/3c4084a19e082136dadde6d8657ced0e.png" alt="img"></p>
+<p>如果以上情况均不符合，则通过createKeyToOldIdx会得到一个oldKeyToIdx，里面存放了一个key为旧的VNode，value为对应index序列的哈希表。从这个哈希表中可以找到是否有与newStartVnode一致key的旧的VNode节点，如果同时满足sameVnode，patchVnode的同时会将这个真实DOM（elmToMove）移动到oldStartVnode对应的真实DOM的前面。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/7c78d8449d4d9c3525d548aa04c16f95.png" alt="img"></p>
+<p>当然也有可能newStartVnode在旧的VNode节点找不到一致的key，或者是即便key相同却不是sameVnode，这个时候会调用createElm创建一个新的DOM节点。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/49d060d1863619e5efae4e74656c15fd.png" alt="img"></p>
+<p>到这里循环已经结束了，那么剩下我们还需要处理多余或者不够的真实DOM节点。</p>
+<p>1.当结束时oldStartIdx &gt; oldEndIdx，这个时候老的VNode节点已经遍历完了，但是新的节点还没有。说明了新的VNode节点实际上比老的VNode节点多，也就是比真实DOM多，需要将剩下的（也就是新增的）VNode节点插入到真实DOM节点中去，此时调用addVnodes（批量调用createElm的接口将这些节点加入到真实DOM中去）。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/f7c9290b5c9912e033372be205004842.png" alt="img"></p>
+<p>2。同理，当newStartIdx &gt; newEndIdx时，新的VNode节点已经遍历完了，但是老的节点还有剩余，说明真实DOM节点多余了，需要从文档中删除，这时候调用removeVnodes将这些多余的真实DOM删除。</p>
+<p><img src="https://images.xiaozhuanlan.com/photo/2017/dfc41a99701946feb12a0f50c88e5381.png" alt="img"></p>
+<h2 id="7-dom操作">7. DOM操作</h2>
+<p>由于Vue使用了虚拟DOM，所以虚拟DOM可以在任何支持JavaScript语言的平台上操作，譬如说目前Vue支持的浏览器平台或是weex，在虚拟DOM的实现上是一致的。那么最后虚拟DOM如何映射到真实的DOM节点上呢？</p>
+<p>Vue为平台做了一层适配层。不同平台之间通过适配层对外提供相同的接口，虚拟DOM进行操作真实DOM节点的时候，只需要调用这些适配层的接口即可，而内部实现则不需要关心，它会根据平台的改变而改变。</p>
+<p>现在又出现了一个问题，我们只是将虚拟DOM映射成了真实的DOM。那如何给这些DOM加入attr、class、style等DOM属性呢？</p>
+<p>这要依赖于虚拟DOM的生命钩子。虚拟DOM提供了如下的钩子函数，分别在不同的时期会进行调用。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> hooks <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;create&#39;</span>, <span style="color:#f1fa8c">&#39;activate&#39;</span>, <span style="color:#f1fa8c">&#39;update&#39;</span>, <span style="color:#f1fa8c">&#39;remove&#39;</span>, <span style="color:#f1fa8c">&#39;destroy&#39;</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4">/*构建cbs回调函数，web平台上见/platforms/web/runtime/modules*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> hooks.length; <span style="color:#ff79c6">++</span>i) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    cbs[hooks[i]] <span style="color:#ff79c6">=</span> []
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">for</span> (j <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; j <span style="color:#ff79c6">&lt;</span> modules.length; <span style="color:#ff79c6">++</span>j) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      <span style="color:#ff79c6">if</span> (isDef(modules[j][hooks[i]])) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        cbs[hooks[i]].push(modules[j][hooks[i]])
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  }
+</code></pre></div><p>同理，也会根据不同平台有自己不同的实现，我们这里以Web平台为例。里面有对attr、class、props、events、style以及transition（过渡状态）的DOM属性进行操作。</p>
+<p>以attr为例，代码很简单。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/* @flow */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">import</span> { isIE9 } from <span style="color:#f1fa8c">&#39;core/util/env&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#ff79c6">import</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  extend,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  isDef,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  isUndef
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>} from <span style="color:#f1fa8c">&#39;shared/util&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#ff79c6">import</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  isXlink,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  xlinkNS,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>  getXlinkProp,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  isBooleanAttr,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>  isEnumeratedAttr,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  isFalsyAttrValue
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>} from <span style="color:#f1fa8c">&#39;web/util/index&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#6272a4">/*更新attr*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#8be9fd;font-style:italic">function</span> updateAttrs (oldVnode<span style="color:#ff79c6">:</span> VNodeWithData, vnode<span style="color:#ff79c6">:</span> VNodeWithData) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  <span style="color:#6272a4">/*如果旧的以及新的VNode节点均没有attr属性，则直接返回*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  <span style="color:#ff79c6">if</span> (isUndef(oldVnode.data.attrs) <span style="color:#ff79c6">&amp;&amp;</span> isUndef(vnode.data.attrs)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#ff79c6">return</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>  <span style="color:#8be9fd;font-style:italic">let</span> key, cur, old
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  <span style="color:#6272a4">/*VNode节点对应的Dom实例*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  <span style="color:#ff79c6">const</span> elm <span style="color:#ff79c6">=</span> vnode.elm
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  <span style="color:#6272a4">/*旧VNode节点的attr*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  <span style="color:#ff79c6">const</span> oldAttrs <span style="color:#ff79c6">=</span> oldVnode.data.attrs <span style="color:#ff79c6">||</span> {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>  <span style="color:#6272a4">/*新VNode节点的attr*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>  <span style="color:#8be9fd;font-style:italic">let</span> attrs<span style="color:#ff79c6">:</span> any <span style="color:#ff79c6">=</span> vnode.data.attrs <span style="color:#ff79c6">||</span> {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>  <span style="color:#6272a4">// clone observed objects, as the user probably wants to mutate it
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">/*如果新的VNode的attr已经有__ob__（代表已经被Observe处理过了）， 进行深拷贝*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  <span style="color:#ff79c6">if</span> (isDef(attrs.__ob__)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    attrs <span style="color:#ff79c6">=</span> vnode.data.attrs <span style="color:#ff79c6">=</span> extend({}, attrs)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  <span style="color:#6272a4">/*遍历attr，不一致则替换*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  <span style="color:#ff79c6">for</span> (key <span style="color:#ff79c6">in</span> attrs) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    cur <span style="color:#ff79c6">=</span> attrs[key]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>    old <span style="color:#ff79c6">=</span> oldAttrs[key]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>    <span style="color:#ff79c6">if</span> (old <span style="color:#ff79c6">!==</span> cur) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>      setAttr(elm, key, cur)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>  <span style="color:#6272a4">// #4391: in IE9, setting type can reset value for input[type=radio]
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">/* istanbul ignore if */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>  <span style="color:#ff79c6">if</span> (isIE9 <span style="color:#ff79c6">&amp;&amp;</span> attrs.value <span style="color:#ff79c6">!==</span> oldAttrs.value) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>    setAttr(elm, <span style="color:#f1fa8c">&#39;value&#39;</span>, attrs.value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>  <span style="color:#ff79c6">for</span> (key <span style="color:#ff79c6">in</span> oldAttrs) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>    <span style="color:#ff79c6">if</span> (isUndef(attrs[key])) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>      <span style="color:#ff79c6">if</span> (isXlink(key)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>        elm.removeAttributeNS(xlinkNS, getXlinkProp(key))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>      } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">!</span>isEnumeratedAttr(key)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>        elm.removeAttribute(key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="color:#6272a4">/*设置attr*/</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span style="color:#8be9fd;font-style:italic">function</span> setAttr (el<span style="color:#ff79c6">:</span> Element, key<span style="color:#ff79c6">:</span> string, value<span style="color:#ff79c6">:</span> any) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>  <span style="color:#ff79c6">if</span> (isBooleanAttr(key)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>    <span style="color:#6272a4">// set attribute for blank value
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// e.g. &lt;option disabled&gt;Select one&lt;/option&gt;
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (isFalsyAttrValue(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>      el.removeAttribute(key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>      el.setAttribute(key, key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isEnumeratedAttr(key)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>    el.setAttribute(key, isFalsyAttrValue(value) <span style="color:#ff79c6">||</span> value <span style="color:#ff79c6">===</span> <span style="color:#f1fa8c">&#39;false&#39;</span> <span style="color:#ff79c6">?</span> <span style="color:#f1fa8c">&#39;false&#39;</span> <span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;true&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (isXlink(key)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>    <span style="color:#ff79c6">if</span> (isFalsyAttrValue(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>      el.removeAttributeNS(xlinkNS, getXlinkProp(key))
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>      el.setAttributeNS(xlinkNS, key, value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>  } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span>    <span style="color:#ff79c6">if</span> (isFalsyAttrValue(value)) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span>      el.removeAttribute(key)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span>      el.setAttribute(key, value)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91</span>  create<span style="color:#ff79c6">:</span> updateAttrs,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92</span>  update<span style="color:#ff79c6">:</span> updateAttrs
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93</span>}
+</code></pre></div><p>attr只需要在create以及update钩子被调用时更新DOM的attr属性即可。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/vue/">vue</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/vue-%E6%95%B0%E6%8D%AE%E5%8A%AB%E6%8C%81%E8%AF%A6%E8%A7%A3/" data-tooltip="vue 数据劫持详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-array%E8%AF%A6%E8%A7%A3/" data-tooltip="js Array详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
