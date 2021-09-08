@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  react 函数式编程范式 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" react 函数式编程范式 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [react] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/react-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 函数式编程定义</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 声明式编程</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 函数式编程特征</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 函数是一等公民</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 使用纯函数</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 函数副作用</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 引用透明</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 参数值不可变</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. 函数只接受一个参数</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">react 函数式编程范式</span>
+        
+        <div class="info">
+          <span>📅 2021-09-08</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2798字</span>
+          <span>⏱ 6分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/58245991">React躬行记（1）——函数式编程</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/26174525">React世界的函数式编程(Functional Programming)</a></p>
+</blockquote>
+<h2 id="1-函数式编程定义">1. 函数式编程定义</h2>
+<p>函数式编程（Functional Programming）不是一种新的框架或工具，而是一种以函数为主的编程范式。编程范式也叫编程范型，是一类编程风格，除了函数式编程，常用的还有面向对象编程、命令式编程等。</p>
+<p>函数式编程是声明式编程的子集，而声明式编程是和命令式编程比较而存在的。既然函数式编程是声明式编程的子集，那么它一定符合声明式编程的要求，我们先来看声明式编程的要求，以及声明式和命令式的区别。</p>
+<h2 id="2-声明式编程">2. 声明式编程</h2>
+<p>声明时编程也是一种范式，但它是一个比较大的概念，函数式编程是它的一个子集。声明式编程能指定每一步操作，而不用向计算机描述具体的实现细节。</p>
+<p>与之相对立的是命令式编程，它会命令计算机每一步该怎么做。</p>
+<p>以数组的元素翻倍为例，先用命令式编程实现，如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  length <span style="color:#ff79c6">=</span> arr.length,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  doubles <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> length; i<span style="color:#ff79c6">++</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>  doubles.push(arr[i] <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>}
+</code></pre></div><p>在命令式的代码中，先用for循环遍历整个数组，然后让每个元素乘以二，再将计算结果插入到doubles数组中，直至将所有的元素计算完才终止整套操作。改用声明式编程可以像下面这样实现相同的功能。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> doubles <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>].map(value =&gt; value <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>);
+</code></pre></div><p>在声明式的代码中，用map()方法替代了循环语句（即不指明流程的控制方式），既不用再维护计数器，也不用再通过索引访问数组的元素，配合ES6的箭头函数让整套操作变得非常简洁。</p>
+<p>除了这些表面区别之外，还有个最本质的区别，那就是声明式编程会避免用变量保存程序的状态，从而能提高代码的无状态性。在命令式的代码中，每次迭代都会修改doubles变量，这是个状态变量，而在声明式的代码中，改用返回值保存程序的状态。</p>
+<h2 id="3-函数式编程特征">3. 函数式编程特征</h2>
+<p>邱奇提出的Lambda演算里，有几个重要设定，在之后的函数式编程语言中实现和扩充了这些设定，这些设定很多，在这里我只列出一些主要的，依次来看 React 和 JavaScript 是否满足这些要求。</p>
+<h3 id="1-函数是一等公民">1. 函数是一等公民</h3>
+<p>函数式编程强调在程序中使用函数。由于JavaScript中的函数是一等公民，它既可以是变量的值，也可以作为另一函数的参数或返回值，因此通过函数可构建一层抽象以替代流程控制或解决复杂的逻辑操作。例如对数组中的数字进行排序和过滤，可以像下面这样运用函数式编程的思想实现。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>[<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>].sort((a, b) =&gt; a <span style="color:#ff79c6">&gt;</span> b).filter(value =&gt; value <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">2</span>);        <span style="color:#6272a4">// [3, 4, 5]
+</span></code></pre></div><p>函数式编程旨在将复杂的运算分解成一系列嵌套的函数，逐层推导，不断渐进，直至完成运算。</p>
+<p>因为函数是第一等公民，所以函数的组合就成为可能，可以玩出函数式编程才有的技巧。</p>
+<h3 id="2-使用纯函数">2. 使用纯函数</h3>
+<p>纯函数（Pure Function）是一种没有副作用、引用透明、输出完全由输入决定的函数，它是函数式编程的基本概念，接下来会重点讲解它的三个特征。</p>
+<h4 id="1-函数副作用">1. 函数副作用</h4>
+<p>函数在读写外部资源或执行不确定的操作时就会产生副作用，例如修改函数外的变量、调用Date.now()或Math.random()、更新cookie信息等。副作用不仅会降低程序整体的可读性，有时候还会带来意料之外、难以排查的错误，下面是一个副作用的例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> digit <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">function</span> increment() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  digit <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">Math</span>.random();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#ff79c6">return</span> digit;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div><p>在上面的代码中，increment()函数产生了副作用，因为每次调用它都会更新外部的digit变量，并且每次得到的计算结果也无法预知。</p>
+<h4 id="2-引用透明">2. 引用透明</h4>
+<p>如果传递给函数相同的参数，始终能得到相同的结果，那么就能说这个函数是引用透明（Referential Transparent）的。简单的说就是，函数的运行只受其输入值的影响，如下代码所示，传递给add()函数固定的参数会返回固定的值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> add(a, b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">+</span> b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><p>在 React 中，组件的 render函数 应该是一个纯函数，遵循了引用透明原则，只有这样，组件渲染的结果才只和 state/props 有关系，遵循<code>UI = f( state )</code>这个公式。</p>
+<h4 id="3-参数值不可变">3. 参数值不可变</h4>
+<p>在函数式编程语言中，数据是不可变的，或者说没有变量这个概念，所有的数据一旦产生，就不能改变其中的值，如果要改变，那就只能生成一个新的数据。</p>
+<p>JavaScript语言本身和 Immutable 沾上边的只有 Object.freeze 这个函数，可以“冻结”一个对象，防止对这个对象的直接修改。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> obj <span style="color:#ff79c6">=</span> { name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Morgan&#39;</span> };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">Object</span>.freeze(obj)；
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>obj.name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;Cheng&#39;</span>; <span style="color:#6272a4">//strict模式下抛出异常，非strict模式下也不会修改obj.name的值。
+</span></code></pre></div><p>同样的，传递给纯函数的参数值是不允许在内部将其改变的，换句话说，在函数内部应该使用参数值的副本，而不是直接对参数值进行操作。</p>
+<p>在React中，强调一个组件不能去修改传入的 prop 值，也是遵循 Immutable 的原则。在Redux中，更是强调 Immutable 的作用，每个 reducer 不能够修改 state，只能返回一个新的 state。</p>
+<p>Immutable 是个好原则，可以让代码更容易维护，当你看到一个变量的时候，可以放心假设这个变量代表的值不会被篡改，否则，你就会很操心。</p>
+<p>在JavaScript中，尽量不要使用 push 方法去修改一个数组。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> arr <span style="color:#ff79c6">=</span> [<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>arr.push(<span style="color:#bd93f9">4</span>); <span style="color:#6272a4">//这样不好，看到这代码我就方了，需要从上往下琢磨一下arr到底存的是啥
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> newArr <span style="color:#ff79c6">=</span> [...arr, <span style="color:#bd93f9">4</span>]; <span style="color:#6272a4">//这样，arr不会被修改，很放心，要修改过的版本用newArr就好了
+</span></code></pre></div><p>也不要直接去修改一个对象的字段。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> me <span style="color:#ff79c6">=</span> {name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;Morgan&#39;</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>me.skill <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;React&#39;</span>; <span style="color:#6272a4">//这样不好，拿不准me里是啥了
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> newMe <span style="color:#ff79c6">=</span> {...me, skill<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;React&#39;</span>}; <span style="color:#6272a4">//这样，me不会被修改
+</span></code></pre></div><p>保持 Immutable 的代价就会有一些空间和时间损耗，不过说真的，对绝大部分场合，真的不用去操心这点空间损耗，代码的可读性比这点损耗重要。</p>
+<h3 id="3-函数只接受一个参数">3. 函数只接受一个参数</h3>
+<p>这可能是函数式编程语言最让人难以理解的一个特性了，对于写了十几年任意参数个数函数的凡人，看到这个规矩真的要疯了，为啥一个函数只能有一个参数？一个函数只能有一个参数，岂不是好多功能都没法写了？</p>
+<p>让函数执行返回函数，可以把多参数的函数分解为多个单参数的函数，不过，我们还是要问：为啥要这样？</p>
+<p>答案，我们可以简单理解为——这就是规矩！当年邱奇发明Lambda演算时就定下的规矩！</p>
+<p>当然，JavaScript语言没有限制一个函数的参数个数，所以这一点上JavaScript也不够原教旨主义，不过，知道函数式编程有这样一个规矩，可以帮助我们理解为什么Redux的一些代码写成很奇怪的样子。</p>
+<p>比如，在Redux中，要写一个Middleware，代码是这个样子。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> someMiddleware <span style="color:#ff79c6">=</span> store =&gt; next =&gt; action =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#6272a4">// 实现middleware
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>};
+</code></pre></div><p>如果看得不是很清楚，可以换个形式来看，上面的代码其实就是下面这样，一个函数返回另一个函数，利用闭包(Closure)，最里面的一个函数就可以访问三个参数了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> someMiddleware <span style="color:#ff79c6">=</span> store =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> next =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">return</span> action =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>      <span style="color:#6272a4">// 实现middleware
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>    };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  };
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>};
+</code></pre></div><p>理论上，既然最后的函数需要的只是store、next和action三个参数，Redux完全可以定义一个middleware的形式是这样。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">const</span> someMiddleware <span style="color:#ff79c6">=</span> (store, next, action) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#6272a4">// 实现middleware
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>};
+</code></pre></div><p>实际上，Redux 没有像上面那样做，就是遵照函数式编程的传统，Redux 的作者 Dan Abramov 现在服务于 React 核心开发组，可以预见未来React也会更加函数式。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/react/">react</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-class%E8%AF%A6%E8%A7%A3/" data-tooltip="js Class详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
