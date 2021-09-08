@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  react 函数组件详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" react 函数组件详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [react 函数组件] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/react-%E5%87%BD%E6%95%B0%E7%BB%84%E4%BB%B6%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 声明函数组件</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 函数组件的优势</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 写法轻量、灵活</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 类组件存在缺陷</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 组件之间复用状态逻辑很难</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 复杂组件难以理解</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 难以理解的 class</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. 函数组件性能优秀</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. Hooks</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">react 函数组件详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-08</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2066字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://blog.csdn.net/Marker__/article/details/105584360">React 函数组件详解</a></p>
+<p><a href="https://blog.csdn.net/weixin_43905830/article/details/111824145">hooks和类组件的区别</a></p>
+<p><a href="https://www.zhihu.com/question/343314784">为什么 React 现在要推行函数式组件，用 class 不好吗？</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/88593858">谈谈react hooks的优缺点</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/363957969">React Hooks 详解</a></p>
+</blockquote>
+<p>React中有两种定义组件的方式：</p>
+<ol>
+<li>
+<p>函数定义组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Welcome() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">return</span> &lt;<span style="color:#ff79c6">h1</span>&gt;函数式&lt;/<span style="color:#ff79c6">h1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div></li>
+<li>
+<p>类定义组件</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#ff79c6">class</span> Welcome <span style="color:#ff79c6">extends</span> React.Component {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  render() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">return</span> &lt;<span style="color:#ff79c6">h1</span>&gt;类式&lt;/<span style="color:#ff79c6">h1</span>&gt;;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
+</code></pre></div></li>
+</ol>
+<p>关于类式组件，在另一篇文章介绍《react 类式组件详解》，本篇文章研究函数式组件的相关内容。</p>
+<h2 id="1-声明函数组件">1. 声明函数组件</h2>
+<p>相比类组件其实更提倡使用函数组件，因为它在很多操作上都是很便捷的，比如说没有 this。创建函数组件的方式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 箭头函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> Hello <span style="color:#ff79c6">=</span> (props) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">return</span> &lt;<span style="color:#ff79c6">div</span>&gt;{ props. message}&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">// 箭头函数缩写
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> Hello <span style="color:#ff79c6">=</span> props =&gt; &lt;<span style="color:#ff79c6">div</span>&gt;{ props. message}&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4">// 普通函数
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Hello(props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">return</span>&lt;<span style="color:#ff79c6">div</span>&gt;{ props. message}&lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+</code></pre></div><h2 id="2-函数组件的优势">2. 函数组件的优势</h2>
+<p>这里与其说是讨论函数组件的优势，倒不如说是Hooks的优势，因为函数组件没有Hooks，就只是一个无状态组件，是能实现简单的渲染逻辑，函数组件+Hooks让函数组件超过了类组件。</p>
+<h3 id="1-写法轻量灵活">1. 写法轻量、灵活</h3>
+<p>在函数组件中我们不需要去继承一个<code>class</code>对象，不需要去记忆那些生命周期，不需要把数据定义在<code>state</code>中。</p>
+<p>函数作为js中的一等公民，可以让我们更加高效更加灵活的去组织代码。</p>
+<h3 id="2-类组件存在缺陷">2. 类组件存在缺陷</h3>
+<p>此处引用React官网，对于引入Hooks的动机：</p>
+<p>Hook 解决了我们五年来编写和维护成千上万的组件时遇到的各种各样看起来不相关的问题。无论你正在学习 React，或每天使用，或者更愿尝试另一个和 React 有相似组件模型的框架，你都可能对这些问题似曾相识。</p>
+<h4 id="1-组件之间复用状态逻辑很难">1. 组件之间复用状态逻辑很难</h4>
+<blockquote>
+<p>React 没有提供将可复用性行为“附加”到组件的途径（例如，把组件连接到 store）。如果你使用过 React 一段时间，你也许会熟悉一些解决此类问题的方案，比如 <a href="https://zh-hans.reactjs.org/docs/render-props.html">render props</a> 和 <a href="https://zh-hans.reactjs.org/docs/higher-order-components.html">高阶组件</a>。但是这类方案需要重新组织你的组件结构，这可能会很麻烦，使你的代码难以理解。如果你在 React DevTools 中观察过 React 应用，你会发现由 providers，consumers，高阶组件，render props 等其他抽象层组成的组件会形成“嵌套地狱”。尽管我们可以<a href="https://github.com/facebook/react-devtools/pull/503">在 DevTools 过滤掉它们</a>，但这说明了一个更深层次的问题：React 需要为共享状态逻辑提供更好的原生途径。</p>
+<p>你可以使用 Hook 从组件中提取状态逻辑，使得这些逻辑可以单独测试并复用。<strong>Hook 使你在无需修改组件结构的情况下复用状态逻辑。</strong> 这使得在组件间或社区内共享 Hook 变得更便捷。</p>
+</blockquote>
+<p>对于<strong>状态逻辑的复用</strong>这种场景只要页面中有复用的组件，且这个组件又有较为复杂的状态逻辑，就会有这样的需求，举个常见的例子：在做后台系统中经常需要去做各种展示的列表，表格的内容各不相同，但是又都要有分页的行为，于是分页组件 就需要去抽象。</p>
+<p>为了复用逻辑增加无实际渲染效果的组件，增加了组件层级，显示十分臃肿，增加了调试的难度以及运行效率的降低。</p>
+<h4 id="2-复杂组件难以理解">2. 复杂组件难以理解</h4>
+<blockquote>
+<p>我们经常维护一些组件，组件起初很简单，但是逐渐会被状态逻辑和副作用充斥。每个生命周期常常包含一些不相关的逻辑。例如，组件常常在 <code>componentDidMount</code> 和 <code>componentDidUpdate</code> 中获取数据。但是，同一个 <code>componentDidMount</code> 中可能也包含很多其它的逻辑，如设置事件监听，而之后需在 <code>componentWillUnmount</code> 中清除。相互关联且需要对照修改的代码被进行了拆分，而完全不相关的代码却在同一个方法中组合在一起。如此很容易产生 bug，并且导致逻辑不一致。</p>
+<p>在多数情况下，不可能将组件拆分为更小的粒度，因为状态逻辑无处不在。这也给测试带来了一定挑战。同时，这也是很多人将 React 与状态管理库结合使用的原因之一。但是，这往往会引入了很多抽象概念，需要你在不同的文件之间来回切换，使得复用变得更加困难。</p>
+<p>为了解决这个问题，<strong>Hook 将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据）</strong>，而并非强制按照生命周期划分。你还可以使用 reducer 来管理组件的内部状态，使其更加可预测。</p>
+</blockquote>
+<p>其实就是我们在实现组件时，将一组相干的业务逻辑拆分到了多个生命周期函数中，在一个生命周期函数内，存在多个不相干的业务逻辑。</p>
+<h4 id="3-难以理解的-class">3. 难以理解的 class</h4>
+<blockquote>
+<p>除了代码复用和代码管理会遇到困难外，我们还发现 class 是学习 React 的一大屏障。你必须去理解 JavaScript 中 <code>this</code> 的工作方式，这与其他语言存在巨大差异。还不能忘记绑定事件处理器。没有稳定的<a href="https://babeljs.io/docs/en/babel-plugin-transform-class-properties/">语法提案</a>，这些代码非常冗余。大家可以很好地理解 props，state 和自顶向下的数据流，但对 class 却一筹莫展。即便在有经验的 React 开发者之间，对于函数组件与 class 组件的差异也存在分歧，甚至还要区分两种组件的使用场景。</p>
+</blockquote>
+<p>其实就是我们需要时时注意<code>this</code>，使用bind或者箭头函数去约束我们函数中<code>this</code>的作用域。</p>
+<h3 id="3-函数组件性能优秀">3. 函数组件性能优秀</h3>
+<p>类组件的性能消耗比较大，因为类组件需要创建类组件的实例，而且不能销毁。</p>
+<p>函数式组件性能消耗小，因为函数式组件不需要创建实例，渲染的时候就执行一下，得到返回的react元素后就直接把中间量全部都销毁。</p>
+<h2 id="3-hooks">3. Hooks</h2>
+<p>Hooks 对函数型组件进行增强，让函数型组件可以存储状态，可以拥有处理副作用的能力，让开发者在不使用类组件的情况下，实现相同的功能。</p>
+<p>函数组件的所有核心都在Hooks，因此，单独在另一篇文章中介绍《react Hooks详解》。</p>
+<p>本文是 深入react 的第3篇文章，下一篇是《react Hooks详解》。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/react/">react</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-class%E8%AF%A6%E8%A7%A3/" data-tooltip="js Class详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/" data-tooltip="react 函数式编程范式">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
