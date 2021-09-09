@@ -51,6 +51,12 @@
             <li>
                 <span class="toc-link">3. createElement</span>
             </li>
+            <li>
+                <span class="toc-link">4. render</span>
+            </li>
+            <li>
+                <span class="toc-link">5. 时间切片与Fiber</span>
+            </li>
             </div><div class="single-post container">
     <div class="post">
       <div class="header">
@@ -59,8 +65,8 @@
         <div class="info">
           <span>📅 2021-09-07</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 2053字</span>
-          <span>⏱ 5分钟</span>
+          <span>📖 2672字</span>
+          <span>⏱ 6分钟</span>
         </div>
         
       </div>
@@ -259,14 +265,92 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> createElement;
-</code></pre></div><p>这个说实话没有什么好说的，只是初步定义了节点的格式，包括<code>type</code>、<code>props</code>、<code>children</code>，这是使用JSX带来的必然要求，或者说我们书写的JSX其实本质就是一个一个的element对象，我们需要通过定义<code>createElement</code>来定义element的格式。</p>
-<p>另外要注意的的是，自定义组件的对象还没有实例化，组件的<code>render</code>函数也没有调用，因此在这个阶段，自定义组件的element对象与组件内部<code>render</code>返回的的JSX element对象是没有关联的，这么说可能不好理解，我们看一下就明白了：</p>
+</code></pre></div><p>这个说实话没有什么好说的，只是初步定义了节点的格式，包括<code>type</code>、<code>props</code>、<code>children</code>，这是使用JSX带来的必然要求，或者说我们书写的 JSX 其实本质就是一个一个的element对象，我们需要通过定义<code>createElement</code>来定义element的格式。</p>
+<p>另外要注意的的是，自定义组件的对象还没有实例化，组件的<code>render</code>函数也没有调用，因此在这个阶段，自定义组件的 element 对象与组件内部<code>render</code>返回的的 JSX element 对象是没有关联的，这么说可能不好理解，我们看一下就明白了：</p>
 <p><code>index.js</code></p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>console.log(&lt;<span style="color:#ff79c6">Counter</span>/&gt;);
 </code></pre></div><p>对于这样的组件，我们打印<code>&lt;Counter/&gt;</code>：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210907210744684.png" alt="image-20210907210744684"></p>
 <p>可以看到这里并没有<code>children</code>，但是<code>render</code>函数内部的<code>div</code>和其子节点<code>h1</code>等其实是有关系的，这是因为<code>Counter</code>是一个类式组件，传入<code>&lt;Counter/&gt;</code>会被Babel编译成<code>React.createElement(Counter, null)</code>，必须实例化并且调用render函数，才能拿到里面的JSX元素。但是这些处理不是现在执行的。</p>
-<p>这里我们定义的<code>createElement</code>函数明显不是给我们自己用的，而是给JSX使用的，因此只负责处理数据格式，而不进行其他操作，这里的element节点是JSX标签的真实面貌。</p>
+<p>这里我们定义的<code>createElement</code>函数明显不是给我们自己用的，而是给 JSX 使用的，因此只负责处理数据格式，而不进行其他操作，这里的 element 节点是 JSX 标签的真实面貌，也是 React 中大名鼎鼎的 VirtualDOM 。</p>
+<p>element 的结构是如下图所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112211371.png" alt="image-20210909112211371"></p>
+<p>目前我们的 VirtualDOM 树存在两个问题：</p>
+<ol>
+<li>上图中有颜色的节点，是自定义组件的节点，需要调用render函数，才能形成下面的节点；</li>
+<li>每个节点都是虚拟节点，没有与之对应的真实 dom 节点一一对应；</li>
+</ol>
+<h2 id="4-render">4. render</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> elecConstructor <span style="color:#ff79c6">=</span> element.type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> elecConstructor();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    eleWithDOM <span style="color:#ff79c6">=</span> createDOM(obj.render());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;string&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#6272a4">// 创建dom
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#6272a4">// 挂载属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#6272a4">// 处理children
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>element.children.length) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      children <span style="color:#ff79c6">=</span> element.children.map(child =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#8be9fd;font-style:italic">let</span> childEleWithDOM <span style="color:#ff79c6">=</span> createDOM(child);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>dom <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>childEleWithDOM.dom){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>          dom.append(childEleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        <span style="color:#ff79c6">return</span> childEleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#6272a4">// 形成Fiber
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>    eleWithDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      ...element,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      dom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>      children
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  <span style="color:#ff79c6">return</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    <span style="color:#6272a4">// nextEle = element
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM <span style="color:#ff79c6">=</span> createDOM(element);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    console.log(eleWithDOM);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    container.append(eleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>  render
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+</code></pre></div><p>在 render 中，我们进行了很简单的操作：</p>
+<ol>
+<li>将根 element 递归的创建和挂载 dom （递归的深度优先遍历）；</li>
+<li>将根 element 的dom元素，挂载到容器上；</li>
+</ol>
+<p>至此，我们的 element 元素就可以在页面上看到了：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909110501558.png" alt="image-20210909110501558"></p>
+<p>经过这一层操作，上面的 VirtualDOM 树变成了这样：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112935483.png" alt="image-20210909112935483"></p>
+<p>这样会存在一个问题，再 render 中，我们采用递归的深度优先遍历，一次完成了dom的创建和挂载，如果节点很多，<code>createDOM</code>函数就会花费很多时间</p>
+<h2 id="5-时间切片与fiber">5. 时间切片与Fiber</h2>
+<p>关于什么是时间切片，为什么使用时间切片思想，在《react 时间切片与requestIdleCallback详解》中有详细介绍。</p>
+<p>关于什么是Fiber，为什么使用Fiber，以及Fiber的结构，在《react Fiber详解》中有详细介绍。</p>
+<p>这里我们只关注如何用代码实现时间切片机制，以及如何将 element 转换为 Fiber 进行工作。</p>
 
       </div>
       <div class="footer">

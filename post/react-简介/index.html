@@ -40,12 +40,7 @@
             <li>
                 <span class="toc-link">2. React 解决的问题</span>
             </li>
-            
-                    <ul class="toc-h3"><li>
-                <span class="toc-link">1. CPU瓶颈</span>
-            </li>
-            
-                    </ul><li>
+            <li>
                 <span class="toc-link">3. React 核心思想</span>
             </li>
             
@@ -69,8 +64,8 @@
         <div class="info">
           <span>📅 2021-09-02</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 1068字</span>
-          <span>⏱ 3分钟</span>
+          <span>📖 284字</span>
+          <span>⏱ 1分钟</span>
         </div>
         
       </div>
@@ -88,44 +83,8 @@
 <p>使用 React 可以将一些独立的代码片段组合成复杂的 UI 界面，这些代码片段被称作“组件”。</p>
 </blockquote>
 <h2 id="2-react-解决的问题">2. React 解决的问题</h2>
-<p>我们日常使用App，浏览网页时，有两类场景会制约快速响应：</p>
-<ol>
-<li>当遇到大计算量的操作或者设备性能不足使页面掉帧，导致卡顿。</li>
-<li>发送网络请求后，由于需要等待数据返回才能进一步操作导致不能快速响应。</li>
-</ol>
-<p>这两类场景可以概括为：</p>
-<ol>
-<li>性能的瓶颈（CPU瓶颈）</li>
-<li>IO的瓶颈</li>
-</ol>
-<p>而IO的瓶颈其实并不是我们可以左右的，只能通过一些手段掩盖IO的延迟，这里我们主要关注，React是如何解决性能瓶颈问题的。</p>
-<h3 id="1-cpu瓶颈">1. CPU瓶颈</h3>
-<p>当项目变得庞大、组件数量繁多时，就容易遇到CPU的瓶颈：</p>
-<p>考虑如下Demo，我们向视图中渲染3000个<code>li</code>：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-react" data-lang="react"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> App() {
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">const</span> len <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3000</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">return</span> (
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    &lt;<span style="color:#ff79c6">ul</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>      {<span style="color:#8be9fd;font-style:italic">Array</span>(<span style="color:#bd93f9">3000</span>).fill(<span style="color:#bd93f9">0</span>).map((_, i) =&gt; &lt;<span style="color:#ff79c6">li</span>&gt;{i}&lt;/<span style="color:#ff79c6">li</span>&gt;)}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    &lt;/<span style="color:#ff79c6">ul</span>&gt;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  );
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>}
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#ff79c6">const</span> rootEl <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.querySelector(<span style="color:#f1fa8c">&#34;#root&#34;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>ReactDOM.render(&lt;<span style="color:#ff79c6">App</span>/&gt;, rootEl);  
-</code></pre></div><blockquote>
-<p>主流浏览器刷新频率为60Hz，即每（1000ms / 60Hz）16.6ms浏览器刷新一次。</p>
-<p>在浏览器的Render进程中，GUI渲染线程与JS线程是互斥的。所以JS脚本执行和浏览器布局、绘制不能同时执行。</p>
-<p>在每16.6ms时间内，需要完成3个工作：JS执行 -&gt;布局 -&gt; 绘制。</p>
-</blockquote>
-<p>我们对上面Demo的渲染过程进行分析，其中js的执行占用了73.65ms：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/7a1b99c463324014ac23b9909bf830d7~tplv-k3u1fbpfcp-watermark.awebp" alt="img"></p>
-<p>那么如果JS执行时间过长，超出了16.6ms，这次刷新就没有时间执行布局和绘制了。以至于这次刷新没有进行样式的渲染，这也就是所谓的页面掉帧，卡顿。那么该如何解决这个问题？</p>
-<p>我们可以在浏览器每一帧的16.6ms中，预留一些时间给JS线程，React利用这部分时间更新组件（可以看到，在<a href="https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L119">源码</a>中，预留的初始时间是5ms）。当预留的时间不够用时，React将线程控制权交还给浏览器使其有时间渲染UI，React则等待下一帧时间到来继续被中断的工作。</p>
-<p>也就是说，我们在每一帧中给JS的执行设限，超过了5ms，你就不要再执行了，等下一帧你再执行。这种将长任务分拆到每一帧中，像蚂蚁搬家一样一次执行一小段任务的操作，被称为时间切片（time slice）。</p>
-<p>而React的很多结构和思想，都是为了实现这个优化逻辑而提出来的。</p>
-<p>我们的长任务被拆分到每一帧不同的 task 中，JS 脚本执行时间大体在 5ms 左右，这样浏览器就有剩余时间执行样式布局和样式绘制，减少掉帧的可能性。</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/2021-01-20-11-16-52-39203a12a2cd216cf4fb8010900ad6b7-fee1c.png" alt="2021 01 20 11 16 52"></p>
+<p>React 使用时间切片的思想，解决了浏览器的性能瓶颈问题。</p>
+<p>关于时间切片的具体介绍，在另一篇文章《react 时间切片与requestIdleCallback详解》。</p>
 <h2 id="3-react-核心思想">3. React 核心思想</h2>
 <h3 id="1-函数式编程">1. 函数式编程</h3>
 <p>这一点，我们在另一篇文章《react 函数式编程范式》中有进一步介绍。</p>
