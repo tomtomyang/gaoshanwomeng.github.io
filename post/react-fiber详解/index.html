@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  react Fiber详解 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" react Fiber详解 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [react Fiber] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/react-fiber%E8%AF%A6%E8%A7%A3/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 背景</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 尝试</span>
+            </li>
+            <li>
+                <span class="toc-link">2. Fiber</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 什么是 Fiber</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 一种执行单元</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 一种数据结构</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. Fiber 链表</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">react Fiber详解</span>
+        
+        <div class="info">
+          <span>📅 2021-09-09</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2406字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://juejin.cn/post/6943896410987659277">走进React Fiber的世界</a></p>
+<p><a href="https://juejin.cn/post/6844904197008130062">手写React的Fiber架构，深入理解其原理</a></p>
+</blockquote>
+<h2 id="1-背景">1. 背景</h2>
+<p>在之前的《react react 时间切片与requestIdleCallback详解》中，我们了解到 React 为了解决浏览器性能瓶颈，提出了时间切片的机制，将大任务拆分为小任务分别执行。</p>
+<p>那么我们就不得不再思考几个问题：</p>
+<ol>
+<li>
+<p>需要我们划分的大任务是什么？</p>
+<p>将 VirtualDOM 树转换为真实 DOM 并挂载到容器上；</p>
+</li>
+<li>
+<p>我们应该按照什么标准划分小任务？</p>
+<p>已经显而易见了，按照节点，每一个节点就是一个小任务；</p>
+</li>
+<li>
+<p>我们按照什么顺序执行小任务？</p>
+<p>对于树形结构，最好的顺序是深度优先，同时必须是非递归的，只有非递归才能拆分任务；</p>
+</li>
+<li>
+<p>我们如何确保每一个小任务都按照既定顺序执行？</p>
+<p>将树形结构转换为链式结构，就可以保证顺序；</p>
+</li>
+</ol>
+<h2 id="2-尝试">2. 尝试</h2>
+<p>这里我们先按照上面几个问题的答案，试着自己去拆分一下我们的大任务吧！</p>
+<p>首先来看看大任务是什么，这里要结合《react 手写react16.x》的代码来看，我们在<code>render</code>里执行了一个函数<code>createDOM</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM <span style="color:#ff79c6">=</span> createDOM(element);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    <span style="color:#6272a4">// console.log(eleWithDOM);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4"></span>    container.append(eleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p><code>createDOM</code>中，递归的对 element 树进行深度优先遍历，对每个 element 节点添加dom属性，存储对应的真实 dom，这差不多也是 React 15的 render 方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> elecConstructor <span style="color:#ff79c6">=</span> element.type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> elecConstructor();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    eleWithDOM <span style="color:#ff79c6">=</span> createDOM(obj.render());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;string&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#6272a4">// 创建dom
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#6272a4">// 挂载属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#6272a4">// 处理children
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>element.children.length) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      children <span style="color:#ff79c6">=</span> element.children.map(child =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#8be9fd;font-style:italic">let</span> childEleWithDOM <span style="color:#ff79c6">=</span> createDOM(child);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>dom <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>childEleWithDOM.dom){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>          dom.append(childEleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        <span style="color:#ff79c6">return</span> childEleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#6272a4">// 形成Fiber
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>    eleWithDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      ...element,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      dom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>      children
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  <span style="color:#ff79c6">return</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>}
+</code></pre></div><p>关于切分小任务，然后划分时间切片去执行，需要用到我们在《react 时间切片与requestIdleCallback详解》中介绍的基础架构：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">let</span> taskQueue <span style="color:#ff79c6">=</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  () =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    console.log(<span style="color:#f1fa8c">&#39;task1 start&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    console.log(<span style="color:#f1fa8c">&#39;task1 end&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  () =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    console.log(<span style="color:#f1fa8c">&#39;task2 start&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    console.log(<span style="color:#f1fa8c">&#39;task2 end&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  () =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    console.log(<span style="color:#f1fa8c">&#39;task3 start&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    console.log(<span style="color:#f1fa8c">&#39;task3 end&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#ff79c6">const</span> performUnitWork <span style="color:#ff79c6">=</span> () =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  <span style="color:#6272a4">// 取出第一个队列中的第一个任务并执行
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span style="color:#6272a4"></span>  taskQueue.shift()()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span style="color:#ff79c6">const</span> workloop <span style="color:#ff79c6">=</span> (deadline) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  <span style="color:#ff79c6">while</span> (deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> taskQueue.length <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    performUnitWork()
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> (taskQueue.length <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    requestIdleCallback(workloop)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>requestIdleCallback(workloop)
+</code></pre></div><p>里面的<code>performUnitWork</code>就是小任务，我们就需要将<code>createDOM</code>拆解，然后把每个小任务放入<code>performUnitWork</code>中，但是<code>createDOM</code>是递归实现的，递归不受控制，不可拆分，那么我们就要考虑树的深度优先遍历的另一种方式——迭代，用一个栈来实现深度优先遍历，每次出战入栈就是一个小任务：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> handleClassElement(element) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">if</span>(element.type.__proto__ <span style="color:#ff79c6">==</span> Component){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleConstructor <span style="color:#ff79c6">=</span> element.type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> eleConstructor();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">return</span> eleObj.render();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">return</span> element.type();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">return</span> element;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#6272a4">// 挂载属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#ff79c6">return</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  <span style="color:#8be9fd;font-style:italic">let</span> topItem <span style="color:#ff79c6">=</span> taskStack.pop();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topItem);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  topItem.dom <span style="color:#ff79c6">=</span> createDOM(topItem);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  topItem.parent.dom.append(topItem.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  <span style="color:#8be9fd;font-style:italic">let</span> children  <span style="color:#ff79c6">=</span> topItem.children;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>    children.reverse().forEach((child, index) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>      taskStack.push({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>        ...handleClassElement(child), 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>        parent<span style="color:#ff79c6">:</span> topItem, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>        sibling<span style="color:#ff79c6">:</span> children[index<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>        });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>    performUnitWork();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>    <span style="color:#6272a4">// renderDom();
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="color:#6272a4"></span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>    requestIdleCallback(workloop)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>requestIdleCallback(workloop);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>    taskStack.push({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>      ...handleClassElement(element), 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container }, 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span>  render
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+</code></pre></div><p>这里我们实现了，将大任务，拆分为小任务，如果每个任务占用时间很高的话，我们的页面会这样被渲染：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Video_2021-09-10_103917.gif" alt=""></p>
+<p>控制台输出如下：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210910104408180.png" alt="image-20210910104408180"></p>
+<p>这样我们就实现了时间切片，通过一个栈结构，实现了非递归深度优先遍历，同时我们一个有效的数据结构，因为我们在对树节点遍历的同时，创建了 dom ，同时给每个节点添加了 parent 、sibling 属性，让节点可以同级查找，向上查找，但是我们一直在 element 上操作，感觉就很麻烦，那么我们可以在对节点进行处理时，生成另外一种数据格式，想要变成这件事，就不是那么容易了。</p>
+<p>这样我们在不改变 element 的同时生成一串新的数据结构，这种结构大概就是下面我们要讲的 Fiber，为什么我们要废这么大力气去生成 Fiber 呢，因为有了 Fiber 之后，我们的各种操作都变得简单了。</p>
+<h2 id="2-fiber">2. Fiber</h2>
+<h3 id="1-什么是-fiber">1. 什么是 Fiber</h3>
+<h4 id="1-一种执行单元">1. 一种执行单元</h4>
+<p>Fiber 可以理解为一个执行单元，每次执行完一个执行单元，react 就会检查现在还剩多少时间，如果没有时间则将控制权让出去。React Fiber 与浏览器的核心交互流程如下：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/78a602cbc87342628ace49abb5d20c39~tplv-k3u1fbpfcp-watermark.awebp" alt="undefined"></p>
+<p>Fiber 可以被理解为划分一个个更小的执行单元，它是把一个大任务拆分为了很多个小块任务，一个小块任务的执行必须是一次完成的，不能出现暂停，但是一个小块任务执行完后可以移交控制权给浏览器去响应用户，从而不用像之前一样要等那个大任务一直执行完成再去响应用户。</p>
+<h4 id="2-一种数据结构">2. 一种数据结构</h4>
+<p>Fiber 还可以理解为是一种数据结构，React Fiber 就是采用链表实现的。每个 Virtual DOM 都可以表示为一个 Fiber，首先我们来对比一下 Virtual DOM 与 Fiber 的区别：</p>
+<p>Virtual DOM：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    type<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;div&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    props<span style="color:#ff79c6">:</span> { },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>    children<span style="color:#ff79c6">:</span> [{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>        ...
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    }]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>Fiber：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    type<span style="color:#ff79c6">:</span> any, <span style="color:#6272a4">// 对于类组件，它指向构造函数；对于DOM元素，它指定HTML tag
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    key<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">|</span> string, <span style="color:#6272a4">// 唯一标识符
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>    stateNode<span style="color:#ff79c6">:</span> any, <span style="color:#6272a4">// 保存组件的类实例、DOM节点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>    child<span style="color:#ff79c6">:</span> Fiber <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">null</span>, <span style="color:#6272a4">// 大儿子
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>    sibling<span style="color:#ff79c6">:</span> Fiber <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">null</span>, <span style="color:#6272a4">// 下一个兄弟
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">return</span><span style="color:#ff79c6">:</span> Fiber <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">null</span>, <span style="color:#6272a4">// 父节点
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>    tag<span style="color:#ff79c6">:</span> WorkTag, <span style="color:#6272a4">// 定义fiber操作的类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    nextEffect<span style="color:#ff79c6">:</span> Fiber <span style="color:#ff79c6">|</span> <span style="color:#ff79c6">null</span>, <span style="color:#6272a4">// 指向下一个节点的指针
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>    updateQueue<span style="color:#ff79c6">:</span> mixed, <span style="color:#6272a4">// 用于状态更新，回调函数，DOM更新的队列
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4"></span>    memoizedState<span style="color:#ff79c6">:</span> any, <span style="color:#6272a4">// 用于创建输出的fiber状态
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>    pendingProps<span style="color:#ff79c6">:</span> any, <span style="color:#6272a4">// 已从React元素中的新数据更新，并且需要应用于子组件或DOM元素的props
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4"></span>    memoizedProps<span style="color:#ff79c6">:</span> any, <span style="color:#6272a4">// 在前一次渲染期间用于创建输出的props   
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>}
+</code></pre></div><p>看到了节点的数据格式，可以清楚的理解 Virtual DOM 节点是面向数据的，Fiber 节点是面向操作的。</p>
+<h3 id="2-fiber-链表">2. Fiber 链表</h3>
+<p>Fiber包括了 child（第一个子节点）、sibling（兄弟节点）、return（父节点）等属性，通过这些属性，离散的 Fiber 节点串成了链表结构，我们再来对比以下 Virtual DOM 树 Fiber 链表的区别：</p>
+<p>Virtual DOM 树：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112211371.png" alt="image-20210909112211371"></p>
+<p>Fiber 链表：</p>
+<p><img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/74fe5e7d1dc449568448b462abcbff6e~tplv-k3u1fbpfcp-watermark.awebp" alt="undefined"></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/react/">react</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-%E6%97%B6%E9%97%B4%E5%88%87%E7%89%87%E4%B8%8Erequestidlecallback%E8%AF%A6%E8%A7%A3/" data-tooltip="react 时间切片与requestIdleCallback详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
