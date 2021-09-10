@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  react 手写react16.x </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" react 手写react16.x " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [react 手写] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/react-%E6%89%8B%E5%86%99react16.x%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.c4de9a6edfe81f31ea928f93f9e35b24a6f151c056fbe71bdc367da67fba2c4a.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 搭建项目</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 初始化项目</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 定义目录结构</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. index.js</span>
+            </li>
+            <li>
+                <span class="toc-link">3. createElement</span>
+            </li>
+            <li>
+                <span class="toc-link">4. render</span>
+            </li>
+            <li>
+                <span class="toc-link">5. 时间切片与Fiber</span>
+            </li>
+            <li>
+                <span class="toc-link">6. 总结</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">react 手写react16.x</span>
+        
+        <div class="info">
+          <span>📅 2021-09-10</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 3128字</span>
+          <span>⏱ 7分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://cdmana.com/2021/08/20210825153526307k.html">8月更文挑战｜react手写实现渲染JSX普通版</a></p>
+<p><a href="https://jelly.jd.com/article/60aceb6b27393b0169c85231">手写一个简单的 React</a></p>
+<p><a href="https://juejin.cn/post/6854573219682942983">手写一个react系列（一）：实现react和react-dom</a></p>
+<p><a href="https://github.com/YuetTusi/my-react">手写 react 核心源码</a></p>
+<p><a href="https://www.bilibili.com/video/BV1qt4y1Y77R?from=search&amp;seid=8422079651592355486&amp;spm_id_from=333.337.0.0">面试装不了逼？当场手写个react16.x框架给他看看</a></p>
+</blockquote>
+<h2 id="1-搭建项目">1. 搭建项目</h2>
+<h3 id="1-初始化项目">1. 初始化项目</h3>
+<p>我们需要初始化一个空的webpack项目，用来编写我们自己的 React ，一次执行下面的命令：</p>
+<p>初始化项目</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm init
+</code></pre></div><p>安装webpack和webpack-dev-server，如果这里很陌生，可以看另一篇文章：《js webpack简介》</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i webpack webpack-cli webpack-dev-server
+</code></pre></div><p>安装html-webpack-plugin，用来指定静态页面<code>index.html</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i html-webpack-plugin
+</code></pre></div><p>安装babel各种插件，用来支持JSX语法，这里如果不理解，可以看另一篇文章：《react JSX详解》</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>npm i @babel/core @babel/plugin-transform-react-jsx babel-loader
+</code></pre></div><p>最终<code>package.json</code>，大概长这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">&#34;name&#34;</span>: <span style="color:#f1fa8c">&#34;my-react&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;1.0.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">&#34;description&#34;</span>: <span style="color:#f1fa8c">&#34;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  <span style="color:#ff79c6">&#34;main&#34;</span>: <span style="color:#f1fa8c">&#34;index.js&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  <span style="color:#ff79c6">&#34;scripts&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">&#34;build&#34;</span>: <span style="color:#f1fa8c">&#34;webpack&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#ff79c6">&#34;dev&#34;</span>: <span style="color:#f1fa8c">&#34;webpack-dev-server&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  <span style="color:#ff79c6">&#34;author&#34;</span>: <span style="color:#f1fa8c">&#34;&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  <span style="color:#ff79c6">&#34;license&#34;</span>: <span style="color:#f1fa8c">&#34;ISC&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  <span style="color:#ff79c6">&#34;devDependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>    <span style="color:#ff79c6">&#34;@babel/core&#34;</span>: <span style="color:#f1fa8c">&#34;^7.14.6&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    <span style="color:#ff79c6">&#34;@babel/plugin-transform-react-jsx&#34;</span>: <span style="color:#f1fa8c">&#34;^7.14.5&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#ff79c6">&#34;babel-loader&#34;</span>: <span style="color:#f1fa8c">&#34;^8.2.2&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#ff79c6">&#34;webpack&#34;</span>: <span style="color:#f1fa8c">&#34;^5.40.0&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">&#34;webpack-dev-server&#34;</span>: <span style="color:#f1fa8c">&#34;^3.11.2&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>  <span style="color:#ff79c6">&#34;dependencies&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    <span style="color:#ff79c6">&#34;html-webpack-plugin&#34;</span>: <span style="color:#f1fa8c">&#34;^5.3.2&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#ff79c6">&#34;webpack-cli&#34;</span>: <span style="color:#f1fa8c">&#34;^3.3.12&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>}
+</code></pre></div><p>配置webpack：</p>
+<p><code>webpack.config.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>      HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>module.exports <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  entry<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;./src/index.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>  output<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    filename<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;bundle.js&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    path<span style="color:#ff79c6">:</span> path.resolve(__dirname, <span style="color:#f1fa8c">&#39;dist&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  resolve<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    modules<span style="color:#ff79c6">:</span> [path.resolve(__dirname, <span style="color:#f1fa8c">&#39;&#39;</span>), path.resolve(__dirname, <span style="color:#f1fa8c">&#39;node_modules&#39;</span>)]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  module<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    rules<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>      {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>        test<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">/\.js$/</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>        use<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>          loader<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;babel-loader&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    ]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>  },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>  plugins<span style="color:#ff79c6">:</span> [
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>    <span style="color:#ff79c6">new</span> HtmlWebpackPlugin({ 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>      title<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;my-react-app&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      template<span style="color:#ff79c6">:</span> path.resolve(__dirname, <span style="color:#f1fa8c">&#39;public/index.html&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>  ],
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>  devServer<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>    open<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>}
+</code></pre></div><p>配置babel：</p>
+<p><code>.babelrc</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#f1fa8c">&#34;plugins&#34;</span><span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#34;@babel/plugin-transform-react-jsx&#34;</span>]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+</code></pre></div><h3 id="2-定义目录结构">2. 定义目录结构</h3>
+<p>我们需要整理目录结构，形成这样的目录结构：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210906221953.jpg" alt=""></p>
+<p>其中的<code>src/index.js</code>、<code>src/react</code>、<code>src/react-dom</code>就是我们主要的工作目录。</p>
+<h2 id="2-indexjs">2. index.js</h2>
+<p>我们先在<code>index.js</code>中写一些我们常用的React代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> ReactDOM <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;./react-dom&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> React <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;./react&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#ff79c6">class</span> SubComponent <span style="color:#ff79c6">extends</span> React.Component {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>  constructor(props) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#ff79c6">super</span>(props);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  componentWillMount() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    console.log(<span style="color:#f1fa8c">&#34;subComponent will mount&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  componentDidMount() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    console.log(<span style="color:#f1fa8c">&#34;subComponent did mount&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  render() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#ff79c6">return</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        &lt;<span style="color:#ff79c6">h1</span>&gt;subComponent&lt;/<span style="color:#ff79c6">h1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span style="color:#ff79c6">class</span> Counter <span style="color:#ff79c6">extends</span> React.Component {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>  constructor(props) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    <span style="color:#ff79c6">super</span>(props);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    <span style="color:#ff79c6">this</span>.state <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>      name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;xiaoming&#39;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>  componentWillMount() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span>    console.log(<span style="color:#f1fa8c">&#34;will&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>  componentDidMount() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>    console.log(<span style="color:#f1fa8c">&#34;did&#34;</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  render() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>    <span style="color:#ff79c6">const</span> { name } <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>.state;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>    <span style="color:#ff79c6">return</span> (
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>      &lt;<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>        &lt;<span style="color:#ff79c6">h1</span>&gt;hello, react&lt;/<span style="color:#ff79c6">h1</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span>        &lt;<span style="color:#ff79c6">button</span>&gt;哈哈哈&lt;/<span style="color:#ff79c6">button</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>        &lt;<span style="color:#ff79c6">h2</span>&gt;{name}&lt;/<span style="color:#ff79c6">h2</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>        &lt;<span style="color:#ff79c6">SubComponent</span>/&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>      &lt;/<span style="color:#ff79c6">div</span>&gt;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>    )
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>ReactDOM.render(&lt;<span style="color:#ff79c6">Counter</span>/&gt;, <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#34;root&#34;</span>));
+</code></pre></div><p>我们在<code>index.js</code>中做了这么几件事：</p>
+<ol>
+<li>我们导入了<code>react</code>和<code>react-dom</code>，并且使用了<code>ReactDom.render</code>和<code>React.creatElement</code>方法，那么我们就必须在对应的位置定义好；</li>
+<li>我们定义了一个类式组件，继承了<code>React.Component</code>类，并且使用<code>&lt;Counter/&gt;</code>初始化了一个组件实例；</li>
+</ol>
+<blockquote>
+<p>这里<code>&lt;Counter/&gt;</code>经过Babel对JSX的处理，会转换为<code>React.createElement(Counter, null)</code>；</p>
+</blockquote>
+<p>根据我们的操作我们来构想一下，我们需要实现哪些功能：</p>
+<ol>
+<li><code>ReactDom.render</code>函数，这个函数需要接受两个参数，第一个参数是根组件，第二个参数是根组件挂载的节点；</li>
+<li><code>React.creatElement</code>函数，这个函数接受至少两个参数，第一个参数是节点类型，可能是字符串也可能是一个构造函数或类，第二个参数是节点的属性，是一个对象，其余参数是节点的子节点，大概有如下几种情况：
+<ol>
+<li><code>React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;)</code>，节点类型是一个字符串，没有参数，子节点就是里面包裹的内容；</li>
+<li><code>React.createElement(&quot;h1&quot;, { id: 'container' }, &quot;hello, react&quot;)</code>，节点上有属性<code>id</code>；</li>
+<li><code>React.createElement(Counter, null)</code>，节点类型是一个构造函数或者类，需要new；</li>
+<li><code>React.createElement(&quot;h1&quot;, null, React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;))</code>，节点有一个子节点；</li>
+<li><code>React.createElement(&quot;h1&quot;, null, React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;), React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;))</code>，节点有多个子节点；</li>
+</ol>
+</li>
+</ol>
+<h2 id="3-createelement">3. createElement</h2>
+<p>对于React对象，我们直接先来实现最基础的<code>createElement</code>函数。</p>
+<p><code>react/element.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">/**
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"> * @description 创建vDOM
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"> * @param  type 元素类型
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"> * @param  props 属性对象
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"> * @param  {Array} children 子元素集合
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"> */</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#8be9fd;font-style:italic">function</span> createElement(type, props, ...children) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    type,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    props,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    children<span style="color:#ff79c6">:</span> children.map(child =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">typeof</span> child <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;string&#39;</span> <span style="color:#ff79c6">?</span> 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        createTextElement(child)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>        <span style="color:#ff79c6">:</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>        child
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span style="color:#8be9fd;font-style:italic">function</span> createTextElement(textStr) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>  <span style="color:#ff79c6">return</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    type<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    props<span style="color:#ff79c6">:</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      nodeValue<span style="color:#ff79c6">:</span> textStr
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>    },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>    children<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> createElement;
+</code></pre></div><p>这个说实话没有什么好说的，只是初步定义了节点的格式，包括<code>type</code>、<code>props</code>、<code>children</code>，这是使用JSX带来的必然要求，或者说我们书写的 JSX 其实本质就是一个一个的element对象，我们需要通过定义<code>createElement</code>来定义element的格式。</p>
+<p>另外要注意的的是，自定义组件的对象还没有实例化，组件的<code>render</code>函数也没有调用，因此在这个阶段，自定义组件的 element 对象与组件内部<code>render</code>返回的的 JSX element 对象是没有关联的，这么说可能不好理解，我们看一下就明白了：</p>
+<p><code>index.js</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>console.log(&lt;<span style="color:#ff79c6">Counter</span>/&gt;);
+</code></pre></div><p>对于这样的组件，我们打印<code>&lt;Counter/&gt;</code>：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210907210744684.png" alt="image-20210907210744684"></p>
+<p>可以看到这里并没有<code>children</code>，但是<code>render</code>函数内部的<code>div</code>和其子节点<code>h1</code>等其实是有关系的，这是因为<code>Counter</code>是一个类式组件，传入<code>&lt;Counter/&gt;</code>会被Babel编译成<code>React.createElement(Counter, null)</code>，必须实例化并且调用render函数，才能拿到里面的JSX元素。但是这些处理不是现在执行的。</p>
+<p>这里我们定义的<code>createElement</code>函数明显不是给我们自己用的，而是给 JSX 使用的，因此只负责处理数据格式，而不进行其他操作，这里的 element 节点是 JSX 标签的真实面貌，也是 React 中大名鼎鼎的 VirtualDOM 。</p>
+<p>element 的结构是如下图所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112211371.png" alt="image-20210909112211371"></p>
+<p>目前我们的 VirtualDOM 树存在两个问题：</p>
+<ol>
+<li>上图中有颜色的节点，是自定义组件的节点，需要调用render函数，才能形成下面的节点；</li>
+<li>每个节点都是虚拟节点，没有与之对应的真实 dom 节点一一对应；</li>
+</ol>
+<h2 id="4-render">4. render</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">let</span> elecConstructor <span style="color:#ff79c6">=</span> element.type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#8be9fd;font-style:italic">let</span> obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> elecConstructor();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    eleWithDOM <span style="color:#ff79c6">=</span> createDOM(obj.render());
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">typeof</span> element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;string&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>    <span style="color:#6272a4">// 创建dom
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    <span style="color:#6272a4">// 挂载属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    <span style="color:#6272a4">// 处理children
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span style="color:#6272a4"></span>    <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>element.children.length) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      children <span style="color:#ff79c6">=</span> element.children.map(child =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        <span style="color:#8be9fd;font-style:italic">let</span> childEleWithDOM <span style="color:#ff79c6">=</span> createDOM(child);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>        <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>dom <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>childEleWithDOM.dom){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>          dom.append(childEleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>        }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>        <span style="color:#ff79c6">return</span> childEleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>    <span style="color:#6272a4">// 形成Fiber
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#6272a4"></span>    eleWithDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>      ...element,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>      dom,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>      children
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>  <span style="color:#ff79c6">return</span> eleWithDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM <span style="color:#ff79c6">=</span> createDOM(element);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>    <span style="color:#6272a4">// console.log(eleWithDOM);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span style="color:#6272a4"></span>    container.append(eleWithDOM.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>  render
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+</code></pre></div><p>在 render 中，我们进行了很简单的操作：</p>
+<ol>
+<li>将根 element 递归的创建和挂载 dom （递归的深度优先遍历）；</li>
+<li>将根 element 的dom元素，挂载到容器上；</li>
+</ol>
+<p>至此，我们的 element 元素就可以在页面上看到了：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909110501558.png" alt="image-20210909110501558"></p>
+<p>经过这一层操作，上面的 VirtualDOM 树变成了这样：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112935483.png" alt="image-20210909112935483"></p>
+<p>这样会存在一个问题，再 render 中，我们采用递归的深度优先遍历，一次完成了dom的创建和挂载，如果节点很多，<code>createDOM</code>函数就会花费很多时间</p>
+<h2 id="5-时间切片与fiber">5. 时间切片与Fiber</h2>
+<p>关于什么是时间切片，为什么使用时间切片思想，在《react 时间切片与requestIdleCallback详解》中有详细介绍。</p>
+<p>关于什么是Fiber，为什么使用Fiber，以及Fiber的结构，在《react Fiber详解》中有详细介绍。</p>
+<p>这里我们只关注如何用代码实现时间切片机制，以及如何将 element 转换为 Fiber 进行工作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">import</span> Component from <span style="color:#f1fa8c">&#34;../react/component&#34;</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> handleClassElement(element) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">if</span>(element.type.__proto__ <span style="color:#ff79c6">==</span> Component){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleConstructor <span style="color:#ff79c6">=</span> element.type;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>    <span style="color:#8be9fd;font-style:italic">let</span> eleObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> eleConstructor();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>    <span style="color:#ff79c6">return</span> eleObj.render();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    <span style="color:#ff79c6">return</span> element.type();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>  } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>    <span style="color:#ff79c6">return</span> element;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span>    } <span style="color:#ff79c6">else</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span>    <span style="color:#6272a4">// 挂载属性
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span>      })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span>    <span style="color:#ff79c6">return</span> dom; 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span>  <span style="color:#8be9fd;font-style:italic">let</span> topFiber <span style="color:#ff79c6">=</span> taskStack.pop();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span>  topFiber.dom <span style="color:#ff79c6">=</span> createDOM(topFiber.element);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span>  topFiber.parent.dom.append(topFiber.dom);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span>  <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> topFiber.element.children;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span>  <span style="color:#6272a4">// sleep(30);
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span style="color:#6272a4"></span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span>    <span style="color:#8be9fd;font-style:italic">let</span> preFiber <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span>    children.reverse().forEach((child, index) =&gt; {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span>      <span style="color:#8be9fd;font-style:italic">let</span> newFiber <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span>        element<span style="color:#ff79c6">:</span> handleClassElement(child),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span>        parent<span style="color:#ff79c6">:</span> topFiber,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span>        sibling<span style="color:#ff79c6">:</span> preFiber
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span>      preFiber <span style="color:#ff79c6">=</span> newFiber;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span>      <span style="color:#ff79c6">if</span>(index <span style="color:#ff79c6">==</span> children.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span>        topFiber.child <span style="color:#ff79c6">=</span> newFiber;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span>      }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span>      taskStack.push(newFiber);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span>    })
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topFiber);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span>    performUnitWork();
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span>    <span style="color:#6272a4">// renderDom();
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span style="color:#6272a4"></span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span>    requestIdleCallback(workloop)
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span>requestIdleCallback(workloop);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span>    taskStack.push({
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span>      element<span style="color:#ff79c6">:</span> handleClassElement(element),
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container },
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89</span>    });
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93</span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">94</span>  render
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">95</span>};
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98</span>
+</code></pre></div><h2 id="6-总结">6. 总结</h2>
+<p>至此，我们简单的实现了 React 16.x 在引入 Fiber 架构后，进行组件渲染的过程，关于组件的更新流程，以及setState等的实现，需要有时间再写几篇文章进行研究。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/react/">react</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-%E6%97%B6%E9%97%B4%E5%88%87%E7%89%87%E4%B8%8Erequestidlecallback%E8%AF%A6%E8%A7%A3/" data-tooltip="react 时间切片与requestIdleCallback详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-fiber%E8%AF%A6%E8%A7%A3/" data-tooltip="react Fiber详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
