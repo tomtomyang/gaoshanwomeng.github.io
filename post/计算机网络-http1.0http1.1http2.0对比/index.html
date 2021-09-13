@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  计算机网络 http1.0http1.1http2.0对比 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" 计算机网络 http1.0http1.1http2.0对比 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [http1.0 http1.1 http2.0] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http1.0http1.1http2.0%E5%AF%B9%E6%AF%94/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.c4de9a6edfe81f31ea928f93f9e35b24a6f151c056fbe71bdc367da67fba2c4a.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. http 1.0</span>
+            </li>
+            <li>
+                <span class="toc-link">2. http 1.1</span>
+            </li>
+            <li>
+                <span class="toc-link">3. http 2.0</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 二进制分帧</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 首部压缩</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 多路复用</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 服务端推送</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">计算机网络 http1.0http1.1http2.0对比</span>
+        
+        <div class="info">
+          <span>📅 2021-09-13</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 1251字</span>
+          <span>⏱ 3分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p>[<a href="https://vue3js.cn/interview/">web前端面试 - 面试官系列</a>](<a href="https://vue3js.cn/interview/http/1.0_1.1_2.0.html">https://vue3js.cn/interview/http/1.0_1.1_2.0.html</a>)</p>
+</blockquote>
+<h2 id="1-http-10">1. http 1.0</h2>
+<p>1.0 的 HTTP 版本，是一种无状态，无连接的应用层协议。 HTTP 1.0 规定浏览器和服务器保持短暂的链接。</p>
+<p>浏览器每次请求都需要与服务器建立一个 TCP 连接，服务器处理完成以后立即断开 TCP 连接（无连接），服务器不跟踪也每个客户单，也不记录过去的请求（无状态）。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/efff4da0-b93a-11eb-85f6-6fac77c0c9b3.png" alt="img"></p>
+<h2 id="2-http-11">2. http 1.1</h2>
+<p>在<code>HTTP1.1</code>中，默认支持长连接（<code>Connection: keep-alive</code>），即在一个TCP连接上可以传送多个<code>HTTP</code>请求和响应，减少了建立和关闭连接的消耗和延迟</p>
+<p>建立一次连接，多次请求均由这个连接完成：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/22db2b90-b93b-11eb-ab90-d9ae814b240d.png" alt="img"></p>
+<p>同时，<code>HTTP 1.1</code>还允许客户端不用等待上一次请求结果返回，就可以发出下一次请求，但服务器端必须按照接收到客户端请求的先后顺序依次回送响应结果，以保证客户端能够区分出每次请求的响应内容，这样也显著地减少了整个下载过程所需要的时间</p>
+<p>同时，<code>HTTP1.1</code>在<code>HTTP1.0</code>的基础上，增加更多的请求头和响应头来完善的功能，如下：</p>
+<ul>
+<li>引入了更多的缓存控制策略，如If-Unmodified-Since, If-Match, If-None-Match等缓存头来控制缓存策略</li>
+<li>引入range，允许值请求资源某个部分</li>
+<li>引入host，实现了在一台WEB服务器上可以在同一个IP地址和端口号上使用不同的主机名来创建多个虚拟WEB站点</li>
+</ul>
+<p>并且还添加了其他的请求方法：<code>put</code>、<code>delete</code>、<code>options</code>&hellip;</p>
+<h2 id="3-http-20">3. http 2.0</h2>
+<p>而<code>HTTP2.0</code>在相比之前版本，性能上有很大的提升，如添加了一个特性：</p>
+<ul>
+<li>多路复用</li>
+<li>二进制分帧</li>
+<li>首部压缩</li>
+<li>服务器推送</li>
+</ul>
+<h3 id="1-二进制分帧">1. 二进制分帧</h3>
+<p>帧是<code>HTTP2</code>通信中最小单位信息</p>
+<p><code>HTTP/2</code> 采用二进制格式传输数据，而非 <code>HTTP 1.x</code>的文本格式，解析起来更高效</p>
+<p>将请求和响应数据分割为更小的帧，并且它们采用二进制编码</p>
+<p><code>HTTP2</code>中，同域名下所有通信都在单个连接上完成，该连接可以承载任意数量的双向数据流</p>
+<p>每个数据流都以消息的形式发送，而消息又由一个或多个帧组成。多个帧之间可以乱序发送，根据帧首部的流标识可以重新组装，这也是多路复用同时发送数据的实现条件</p>
+<h3 id="2-首部压缩">2. 首部压缩</h3>
+<p><code>HTTP/2</code>在客户端和服务器端使用“首部表”来跟踪和存储之前发送的键值对，对于相同的数据，不再通过每次请求和响应发送</p>
+<p>首部表在<code>HTTP/2</code>的连接存续期内始终存在，由客户端和服务器共同渐进地更新</p>
+<p>例如：下图中的两个请求， 请求一发送了所有的头部字段，第二个请求则只需要发送差异数据，这样可以减少冗余数据，降低开销</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/3c536740-b93b-11eb-ab90-d9ae814b240d.png" alt="img"></p>
+<h3 id="3-多路复用">3. 多路复用</h3>
+<p><code>HTTP/2</code> 复用<code>TCP</code>连接，在一个连接里，客户端和浏览器都可以<strong>同时</strong>发送多个请求或回应，而且不用按照顺序一一对应，这样就避免了”队头堵塞”</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/313f1980-b93b-11eb-85f6-6fac77c0c9b3.png" alt="img"></p>
+<p>上图中，可以看到第四步中<code>css</code>、<code>js</code>资源是同时发送到服务端。</p>
+<h3 id="4-服务端推送">4. 服务端推送</h3>
+<p><code>HTTP2</code>引入服务器推送，允许服务端推送资源给客户端</p>
+<p>服务器会顺便把一些客户端需要的资源一起推送到客户端，如在响应一个页面请求中，就可以随同页面的其它资源</p>
+<p>免得客户端再次创建连接发送请求到服务器端获取</p>
+<p>这种方式非常合适加载静态资源</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/47130550-b93b-11eb-85f6-6fac77c0c9b3.png" alt="img"></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/http/">http</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-https%E8%AF%A6%E8%A7%A3/" data-tooltip="计算机网络 https详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    <div id="loading" class="loading-container"></div>
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
