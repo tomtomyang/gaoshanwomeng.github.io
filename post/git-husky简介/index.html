@@ -35,23 +35,23 @@
     <div class="toc-header">
         <span>目录</span>
     </div><ul class="toc-h3"><li>
-                <span class="toc-link">husky5.x使用总结</span>
+                <span class="toc-link">1. husky5.x 使用总结</span>
             </li>
             <li>
-                <span class="toc-link">husky6.0使用总结</span>
+                <span class="toc-link">2. husky6.0使用总结</span>
             </li>
             
                     <ul class="toc-h4"><li>
-                <span class="toc-link">husky为什么放弃了之前的配置方式</span>
+                <span class="toc-link">1. 为什么放弃之前的配置方式</span>
             </li>
             <li>
-                <span class="toc-link">新版husky的工作原理</span>
+                <span class="toc-link">2. 新 husky 的工作原理</span>
             </li>
             <li>
-                <span class="toc-link">新版husky使用方式</span>
+                <span class="toc-link">3. 新版 husky 使用方式</span>
             </li>
             <li>
-                <span class="toc-link">需要注意的点</span>
+                <span class="toc-link">4. 需要注意的点</span>
             </li>
             </div><div class="single-post container">
     <div class="post">
@@ -61,14 +61,14 @@
         <div class="info">
           <span>📅 2021-06-20</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 1654字</span>
+          <span>📖 1634字</span>
           <span>⏱ 4分钟</span>
         </div>
         
       </div>
       <div class="content markdown-body">
-        <h3 id="husky5x使用总结">husky5.x使用总结</h3>
-<p>husky可以让我们向项目中方便添加git hooks。通常情况下只需要如下两步就可在项目中引入并设置好husky：</p>
+        <h3 id="1-husky5x-使用总结">1. husky5.x 使用总结</h3>
+<p>husky 可以让我们向项目中方便添加git hooks。通常情况下只需要如下两步就可在项目中引入并设置好husky：</p>
 <ol>
 <li>将husky添加到项目的开发依赖中</li>
 </ol>
@@ -84,16 +84,16 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>  }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span>}
-</code></pre></div><h3 id="husky60使用总结">husky6.0使用总结</h3>
+</code></pre></div><h3 id="2-husky60使用总结">2. husky6.0使用总结</h3>
 <p>最新版本的husky（6.0.0）已经做了破坏性的变更，之前的设置方式已经失效了。</p>
-<h4 id="husky为什么放弃了之前的配置方式">husky为什么放弃了之前的配置方式</h4>
+<h4 id="1-为什么放弃之前的配置方式">1. 为什么放弃之前的配置方式</h4>
 <p>根据官方的说法，之前husky的工作方式是这样的，为了能够让用户设置任何类型的git hooks都能正常工作，husky不得不创建所有类型的git hooks。这样在git 工作的每个阶段都会调用husky所设置的脚本，在这个脚本中husky会检查用户是否配置该hook，如果有就运行用户配置的命令，如果没有就继续往下执行。</p>
 <p>这样做的好处就是无论用户设置什么类型的git hook husky都能确保其正常运行。但是缺点也是显而易见的，即使用户没有设置任何git hook，husky也向git中添加了所有类型的git hook。</p>
 <p>那有没有可能让husky只添加我们需要的git hook呢？作者尝试过解决这个问题，但是失败了。究其失败的根本原因，就是因为husky需要在两个地方进行配置才能完成一个完整的git hook功能。一个是在package.json中配置git hook所要执行的真正命令，一个是在.git/hooks/中配置相对应的git hook。也就是说无论是添加还是删除git hook就要保证在这两个地方同步执行对应的操作。作者无法找到一个可靠的方法来同步这两个地方的配置，因此失败了。</p>
 <p>作者认为这个问题是由husky工作模型的自身缺陷导致的，如果想要解决就不得不另辟蹊径采用一种新的工作模型。因此新版husky做了破坏性的变更。</p>
-<h4 id="新版husky的工作原理">新版husky的工作原理</h4>
+<h4 id="2-新-husky-的工作原理">2. 新 husky 的工作原理</h4>
 <p>新版的husky使用了从git 2.9开始引入的一个新功能core.hooksPath。core.hooksPath可以让你指定git hooks所在的目录而不是使用默认的.git/hooks/。这样husky可以使用<code>husky install</code>将git hooks的目录指定为.husky/，然后使用<code>husky add</code>命令向.husky/中添加hook。通过这种方式我们就可以只添加我们需要的git hook，而且所有的脚本都保存在了一个地方（.husky/目录下）因此也就不存在同步文件的问题了。</p>
-<h4 id="新版husky使用方式">新版husky使用方式</h4>
+<h4 id="3-新版-husky-使用方式">3. 新版 husky 使用方式</h4>
 <ol>
 <li>安装husky</li>
 </ol>
@@ -117,7 +117,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>npm run  test
 </code></pre></div><p>可以看到该脚本的功能就是执行npm run test这个命令</p>
-<h4 id="需要注意的点">需要注意的点</h4>
+<h4 id="4-需要注意的点">4. 需要注意的点</h4>
 <p>在项目中我们会使用commit-msg这个git hook来校验我们commit时添加的备注信息是否符合规范。在以前的我们通常是这样配置：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>{
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">&#34;husky&#34;</span>: {
