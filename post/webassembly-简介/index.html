@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  WebAssembly 简介 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" WebAssembly 简介 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [WebAssembly] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/webassembly-%E7%AE%80%E4%BB%8B/">
+    <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h3"><li>
+                <span class="toc-link">1. 定义</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 指令集</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 历史</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 特点</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 高效</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 安全</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 开放</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 标准</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">5. 支持</span>
+            </li>
+            <li>
+                <span class="toc-link">6. 应用</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. eBay 的条形码扫描</span>
+            </li>
+            <li>
+                <span class="toc-link">2. AutoCAD</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 谷歌地球</span>
+            </li>
+            <li>
+                <span class="toc-link">4. bilibili 上传视频的封面</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">WebAssembly 简介</span>
+        
+        <div class="info">
+          <span>📅 2021-11-10</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2174字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://juejin.cn/post/6844904104146239501">[WebAssembly]浏览器内，javascript之外的速度</a></p>
+</blockquote>
+<h3 id="1-定义">1. 定义</h3>
+<blockquote>
+<p>WebAssembly 官网的定义是：</p>
+<p>WebAssembly 或者 wasm 是一个可移植、体积小、加载快并且兼容 Web 的全新格式</p>
+</blockquote>
+<p>WebAssembly  是基于栈式虚拟机的二进制指令集，可以作为编程语言的编译目标，能够部署在  web 客户端和服务端的应用中。</p>
+<p>WebAssembly  由两个词构成，Web 表明它一定和 Web 开发有关，Assembly 的意思是汇编，说到汇编就可以想到机器码和 CPU 指令集。</p>
+<h3 id="2-指令集">2. 指令集</h3>
+<p><img src="https://pic1.zhimg.com/80/v2-953036585bc2a93917804f7391d0ed73_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>计算机的主要架构如上。最底层是 <code>CPU</code> 的指令集，主要分为复杂指令集和简单指令集。</p>
+<p>复杂指令集是 <code>x86</code>、<code>x64(也叫 x86-64, amd64)</code> 两种架构，专利在 <code>Intel</code> 和 <code>AMD</code> 两家公司手里， 该架构 <code>CPU</code> 主要是 <code>Intel</code> 和 <code>AMD</code> 两家公司，这种 <code>CPU</code> 常用在 <code>PC</code> 机上，包括 <code>Windows</code>，<code>macOS</code> 和 <code>Linux</code>。</p>
+<p>简单指令集是 <code>arm</code> 一种架构，专利在 <code>ARM</code> 公司手里，该架构 <code>CPU</code> 主要有高通、三星、苹果、华为海思、联发科等公司。这种 <code>CPU</code> 常用在手机上，包括安卓和苹果。</p>
+<p>举个例子：</p>
+<p><code>c</code> 语言的源程序：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">add_a_and_b</span>(<span style="color:#8be9fd">int</span> a, <span style="color:#8be9fd">int</span> b) {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>   <span style="color:#ff79c6">return</span> a <span style="color:#ff79c6">+</span> b;
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">main</span>() {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>   <span style="color:#ff79c6">return</span> add_a_and_b(<span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>);
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>}
+</code></pre></div><p>所对应的汇编语言就是下面的样子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>_add_a_and_b:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>   push   %ebx
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>   mov    %eax, [%esp+8] 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>   mov    %ebx, [%esp+12]
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>   add    %eax, %ebx 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>   pop    %ebx 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>   ret  
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>_main:
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>   push   3
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>   push   2
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>   call   _add_a_and_b 
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>   add    %esp, 8
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>   ret
+</code></pre></div><p>这里的 <code>push</code> 、<code>mov</code> 每一条指令就是指令集规定的内容，规定了操作码、操作数以及具体的功能。当然这里是用汇编表示的，主要是为了我们人类来读写，最终还会转成 <code>0,1</code> 序列。上边每个单词都会有一个数字相对应，比如 <code>add</code> 指令对应 <code>00000011</code> 。</p>
+<p>通过规定的指令集（加法的指令，压栈指令等），编写相关程序，然后 <code>CPU</code> 就会一条一条的执行，最终实现相应的功能。</p>
+<p>而 WebAssembly 就规定了一套指令集，更准确的来说是虚拟指令集，因为这套指令集是跑在虚拟机上的，而不是直接由硬件运行。</p>
+<h3 id="3-历史">3. 历史</h3>
+<blockquote>
+<p>2015 年 4 月，WebAssembly Community Group 成立；</p>
+<p>2015 年 6 月，WebAssembly 第一次以 WCG 的官方名义向外界公布；</p>
+<p>2016 年 8 月，WebAssembly 开始进入了漫长的 “Browser Preview” 阶段；</p>
+<p>2017 年 2 月，WebAssembly 官方 LOGO 在 Github 上的众多讨论中被最终确定；同年同月，一个历史性的阶段，四大浏览器（FireFox、Chrome、Edge、WebKit）在 WebAssembly 的 MVP（最小可用版本）标准实现上达成共识，这意味着 WebAssembly 在其 MVP 标准上的 “Brower Preview” 阶段已经结束；</p>
+<p>2017 年 8 月，W3C WebAssembly Working Group 成立，意味着 WebAssembly 正式成为 W3C 众多技术标准中的一员。</p>
+</blockquote>
+<p>WebAssembly 于 <code>2019</code> 年 <code>12</code> 月 <code>5</code> 日成为万维网联盟（ W3C ）的推荐标准，与 HTML，CSS 和 JavaScript 一起成为 Web 的第四种语言。</p>
+<h3 id="4-特点">4. 特点</h3>
+<h4 id="1-高效">1. 高效</h4>
+<p>WebAssembly 有一套完整的<a href="http://webassembly.org.cn/docs/semantics/">语义</a>，实际上 wasm 是体积小且加载快的<a href="http://webassembly.org.cn/docs/binary-encoding/">二进制格式</a>， 其目标就是充分发挥<a href="http://webassembly.org.cn/docs/portability/#assumptions-for-efficient-execution">硬件</a>能力以达到原生执行效率</p>
+<h4 id="2-安全">2. 安全</h4>
+<p>WebAssembly 运行在一个沙箱化的<a href="http://webassembly.org.cn/docs/semantics/#linear-memory">执行环境</a>中，甚至可以在现有的 JavaScript 虚拟机中实现。在<a href="http://webassembly.org.cn/docs/web/">web环境中</a>，WebAssembly将会严格遵守同源策略以及浏览器安全策略。</p>
+<h4 id="3-开放">3. 开放</h4>
+<p>WebAssembly 设计了一个非常规整的<a href="http://webassembly.org.cn/docs/text-format/">文本格式</a>用来、调试、测试、实验、优化、学习、教学或者编写程序。可以以这种文本格式在web页面上<a href="http://webassembly.org.cn/docs/faq/#will-webassembly-support-view-source-on-the-web">查看wasm模块的源码</a>。</p>
+<h4 id="4-标准">4. 标准</h4>
+<p>WebAssembly 在 <a href="http://webassembly.org.cn/docs/web/">web</a> 中被设计成无版本、特性可测试、向后兼容的。WebAssembly 可以被 JavaScript 调用，进入 JavaScript 上下文，也可以像 Web API 一样调用浏览器的功能。当然，WebAssembly 不仅可以运行在浏览器上，也可以运行在<a href="http://webassembly.org.cn/docs/non-web/">非web</a>环境下。</p>
+<h3 id="5-支持">5. 支持</h3>
+<p>目前已经有了将 C/C++ 、Rust、ts、C#、Go、Kotlin、Swift 等语言转换为 WebAssembly 的工具。</p>
+<h3 id="6-应用">6. 应用</h3>
+<p>一些目前已经成功落地的 <code>WebAssembly</code> 的应用：</p>
+<h4 id="1-ebay-的条形码扫描">1. eBay 的条形码扫描</h4>
+<p><code>eBay</code> 在原生应用中有专门的 <code>C++</code> 库用于条形码的扫描，在 <code>H5</code> 中利用开源 <code>JavaScript</code> 库 <code>BarcodeReader</code> 做了一个带条形码扫描功能的Web版本。 问题是它只有在 <code>20％</code> 的时间表现良好。 剩余的 <code>80％</code> 的时间运行非常缓慢，准确率也不高。</p>
+<p>最终的解决方案是通过 <code>wasm</code> ，将原有的 <code>c++</code> 库引入，以及业界十分有名的、基于 <code>C</code> 语言编写的开源条形码扫描库 <code>ZBar</code> 引入，再加上原本的 <code>js</code> 库，三者协助，最终识别率达到了 <code>100%</code>。</p>
+<p>产品上线后的最终效果如下图所示：</p>
+<p><img src="https://pica.zhimg.com/50/v2-bb5a300749c27008137e8f45c9bdced9_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>产品在上线使用了一段时间后，<code>eBay</code> 技术团队对应用的条形码扫描情况进行了统计，结果发现有 <code>53%</code> 的成功扫描来自于 <code>ZBar</code>；<code>34%</code> 来自于自研的 <code>C++</code> 库。剩下的 <code>13%</code> 则来自于第三方的 <code>JavaScript</code> 库实现。可见，其中通过 <code>Wasm</code> 实现得到的扫描结果占据了总成功次数的 <code>87%</code>。</p>
+<h4 id="2-autocad">2. AutoCAD</h4>
+<p><code>AutoCAD</code> 是一款由将近 <code>40</code> 年历史的知名桌面端设计软件，被广泛地用于土木建筑、装饰装潢、工业制图等多个领域中。</p>
+<p><img src="https://pic1.zhimg.com/50/v2-526a41fafae9ffafa80e2c152dd55b4c_720w.jpg?source=1940ef5c" alt="img"></p>
+<p>最初基于<code>C++</code> 编译为 <code>Java</code> 代码供 <code>Android</code> 设备使用，最后，在 <code>Google Web Toolkit</code>（一个 <code>Google</code> 开发的可以使用 <code>Java</code> 语言开发 <code>Web</code> 应用的工具集）的帮助下，又将这些 <code>Java</code> 代码转译为了 <code>Web</code> 平台可用的 <code>JavaScript</code> 代码。但最后生成的 <code>Web</code> 应用代码库十分庞大，且在浏览器中的运行性能并不可观。这个「粗糙版」的 <code>Web</code> 应用发布于 <code>2014</code> 年。</p>
+<h4 id="3-谷歌地球">3. 谷歌地球</h4>
+<p><code>Google</code> 地球最初使用 <code>C++</code> 语言在 <code>Windows</code> 平台上开发。后来移植到了 <code>Android</code> 和 <code>iOS</code> 平台中。<code>2017</code> 年 <code>4</code> 月 <code>18</code> 日，经过全新设计的 <code>Google</code> 地球 <code>9.0</code> 发布。由于采用了 <a href="https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/Native_Client">Native Client</a> 技术，刚发布时仅能在<code>Chrome</code> 中运行。<code>2020</code> 年 <code>2</code> 月 <code>27</code> 日，<code>Google</code> 使用 <code>C++</code> 语言通过 <code>WebAssembly</code> 上重写了 <code>Google</code> 地球，从此 <code>Google</code> 地球可以在 <code>Firefox</code> 和 <code>Edge</code> 上运行。</p>
+<h4 id="4-bilibili-上传视频的封面">4. bilibili 上传视频的封面</h4>
+<p><img src="https://pic1.zhimg.com/50/v2-69d4967947278e4cab3ba299fef523db_720w.jpg?source=1940ef5c" alt="img" style="zoom:67%;" /></p>
+<blockquote>
+<p>投稿视频的时候，当你的视频还在上传中，已经可以自由选择AI推荐的封面。这里采用了webassembly+AI的前端整合。</p>
+<p>webassembly 负责读取本地视频，生成图片；</p>
+<p>tensorflow.js 负责加载AI训练过的 model，读取图片并打分。</p>
+<p>从完全的服务端架构 =&gt; 前端架构 &amp;&amp; 服务端兜底。</p>
+<p>webassembly支持解析99%以上的视频编码格式，速度提升体验惠及约50%的web投稿用户。</p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/webassembly/">WebAssembly</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/%E5%BE%AE%E5%89%8D%E7%AB%AF-%E7%AE%80%E4%BB%8B/" data-tooltip="微前端 简介">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
+<script>
+    if('serviceWorker' in navigator) {
+    const PREFETCH = true;
+    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
+    function prefetchCache() {
+        if(navigator.serviceWorker.controller) {
+            let links = document.querySelectorAll(
+                PREFETCH_LINK_RELS.map((rel) => {
+                    return 'link[rel='+rel+']';
+                }).join(',')
+            );
+            if(links.length > 0) {
+                Array.from(links)
+                    .map((link) => {
+                        let href = link.getAttribute('href');
+                        navigator.serviceWorker.controller.postMessage({
+                            action : 'cache',
+                            url : href,
+                        });
+                    });
+            }
+        }
+    }
+
+    navigator.serviceWorker
+        .register('/sw.js', { scope: '/' })
+        .then(() => {
+            console.log('Service Worker Registered');
+        });
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            if(PREFETCH) {
+                prefetchCache();
+            }
+        });
+}
+</script></html>

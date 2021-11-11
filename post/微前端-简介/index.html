@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  微前端 简介 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" 微前端 简介 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [微前端] " />
+    <base href="https://tomtomyoung.top/">
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="canonical" href="https://tomtomyoung.top/post/%E5%BE%AE%E5%89%8D%E7%AB%AF-%E7%AE%80%E4%BB%8B/">
+    <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 定位</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 背景</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 现代 Web App</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 核心概念</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 技术不可知主义</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 隔离代码</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 建立团队前缀</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 原生浏览器标准优先</span>
+            </li>
+            <li>
+                <span class="toc-link">5. 构建高可用的网络应用</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">5. 技术细节</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 浏览器支持</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. 实现微前端的方案</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 微前端的组成</span>
+            </li>
+            <li>
+                <span class="toc-link">5. 微前端的路由分发</span>
+            </li>
+            <li>
+                <span class="toc-link">6. 微前端的应用隔离</span>
+            </li>
+            <li>
+                <span class="toc-link">7. 微前端的消息通信</span>
+            </li>
+            <li>
+                <span class="toc-link">8. 微前端有哪些框架</span>
+            </li>
+            <li>
+                <span class="toc-link">9. 是否要用微前端</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">微前端 简介</span>
+        
+        <div class="info">
+          <span>📅 2021-11-10</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 4851字</span>
+          <span>⏱ 10分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/141530392">微前端-最容易看懂的微前端知识</a></p>
+<p><a href="https://swearer23.github.io/micro-frontends/">extending the microservice idea to frontend development</a></p>
+<p><a href="https://ar.al/notes/the-documents-to-applications-continuum/">Sites vs. Apps defined: the Documents‐to‐Applications Continuum.</a></p>
+<p><a href="https://gustafnk.github.io/microservice-websites/">Micro­service Websites</a></p>
+<p><a href="https://zendev.com/2019/06/17/microfrontends-good-bad-ugly.html">Microfrontends: the good, the bad, and the ugly</a></p>
+<p><a href="https://martinfowler.com/articles/micro-frontends.html">Micro Frontends —— Cam Jackson</a></p>
+</blockquote>
+<h2 id="1-定位">1. 定位</h2>
+<p>微前端（Micro-Frontends）是一种类似于微服务的架构，它将微服务的理念应用于浏览器端，即将 Web 应用由单一的单体应用转变为多个小型前端应用聚合为一的应用。</p>
+<p>各个前端应用还可以独立运行、独立开发、独立部署。</p>
+<p><strong>微前端不是单纯的前端框架或者工具，而是一套架构体系。</strong></p>
+<h2 id="2-背景">2. 背景</h2>
+<p>现代的前端应用的发展趋势正在变得越来越富功能化，富交互化，也就是传说中的SPA(单页面应用)；这样越来越复杂的单体前端应用，背后的后端应用则是数量庞大的微服务集群。</p>
+<p>被一个团队维护的前端项目，随着时间推进，会变得越来越庞大，越来越难以维护。所以我们给这种应用起名为<a href="https://www.youtube.com/watch?v=pU1gXA0rfwc">巨石单体应用</a>。</p>
+<p><img src="https://swearer23.github.io/micro-frontends/ressources/diagrams/organisational/monolith-frontback-microservices.png" alt="Monolithic Frontends"></p>
+<p>在上面的图中，我们可以看到，在传统的巨石单体应用中，后端的架构是不断发展的，最终形成了微服务架构，每个服务自我包含，实现单一业务的解耦，子服务数量增多，管理上开始使用 Zookeeper 等服务集中化管理框架，同时加入了 Jenkins 等自动化部署流程工具。</p>
+<p>同样的，在前端方面，也开始采用这种解耦的思想，发展微前端的技术架构。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/16347491-e3174571a79e07c3.png" alt="img"></p>
+<p>微前端的思想是认为：现代复杂的web app或者网站，通常由很多 <strong>相对独立的功能模块组合而成</strong>，而对这些模块负责的应该是 <strong>相互独立的多个团队</strong>。这些独立的团队由于专业分工不同，会负责着 <strong>特定的业务领域</strong>，以及完成 <strong>特定的开发任务</strong>，同时使用<strong>不同的技术栈</strong>，这样的团队，通常在人员组成方面囊括了从前端开发到服务端开发，从UI实现到数据库设计这样 <strong>端到端</strong> 的 <strong>跨职能人员</strong> 构成。</p>
+<p><img src="https://swearer23.github.io/micro-frontends/ressources/diagrams/organisational/verticals-headline.png" alt="End-To-End Teams with Micro Frontends"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-49e29d35de9548c02b0d48782714e914_720w.jpg" alt="img"></p>
+<h2 id="3-现代-web-app">3. 现代 Web App</h2>
+<p><a href="https://ar.al/">Aral Balkan</a> 曾经在一篇blog中提及关于 <a href="https://ar.al/notes/the-documents-to-applications-continuum/">联机文档与网络应用的边界</a> 的看法，他认为如果在联机文档与网络应用之间有一个清晰的边界的话，那么通过超链接的形式组成的一堆 静态文档 就应该属于 边界的最左侧，也即联机文档这一侧，比如个人博客网站。而另外一端，则应该属于通过行为驱动的 与内容无关 的应用，比如在线相册或者打单工具系统（它提供的是一个功能，内容只是功能所提供的的价值）。</p>
+<p>如果你认为你的项目在 这个序列中 应该位列左侧，那么一个简单的 web 服务器的集成就已经足够了。对这种网络架构来说，一个 web 服务器把 散落于组件中的 HTML 标签 集成起来，之后把集成好的 HTML 文档传输给请求的用户即可。页面的更新无非是通过刷新浏览器，或者通过 ajax 请求更新页面中部分的静态内容。关于这个话题， <a href="https://twitter.com/gustaf_nk/">Gustaf Nilsson Kotte</a> 也曾经专门写过一篇文章 <a href="https://gustafnk.github.io/microservice-websites/">comprehensive article</a> 。</p>
+<p>但如果你的应用需要提供即时 更新的UI 特性（不通过路由跳转），甚至是在不怎么好的网络环境之下，那么一个纯粹的服务端渲染的架构就显然力不从心了。为了追求更加优秀的用户体验，如果要实现类似于 骨架屏 之类的技术，甚至需要在终端设备自身(不依赖服务端)进行UI的 更新操作。比如 Google 发明的 <a href="https://developers.google.com/web/progressive-web-apps/">Progressive Web Apps</a> （PWA Flutter支持）就认为这种 平衡技术 需要做到：即能够具备良好的 web 素质（渐进增强）的同时，也需要提供原生APP的性能表现。前端应用发展至今，单个web服务器的架构已经不足以满足业务的需求，所以我们必须向更深远的方向考虑，一个web应用应该如何更加深入的与浏览器进行结合。</p>
+<h2 id="4-核心概念">4. 核心概念</h2>
+<h3 id="1-技术不可知主义">1. 技术不可知主义</h3>
+<p>每个团队应该选择自己的技术栈以及技术进化路线，而不是与其他团队步调一致。在项目中可以通过引入<a href="https://swearer23.github.io/micro-frontends/#the-dom-is-the-api">自定义元素</a> 来提供技术栈无关的接口，同时还隐藏了复杂的内部实现。也许在微前端的语境之下，框架将不是未来架构师主要考虑的问题，如何高效的提供可复用的 WebComponent 会成为核心问题。</p>
+<h3 id="2-隔离代码">2. 隔离代码</h3>
+<p>即便所有团队都使用同样的框架，也不要共享同一个运行时环境。构建自包含的Apps。不要依赖共享的状态或者全局变量。</p>
+<h3 id="3-建立团队前缀">3. 建立团队前缀</h3>
+<p>在还不能做到完全隔离的环境下，通过命名规约进行隔离。对于CSS， 事件，Local Storage 以及 Cookies之类的环境之下，通过命名空间进行的隔离可以避免冲突，以及所有权。</p>
+<h3 id="4-原生浏览器标准优先">4. 原生浏览器标准优先</h3>
+<p>使用 <a href="https://swearer23.github.io/micro-frontends/#parent-child-communication--dom-modification">用于通信的原生浏览器事件机制</a> ，而不是自己构建一个PubSub系统。如果确实需要设计一个跨团队的通信API，那么也尽量让设计简单为好。</p>
+<h3 id="5-构建高可用的网络应用">5. 构建高可用的网络应用</h3>
+<p>即便在 JavaScript 执行失败的情况下，站点的功能也应保证可用。可以使用 <a href="https://swearer23.github.io/micro-frontends/#serverside-rendering--universal-rendering">同构渲染 </a> 以及渐进增强来提升体验和性能。</p>
+<h2 id="5-技术细节">5. 技术细节</h2>
+<h3 id="1-浏览器支持">1. 浏览器支持</h3>
+<p>任何新技术的产生都是为了解决现有场景和需求下的技术痛点，微前端也不例外：</p>
+<ol>
+<li><strong>拆分和细化</strong>：当下前端领域，单页面应用（SPA）是非常流行的项目形态之一，而随着时间的推移以及应用功能的丰富，单页应用变得不再单一而是越来越庞大也越来越难以维护，往往是改一处而动全身，由此带来的发版成本也越来越高。微前端的意义就是将这些庞大应用进行拆分，并随之解耦，每个部分可以单独进行维护和部署，提升效率。</li>
+<li><strong>整合历史系统</strong>：在不少的业务中，或多或少会存在一些历史项目，这些项目大多以采用老框架类似（Backbone.js，Angular.js 1）的B端管理系统为主，介于日常运营，这些系统需要结合到新框架中来使用还不能抛弃，对此我们也没有理由浪费时间和精力重写旧的逻辑。而微前端可以将这些系统进行整合，在基本不修改来逻辑的同时来同时兼容新老两套系统并行运行。</li>
+</ol>
+<h2 id="3-实现微前端的方案">3. 实现微前端的方案</h2>
+<p>单纯根据对概念的理解，很容易想到实现微前端的重要思想就是将应用进行拆解和整合，通常是一个父应用加上一些子应用，那么使用类似Nginx配置不同应用的转发，或是采用iframe来将多个应用整合到一起等等这些其实都属于微前端的实现方案，他们之间的对比如下图：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-d4814f69c9cdcc59b022248a1f606e9e_720w.jpg" alt="img"></p>
+<p>上述方案中，每种都有自己的优劣，最原始的 Nginx 配置反向代理是从接入层的角度来将系统进行分离，但是需要运维配置，而iframe嵌套是最简单和最快速的方案，但是iframe的弊端也是无法避免的，而 Web Components 的方案则需要大量的改造成本，最后的组合式应用路由分发方案改造成本中等并且能满足大部分需求，也不影响各前端应用的体验，是当下各个业务普遍采用的一种方案，本文后面的内容也是主要基于这种方案进行阐述。</p>
+<h2 id="4-微前端的组成">4. 微前端的组成</h2>
+<p>基于上文，当下微前端主要采用的是组合式应用路由方案，该方案的核心是“主从”思想，即包括一个基座（MainApp）应用和若干个微（MicroApp）应用，基座应用大多数是一个前端SPA项目，主要负责应用注册，路由映射，消息下发等，而微应用是独立前端项目，这些项目不限于采用React，Vue，Angular或者JQuery开发，每个微应用注册到基座应用中，由基座进行管理，但是如果脱离基座也是可以单独访问，基本的流程如下图所示：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-d9fa4e6bfb0dc1616a92c27a5a3ee765_720w.jpg" alt="img"></p>
+<p>当整个微前端框架运行之后，给用户的体验就是类似下图所示：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-4df996c7db3afca9c18468e9eab0b14d_720w.jpg" alt="img"></p>
+<p>简单描述下就是基座应用中有一些菜单项，点击每个菜单项可以展示对应的微应用，这些应用的切换是纯前端无感知的，所以，基于目前的方案来说，一个微前端的基座框架需要解决以下问题：</p>
+<ol>
+<li>路由切换的分发问题。</li>
+<li>主微应用的隔离问题。</li>
+<li>通信问题。</li>
+</ol>
+<p>下面针对这些问题来一一阐述。</p>
+<h2 id="5-微前端的路由分发">5. 微前端的路由分发</h2>
+<p>作为微前端的基座应用，是整个应用的入口，负责承载当前微应用的展示和对其他路由微应用的转发，对于当前微应用的展示，一般是由以下几步构成：</p>
+<ol>
+<li>作为一个SPA的基座应用，本身是一套纯前端项目，要想展示微应用的页面除了采用iframe之外，要能先拉取到微应用的页面内容， 这就需要<strong>远程拉取机制</strong>。</li>
+<li>远程拉取机制通常会采用fetch API来首先获取到微应用的HTML内容，然后通过解析将微应用的JavaScript和CSS进行抽离，采用eval方法来运行JavaScript，并将CSS和HTML内容append到基座应用中留给微应用的展示区域，当微应用切换走时，同步卸载这些内容，这就构成的当前应用的展示流程。</li>
+<li>当然这个流程里会涉及到CSS样式的污染以及JavaScript对全局对象的污染，这个涉及到隔离问题会在后面讨论，而目前针对远程拉取机制这套流程，已有现成的库来实现，可以参考<a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/import-html-entry">import-html-entry</a>和<a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/system.js">system.js</a>。</li>
+</ol>
+<p>对于路由分发而言，以采用vue-router开发的基座SPA应用来举例，主要是下面这个流程：</p>
+<ol>
+<li>当浏览器的路径变化后，vue-router会监听hashchange或者popstate事件，从而获取到路由切换的时机。</li>
+<li>最先接收到这个变化的是基座的router，通过查询注册信息可以获取到转发到那个微应用，经过一些逻辑处理后，采用修改hash方法或者pushState方法来路由信息推送给微应用的路由，微应用可以是手动监听hashchange或者popstate事件接收，或者采用React-router，vue-router接管路由，后面的逻辑就由微应用自己控制。</li>
+</ol>
+<h2 id="6-微前端的应用隔离">6. 微前端的应用隔离</h2>
+<p>应用隔离问题主要分为主应用和微应用，微应用和微应用之间的JavaScript执行环境隔离，CSS样式隔离，我们先来说下CSS的隔离。</p>
+<p><strong>CSS隔离</strong>：当主应用和微应用同屏渲染时，就可能会有一些样式会相互污染，如果要彻底隔离CSS污染，可以采用CSS Module 或者命名空间的方式，给每个微应用模块以特定前缀，即可保证不会互相干扰，可以采用webpack的postcss插件，在打包时添加特定的前缀。</p>
+<p>而对于微应用与微应用之间的CSS隔离就非常简单，在每次应用加载时，将该应用所有的link和style 内容进行标记。在应用卸载后，同步卸载页面上对应的link和style即可。</p>
+<p><strong>JavaScript隔离</strong>：每当微应用的JavaScript被加载并运行时，它的核心实际上是对全局对象Window的修改以及一些全局事件的改变，例如jQuery这个js运行后，会在Window上挂载一个<code>window.$</code>对象，对于其他库React，Vue也不例外。为此，需要在加载和卸载每个微应用的同时，尽可能消除这种冲突和影响，最普遍的做法是采用沙箱机制（SandBox）。</p>
+<p>沙箱机制的核心是让局部的JavaScript运行时，对外部对象的访问和修改处在可控的范围内，即无论内部怎么运行，都不会影响外部的对象。通常在Node.js端可以采用vm模块，而对于浏览器，则需要结合with关键字和window.Proxy对象来实现浏览器端的沙箱。</p>
+<h2 id="7-微前端的消息通信">7. 微前端的消息通信</h2>
+<p>应用间通信有很多种方式，当然，要让多个分离的微应用之间要做到通信，本质上仍离不开中间媒介或者说全局对象。所以对于消息订阅（pub/sub）模式的通信机制是非常适用的，在基座应用中会定义事件中心Event，每个微应用分别来注册事件，当被触发事件时再有事件中心统一分发，这就构成了基本的通信机制，流程如下图：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-d3aa8246f16d3dde8cbaf5907afa87d3_720w.jpg" alt="img"></p>
+<p>当然，如果基座和微应用采用的是React或者是Vue，是可以结合Redux和Vuex来一起使用，实现应用之间的通信。</p>
+<h2 id="8-微前端有哪些框架">8. 微前端有哪些框架</h2>
+<p>基于上述对微前端整体概念和理论的阐述，目前业界已经有不少框架来帮助开发者轻松的集成微前端架构，例如下面这些：</p>
+<ul>
+<li><a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/mooa">Mooa</a>：基于Angular的微前端服务框架</li>
+<li><a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/single-spa">Single-Spa</a>：最早的微前端框架，兼容多种前端技术栈。</li>
+<li><a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/qiankun">Qiankun</a>：基于Single-Spa，阿里系开源微前端框架。</li>
+<li><a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/icestark">Icestark</a>：阿里飞冰微前端框架，兼容多种前端技术栈。</li>
+<li><a href="https://link.zhihu.com/?target=https%3A//www.npmjs.com/package/https%3A//ara-framework.github.io/website/docs/quick-start">Ara Framework</a>：由服务端渲染延伸出的微前端框架。</li>
+</ul>
+<p>上面这些框架，笔者这里就不在过多延伸，各位读者感兴趣的话可以来亲自试试。</p>
+<h2 id="9-是否要用微前端">9. 是否要用微前端</h2>
+<p>微前端帮助开发者解决了实际的问题，但是对于每个业务来说，是否适合使用微前端，以及是否正确的使用微前端，还是需要遵循以下一些原则：</p>
+<ol>
+<li>微前端最佳的使用场景是一些B端的管理系统，既能兼容集成历史系统，也可以将新的系统集成进来，并且不影响原先的交互体验。</li>
+<li>整体的微前端不仅仅是只将系统集成进来，而是整个微前端体系的完善，这其中就包括：
+1)：基座应用和微应用的自动部署能力。
+2)：微应用的配置管理能力。
+3)：本地开发调试能力。
+4)：线上监控和统计能力等等。
+只有将整个能力体系搭建完善，才能说是整个微前端体系流程的完善。</li>
+<li>当发现使用微前端反而使效率变低，简单的变更复杂那就说明微前端并不适用。</li>
+</ol>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/%E5%BE%AE%E5%89%8D%E7%AB%AF/">微前端</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react_native-bridge%E8%AF%A6%E8%A7%A3/" data-tooltip="react_native bridge详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/webassembly-%E7%AE%80%E4%BB%8B/" data-tooltip="WebAssembly 简介">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
+<script>
+    if('serviceWorker' in navigator) {
+    const PREFETCH = true;
+    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
+    function prefetchCache() {
+        if(navigator.serviceWorker.controller) {
+            let links = document.querySelectorAll(
+                PREFETCH_LINK_RELS.map((rel) => {
+                    return 'link[rel='+rel+']';
+                }).join(',')
+            );
+            if(links.length > 0) {
+                Array.from(links)
+                    .map((link) => {
+                        let href = link.getAttribute('href');
+                        navigator.serviceWorker.controller.postMessage({
+                            action : 'cache',
+                            url : href,
+                        });
+                    });
+            }
+        }
+    }
+
+    navigator.serviceWorker
+        .register('/sw.js', { scope: '/' })
+        .then(() => {
+            console.log('Service Worker Registered');
+        });
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            if(PREFETCH) {
+                prefetchCache();
+            }
+        });
+}
+</script></html>

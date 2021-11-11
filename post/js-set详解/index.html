@@ -14,6 +14,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
     <link rel="canonical" href="https://tomtomyoung.top/post/js-set%E8%AF%A6%E8%A7%A3/">
+    <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
     <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
     
     
@@ -24,10 +25,10 @@
     
     
     
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.055753282b6ac09fa55cab335d0b741082b8d559a711f8f22b98b98ac3dd1bb2.css" integrity="" type="text/css">
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.css" integrity="" type="text/css">
     
     
-    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.js" integrity=""></script>
 </head><body class="animated fadeInDown">
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -201,4 +202,43 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.cbb11aa834d67fe3a408c90d91eb61968cf8837e7b654992031f36b824366a124619697154c0999a624b36918f443262ed9aab968b3a84540f3fce9658230023.js" integrity=""></script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
+<script>
+    if('serviceWorker' in navigator) {
+    const PREFETCH = true;
+    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
+    function prefetchCache() {
+        if(navigator.serviceWorker.controller) {
+            let links = document.querySelectorAll(
+                PREFETCH_LINK_RELS.map((rel) => {
+                    return 'link[rel='+rel+']';
+                }).join(',')
+            );
+            if(links.length > 0) {
+                Array.from(links)
+                    .map((link) => {
+                        let href = link.getAttribute('href');
+                        navigator.serviceWorker.controller.postMessage({
+                            action : 'cache',
+                            url : href,
+                        });
+                    });
+            }
+        }
+    }
+
+    navigator.serviceWorker
+        .register('/sw.js', { scope: '/' })
+        .then(() => {
+            console.log('Service Worker Registered');
+        });
+
+    navigator.serviceWorker
+        .ready
+        .then(() => {
+            if(PREFETCH) {
+                prefetchCache();
+            }
+        });
+}
+</script></html>
