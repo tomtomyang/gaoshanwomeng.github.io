@@ -111,6 +111,11 @@
         
         <li class="list-item">
           <span class="item-date">2021-11-10</span>
+          <a class="item-link" href="https://tomtomyoung.top/post/%E5%BE%AE%E5%89%8D%E7%AB%AF-single-spa-%E5%AE%9E%E8%B7%B5/" title="微前端 Single-SPA 实践">微前端 Single-SPA 实践</a>
+        </li>
+        
+        <li class="list-item">
+          <span class="item-date">2021-11-10</span>
           <a class="item-link" href="https://tomtomyoung.top/post/%E5%BE%AE%E5%89%8D%E7%AB%AF-%E7%AE%80%E4%BB%8B/" title="微前端 简介">微前端 简介</a>
         </li>
         
@@ -523,42 +528,42 @@
 
 <script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
 <script>
-    if('serviceWorker' in navigator) {
-    const PREFETCH = true;
-    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
-    function prefetchCache() {
-        if(navigator.serviceWorker.controller) {
-            let links = document.querySelectorAll(
-                PREFETCH_LINK_RELS.map((rel) => {
-                    return 'link[rel='+rel+']';
-                }).join(',')
-            );
-            if(links.length > 0) {
-                Array.from(links)
-                    .map((link) => {
-                        let href = link.getAttribute('href');
-                        navigator.serviceWorker.controller.postMessage({
-                            action : 'cache',
-                            url : href,
+    if ('serviceWorker' in navigator) {
+        const PREFETCH = true;
+        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
+        function prefetchCache() {
+            if (navigator.serviceWorker.controller) {
+                let links = document.querySelectorAll(
+                    PREFETCH_LINK_RELS.map((rel) => {
+                        return 'link[rel=' + rel + ']';
+                    }).join(',')
+                );
+                if (links.length > 0) {
+                    Array.from(links)
+                        .map((link) => {
+                            let href = link.getAttribute('href');
+                            navigator.serviceWorker.controller.postMessage({
+                                action: 'cache',
+                                url: href,
+                            });
                         });
-                    });
+                }
             }
         }
+
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(() => {
+                console.log('Service Worker Registered');
+            });
+
+        navigator.serviceWorker
+            .ready
+            .then(() => {
+                if (PREFETCH) {
+                    console.log('Service Worker Ready');
+                    prefetchCache();
+                }
+            });
     }
-
-    navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
-        .then(() => {
-            console.log('Service Worker Registered');
-        });
-
-    navigator.serviceWorker
-        .ready
-        .then(() => {
-            if(PREFETCH) {
-                console.log('Service Worker Ready');
-                prefetchCache();
-            }
-        });
-}
 </script></html>

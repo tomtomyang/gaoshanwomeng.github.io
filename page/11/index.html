@@ -106,6 +106,19 @@
 
       <div class="list-item">
         <div>
+          <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+          <a class="item-title" href="https://tomtomyoung.top/post/vue-vuecli%E7%AE%80%E4%BB%8B/">vue vuecli简介</a>
+        </div>
+        
+        <div class="item-info">
+          <span class="date">2020-06-15</span>
+          <span><a class="tag" href="https://tomtomyoung.top/tags/vue/">vue</a></span>
+        </div>
+      </div>
+      
+
+      <div class="list-item">
+        <div>
           <span><a class="category" href="https://tomtomyoung.top/categories/linux/">linux</a></span>
           <a class="item-title" href="https://tomtomyoung.top/post/win10&#43;ubuntu18.04%E5%8F%8C%E7%B3%BB%E7%BB%9F/">win10&#43;ubuntu18.04双系统</a>
         </div>
@@ -171,42 +184,42 @@
 
 <script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
 <script>
-    if('serviceWorker' in navigator) {
-    const PREFETCH = true;
-    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
-    function prefetchCache() {
-        if(navigator.serviceWorker.controller) {
-            let links = document.querySelectorAll(
-                PREFETCH_LINK_RELS.map((rel) => {
-                    return 'link[rel='+rel+']';
-                }).join(',')
-            );
-            if(links.length > 0) {
-                Array.from(links)
-                    .map((link) => {
-                        let href = link.getAttribute('href');
-                        navigator.serviceWorker.controller.postMessage({
-                            action : 'cache',
-                            url : href,
+    if ('serviceWorker' in navigator) {
+        const PREFETCH = true;
+        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
+        function prefetchCache() {
+            if (navigator.serviceWorker.controller) {
+                let links = document.querySelectorAll(
+                    PREFETCH_LINK_RELS.map((rel) => {
+                        return 'link[rel=' + rel + ']';
+                    }).join(',')
+                );
+                if (links.length > 0) {
+                    Array.from(links)
+                        .map((link) => {
+                            let href = link.getAttribute('href');
+                            navigator.serviceWorker.controller.postMessage({
+                                action: 'cache',
+                                url: href,
+                            });
                         });
-                    });
+                }
             }
         }
+
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(() => {
+                console.log('Service Worker Registered');
+            });
+
+        navigator.serviceWorker
+            .ready
+            .then(() => {
+                if (PREFETCH) {
+                    console.log('Service Worker Ready');
+                    prefetchCache();
+                }
+            });
     }
-
-    navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
-        .then(() => {
-            console.log('Service Worker Registered');
-        });
-
-    navigator.serviceWorker
-        .ready
-        .then(() => {
-            if(PREFETCH) {
-                console.log('Service Worker Ready');
-                prefetchCache();
-            }
-        });
-}
 </script></html>

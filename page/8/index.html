@@ -107,6 +107,19 @@
       <div class="list-item">
         <div>
           <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+          <a class="item-title" href="https://tomtomyoung.top/post/lodop-lodopc-lodop/">lodop lodop&amp;c-lodop</a>
+        </div>
+        
+        <div class="item-info">
+          <span class="date">2021-01-31</span>
+          <span><a class="tag" href="https://tomtomyoung.top/tags/lodop/">lodop</a></span>
+        </div>
+      </div>
+      
+
+      <div class="list-item">
+        <div>
+          <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
           <a class="item-title" href="https://tomtomyoung.top/post/vue-v-model%E7%BB%91%E5%AE%9Avuex%E4%B8%ADstate%E6%8A%A5%E9%94%99%E5%A1%AB%E5%9D%91/">vue v-model绑定vuex中state报错填坑</a>
         </div>
         
@@ -220,19 +233,6 @@
         </div>
       </div>
       
-
-      <div class="list-item">
-        <div>
-          <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/categories/%E7%B2%BE%E9%80%89/">精选</a></span>
-          <a class="item-title" href="https://tomtomyoung.top/post/ajax-%E9%A2%84%E6%A3%80%E8%AF%B7%E6%B1%82/">ajax 预检请求</a>
-        </div>
-        
-        <div class="item-info">
-          <span class="date">2020-11-17</span>
-          <span><a class="tag" href="https://tomtomyoung.top/tags/ajax/">ajax</a></span>
-        </div>
-      </div>
-      
     </div>
     <div class="pagination">
       
@@ -297,42 +297,42 @@
 
 <script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
 <script>
-    if('serviceWorker' in navigator) {
-    const PREFETCH = true;
-    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
-    function prefetchCache() {
-        if(navigator.serviceWorker.controller) {
-            let links = document.querySelectorAll(
-                PREFETCH_LINK_RELS.map((rel) => {
-                    return 'link[rel='+rel+']';
-                }).join(',')
-            );
-            if(links.length > 0) {
-                Array.from(links)
-                    .map((link) => {
-                        let href = link.getAttribute('href');
-                        navigator.serviceWorker.controller.postMessage({
-                            action : 'cache',
-                            url : href,
+    if ('serviceWorker' in navigator) {
+        const PREFETCH = true;
+        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
+        function prefetchCache() {
+            if (navigator.serviceWorker.controller) {
+                let links = document.querySelectorAll(
+                    PREFETCH_LINK_RELS.map((rel) => {
+                        return 'link[rel=' + rel + ']';
+                    }).join(',')
+                );
+                if (links.length > 0) {
+                    Array.from(links)
+                        .map((link) => {
+                            let href = link.getAttribute('href');
+                            navigator.serviceWorker.controller.postMessage({
+                                action: 'cache',
+                                url: href,
+                            });
                         });
-                    });
+                }
             }
         }
+
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(() => {
+                console.log('Service Worker Registered');
+            });
+
+        navigator.serviceWorker
+            .ready
+            .then(() => {
+                if (PREFETCH) {
+                    console.log('Service Worker Ready');
+                    prefetchCache();
+                }
+            });
     }
-
-    navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
-        .then(() => {
-            console.log('Service Worker Registered');
-        });
-
-    navigator.serviceWorker
-        .ready
-        .then(() => {
-            if(PREFETCH) {
-                console.log('Service Worker Ready');
-                prefetchCache();
-            }
-        });
-}
 </script></html>

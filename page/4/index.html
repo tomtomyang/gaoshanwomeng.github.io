@@ -107,6 +107,19 @@
       <div class="list-item">
         <div>
           <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/categories/%E7%B2%BE%E9%80%89/">精选</a></span>
+          <a class="item-title" href="https://tomtomyoung.top/post/js-es6_module%E8%AF%A6%E8%A7%A3/">js ES6_module详解</a>
+        </div>
+        
+        <div class="item-info">
+          <span class="date">2021-08-25</span>
+          <span><a class="tag" href="https://tomtomyoung.top/tags/js/">js</a><a class="tag" href="https://tomtomyoung.top/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/">模块化</a><a class="tag" href="https://tomtomyoung.top/tags/es6/">ES6</a></span>
+        </div>
+      </div>
+      
+
+      <div class="list-item">
+        <div>
+          <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a><a class="category" href="https://tomtomyoung.top/categories/%E7%B2%BE%E9%80%89/">精选</a></span>
           <a class="item-title" href="https://tomtomyoung.top/post/js-this%E8%AF%A6%E8%A7%A3/">js this详解</a>
         </div>
         
@@ -220,19 +233,6 @@
         </div>
       </div>
       
-
-      <div class="list-item">
-        <div>
-          <span><a class="category" href="https://tomtomyoung.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a><a class="category" href="https://tomtomyoung.top/categories/%E7%B2%BE%E9%80%89/">精选</a></span>
-          <a class="item-title" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-http%E7%BC%93%E5%AD%98%E8%AF%A6%E8%A7%A3/">计算机网络 HTTP缓存详解</a>
-        </div>
-        
-        <div class="item-info">
-          <span class="date">2021-08-12</span>
-          <span><a class="tag" href="https://tomtomyoung.top/tags/http/">HTTP</a></span>
-        </div>
-      </div>
-      
     </div>
     <div class="pagination">
       
@@ -291,42 +291,42 @@
 
 <script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
 <script>
-    if('serviceWorker' in navigator) {
-    const PREFETCH = true;
-    const PREFETCH_LINK_RELS = ['index','next', 'prev', 'prefetch'];
-    function prefetchCache() {
-        if(navigator.serviceWorker.controller) {
-            let links = document.querySelectorAll(
-                PREFETCH_LINK_RELS.map((rel) => {
-                    return 'link[rel='+rel+']';
-                }).join(',')
-            );
-            if(links.length > 0) {
-                Array.from(links)
-                    .map((link) => {
-                        let href = link.getAttribute('href');
-                        navigator.serviceWorker.controller.postMessage({
-                            action : 'cache',
-                            url : href,
+    if ('serviceWorker' in navigator) {
+        const PREFETCH = true;
+        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
+        function prefetchCache() {
+            if (navigator.serviceWorker.controller) {
+                let links = document.querySelectorAll(
+                    PREFETCH_LINK_RELS.map((rel) => {
+                        return 'link[rel=' + rel + ']';
+                    }).join(',')
+                );
+                if (links.length > 0) {
+                    Array.from(links)
+                        .map((link) => {
+                            let href = link.getAttribute('href');
+                            navigator.serviceWorker.controller.postMessage({
+                                action: 'cache',
+                                url: href,
+                            });
                         });
-                    });
+                }
             }
         }
+
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(() => {
+                console.log('Service Worker Registered');
+            });
+
+        navigator.serviceWorker
+            .ready
+            .then(() => {
+                if (PREFETCH) {
+                    console.log('Service Worker Ready');
+                    prefetchCache();
+                }
+            });
     }
-
-    navigator.serviceWorker
-        .register('/sw.js', { scope: '/' })
-        .then(() => {
-            console.log('Service Worker Registered');
-        });
-
-    navigator.serviceWorker
-        .ready
-        .then(() => {
-            if(PREFETCH) {
-                console.log('Service Worker Ready');
-                prefetchCache();
-            }
-        });
-}
 </script></html>
