@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+    <title>  vue 单元测试 </title>
+    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="description" itemprop="description"
+        content=" vue 单元测试 " />
+    <meta name="keywords" itemprop="keywords"
+        content=" [vue 单元测试] " />
+    <base href="https://tomtomyoung.top/">
+
+    
+    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
+    <link rel="mask-icon" href="https://tomtomyoung.top/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://tomtomyoung.top/favicons/apple-touch-icon.png">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-TileImage" content="https://tomtomyoung.top/favicons/mstile-144x144.png">
+    <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+
+    <link rel="canonical" href="https://tomtomyoung.top/post/vue-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/">
+    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.css" integrity="" type="text/css">
+    
+    
+    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.js" integrity=""></script>
+</head><body class="animated fadeInDown">
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header">
+        <span>目录</span>
+    </div><ul class="toc-h2"><li>
+                <span class="toc-link">1. 测试的必要性</span>
+            </li>
+            <li>
+                <span class="toc-link">1. 测试的哲学</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. TDD</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">1. 设计原则</span>
+            </li>
+            
+                    <ul class="toc-h5"><li>
+                <span class="toc-link">1. 独立测试</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 测试列表</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 测试驱动</span>
+            </li>
+            <li>
+                <span class="toc-link">4. 先写断言</span>
+            </li>
+            <li>
+                <span class="toc-link">5. 可测试性</span>
+            </li>
+            <li>
+                <span class="toc-link">6. 及时重构</span>
+            </li>
+            <li>
+                <span class="toc-link">7. 小步前进</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. 开发步骤</span>
+            </li>
+            <li>
+                <span class="toc-link">3. TDD 优点</span>
+            </li>
+            <li>
+                <span class="toc-link">4. TDD 缺点</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. BDD</span>
+            </li>
+            
+                    <ul class="toc-h4"><li>
+                <span class="toc-link">2. 开发步骤</span>
+            </li>
+            
+                    </ul>
+                    </ul><li>
+                <span class="toc-link">1. 前端测试</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. 测试框架</span>
+            </li>
+            <li>
+                <span class="toc-link">2. 断言库</span>
+            </li>
+            <li>
+                <span class="toc-link">3. 测试覆盖率工具</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post">
+      <div class="header">
+        <span class="title">vue 单元测试</span>
+        
+        <div class="info">
+          <span>📅 2021-12-20</span>
+          <span>👦 Tomtom Young</span>
+          <span>📖 2230字</span>
+          <span>⏱ 5分钟</span>
+        </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="http://www.ruanyifeng.com/blog/2015/12/a-mocha-tutorial-of-examples.html">阮一峰——测试框架 Mocha 实例教程</a></p>
+<p><a href="https://www.jestjs.cn/">jest 官网</a></p>
+<p><a href="https://joshldavis.com/2013/05/27/difference-between-tdd-and-bdd/">TDD和BDD的区别</a></p>
+</blockquote>
+<h2 id="1-测试的必要性">1. 测试的必要性</h2>
+<p>对于稍微有一些开发经验的同学在开发过程中总会经历下面类似的问题：</p>
+<ul>
+<li>每次在版本发布上线之前，在电脑前蹲上好几个小时甚至是更长时间对你的应用进行测试，这个过程非常枯燥而痛苦。</li>
+<li>当代码的复杂度达到了一定的级别，当维护者的数量不止你一个，你应该会逐渐察觉到你在开发新功能或修复 bug 的时候，会变得越发小心翼翼，即使代码看起来没什么问题，但你心里还是会犯嘀咕：这个 Feature 会不会带来其他 Bug ？这个 Fix 会不会引入其他 Feature ？</li>
+<li>当你想要对项目中的代码进行重构的时候，你会花费大量的时间进行回归测试。</li>
+</ul>
+<p>以上这些问题都是由于大多数开发者所使用最基本的手动测试的方式所带来的问题，解决它的根本举措就是引入自动化测试方案。</p>
+<h2 id="1-测试的哲学">1. 测试的哲学</h2>
+<p>测试开发有两个流派：</p>
+<ul>
+<li><strong>TDD</strong>：测试驱动开发，先写测试后实现功能</li>
+<li><strong>BDD</strong>：行为驱动开发，先实现功能后写测试</li>
+</ul>
+<h3 id="1-tdd">1. TDD</h3>
+<p>TDD（Test-driven development），测试驱动开发，是快速开发中的一项核心实践和技术，也是一种软件设计方法论。</p>
+<p>其原理是在编写代码之前先编写测试用例，由测试来决定我们的代码。</p>
+<p>TDD 更多地需要编写独立的测试用例，比如只测试一个组件的某个功能点，某个工具函数等。</p>
+<h4 id="1-设计原则">1. 设计原则</h4>
+<h5 id="1-独立测试">1. 独立测试</h5>
+<p>不同代码的测试应该相互独立，一个类对应一个测试类，一个函数对应一个测试函数。</p>
+<p>用例也应各自独立。每个用例不能使用其他用例的结果数据，结果也不能依赖于用例执行顺序。</p>
+<p>开发过程包含多种工作，如：编写测试代码、编写产品代码、代码重构等。做不同的工作时，应专注于当前的角色，不要过多考虑其他方面的细节。</p>
+<h5 id="2-测试列表">2. 测试列表</h5>
+<p>代码的功能点可能很多，并且需求可能是陆续出现的，任何阶段想添加功能时，应把相关功能点加到测试列表中，然后才能继续手头工作，避免疏漏。</p>
+<h5 id="3-测试驱动">3. 测试驱动</h5>
+<p>即利用测试来驱动开发，<strong>是TDD的核心</strong>。要实现某个功能，要编写某个类或某个函数，应首先编写测试代码，明确这个类、这个函数如何使用，如何测试，然后在对其进行设计、编码。</p>
+<h5 id="4-先写断言">4. 先写断言</h5>
+<p>编写测试代码时，应该首先编写判断代码功能的断言语句，然后编写必要的辅助语句。</p>
+<h5 id="5-可测试性">5. 可测试性</h5>
+<p>产品代码设计、开发时应尽可能提高可测试性。每个代码单元的功能应该比较单纯，“各家自扫门前雪”，每个类、每个函数应该只做它该做的事，不要弄成大杂烩。尤其是增加新功能时，不要为了图一时之便，随便在原有代码中添加功能。</p>
+<h5 id="6-及时重构">6. 及时重构</h5>
+<p>对结构不合理，重复等“味道”不好的代码，在测试通过后，应及时进行重构。</p>
+<h5 id="7-小步前进">7. 小步前进</h5>
+<p>软件开发是复杂性非常高的工作，小步前进是降低复杂性的好办法。</p>
+<h4 id="2-开发步骤">2. 开发步骤</h4>
+<p>一般来说，TDD 的开发流程分为下面几个步骤：</p>
+<ul>
+<li>编写测试用例</li>
+<li>运行测试</li>
+<li>编写代码使测试通过</li>
+<li>重构/优化代码</li>
+<li>新增功能，重复上述步骤</li>
+</ul>
+<h4 id="3-tdd-优点">3. TDD 优点</h4>
+<ul>
+<li>保证代码质量，因为先编写测试，所以可能出现的问题都被提前发现了；</li>
+<li>促进开发人员思考，有利于程序的模块设计；</li>
+<li>测试覆盖率高，因为后编写代码，因此测试用例基本都能照顾到；</li>
+</ul>
+<h4 id="4-tdd-缺点">4. TDD 缺点</h4>
+<ul>
+<li>代码量增多，大多数情况下测试代码是功能代码的两倍甚至更多；</li>
+<li>业务耦合度高，测试用例中使用了业务中一些模拟的数据，当业务代码变更的时候，要去重新组织测试用例；</li>
+<li>关注点过于独立，由于单元测试只关注这一个单元的健康状况，无法保证多个单元组成的整体是否正常；</li>
+</ul>
+<p>在应用实际开发过程中 <strong>TDD 更适合开发纯函数库</strong>，比如 Lodash、Vue、React 等。</p>
+<h3 id="2-bdd">2. BDD</h3>
+<p>TDD 最大一个问题是在于开发人员最终做出来的东西和实际功能需求可能相偏离，为了解决这一问题有人发明了 BDD。BDD（Behavior-driven development）行为驱动开发，是测试驱动开发延伸出来的一种敏捷软件开发技术。</p>
+<p>BDD 解决的另外一个关键问题就是<strong>如何定义 TDD 或单元测试过程中的细节</strong>。一些不良的单元测试的一个常见问题是**过于依赖被测试功能的实现逻辑。**这通常意味着如果你要修改实现逻辑，即使输入输出没有变，通常也需要去更新测试代码。这就造成了一个问题，让开发人员对测试代码的维护感觉乏味和厌烦。</p>
+<p>BDD 核心目的是为了解决 TDD 模式下开发和实际功能需求不一致而诞生，BDD 不需要再面向实现细节设计测试，取而代之的是<strong>面向行为来测试</strong>。它是从产品角度出发，鼓励开发人员和非开发人员（产品、QA、客户等）之间的协作。由于 BDD 的核心是关注软件的功能测试，所以 BDD 更多的是结合<strong>集成测试</strong>进行，它是黑盒的。</p>
+<h4 id="2-开发步骤-1">2. 开发步骤</h4>
+<p>1、开发人员和非开发人员一起讨论确认需求</p>
+<p>2、以一种<strong>自动化</strong>的方式将需求建立起来，并确认是否一致</p>
+<p>3、最后，实现每个文档示例描述的行为，并从自动化测试开始以指导代码的开发</p>
+<p>这样做使得每一次的更改都较小并快速迭代，每次需要更多信息时都将其上移。每次自动化并实现一个新示例时，便为系统添加了一些有价值的内容，并准备响应反馈。</p>
+<h2 id="1-前端测试">1. 前端测试</h2>
+<p>前端测试工具也和前端的框架一样纷繁复杂，其中常见的测试工具，大致可分为测试框架、断言库、测试覆盖率工具等几类。</p>
+<h3 id="1-测试框架">1. 测试框架</h3>
+<p>测试框架的作用是提供一些方便的语法来描述测试用例，以及对用例进行分组。</p>
+<p>测试框架可分为两种： TDD （测试驱动开发）和 BDD （行为驱动开发），我理解两者间的区别主要是一些语法上的不同，其中 BDD 提供了提供了可读性更好的用例语法。</p>
+<p>常见的测试框架有 <a href="https://link.zhihu.com/?target=https%3A//jasmine.github.io/">Jasmine</a>, <a href="https://link.zhihu.com/?target=https%3A//mochajs.org/">Mocha</a> 以及本文要介绍的 <a href="https://link.zhihu.com/?target=http%3A//facebook.github.io/jest/zh-Hans/">Jest</a> 。</p>
+<h3 id="2-断言库">2. 断言库</h3>
+<p>断言库主要提供语义化方法，用于对参与测试的值做各种各样的判断。这些语义化方法会返回测试的结果，要么成功、要么失败。常见的断言库有 <a href="https://link.zhihu.com/?target=https%3A//shouldjs.github.io/">Should.js</a>, <a href="https://link.zhihu.com/?target=http%3A//chaijs.com/">Chai.js</a> 等。</p>
+<h3 id="3-测试覆盖率工具">3. 测试覆盖率工具</h3>
+<p>用于统计测试用例对代码的测试情况，生成相应的报表，比如 <a href="https://link.zhihu.com/?target=https%3A//github.com/gotwarlost/istanbul">istanbul</a> 。</p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/vue/">vue</a></span>
+      </div>
+    </div>
+
+    <ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/pwa-%E7%AE%80%E4%BB%8B/" data-tooltip="PWA 简介">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        </a>
+    </li>
+</ul>
+
+  </div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        const PREFETCH = true;
+        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
+        function prefetchCache() {
+            if (navigator.serviceWorker.controller) {
+                let links = document.querySelectorAll(
+                    PREFETCH_LINK_RELS.map((rel) => {
+                        return 'link[rel=' + rel + ']';
+                    }).join(',')
+                );
+                if (links.length > 0) {
+                    Array.from(links)
+                        .map((link) => {
+                            let href = link.getAttribute('href');
+                            navigator.serviceWorker.controller.postMessage({
+                                action: 'cache',
+                                url: href,
+                            });
+                        });
+                }
+            }
+        }
+
+        navigator.serviceWorker
+            .register('/sw.js', { scope: '/' })
+            .then(() => {
+                console.log('Service Worker Registered');
+            });
+
+        navigator.serviceWorker
+            .ready
+            .then(() => {
+                if (PREFETCH) {
+                    console.log('Service Worker Ready');
+                    prefetchCache();
+                }
+            });
+    }
+</script></html>
