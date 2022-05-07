@@ -198,7 +198,7 @@
 <p><strong>Tailwind CSS做了什么呢？</strong></p>
 <p>它将所有的css属性全部封装成语义化的类，比如你想要一个<code>float:left</code>，它已经帮你封装好了，你直接使用一个<code>float-left</code>就可以。需要一个宽度为12像素，只需要写<code>w-3</code>就可以。</p>
 <p>接用官网上的例子，实现下面这样一个效果：</p>
-<p><img src="https://pic1.zhimg.com/80/v2-645c9be5405f8488a2a23e26fb99c2ee_720w.jpg?source=1940ef5c" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-645c9be5405f8488a2a23e26fb99c2ee_720w.jpg" alt="img"></p>
 <p>按照正常的写法，需要这样写：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;chat-notification&#34;</span>&gt;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  &lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;chat-notification-logo-wrapper&#34;</span>&gt;
@@ -292,7 +292,7 @@
 </ol>
 <h4 id="3-规范统一">3. 规范、统一</h4>
 <p>Tailwind 拥有一套专业的 UI 属性值，虽然没有封装任何结构性 UI，但是默认提供的一些属性值都是很专业的。比如颜色：</p>
-<p><img src="https://pica.zhimg.com/80/v2-ac649ae38613d6b0f19032042a44c626_720w.jpg?source=1940ef5c" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-ac649ae38613d6b0f19032042a44c626_720w.jpg" alt="img"></p>
 <p>还有各种内边距外边距，宽高，文字大小行高颜色等等。即使你不懂设计，按照他内置的属性做出来的东西，也不会太差。</p>
 <p>另外，有了 <code>text-lg</code> 此类，一个页面上就不会出现几十种参差不同的字体大小。</p>
 <h4 id="4-响应式设计">4. 响应式设计</h4>
@@ -363,21 +363,21 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span>  ));
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span>);
 </code></pre></div><p>像这样动态生成类名的操作是做不到的。这意味着 Tailwind 对我们的开发造成了限制。关于这一点，<a href="https://link.segmentfault.com/?enc=UGUmX6BtfnQDlmrOcnRgpw%3D%3D.EheNmx93BtbHexYZLvKV91uQxYrxEEYIZjqH9NfxBD9qpCQQpMR689LN5%2BZDs04vVNG0VtFLmmoeeqEiH%2FhuqsiLcDxBo1bEnXkVquirFdw%3D">文档</a>也有提到，字符串拼接的操作是不允许的，但很容易被开发者忽略：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000039218691" alt="Image for post"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000039218691" alt="Image for post"></p>
 <p>其根本原因是，Tailwind 使用了 PurgeCSS 这个工具：</p>
 <blockquote>
 <p>PurgeCSS 会分析你的内容和 css 文件，首先它将 css 文件中使用的选择器与内容文件中的选择器进行匹配，然后它会从 css 中删除未使用的选择器，从而生成更小的 css 文件。</p>
 </blockquote>
 <p>首先，我们为项目引入大量的工具类名，在准备构建并发布项目的时候，使用一个工具扫描代码并找出所有未使用的类名，以确保它们不会随其它代码一起打包。其实现依赖于下面这个正则表达式：</p>
-<p><img src="https://segmentfault.com/img/remote/1460000039218690" alt="Image for post"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1460000039218690" alt="Image for post"></p>
 <p>因为这个正则匹配的问题，字符串拼接动态生成类名，不能被允许。</p>
 <h3 id="4-关于-tailwind-的几点疑惑">4. 关于 Tailwind 的几点疑惑？</h3>
 <h4 id="1-造成新的记忆负担">1. 造成新的记忆负担</h4>
 <p>这个问题仁者见仁智者见智，在 Vue 的 <code>template</code> 语法中也经常出现此类问题，很多人会对一些命名上的约定，特别是自己不太喜欢的约定天然排斥。</p>
 <p>借助提示补全插件，会大大缓解这种情况：</p>
 <p><a href="https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss">Tailwind CSS IntelliSense</a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/shfshanyue/assets@master/src/tailwind02.png" alt="智能补全"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/shfshanyue/assets@master/src/tailwind-01.png" alt="代码提示"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/tailwind02.png" alt="智能补全"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/tailwind-01.png" alt="代码提示"></p>
 <h4 id="2-代码可读性变差维护困难">2. 代码可读性变差，维护困难</h4>
 <p>因为要实现特定的效果，需要用到很多 CSS 属性，因此使用 Tailwind 的 HTML 文档会变得很丑，可读性变差：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;w-full flex items-center justify-center pt-4&#34;</span>&gt;
@@ -397,7 +397,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>  &lt;/<span style="color:#ff79c6">button</span>&gt;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>&lt;/<span style="color:#ff79c6">div</span>&gt;
 </code></pre></div><p>但是这也不意味着，维护会变得会更加困难，因为 Tailwind 的样式覆盖基本不存在，借助调试工具和搜索，就可以快速定位和维护：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/shfshanyue/assets@master/src/tailwind-devtool.png" alt="使用 Devtool 调试 CSS"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/tailwind-devtool.png" alt="使用 Devtool 调试 CSS"></p>
 <h4 id="3-使用tailwind-让文件体积变大">3. 使用Tailwind 让文件体积变大</h4>
 <p>是的。因为它需要把所有的css属性全部都封装一遍，所以 CSS 文件巨大，3M多。所以不建议在页面内直接引入Tailwind 原生css文件的做法。</p>
 <p>Tailwind CSS官方团队为了解决这个问题，提出了一个方案，在编译的时候引入PurgeCSS 这个工具，构建的时候，会自动删除掉所有你没用到的 CSS。只保留你用到的 CSS。这样最终打包出来的 CSS 文件极小，一般的项目构建出来的css文件,压缩一下甚至不会超过10K，但是也限制了我们必须在工程化项目里使用 Tailwind。</p>
@@ -409,7 +409,7 @@
 <p>用一句话来概括就是，Tailwind 是零散的，举一个例子就是，ElementUI这类框架，就像是买回来的玩具，除非是动手能力比较强，否则不太能拆开。而 Tailwind 像是积木，需要自己去组装，甚至可以自己生产积木，是高度定制化的。</p>
 <p>例如：</p>
 <p>在 <code>tailwind.config.js</code> 的 <code>theme</code> 项下新增了一种颜色，取名为 <code>my-green</code> ，实际编写代码时，tailwindcss 就能把我新增的颜色应用到每一个能够设置颜色的属性中，比如图上的背景色 <code>bg-my-green</code> 、文本颜色 <code>text-my-green</code> 、 边框颜色 <code>border-my-green</code> 。</p>
-<p><img src="https://pica.zhimg.com/80/v2-4bd938d48bc1e80ac637bba567237ad3_720w.jpg?source=1940ef5c" alt="img"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-4bd938d48bc1e80ac637bba567237ad3_720w.jpg" alt="img"></p>
 <p>如果一个项目，需要快速或者简单交付，那没必要用Tailwind CSS。用<code>bootstrap</code>，<code>bulma</code>之类的框架可以让你很快的完成一个项目。不用纠结太深的技术。</p>
 <p>Tailwind CSS更适合于页面定制化高的场景。</p>
 

@@ -168,7 +168,7 @@
 <li>从多台机器或位置访问现有的开发环境。</li>
 <li>调试在其他地方（例如客户站点或云中）运行的应用程序。</li>
 </ul>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/remote-overview/architecture.png" alt="建筑学"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/architecture.png" alt="建筑学"></p>
 </blockquote>
 <p><a href="https://aka.ms/vscode-remote/download/extension">Remote Development extension pack</a> 包括三个扩展，分别是：</p>
 <ul>
@@ -181,11 +181,11 @@
 <ol>
 <li>
 <p>在 VS Code 中，从命令面板（F1、Ctrl+Shift+P ）中选择**Remote-SSH: Connect to Host&hellip;**并使用与步骤 1 相同的方法。<code>user@hostname</code></p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-user@box.png" alt="user@host 输入框图解"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-user@box.png" alt="user@host 输入框图解"></p>
 </li>
 <li>
 <p>如果 VS Code 无法自动检测到您正在连接的服务器类型，则会要求您手动选择类型。</p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-select-platform.png" alt="平台选择图解"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-select-platform.png" alt="平台选择图解"></p>
 <p>选择平台后，它将存储在属性下的<a href="https://code.visualstudio.com/docs/getstarted/settings">VS Code 设置</a><code>remote.SSH.remotePlatform</code>中，因此您可以随时更改它。</p>
 </li>
 <li>
@@ -193,19 +193,19 @@
 </li>
 <li>
 <p>连接后，您将处于一个空窗口中。您始终可以参考状态栏来查看您连接到的主机。</p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-statusbar.png" alt="SSH状态栏项"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-statusbar.png" alt="SSH状态栏项"></p>
 <p>单击状态栏项目将在您连接时提供远程命令列表。</p>
 </li>
 <li>
 <p>然后，您可以像在本地一样使用**File &gt; Open&hellip;<strong>或</strong>File &gt; Open Workspace&hellip;**打开远程计算机上的任何文件夹或工作区！</p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-open-folder.png" alt="在远程 SSH 主机上打开文件"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-open-folder.png" alt="在远程 SSH 主机上打开文件"></p>
 </li>
 </ol>
 <h3 id="2-免密登录">2. 免密登录</h3>
 <p>打开<code>C:\Users\你的用户名</code>文件夹，如<code>C:\Users\xiaoming</code>，在上述目录找到<code>.ssh</code>文件夹，若不存在，新建一个。在<code>.ssh</code>目录启动命令行，有两种方式，输入：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>ssh-keygen -t rsa -b <span style="color:#bd93f9">4096</span> 
 </code></pre></div><p>一直回车，如下图：</p>
-<p><img src="https://img-blog.csdnimg.cn/20210425093831903.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM4NjMzNTM2,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210425093831903.png" alt="在这里插入图片描述"></p>
 <p>这时你会看到文件夹下生成了两个文件，id_rsa和id_rsa.pub，id_rsa.pub就是公钥。</p>
 <p>在<code>/root</code>文件夹下找到<code>.ssh</code>文件，查看其中是否包含名为<code>authorized_keys</code>的文件。打开<code>authorized_keys</code>文件，将创建的<code>id_rsa.pub</code>里面的内容拷贝到<code>authorized_keys</code>中保存即可。</p>
 <p>在 Remote SSH 的 SSH Config 文件中加入<code>IdentityFile C:/Users/xiaoming/.ssh/id_rsa</code>，即可</p>
@@ -215,10 +215,10 @@
 </code></pre></div><h3 id="3-安装插件">3. 安装插件</h3>
 <p>VS Code 在以下两个位置之一运行扩展：本地在 UI / 客户端，或远程在 SSH 主机上。影响 VS Code UI 的扩展（如主题和代码片段）安装在本地，大多数扩展将驻留在 SSH 主机上。这可确保您获得流畅的体验，并允许您从本地计算机上为 SSH 主机上的给定工作区安装任何需要的扩展。</p>
 <p>如果您从“扩展”视图安装扩展，它将自动安装在正确的位置。安装后，您可以根据类别分组判断扩展的安装位置。</p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-installed-remote-indicator.png" alt="工作区扩展类别"></p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/common/local-installed-extensions.png" alt="本地扩展类别"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-installed-remote-indicator.png" alt="工作区扩展类别"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/local-installed-extensions.png" alt="本地扩展类别"></p>
 <p>实际需要远程运行的本地扩展将在“<strong>本地 - 已安装</strong>”类别中显示为灰色和禁用。选择<strong>安装</strong>以在远程主机上安装扩展。</p>
-<p><img src="https://code.visualstudio.com/assets/docs/remote/ssh/ssh-disabled-extensions.png" alt="带有安装按钮的禁用扩展"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-disabled-extensions.png" alt="带有安装按钮的禁用扩展"></p>
 <p>您还可以在 SSH 主机上安装所有本地安装的扩展，方法是转到扩展视图并选择<strong>在 SSH 中安装本地扩展：[主机名]使用****本地 - 已安装</strong>标题栏右侧的云按钮。这将显示一个下拉列表，您可以在其中选择要在 SSH 主机上安装哪些本地安装的扩展。</p>
 <p>如果您希望在任何 SSH 主机上始终安装一些扩展，您可以使用<code>remote.SSH.defaultExtensions</code>. <code>settings.json</code>例如，如果您想安装<a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens">GitLens</a>和<a href="https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor">资源监视器</a>扩展，请指定它们的扩展 ID，如下所示：</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;remote.SSH.defaultExtensions&#34;</span>: [
@@ -233,7 +233,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
 </code></pre></div><h3 id="4-端口映射">4. 端口映射</h3>
 <p>这个插件有一个 port forward 功能，使用这个功能后我们就可以不用调整防火墙设置直接在本地访问云主机指定端口上的服务了。比如下面的截图就是把云主机的 5432 端口转移到本地。</p>
-<p><img src="https://img-blog.csdnimg.cn/20210507083756971.png" alt="port forward"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210507083756971.png" alt="port forward"></p>
 <h2 id="4-多用户远程开发git设置">4. 多用户远程开发Git设置</h2>
 <p>远程开发时可能会出现vscode找不到服务器上git的问题，此时需要在设置里指定git的路径，同时还需要注意，git版本应该大于2，否则很多功能不能使用。</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;git.path&#34;</span>: <span style="color:#f1fa8c">&#34;/usr/local/git/bin/git&#34;</span>
