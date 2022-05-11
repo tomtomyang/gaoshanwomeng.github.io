@@ -58,10 +58,19 @@
                 <span class="toc-link">2. font-size</span>
             </li>
             <li>
-                <span class="toc-link">3. font-</span>
+                <span class="toc-link">3. font-weight</span>
+            </li>
+            <li>
+                <span class="toc-link">4. font-variant</span>
+            </li>
+            <li>
+                <span class="toc-link">5. font-style</span>
             </li>
             
                     </ul><li>
+                <span class="toc-link">2. 加载网络字体</span>
+            </li>
+            <li>
                 <span class="toc-link">2. 盘古之白</span>
             </li>
             </div><div class="single-post container">
@@ -72,8 +81,8 @@
         <div class="info">
           <span>📅 2022-05-11</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 949字</span>
-          <span>⏱ 2分钟</span>
+          <span>📖 1452字</span>
+          <span>⏱ 3分钟</span>
         </div>
         
       </div>
@@ -92,9 +101,21 @@
 <blockquote>
 <p><code>font-family</code> 属性指定的是一个优先级从高到低的可选字体列表。 字体的选定不是在发现用户计算机上安装的列表中的第一个字体时停止。相反，对字体的选择是逐字进行的。也就是说即使某个字符周围都在某个字体中可以显示，但该字符在当前的字体文件中没有适合的图形，那么会继续尝试列表中靠后的字体。当一个字体只在某些特定的 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-style">font-style (en-US)</a>、 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant">font-variant (en-US)</a>、或 <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/font-size">font-size (en-US)</a> 属性值下有效时，这些属性的值也可能对字体族 font family 的选择造成影响。</p>
 </blockquote>
+<blockquote>
+<ul>
+<li>英文字体在前，中文字体在后。原因很简单，中文字体包中通常包含了英文字符，反之则不成立，如果先设置了中文字体，那么英文字体根本轮不到 fallback</li>
+<li>操作系统方面，Apple 系列（macOS + iOS）字体在前（直接用 <code>-apple-system</code> 即可，见下文），Windows 字体在后。<a href="https://ruby-china.org/topics/14005">这里</a>解释了原因，即，macOS 下的用户有一定概率安装了 Windows 字体（因为安装了 Office），而 Windows 下安装 macOS 字体的用户却少之又少，所以如果 Windows 在前，那么在 macOS 下很有可能就出现「放着苹方不用却用微软雅黑」这种坑爹情况</li>
+<li>根据访问网站的用户群体不同，可以考虑放弃对于老旧操作系统和浏览器的支持，比如我在使用思源宋体的时候，仅提供了 .woff 和 .woff2 格式的字体文件，完全放弃了老版本的 IE 和 Safari</li>
+<li>仅对 Windows 用户使用自定义字体，比如思源系列，macOS、iOS、Linux 就使用系统自带字体就好。原因嘛当然是因为 Windows 自带的中文字体实在找不到好看的，而主动安装字体的用户毕竟还是少数（嗯这条是私货 🙄 ）</li>
+<li>衬线还是非衬线完全看个人审美喜好，比如我就不觉得思源黑体系列好看（所以你现在看到的思源宋体，如果你是 Windows 用户的话）。同时，中文衬线搭配英文非衬线，或者反过来，中文非衬线搭配英文衬线，也完全没有问题</li>
+</ul>
+</blockquote>
 <p>对于传统的web开发人员来说，字体选择是有限的。只有少数几种字体可以保证兼容所有流行的操作系统——这就是所谓的 <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Fundamentals#web_safe_fonts">Web-safe 字体</a>。您可以使用字体堆栈来指定可选择的字体，后面是Web-safe的替代选项，然后是默认的系统字体，但是为了确保您的设计在每种字体中都显示正常，这样增加了测试的开销。</p>
 <h3 id="2-font-size">2. font-size</h3>
-<h3 id="3-font-">3. font-</h3>
+<h3 id="3-font-weight">3. font-weight</h3>
+<h3 id="4-font-variant">4. font-variant</h3>
+<h3 id="5-font-style">5. font-style</h3>
+<h2 id="2-加载网络字体">2. 加载网络字体</h2>
 <p>在Web 中，中文一般是不推荐使用网络字体的——因为汉字庞大的字符数让中文网络字体的体积异常庞大。但是，如果你经常浏览国外的英文网站，你会发现——使用了网络字体的网页是真的很美！所以，为何中文网页不能一样美呢？</p>
 <p>技术进步带来的字体子集化和用户网络带宽的普遍提升，中文网页其实已经可以开始尝试网络字体了。不知你是否注意到，<a href="https://www.apple.com.cn/">苹果的中文官网</a>其实就已经在使用中文网络字体了。就在昨天，<a href="https://fonts.google.com/">Google Fonts</a> 推出了全新的设计，以庆祝其 10 岁的生日，而其中一个重要的新亮点，就是添加了可变字体（Variable Fonts）的支持。</p>
 <p>所以，中文网络字体的普及是刻不容缓的。这需要字体设计师的努力，也需要网页开发者的努力。作为开发者，尝试使用网络字体其实也是我们的一个职责——<em>Making the Web Beautiful!</em></p>
