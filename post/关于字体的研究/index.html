@@ -11,7 +11,11 @@
     content=" [字体] " />
   <base href="https://tomtomyoung.top/" />
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print" onload="this.media='all'">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print"
+    onload="this.media='all'">
 
   
   <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon" />
@@ -70,7 +74,15 @@
                     </ul><li>
                 <span class="toc-link">2. 加载网络字体</span>
             </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. link</span>
+            </li>
             <li>
+                <span class="toc-link">2. @font-face</span>
+            </li>
+            
+                    </ul><li>
                 <span class="toc-link">2. 盘古之白</span>
             </li>
             </div><div class="single-post container">
@@ -81,8 +93,8 @@
         <div class="info">
           <span>📅 2022-05-11</span>
           <span>👦 Tomtom Young</span>
-          <span>📖 1452字</span>
-          <span>⏱ 3分钟</span>
+          <span>📖 2784字</span>
+          <span>⏱ 6分钟</span>
         </div>
         
       </div>
@@ -93,6 +105,9 @@
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Styling_text/Web_fonts">MDN_Web字体</a></p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family">MDN_font-family</a></p>
 <p><a href="https://ridiqulous.com/chinese-webfont-guide/">中文网页字体设置方案：从 font-family 到 font-display</a></p>
+<p><a href="https://blog.jsonfeed.cn/load-web-fonts-best-practice/">加载 Web Fonts 最佳实践</a></p>
+<p><a href="https://juejin.cn/post/6971640926389141518">HTML5 之 Link 标签</a></p>
+<p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/link">MDN_link</a></p>
 </blockquote>
 <p>字体无处不在，无论是阅读网页，还是编辑Word文档，甚至是编写代码，我们都需要使用到字体，包括中文字体和英文字体。使用不同的字体会带来完全不同的阅读体验，为了构造更美观的网页效果，提高网页的阅读体验，本篇文章对Web中的字体展开研究。</p>
 <h2 id="1-字体的设置">1. 字体的设置</h2>
@@ -116,9 +131,55 @@
 <h3 id="4-font-variant">4. font-variant</h3>
 <h3 id="5-font-style">5. font-style</h3>
 <h2 id="2-加载网络字体">2. 加载网络字体</h2>
-<p>在Web 中，中文一般是不推荐使用网络字体的——因为汉字庞大的字符数让中文网络字体的体积异常庞大。但是，如果你经常浏览国外的英文网站，你会发现——使用了网络字体的网页是真的很美！所以，为何中文网页不能一样美呢？</p>
-<p>技术进步带来的字体子集化和用户网络带宽的普遍提升，中文网页其实已经可以开始尝试网络字体了。不知你是否注意到，<a href="https://www.apple.com.cn/">苹果的中文官网</a>其实就已经在使用中文网络字体了。就在昨天，<a href="https://fonts.google.com/">Google Fonts</a> 推出了全新的设计，以庆祝其 10 岁的生日，而其中一个重要的新亮点，就是添加了可变字体（Variable Fonts）的支持。</p>
+<p>在上一节中说到“CSS 属性 <code>font-family</code> 允许您通过给定一个有先后顺序的，由字体名或者字体族名组成的列表来为选定的元素设置字体。浏览器会在列表中搜寻，直到找到它所运行的系统上可用的字体”，那么可能会出现一个问题，不同的电脑中安装的字体不同，同一个网站在不同电脑上显示的字体也不同。如果我们想让我们的网站显示统一的字体，有以下两种方式，第一种是设置一个每一台电脑上都会装的字体，第二种是使用网络字体，给用户装一个字体。</p>
+<p>在Web中，中文一般是不推荐使用网络字体的——因为汉字庞大的字符数让中文网络字体的体积异常庞大。但是，如果你经常浏览国外的英文网站，你会发现——使用了网络字体的网页是真的很美！所以，为何中文网页不能一样美呢？</p>
+<p>技术进步带来的字体子集化和用户网络带宽的普遍提升，中文网页其实已经可以开始尝试网络字体了。<a href="https://www.apple.com.cn/">苹果的中文官网</a>其实就已经在使用中文网络字体了。<a href="https://fonts.google.com/">Google Fonts</a> 也推出了全新的设计，以庆祝其 10 岁的生日，而其中一个重要的新亮点，就是添加了可变字体（Variable Fonts）的支持。</p>
 <p>所以，中文网络字体的普及是刻不容缓的。这需要字体设计师的努力，也需要网页开发者的努力。作为开发者，尝试使用网络字体其实也是我们的一个职责——<em>Making the Web Beautiful!</em></p>
+<h3 id="1-link">1. link</h3>
+<p>link 元素用于链接外部<code>css</code>样式表等其他相关外部资源。</p>
+<p>其中<code>link</code>中包括如下属性。</p>
+<ul>
+<li><code>href</code>：指明外部资源文件的路径，即告诉浏览器外部资源的位置</li>
+<li><code>hreflang</code>：说明外部资源使用的语言</li>
+<li><code>media</code>：说明外部资源用于哪种设备</li>
+<li><code>rel</code>：必填，表明当前文档和外部资源的关系</li>
+<li><code>sizes</code>：指定图标的大小，只对属性<code>rel=&quot;icon&quot;</code>生效</li>
+<li><code>type</code>：说明外部资源的 <a href="https://link.juejin.cn/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FHTTP%2FBasics_of_HTTP%2FMIME_types">MIME</a> 类型，如<code>text/css</code>、<code>image/x-icon</code></li>
+</ul>
+<p>其中<code>rel</code>是核心属性，其参数值如下，也可参考 <a href="https://link.juejin.cn/?target=https%3A%2F%2Fdeveloper.mozilla.org%2Fzh-CN%2Fdocs%2FWeb%2FHTML%2FLink_types">MDN</a>：</p>
+<ul>
+<li><code>alternate</code>：链接到文档的替代版本</li>
+<li><code>archives</code>：链接到文档集或历史数据</li>
+<li><code>author</code>：提供指向文档作者的链接</li>
+<li><code>bookmark</code>：定义文档在收藏夹中显示的书签图标</li>
+<li><code>canonical</code>：指明网站的规范版本</li>
+<li><code>dns-prefetch</code>：指定浏览器预先执行目标资源的<code>DNS</code>解析</li>
+<li><code>external</code>：链接到外部，即告知搜索引擎，此链接不是本站链接</li>
+<li><code>first</code>：链接到集合中的首个文档</li>
+<li><code>help</code>：链接帮助信息</li>
+<li><code>icon</code>：定义网站或网页在浏览器标题栏中的图标</li>
+<li><code>license</code>：链接到文档的版权信息</li>
+<li><code>last</code>：链接到集合中的末个文档</li>
+<li><code>nofollow</code>：指定文档不被搜索引擎跟踪，即某些页面不被爬虫抓取</li>
+<li><code>next</code>：记录文档的下一页（浏览器可以提前加载此页）</li>
+<li><code>noreferrer</code>：可以阻止浏览器发送访问来源信息</li>
+<li><code>preload</code>：对资源进行预加载</li>
+<li><code>pingback</code>：提供处理当前文档的<code>pingback</code>服务器地址</li>
+<li><code>prefetch</code>：对资源进行预加载并缓存，通常<code>preload</code>用于加载当前页面的资源，而<code>prefetch</code>用于加载将来页面可能需要的资源</li>
+<li><code>preconnect</code>：预先连接到目标资源的地址</li>
+<li><code>prev</code>：记录文档的下一页</li>
+<li><code>search</code>：链接到文档的搜索工具</li>
+<li><code>stylesheet</code>：指定作为样式表的外部资源</li>
+<li><code>sidebar</code>：指定浏览器边栏中显示的文档</li>
+<li><code>tag</code>：指定当前文档使用的标签、关键词</li>
+<li><code>up</code>：指向一个文档，此文档提供此网页的上下文关系</li>
+</ul>
+<p>其中<code>stylesheet</code>指定作为样式表的外部资源，</p>
+<p>人们每天数以千次地像这样操作谷歌字体：选择一些看起来不错的网络可用字体，将它的 <code>&lt;link&gt;</code> 标签放入 <code>&lt;head&gt;</code> 中，然后检查它们是否显示正确。我们来看下 Lighthouse 是如何评价这样的工作流的。</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Lighthouse.webp" alt="Lighthouse"></p>
+<p>标签中的样式表被 Lighthouse 标记为阻塞渲染的资源，它们竟然让渲染增加了一秒钟？这看起来不是很好。我们已经按照书籍，文档，HTML 标准完成了所有工作，为什么 Lighthouse 还是会告诉我这样不对呢？</p>
+<p>让我们来讨论下如何让字体样式文件成为非渲染阻塞资源，并且探讨一种不仅让 Lighthouse 满意，还要解决加载字体时通常会出现糟糕的无样式文本闪烁（FOUT）问题。我们将使用原生的 HTML，CSS 和 JavaScript 来完成这些工作，因此我们可以在任何技术栈中使用它们。</p>
+<h3 id="2-font-face">2. @font-face</h3>
 <h2 id="2-盘古之白">2. 盘古之白</h2>
 
       </div>
@@ -176,42 +237,42 @@
 
 <script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
 <script>
-    if ('serviceWorker' in navigator) {
-        const PREFETCH = true;
-        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
-        function prefetchCache () {
-            if (navigator.serviceWorker.controller) {
-                let links = document.querySelectorAll(
-                    PREFETCH_LINK_RELS.map((rel) => {
-                        return 'link[rel=' + rel + ']';
-                    }).join(',')
-                );
-                if (links.length > 0) {
-                    Array.from(links)
-                        .map((link) => {
-                            let href = link.getAttribute('href');
-                            navigator.serviceWorker.controller.postMessage({
-                                action: 'cache',
-                                url: href,
-                            });
-                        });
-                }
-            }
-        }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-        navigator.serviceWorker
-            .register('/serviceWorker.js', { scope: '/' })
-            .then(() => {
-                console.log('Service Worker Registered');
-            });
+    
+    
+    
+    
+    
 
-        navigator.serviceWorker
-            .ready
-            .then(() => {
-                if (PREFETCH) {
-                    console.log('Service Worker Ready');
-                    prefetchCache();
-                }
-            });
-    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </script></html>
