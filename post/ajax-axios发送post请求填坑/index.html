@@ -11,9 +11,9 @@
     content=" [前端 axios post] " />
   <base href="https://tomtomyoung.top/" />
 
-
+  
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" />
+  <link rel="preload prefetch" as="style" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print"
     onload="this.media='all'">
 
@@ -307,44 +307,5 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script>
-<script>
-    if ('serviceWorker' in navigator) {
-        const PREFETCH = true;
-        const PREFETCH_LINK_RELS = ['index', 'next', 'prev', 'prefetch'];
-        function prefetchCache () {
-            if (navigator.serviceWorker.controller) {
-                let links = document.querySelectorAll(
-                    PREFETCH_LINK_RELS.map((rel) => {
-                        return 'link[rel=' + rel + ']';
-                    }).join(',')
-                );
-                if (links.length > 0) {
-                    Array.from(links)
-                        .map((link) => {
-                            let href = link.getAttribute('href');
-                            navigator.serviceWorker.controller.postMessage({
-                                action: 'cache',
-                                url: href,
-                            });
-                        });
-                }
-            }
-        }
 
-        navigator.serviceWorker
-            .register('/serviceWorker.js', { scope: '/' })
-            .then(() => {
-                console.log('Service Worker Registered');
-            });
-
-        navigator.serviceWorker
-            .ready
-            .then(() => {
-                if (PREFETCH) {
-                    console.log('Service Worker Ready');
-                    prefetchCache();
-                }
-            });
-    }
-</script></html>
+<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.js" integrity=""></script></html>
