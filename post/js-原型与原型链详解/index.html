@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js 原型与原型链详解</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js 原型与原型链详解" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -180,7 +175,7 @@
 <p>简单来说，<code>prototype</code>的作用是：如果一个函数是构造函数，当他执行构造对象的任务时，需要一个模板，来指定需要构造一个什么样的对象。</p>
 <h4 id="1-默认prototype">1. 默认prototype</h4>
 <p>看下面的代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> a(){ }
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> a(){ }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(a.prototype);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// console output
@@ -192,7 +187,7 @@
 </span></code></pre></div><p>这里我们可以看到<code>a()</code>的<code>prototype</code>在默认情况下，指向的是一个构造函数为<code>a()</code>的空对象。</p>
 <h4 id="2-改变prototype">2. 改变prototype</h4>
 <p>如果我们想让函数按照我们的意愿去构造一个我们想要的对象，那么我们就需要把<code>prototype</code>改造成一个那个我们想要的对象。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    x<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    y<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
@@ -223,7 +218,7 @@
 <p>一个对象的属性可以被解释成一个附加到对象上的变量。</p>
 <p>对象的属性和普通的 javascript 变量基本没什么区别，仅仅是属性属于某个对象。</p>
 <p>一个对象的属性名可以是任何有效的 JavaScript 字符串，或者可以被转换为字符串的任何类型，包括空字符串。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> myObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>(),
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> myObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>(),
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    str <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;myString&#34;</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    rand <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Math</span>.random(),
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    obj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Object</span>();
@@ -248,7 +243,7 @@
 <p>例如，在上面的代码中，当将键obj添加到myObj时，JavaScript将调用obj.toString()方法，并将此结果字符串用作新键。</p>
 <h4 id="3-创建对象">3. 创建对象</h4>
 <h5 id="1-对象初始化器">1. 对象初始化器</h5>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> { 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> { 
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    property_1<span style="color:#ff79c6">:</span>   value_1,     <span style="color:#6272a4">// property_# 可以是一个标识符...
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>    <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span>            value_2,     <span style="color:#6272a4">// 或一个数字...
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span>    [<span style="color:#f1fa8c">&#34;property&#34;</span> <span style="color:#ff79c6">+</span><span style="color:#bd93f9">3</span>]<span style="color:#ff79c6">:</span> value_3,  <span style="color:#6272a4">// 或一个可计算的key名...
@@ -263,17 +258,17 @@
 </ol>
 <p>所谓的构造函数，就是为了定义对象类型，为对象类型创建一个函数以声明类型的名称、属性和方法，这其实也属于<code>this</code>的一种应用。</p>
 <p>例如，你想为汽车创建一个类型，并且将这类对象称为 <code>car</code> ，并且拥有属性 make, model, 和 year，你可以创建如下的函数：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Car(make, model, year) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> Car(make, model, year) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>  <span style="color:#ff79c6">this</span>.make <span style="color:#ff79c6">=</span> make;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>  <span style="color:#ff79c6">this</span>.model <span style="color:#ff79c6">=</span> model;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>  <span style="color:#ff79c6">this</span>.year <span style="color:#ff79c6">=</span> year;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>}
 </code></pre></div><p>现在你可以像这样创建一个 <code>mycar</code> 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> mycar <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Car(<span style="color:#f1fa8c">&#34;Eagle&#34;</span>, <span style="color:#f1fa8c">&#34;Talon TSi&#34;</span>, <span style="color:#bd93f9">1993</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> mycar <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Car(<span style="color:#f1fa8c">&#34;Eagle&#34;</span>, <span style="color:#f1fa8c">&#34;Talon TSi&#34;</span>, <span style="color:#bd93f9">1993</span>);
 </code></pre></div><p>这里我们得到了函数与对象的第一个关系，对象可以通过构造函数来创建。</p>
 <h5 id="3-objectcreate">3. object.create</h5>
 <p>对象也可以用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/create"><code>Object.create()</code></a> 方法创建。该方法非常有用，因为它允许你为创建的对象选择一个原型对象，而不用定义构造函数。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// Animal properties and method encapsulation
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// Animal properties and method encapsulation
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> Animal <span style="color:#ff79c6">=</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  type<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;Invertebrates&#34;</span>, 
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  displayType <span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
@@ -290,7 +285,7 @@
 <p>每个原型都有一个 constructor 属性指向关联的构造函数，其含义可以这样理解，当我想构造一个和当前对象相似的对象时，我应该用什么构造函数来构造？</p>
 <h4 id="1-默认constructor">1. 默认constructor</h4>
 <p>对于一个普通的对象来说，存在<code>constructor</code>这一属性吗？</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    x<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    y<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
@@ -301,7 +296,7 @@
 </span></code></pre></div><p>也就是说对于一个普通的对象，本身并没有这一属性，这时候我们查找<code>a.consructor</code>，在本身找不到，就会顺着原型链，找到了<code>a.__proto__</code>的<code>Object.prototype</code>，<code>Object.prototype</code>的构造函数为<code>Object</code>:</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210831203151.jpg" alt=""></p>
 <h4 id="2-添加constructor">2. 添加constructor</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    x<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    y<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>}
@@ -331,7 +326,7 @@
 <p>一个函数作为一个特殊的对象，它具有<code>constructor</code>和<code>__proto__</code>，同时作为一个函数，它具有<code>prototype</code>。</p>
 <p>那么把函数当作是对象，所有的函数的<code>constructor</code>都是<code>Function</code>，所有函数的<code>__proto__</code>，都是<code>Function.prototype</code>，除了<code>Function.prototype</code>自身。</p>
 <p>可以看到，我们定义的函数<code>f1</code>、<code>f2</code>，甚至<code>Function</code>都遵循了这一法则：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>f1.__proto__ <span style="color:#ff79c6">==</span> f2.__proto__ <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>.__proto__ <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>.prototype
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>f1.__proto__ <span style="color:#ff79c6">==</span> f2.__proto__ <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>.__proto__ <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>.prototype
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>f1.constructor <span style="color:#ff79c6">==</span> f2.constructor <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>.constructor <span style="color:#ff79c6">==</span> <span style="color:#8be9fd;font-style:italic">Function</span>
 </code></pre></div><p>这里很合理，所有函数都由<code>Function</code>来构造，构造出来的函数都继承了<code>Function.prototype</code>的属性和方法。</p>
 <p>而<code>constructor</code>是确定，这个函数对象可以由什么函数来构造，但是实际开发中，我们并不会根据一个函数对象，去构造另一个函数对象，而是去定义一个新的函数，因此将<code>constructor</code>都指定为<code>Function</code>，某一个函数的<code>constructor</code>是基本不会被使用的。</p>
@@ -408,4 +403,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>

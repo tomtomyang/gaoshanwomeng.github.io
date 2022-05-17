@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js 闭包详解</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js 闭包详解" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -104,7 +99,7 @@
 <p>在 JavaScript 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来。</p>
 </blockquote>
 <h2 id="2-闭包解决的问题">2. 闭包解决的问题</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> init() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> init() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Mozilla&#34;</span>; 
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">function</span> displayName() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        alert(name); 
@@ -116,7 +111,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// Mozilla
 </span></code></pre></div><p>在上面的代码中，引擎执行<code>alert(name)</code>时，会进行RHS，在当前作用域中查找<code>name</code>，没有找到，则沿着作用域链，向上一层<code>init</code>的作用域查找，找到了<code>name</code>的值为<code>Mozilla</code>，则交给<code>alert</code>执行。</p>
 <p>这是我们已经知道的知识，是作用域和作用域链、LHS和RHS的工作方式。那么换一种情况：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Mozilla&#34;</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">function</span> displayName() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        alert(name);
@@ -138,7 +133,7 @@
 <p>在 JavaScript 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来。</p>
 </blockquote>
 <p>那么我们用闭包的理念来分析另一段代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeAdder(x) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeAdder(x) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span>(y) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">return</span> x <span style="color:#ff79c6">+</span> y;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  };
@@ -160,7 +155,7 @@
 <li><code>add10(2)</code>的入参为2，进入<code>function(y){ return x + y }</code>内部，执行return，查找<code>x</code>和<code>y</code>的值，<code>x</code>在当前作用域中没有找到，找上层作用域，在闭包中的上层作用域中<code>x = 10</code>，<code>y</code>在当前作用域中存在，<code>y = 2</code>，因此返回值为<code>10 + 2 = 12</code>；</li>
 </ol>
 <p>到这里我们已经可以体会到闭包的一些功能了，但是有一个问题，MDN定义描述的有些模糊，就是闭包里保存的作用域，是单层作用域还是一个作用域链，我们再通过一段代码来分析：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">function</span> f1() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#8be9fd;font-style:italic">function</span> f2(){
@@ -177,7 +172,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span style="color:#6272a4">// f2() 1
 </span></code></pre></div><p>通过这个结果，我们可以明确知道了，闭包中存在完整的作用域链。</p>
 <h2 id="3-看到闭包">3. 看到闭包</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> fn;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> fn;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> foo() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
@@ -206,7 +201,7 @@
 <h3 id="1-存储变量的临时值">1. 存储变量的临时值</h3>
 <p>在 Web 开发中，你想要这样做的情况特别常见。</p>
 <p>大部分我们所写的 JavaScript 代码都是基于事件的，我们会将这个事件绑定到dom元素上（比如click、change）。我们的代码通常作为回调，为响应事件而执行。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeSizer(size) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> makeSizer(size) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#8be9fd;font-style:italic">document</span>.body.style.fontSize <span style="color:#ff79c6">=</span> size <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;px&#39;</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  };
@@ -222,7 +217,7 @@
 <h3 id="2-立即执行函数表达式">2. 立即执行函数表达式</h3>
 <p>这一部分有专门的文章介绍《js IIFE简介》。</p>
 <h3 id="3-模拟类的私有变量">3. 模拟类的私有变量</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Person(){
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Person(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;default&#39;</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.getName<span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">function</span>(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        <span style="color:#ff79c6">return</span> name;
@@ -290,4 +285,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>

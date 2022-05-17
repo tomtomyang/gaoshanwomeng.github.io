@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js 作用域&amp;作用域链</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js 作用域&amp;作用域链" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -244,7 +239,7 @@
 <p>当 <em>引擎</em> 执行 <em>编译器</em> 在第二步为它产生的代码时，它必须查询变量 <code>a</code> 来看它是否已经被声明过了，而且这个查询是咨询 <em>作用域</em> 的。但是 <em>引擎</em> 所实施的查询的类型会影响查询的结果。</p>
 <p>为了更深入地理解这个查询过程，我们需要了解一点编译器术语。在上面的例子中，<em>引擎</em> 将会对变量 <code>a</code> 实施一个“LHS”查询。另一种类型的查询称为“RHS”。</p>
 <p>这两个术语表示“Left-hand Side（左手边）”和“Right-hand Side（右手边）”。即当一个变量出现在赋值操作的左手边时，会进行 LHS 查询，当一个变量出现在赋值操作的右手边时，会进行 RHS 查询。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> a;
 </code></pre></div><p><code>var a = 2</code>中，指向 <code>a</code> 的引用是一个 LHS 引用，因为我们实际上不关心当前的值是什么，我们只是想找到这个变量，将它作为 <code>= 2</code> 赋值操作的目标。</p>
 <p><code>var b = a</code>中，指向<code>a</code>的引用是一个RHS引用，因为这里没有东西被赋值给 <code>a</code>。而是我们在查询 <code>a</code> 并取得它的值。</p>
@@ -270,7 +265,7 @@
 </ul>
 </blockquote>
 <p>下面这段程序，它既有 LHS 引用又有 RHS 引用：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a ); <span style="color:#6272a4">// 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
@@ -302,7 +297,7 @@
 <p>let定义的变量，声明被提升了；</p>
 </blockquote>
 <h4 id="4-演员之间的对话">4. 演员之间的对话</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a ); <span style="color:#6272a4">// 2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
@@ -352,7 +347,7 @@
 <p><em>作用域</em> 是通过标识符名称查询变量的一组规则。一个作用域会维护一个变量列表，但是在实际的场景下，通常是多于一个的 <em>作用域</em> 嵌套。一个代码块或函数被嵌套在另一个代码块或函数中，作用域被嵌套在其他的作用域中。</p>
 <h3 id="2-遍历作用域链">2. 遍历作用域链</h3>
 <p>如果在当前作用域中找不到一个变量的话，<em>引擎</em> 就会咨询下一个外层作用域，如此继续直到找到这个变量或者到达最外层作用域（也就是全局作用域）。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	console.log( a <span style="color:#ff79c6">+</span> b );
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>}
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>
@@ -395,7 +390,7 @@
 <p>换句话说，词法作用域是你在写程序时，变量和作用域的块儿在何处被编写决定的，因此它在词法分析器处理你的代码时（基本上）是固定不变的。</p>
 <p>有一些方法可以骗过词法作用域，从而在词法分析器处理过后改变它。</p>
 <h3 id="2-生成词法作用域">2. 生成词法作用域</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#8be9fd;font-style:italic">function</span> bar(c) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		console.log( a, b, c );
@@ -437,7 +432,7 @@
 <h4 id="1-eval">1. eval</h4>
 <p>JavaScript 中的 <code>eval(..)</code> 函数接收一个字符串作为参数值，并把这个字符串作为一段<code>js</code>代码进行执行。</p>
 <p>换句话说，你可以用编程的方式在你编写好的代码内部生成代码，而且你可以运行这个生成的代码，就好像它在编写时就已经在那里了一样。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(str, a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(str, a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">eval</span>( str ); <span style="color:#6272a4">// 作弊！
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4"></span>	console.log( a, b );
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
@@ -449,7 +444,7 @@
 <p>在 <code>eval(..)</code> 调用的位置上，字符串 <code>&quot;var b = 3&quot;</code> 被看作是一直就存在在那里的代码。因为这个代码恰巧声明了一个新的变量 <code>b</code>，它就修改了现存的 <code>foo(..)</code> 的词法作用域。</p>
 <p><code>&quot;var b = 3&quot;</code>在 <code>foo(..)</code> 内部创建了变量 <code>b</code>，它遮蔽了声明在外部（全局）作用域中的 <code>b</code>。</p>
 <p>当 <code>console.log(..)</code> 调用发生时，它会在 <code>foo(..)</code> 的作用域中找到 <code>a</code> 和 <code>b</code>，而且绝不会找到外部的 <code>b</code>。这样，我们就打印出 &ldquo;1 3&rdquo; 而不是一般情况下的 &ldquo;1 2&rdquo;。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 使用严格模式，解除欺骗
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// 使用严格模式，解除欺骗
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> foo(str, a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#f1fa8c">&#34;use strict&#34;</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	<span style="color:#8be9fd;font-style:italic">eval</span>( str ); <span style="color:#6272a4">// 作弊！
@@ -467,7 +462,7 @@
 <h3 id="1-函数作用域">1. 函数作用域</h3>
 <h4 id="1-定义-2">1. 定义</h4>
 <p>JavaScript 拥有基于函数的作用域，也就是，你声明的每一个函数都为自己创建了一个气泡。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">function</span> foo(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>	<span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>	<span style="color:#8be9fd;font-style:italic">function</span> bar() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>		<span style="color:#8be9fd;font-style:italic">var</span> d <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">4</span>;
@@ -491,7 +486,7 @@
 <p>但是相反的想法也同样强大和有用：拿你所编写的代码的任意一部分，在它周围包装一个函数声明，这实质上“隐藏”了这段代码。实际结果是在这段代码周围创建了一个作用域气泡，这意味着现在在这段代码中的任何声明都将绑在这个新的包装函数的作用域上，而不是前一个包含它们的作用域。</p>
 <p>也就是，你可以通过将变量和函数围在一个函数的作用域中来“隐藏”它们。</p>
 <p>通过这种包装和隐藏，可以解决很多问题，比如命名冲突，模块管理等。这一部分的内容在IIFE里面可以学到。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> doSomething(a) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> doSomething(a) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>	b <span style="color:#ff79c6">=</span> a <span style="color:#ff79c6">+</span> doSomethingElse( a <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">2</span> );
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	console.log( b <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">3</span> );
@@ -569,4 +564,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>

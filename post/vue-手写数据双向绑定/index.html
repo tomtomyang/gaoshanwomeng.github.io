@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>vue 手写数据双向绑定</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="vue 手写数据双向绑定" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -105,7 +100,7 @@
 </ol>
 <h2 id="2-mvvm">2. MVVM</h2>
 <p>MVVM构造函数作为入口，我们应该先来实现它。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> MVVM(options) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> MVVM(options) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#6272a4">// 在实例对象上保存option
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.$options <span style="color:#ff79c6">=</span> options <span style="color:#ff79c6">||</span> {};
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    
@@ -156,7 +151,7 @@
 <li>
 <p>在实例上挂载data，这里进行了判断<code>typeof this.$options.data == 'function'</code>，是因为我们在定义data时，会有两种方式：</p>
 <p>一种是函数返回的方式：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>data<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>data<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">return</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        someStr<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;hello MVVM&#39;</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        strArr<span style="color:#ff79c6">:</span> [
@@ -167,7 +162,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>},
 </code></pre></div><p>一种是对象方式：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>data<span style="color:#ff79c6">:</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>data<span style="color:#ff79c6">:</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    someStr<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;hello MVVM&#39;</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>},
 </code></pre></div></li>
@@ -183,7 +178,7 @@
 </ol>
 <h2 id="3-observer">3. Observer</h2>
 <p>在给对象绑定观察类之前，我们需要先对数据进行判断，如果这个数据不是对象，那么我们肯定不需要进行<code>new Observer</code>的操作，因此要定义一个<code>observe</code>函数进行数据的判断，单独封装一个函数，也方便了逻辑复用，因为有递归的操作，这段判断在很多地方都用到了。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> observe(data, vm) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> observe(data, vm) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#6272a4">// 如果是是数组的话，监听里面的每个元素
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> (data <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Array</span>) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        data.forEach(item =&gt; {
@@ -200,7 +195,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>    }
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>};
 </code></pre></div><p>Observer类作为数据劫持的实现，是Vue核心思想的体现，也是各个手写Vue教程最多提及的，这一部分虽然关键，其实并不难理解。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// Observer只负责对对现象的监听，有一个对象就会有一个Observer
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#6272a4">// Observer只负责对对现象的监听，有一个对象就会有一个Observer
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> Observer(data, vm) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    vm._dep <span style="color:#ff79c6">=</span> [];
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.data <span style="color:#ff79c6">=</span> data;
@@ -251,7 +246,7 @@
 <h2 id="4-dep">4. Dep</h2>
 <p>相比于Observer，我个人认为Dep才是实现数据双向绑定的核心，只有搞清楚Dep的工作方式，才能真正理解整个流程。</p>
 <p>需要再次明确的是，每一个属性，都对应一个Dep实例，实例中subs数组中存放这个属性在页面中的引用。要仔细地体会依赖收集的含义。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> uid <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">var</span> uid <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">function</span> Dep() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.id <span style="color:#ff79c6">=</span> uid<span style="color:#ff79c6">++</span>;
@@ -287,10 +282,10 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span style="color:#6272a4"></span>Dep.target <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
 </code></pre></div><p>用一个实际情况来说明Dep的形成：</p>
 <p>页面：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text&#34;</span> <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;someStr&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">input</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text&#34;</span> <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;someStr&#34;</span>&gt;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>&lt;<span style="color:#ff79c6">p</span>&gt;{{someStr}}&lt;/<span style="color:#ff79c6">p</span>&gt;
 </code></pre></div><p>数据：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>data<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>data<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">return</span> {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>        someStr<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#39;hello MVVM&#39;</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>        strArr<span style="color:#ff79c6">:</span> [
@@ -307,7 +302,7 @@
 <p>第二个Dep实例，对应着<code>strArr</code>，subs是空数组，因为我们没有在页面中使用这个数据。</p>
 <h2 id="5-compile">5. Compile</h2>
 <p>通过上面的图，我们可以看到subs里面放的是Watcher实例，但是这里我们先不去研究Watcher的实例是什么样子，包含什么，我们先去研究，页面中的数据是怎么被转换为Watcher对象的，这一部分就是Compile的主要工作。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span><span style="color:#8be9fd;font-style:italic">function</span> Compile(el, vm) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span><span style="color:#8be9fd;font-style:italic">function</span> Compile(el, vm) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2</span>    <span style="color:#ff79c6">this</span>.$vm <span style="color:#ff79c6">=</span> vm;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3</span>    <span style="color:#6272a4">// 传进来的el, 是一个字符串，需要拿到真实DOM节点
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">this</span>.$el <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.querySelector(el);
@@ -505,7 +500,7 @@
 <li>对发现的<code>v-</code>指令和<code>{{}}</code>进行处理，分别创建<code>Watcher</code>，保存对应变量，以及更新函数；</li>
 </ol>
 <p>这里还要注意的是，在<code>v-model</code>的处理中，使用了<code>addEventListener('input' function(){})</code>，正是这一步，实现了view -&gt; model的数据流：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span> model<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(node, vm, exp) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span> model<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(node, vm, exp) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">this</span>.bind(node, vm, exp, <span style="color:#f1fa8c">&#39;model&#39;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#8be9fd;font-style:italic">var</span> me <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>,
@@ -520,7 +515,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span>        val <span style="color:#ff79c6">=</span> newValue;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span>    });
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>},
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>_setVMVal<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(vm, exp, value) {
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>_setVMVal<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(vm, exp, value) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#8be9fd;font-style:italic">var</span> val <span style="color:#ff79c6">=</span> vm;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    exp <span style="color:#ff79c6">=</span> exp.split(<span style="color:#f1fa8c">&#39;.&#39;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    exp.forEach(<span style="color:#8be9fd;font-style:italic">function</span>(k, i) {
@@ -534,7 +529,7 @@
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
 </code></pre></div><h2 id="6-watcher">6. Watcher</h2>
 <p>下面再来看Watcher，正是Watcher把Compile和Dep连接起来，实现了model-&gt;view的数据流。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Watcher(vm, exp, updateFunc) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">function</span> Watcher(vm, exp, updateFunc) {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">this</span>.updateFunc <span style="color:#ff79c6">=</span> updateFunc;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">this</span>.vm <span style="color:#ff79c6">=</span> vm;
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">this</span>.exp <span style="color:#ff79c6">=</span> exp;
@@ -667,4 +662,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>

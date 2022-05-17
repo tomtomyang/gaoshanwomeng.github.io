@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js 事件循环与异步并发</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js 事件循环与异步并发" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -124,7 +119,7 @@
 <h3 id="2-js事件的组织形式">2. JS事件的组织形式</h3>
 <p>按照上面的说法，任务的来源多种多样，而且，同时可能会有好几个任务需要被执行，但是JS是单线程的，同一时间只能执行一个任务，那么就需要一个特定的机制和一块特定的空间来记录这些需要被执行的任务，同时，给这些任务排队，这就是JS的并发模型（浏览器引擎的实现和Node.js并不相同，这里介绍浏览器引擎的实现方式）。</p>
 <p>关于并发模型，有两种图示结构，两种结构都包含了：堆、栈、队列：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*MnRk2ZVl5acI5BFmmw7IRg.png" alt="img" style="zoom:50%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*MnRk2ZVl5acI5BFmmw7IRg.png" alt="img" style="zoom:50%;" />
 <blockquote>
 <ul>
 <li><strong>Memory Heap</strong> : Objects are allocated in a heap which is just a name to denote a large mostly unstructured region of memory.</li>
@@ -143,7 +138,7 @@
 </ul>
 <p>事件队列：负责将新任务发送到执行栈进行处理。 这是一个先进先出的队列结构，用来维护所有应该被执行的的任务的执行顺序。</p>
 </blockquote>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/The_Javascript_Runtime_Environment_Example.svg" alt="Stack, heap, queue" style="zoom:150%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/The_Javascript_Runtime_Environment_Example.svg" alt="Stack, heap, queue" style="zoom:150%;" />
 <blockquote>
 <ul>
 <li><strong>栈（调用栈、执行栈）</strong>
@@ -173,13 +168,13 @@
 <h3 id="3-js事件循环">3. JS事件循环</h3>
 <p>了解了JS的并发模型，那么这个模型是如何工作的？根据所查资料，当并发模型按照既定工作方式进行运作时，就形成了JS的事件循环机制，或者说并发模型就是按照事件循环机制进行工作的。</p>
 <p>执行栈的工作模式：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*yE9mbYWzwZGpc1jUcUw69Q.png" alt="img" style="zoom:50%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*yE9mbYWzwZGpc1jUcUw69Q.png" alt="img" style="zoom:50%;" />
 <p>任务队列的工作模式：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*KRkTIajDBcG2wf21-RdR5Q.png" alt="img" style="zoom:50%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*KRkTIajDBcG2wf21-RdR5Q.png" alt="img" style="zoom:50%;" />
 <p>事件循环机制：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*WGEUuqPJu4ti7kBfufwdXw.png" alt="img" style="zoom:50%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*WGEUuqPJu4ti7kBfufwdXw.png" alt="img" style="zoom:50%;" />
 <p>用一段代码来看一下具体的过程：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;First&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#ff79c6">const</span> foo <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;First&#34;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#ff79c6">const</span> bar <span style="color:#ff79c6">=</span> () =&gt; setTimeout(() =&gt; console.log(<span style="color:#f1fa8c">&#34;Second&#34;</span>), <span style="color:#bd93f9">500</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#ff79c6">const</span> baz <span style="color:#ff79c6">=</span> () =&gt; console.log(<span style="color:#f1fa8c">&#34;Third&#34;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
@@ -191,7 +186,7 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4">// First
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// Third 
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// Second
-</span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  /></p>
+</span></code></pre></div><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  />
 <ol>
 <li>当开始执行 JS 代码时，首先会执行一个 <code>main</code> 函数，然后执行我们的代码；</li>
 <li>bar函数被调用，形成函数调用帧，压入执行栈；</li>
@@ -207,7 +202,7 @@
 <li>但是，如果前面有其它任务或者执行栈还不为空，<code>setTimeout</code> 消息必须等待。</li>
 <li>因此第二个参数仅仅表示最少延迟时间，而非确切的等待时间。</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>(<span style="color:#8be9fd;font-style:italic">function</span>() {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>(<span style="color:#8be9fd;font-style:italic">function</span>() {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  console.log(<span style="color:#f1fa8c">&#39;这是开始&#39;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
@@ -290,36 +285,36 @@
 <table>
 <thead>
 <tr>
-<th align="left"></th>
-<th align="left">宏任务（macrotask）</th>
-<th align="left">微任务（microtask）</th>
+<th style="text-align:left"></th>
+<th style="text-align:left">宏任务（macrotask）</th>
+<th style="text-align:left">微任务（microtask）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">谁发起的</td>
-<td align="left">宿主（Node.js、浏览器）</td>
-<td align="left">JS引擎（JS自身）</td>
+<td style="text-align:left">谁发起的</td>
+<td style="text-align:left">宿主（Node.js、浏览器）</td>
+<td style="text-align:left">JS引擎（JS自身）</td>
 </tr>
 <tr>
-<td align="left">具体事件</td>
-<td align="left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
-<td align="left">1. Promise<br/>2. MutaionObserver（监听DOM树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
+<td style="text-align:left">具体事件</td>
+<td style="text-align:left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
+<td style="text-align:left">1. Promise<br/>2. MutaionObserver（监听DOM树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
 </tr>
 <tr>
-<td align="left">谁先运行</td>
-<td align="left">后运行</td>
-<td align="left">先运行</td>
+<td style="text-align:left">谁先运行</td>
+<td style="text-align:left">后运行</td>
+<td style="text-align:left">先运行</td>
 </tr>
 <tr>
-<td align="left">会触发新一轮Tick吗</td>
-<td align="left">会</td>
-<td align="left">不会</td>
+<td style="text-align:left">会触发新一轮Tick吗</td>
+<td style="text-align:left">会</td>
+<td style="text-align:left">不会</td>
 </tr>
 </tbody>
 </table>
 <p>既然宏任务和微任务需要区别对待，那么就有必要对微任务进行单独的管理，那就产生了微任务队列，添加了微任务队列之后，事件循环的并发模型就变成了如下所示：</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/dpjs7sc1yk.png" style="zoom: 50%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/dpjs7sc1yk.png" style="zoom: 50%;" />
 <p>而整个事件循环就变成了：</p>
 <blockquote>
 <ul>
@@ -327,10 +322,10 @@
 <li><code>Task2</code>, <code>Task3</code>, <code>Task4</code>: microtasks, for example, a promise <code>then</code> callback, or a task added with <code>queueMicrotask</code>.</li>
 <li><code>Task5</code>, <code>Task6</code>: a (macro)task, for example, a <code>setTimeout</code> or <code>setImmediate</code> callback.</li>
 </ul>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*0xDGBNrA1WtfSfYY3FJOdw.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*0xDGBNrA1WtfSfYY3FJOdw.gif" alt="img" style="zoom:80%;" />
 </blockquote>
 <p>再用一个实际的例子来看一下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>setTimeout(() =&gt; {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>	console.log(<span style="color:#f1fa8c">&#39;Timeout!&#39;</span>);
@@ -343,30 +338,30 @@
 </code></pre></div><ol>
 <li>在第一行，JS引擎遇到<code>console.log()</code>方法。 它被添加到执行栈，之后会将指定内容输出到控制台。 该方法弹出执行栈，JS引擎继续；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" />
 <ol start="2">
 <li>该发动机遇到了<code>setTimeout</code>方法，该方法添加到执行栈中。 <code>setTimeout</code>方法浏览器提供的API，所以将在JS外部进行执行，其回调函数<code>() =&gt; { console.log('Timeout!'); }</code>将被添加到Web API，直到定时器完成，之后回调函数被添加到宏任务队列；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*a_X8_BfQGJ6oHR-XmuPGRQ.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*a_X8_BfQGJ6oHR-XmuPGRQ.gif" alt="img" style="zoom:80%;" />
 <ol start="3">
 <li>JS引擎继续向下执行，遇到<code>Promise.resolve()</code>方法， 这个方法将添加到执行栈中，当完成<code>resolve</code>之后，<code>.then</code>中指定的回调函数被添加到微任务队列中；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Q5xtSx914wUAo_msjNk8qQ.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Q5xtSx914wUAo_msjNk8qQ.gif" alt="img" style="zoom:80%;" />
 <ol start="4">
 <li>JS引擎继续执行，遇到<code>console.log()</code>方法。 添加到执行栈中，之后会将指定内容输出到控制台，执行完成弹出执行栈，JS引擎继续向下执行；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*H2QP7Ry7XCXDaD2dHkQYMw.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*H2QP7Ry7XCXDaD2dHkQYMw.gif" alt="img" style="zoom:80%;" />
 <ol start="5">
 <li>第一轮宏任务至此完成，JS引擎发现执行栈是空的，它将检查微任务队列中是否存在排队任务，<code>Promise.then</code>的回调函数正在等待，它会压入执行栈，之后会打印输出<code>Promise!</code>；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*PfxpUO9FJYm05lzA792CrQ.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*PfxpUO9FJYm05lzA792CrQ.gif" alt="img" style="zoom:80%;" />
 <ol start="6">
 <li>JS引擎检查执行栈为空，再次检查微任务队列，微任务队列也为空。 现在应该检查宏任务队列，发现<code>setTimeout</code>的回调函数正在等待，回调函数将压入调用栈， 打印输出<code>Timeout!</code>，执行完成后出栈；</li>
 </ol>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" />
 <h3 id="5-async和await">5. async和await</h3>
 <p>首先我们要知道，<code>async</code>和<code>await</code>是异步微任务的另一种实现方式，解决了在<code>Promise</code>中不能进行异常捕获的问题，关于<code>async</code>和<code>await</code>的详细讲解，在另一篇文章《js async与await详解》。</p>
-<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" /></p>
+<img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" />
 <blockquote>
 <ol>
 <li>
@@ -454,4 +449,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>

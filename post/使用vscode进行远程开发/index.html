@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>使用vscode进行远程开发</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="使用vscode进行远程开发" />
   <meta name="keywords" itemprop="keywords"
@@ -39,12 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.5fce09292cce55036a608998e0ab26100142e522e5de0bafb8f43176c3d8e8423072b3a0a23829b3cbe1ebb4981c6c5bcc6f65c4fa2ecbcd8abe2d9de3f25899.css" integrity="sha512-X84JKSzOVQNqYImY4KsmEAFC5SLl3guvuPQxdsPY6EIwcrOgojgps8vh67SYHGxbzG9lxPouy82Kvi2d4/JYmQ==" type="text/css" />
-
-  
-  
-  
-  <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.3eaff11ffee382400d80e4e6620aa193adda2673a6876ef960d827fa13dfbc4a3062454b0160132534083812e6993efc35ae28271f66ee7d352840bc564971d5.js" integrity="sha512-Pq/xH/7jgkANgOTmYgqhk63aJnOmh275YNgn&#43;hPfvEowYkVLAWATJTQIOBLmmT78Na4oJx9m7n01KEC8Vklx1Q=="></script>
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -213,14 +208,14 @@
 </ol>
 <h3 id="2-免密登录">2. 免密登录</h3>
 <p>打开<code>C:\Users\你的用户名</code>文件夹，如<code>C:\Users\xiaoming</code>，在上述目录找到<code>.ssh</code>文件夹，若不存在，新建一个。在<code>.ssh</code>目录启动命令行，有两种方式，输入：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>ssh-keygen -t rsa -b <span style="color:#bd93f9">4096</span> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>ssh-keygen -t rsa -b <span style="color:#bd93f9">4096</span> 
 </code></pre></div><p>一直回车，如下图：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210425093831903.png" alt="在这里插入图片描述"></p>
 <p>这时你会看到文件夹下生成了两个文件，id_rsa和id_rsa.pub，id_rsa.pub就是公钥。</p>
 <p>在<code>/root</code>文件夹下找到<code>.ssh</code>文件，查看其中是否包含名为<code>authorized_keys</code>的文件。打开<code>authorized_keys</code>文件，将创建的<code>id_rsa.pub</code>里面的内容拷贝到<code>authorized_keys</code>中保存即可。</p>
 <p>在 Remote SSH 的 SSH Config 文件中加入<code>IdentityFile C:/Users/xiaoming/.ssh/id_rsa</code>，即可</p>
 <p>上述工作建立在：/etc/ssh/sshd_config中有下面两项的情况下，如果没有，请使用root账户添加或修改。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>RSAAuthentication yes
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>RSAAuthentication yes
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>PubkeyAuthentication yes
 </code></pre></div><h3 id="3-安装插件">3. 安装插件</h3>
 <p>VS Code 在以下两个位置之一运行扩展：本地在 UI / 客户端，或远程在 SSH 主机上。影响 VS Code UI 的扩展（如主题和代码片段）安装在本地，大多数扩展将驻留在 SSH 主机上。这可确保您获得流畅的体验，并允许您从本地计算机上为 SSH 主机上的给定工作区安装任何需要的扩展。</p>
@@ -231,13 +226,13 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/ssh-disabled-extensions.png" alt="带有安装按钮的禁用扩展"></p>
 <p>您还可以在 SSH 主机上安装所有本地安装的扩展，方法是转到扩展视图并选择<strong>在 SSH 中安装本地扩展：[主机名]使用****本地 - 已安装</strong>标题栏右侧的云按钮。这将显示一个下拉列表，您可以在其中选择要在 SSH 主机上安装哪些本地安装的扩展。</p>
 <p>如果您希望在任何 SSH 主机上始终安装一些扩展，您可以使用<code>remote.SSH.defaultExtensions</code>. <code>settings.json</code>例如，如果您想安装<a href="https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens">GitLens</a>和<a href="https://marketplace.visualstudio.com/items?itemName=mutantdino.resourcemonitor">资源监视器</a>扩展，请指定它们的扩展 ID，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;remote.SSH.defaultExtensions&#34;</span>: [
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;remote.SSH.defaultExtensions&#34;</span>: [
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#f1fa8c">&#34;eamodio.gitlens&#34;</span>,
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#f1fa8c">&#34;mutantdino.resourcemonitor&#34;</span>
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>]
 </code></pre></div><p>扩展通常被设计和测试为在本地或远程运行，而不是同时运行。但是，如果扩展支持它，您可以强制它在<code>settings.json</code>文件中的特定位置运行。</p>
 <p>例如，下面的设置将强制 Docker 扩展在本地运行，并强制 Debugger for Chrome 扩展远程运行，而不是它们的默认值：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;remote.extensionKind&#34;</span>: {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;remote.extensionKind&#34;</span>: {
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>    <span style="color:#ff79c6">&#34;ms-azuretools.vscode-docker&#34;</span>: [ <span style="color:#f1fa8c">&#34;ui&#34;</span> ],
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>    <span style="color:#ff79c6">&#34;msjsdiag.debugger-for-chrome&#34;</span>: [ <span style="color:#f1fa8c">&#34;workspace&#34;</span> ]
 <span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>}
@@ -246,7 +241,7 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210507083756971.png" alt="port forward"></p>
 <h2 id="4-多用户远程开发git设置">4. 多用户远程开发Git设置</h2>
 <p>远程开发时可能会出现vscode找不到服务器上git的问题，此时需要在设置里指定git的路径，同时还需要注意，git版本应该大于2，否则很多功能不能使用。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;git.path&#34;</span>: <span style="color:#f1fa8c">&#34;/usr/local/git/bin/git&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#f1fa8c">&#34;git.path&#34;</span>: <span style="color:#f1fa8c">&#34;/usr/local/git/bin/git&#34;</span>
 </code></pre></div><p>同时，如果多个用户用同一个账号使用服务器进行开发，可以对git进行局部配置，这样可以相互独立，互不影响。</p>
 
       </div>
@@ -303,4 +298,6 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.8483d4e1b00197ebc20601b525f9d22bb40550930eb6ef7fb773541c70a77b51f0b21163ca335742194ef7cc8f685560ee81a49dcd0b8b477857bdb56c916e54.js" integrity="sha512-hIPU4bABl&#43;vCBgG1JfnSK7QFUJMOtu9/t3NUHHCne1HwshFjyjNXQhlO98yPaFVg7oGknc0Li0d4V721bJFuVA=="></script></html>
+
+
+<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>
