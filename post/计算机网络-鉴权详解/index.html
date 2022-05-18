@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+  <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+  <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+  <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+  <title>计算机网络 鉴权详解</title>
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.99.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta name="description" itemprop="description"
+    content="计算机网络 鉴权详解" />
+  <meta name="keywords" itemprop="keywords"
+    content="[HTTP cookie]" />
+  <base href="https://tomtomyoung.top/" />
+  <link rel="canonical" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E9%89%B4%E6%9D%83%E8%AF%A6%E8%A7%A3/" />
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload prefetch" as="style" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print"
+    onload="this.media='all'">
+
+  
+  <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png" />
+  <link rel="mask-icon" href="https://tomtomyoung.top/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tomtomyoung.top/favicons/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <meta name="msapplication-TileImage" content="https://tomtomyoung.top/favicons/mstile-144x144.png">
+  <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+
+  
+  <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_5vzvggza71i.css" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.237f48f1ad467a34432f017d0d520acd9ff9a85f8654f0fb9e3e2ae4fe54ab7959272945b11c0af4995c60fa199f7f7b1c39e943ecc9fb7062c315e869b676ed.css" integrity="sha512-I39I8a1GejRDLwF9DVIKzZ/5qF&#43;GVPD7nj4q5P5Uq3lZJylFsRwK9JlcYPoZn397HDnpQ&#43;zJ&#43;3BiwxXoabZ27Q==" type="text/css" />
+</head><body>
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header animated fadeInDown">
+        <span>目录</span>
+    </div><ul class="toc-h2 animated fadeInDown"><li>
+                <span class="toc-link">1. cookie</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post animated fadeInDown">
+      <div class="header">
+        <span class="title">计算机网络 鉴权详解</span>
+        
+          <div class="info">
+            <span>发布于2021-09-23</span>
+            <span>更新于2022-05-17</span>
+            <span>共46字</span>
+            <span>阅读1分钟</span>
+
+          </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/395273289">鉴权必须了解的5个兄弟：cookie、session、token、jwt、单点登录</a></p>
+</blockquote>
+<h2 id="1-cookie">1. cookie</h2>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/http/">HTTP</a><a class="tag" href="https://tomtomyoung.top/tags/cookie/">cookie</a></span>
+      </div>
+
+      
+    </div><ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-uriurlurn/" data-tooltip="计算机网络 URI&amp;URL&amp;URN">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/js-generator%E8%AF%A6%E8%A7%A3/" data-tooltip="js Generator详解">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul></div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>

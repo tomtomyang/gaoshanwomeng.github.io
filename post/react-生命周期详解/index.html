@@ -1,62 +1,178 @@
 <!DOCTYPE html>
 <html lang="zh-cn" data-theme="light"><head>
-    <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
-    <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
-    <meta name="baidu-site-verification" content="iPC3wUcQLL" />
-    <title>  react 生命周期详解 </title>
-    <meta charset="utf-8" /><meta name="generator" content="Hugo 0.74.3" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
-    <meta name="description" itemprop="description"
-        content=" react 生命周期详解 " />
-    <meta name="keywords" itemprop="keywords"
-        content=" [react 生命周期] " />
-    <base href="https://tomtomyoung.top/">
-    <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png">
-    <link rel="canonical" href="https://tomtomyoung.top/post/react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%A6%E8%A7%A3/">
-    <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_iypnqhtzjei.css">
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.d3105484ab1af6af37b65225e214199cc648cfba5e7e2808585a08a35f422e28.css" integrity="" type="text/css">
-    
-    
-    <script type="text/javascript" src="https://tomtomyoung.top/js/docsearch.min.69f8ad33daa0ba1950834aaf16111d935f6a7e2b03db2cc2ae537724142b2719782bcea9aba5996af27f6f94a8365b6575ce2eff90506c2bba9aa0411587116c.js" integrity=""></script>
-</head><body class="animated fadeInDown">
+  <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+  <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+  <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+  <title>react 生命周期详解</title>
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.99.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta name="description" itemprop="description"
+    content="react 生命周期详解" />
+  <meta name="keywords" itemprop="keywords"
+    content="[react]" />
+  <base href="https://tomtomyoung.top/" />
+  <link rel="canonical" href="https://tomtomyoung.top/post/react-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E8%AF%A6%E8%A7%A3/" />
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload prefetch" as="style" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print"
+    onload="this.media='all'">
+
+  
+  <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png" />
+  <link rel="mask-icon" href="https://tomtomyoung.top/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tomtomyoung.top/favicons/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <meta name="msapplication-TileImage" content="https://tomtomyoung.top/favicons/mstile-144x144.png">
+  <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+
+  
+  <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_5vzvggza71i.css" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.237f48f1ad467a34432f017d0d520acd9ff9a85f8654f0fb9e3e2ae4fe54ab7959272945b11c0af4995c60fa199f7f7b1c39e943ecc9fb7062c315e869b676ed.css" integrity="sha512-I39I8a1GejRDLwF9DVIKzZ/5qF&#43;GVPD7nj4q5P5Uq3lZJylFsRwK9JlcYPoZn397HDnpQ&#43;zJ&#43;3BiwxXoabZ27Q==" type="text/css" />
+</head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
-</div><div class="single-post container">
-    <div class="post">
+</div><div class="toc sub-container">
+    <div class="toc-header animated fadeInDown">
+        <span>目录</span>
+    </div><ul class="toc-h2 animated fadeInDown"><li>
+                <span class="toc-link">1. 挂载时</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. getDerivedStateFromProps</span>
+            </li>
+            <li>
+                <span class="toc-link">2. shouldComponentUpdate</span>
+            </li>
+            <li>
+                <span class="toc-link">3. componentDidMount</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">2. 更新时</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. getDerivedStateFromProps</span>
+            </li>
+            <li>
+                <span class="toc-link">2. shouldComponentUpdate</span>
+            </li>
+            <li>
+                <span class="toc-link">3. getsnapshotbeforeupdate</span>
+            </li>
+            <li>
+                <span class="toc-link">4. componentDidUpdate</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">3. 卸载时</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">1. componentwillunmount</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post animated fadeInDown">
       <div class="header">
         <span class="title">react 生命周期详解</span>
         
-        <div class="info">
-          <span>📅 2021-09-02</span>
-          <span>👦 Tomtom Young</span>
-          <span>📖 3字</span>
-          <span>⏱ 1分钟</span>
-        </div>
+          <div class="info">
+            <span>发布于2021-09-02</span>
+            <span>更新于2022-05-17</span>
+            <span>共1029字</span>
+            <span>阅读3分钟</span>
+
+          </div>
         
       </div>
       <div class="content markdown-body">
         <blockquote>
 <p>参考：</p>
+<p><a href="https://zh-hans.reactjs.org/docs/react-component.html#render">React.Component</a></p>
+<p><a href="https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/">react-lifecycle-methods-diagram</a></p>
 </blockquote>
+<p>所谓的生命周期，就是在组件渲染或更新的不同时期会触发的一些回调函数，把这些函数暴露给开发者，方便开发者实现预期的效果。</p>
+<p>所有的生命周期都定义在<code>React Component</code>类中，因此，只有类组件有生命周期，函数组件是没有生命周期这一概念的。</p>
+<p>React的生命周期分为三大块，分别是：</p>
+<ol>
+<li>挂载时；</li>
+<li>更新时；</li>
+<li>卸载时；</li>
+</ol>
+<p>同时，16.4版本的React对生命周期进行了调整，整体的流程图如下所示：</p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210908002640507.png" alt="image-20210908002640507"></p>
+<p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210908002715727.png" alt="image-20210908002715727"></p>
+<h2 id="1-挂载时">1. 挂载时</h2>
+<p>在组件挂载时，会按如下顺序进行组件的初始化和渲染：</p>
+<ol>
+<li><code>constructor</code></li>
+<li><code>getDerivedStateFromProps</code></li>
+<li><code>shouldComponentUpdate</code></li>
+<li><code>render</code></li>
+<li><code>componentDidMount</code></li>
+</ol>
+<h3 id="1-getderivedstatefromprops">1. getDerivedStateFromProps</h3>
+<h3 id="2-shouldcomponentupdate">2. shouldComponentUpdate</h3>
+<h3 id="3-componentdidmount">3. componentDidMount</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>componentDidMount()
+</span></span></code></pre></div><p><code>componentDidMount()</code> 会在组件挂载后（插入 DOM 树中）立即调用。依赖于 DOM 节点的初始化应该放在这里。如需通过网络请求获取数据，此处是实例化请求的好地方。</p>
+<p>你可以在 <code>componentDidMount()</code> 里直接调用 <code>setState()</code>。它将触发额外渲染，但此渲染会发生在浏览器更新屏幕之前。如此保证了即使在 <code>render()</code> 两次调用的情况下，用户也不会看到中间状态。请谨慎使用该模式，因为它会导致性能问题。通常，你应该在 <code>constructor()</code> 中初始化 state。如果你的渲染依赖于 DOM 节点的大小或位置，比如实现 modals 和 tooltips 等情况下，你可以使用此方式处理</p>
+<h2 id="2-更新时">2. 更新时</h2>
+<p>在组件更新时，会按如下顺序进行组件的重新渲染：</p>
+<ol>
+<li><code>getDerivedStateFromProps</code></li>
+<li><code>shouldComponentUpdate</code></li>
+<li><code>render</code></li>
+<li><code>getsnapshotbeforeupdate</code></li>
+<li><code>componentDidUpdate</code></li>
+</ol>
+<h3 id="1-getderivedstatefromprops-1">1. getDerivedStateFromProps</h3>
+<h3 id="2-shouldcomponentupdate-1">2. shouldComponentUpdate</h3>
+<h3 id="3-getsnapshotbeforeupdate">3. getsnapshotbeforeupdate</h3>
+<h3 id="4-componentdidupdate">4. componentDidUpdate</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>componentDidUpdate(prevProps, prevState, snapshot)
+</span></span></code></pre></div><p><code>componentDidUpdate()</code> 会在更新后会被立即调用。首次渲染不会执行此方法。</p>
+<p>当组件更新后，可以在此处对 DOM 进行操作。如果你对更新前后的 props 进行了比较，也可以选择在此处进行网络请求。（例如，当 props 未发生变化时，则不会执行网络请求）。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>componentDidUpdate(prevProps) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#6272a4">// 典型用法（不要忘记比较 props）：
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">this</span>.props.userID <span style="color:#ff79c6">!==</span> prevProps.userID) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>    <span style="color:#ff79c6">this</span>.fetchData(<span style="color:#ff79c6">this</span>.props.userID);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
+</span></span></code></pre></div><p>你也可以在 <code>componentDidUpdate()</code> 中直接调用 <code>setState()</code>，但请注意它必须被包裹在一个条件语句里，正如上述的例子那样进行处理，否则会导致死循环。它还会导致额外的重新渲染，虽然用户不可见，但会影响组件性能。</p>
+<p>不要将 props “镜像”给 state，请考虑直接使用 props。</p>
+<p>如果组件实现了 <code>getSnapshotBeforeUpdate()</code> 生命周期，则它的返回值将作为 <code>componentDidUpdate()</code> 的第三个参数 “snapshot” 参数传递。否则此参数将为 undefined。</p>
+<blockquote>
+<p>注意：</p>
+<p>如果 <code>shouldComponentUpdate()</code>返回值为 false，则不会调用 <code>componentDidUpdate()</code>。</p>
+</blockquote>
+<h2 id="3-卸载时">3. 卸载时</h2>
+<h3 id="1-componentwillunmount">1. componentwillunmount</h3>
+<p><code>componentWillUnmount()</code> 会在组件卸载及销毁之前直接调用。在此方法中执行必要的清理操作，例如，清除 timer，取消网络请求或清除在 <code>componentDidMount()</code> 中创建的订阅等。</p>
+<p><code>componentWillUnmount()</code> 中<strong>不应调用 <code>setState()</code></strong>，因为该组件将永远不会重新渲染。组件实例卸载后，将永远不会再挂载它。</p>
+<p>本文是 深入react 的第2篇文章，下一篇是《react 函数式组件详解》。</p>
 
       </div>
       <div class="footer">
-        <span><a class="category" href="https://tomtomyoung.top/%20categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
-        <span><a class="tag" href="https://tomtomyoung.top/%20tags/react/">react</a></span>
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/react/">react</a></span>
       </div>
-    </div>
 
-    <ul class="menu">
+      
+    </div><ul class="menu">
     <li class="menu-item">
         <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
     </li>
@@ -80,20 +196,18 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/react-hooks%E8%AF%A6%E8%A7%A3/" data-tooltip="react Hooks详解">
+        <a class="" href="https://tomtomyoung.top/post/mvc%E4%B8%8Emvvm%E8%AF%A6%E8%A7%A3/" data-tooltip="MVC与MVVM详解">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
     </li>
-</ul>
-
-  </div>
+</ul></div>
 </div>
 
 <div class="cover" id="cover">
         <div class="search-container">
     <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
-    <div id="loading" class="loading-container"></div>
+    
 </div>
     </div>
 </body>
@@ -103,4 +217,7 @@
 
 
 
-<script type="text/javascript" src="https://tomtomyoung.top/js/util.min.23fcb467e1267d2c197d5b376a19d64754a5273c549b0ff6810b60cca2dd4afda8c7d8c36cf8c7d9f60a285a94e8495929e857e4f239c4e1839649cf861c27d4.js" integrity=""></script></html>
+
+
+
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>

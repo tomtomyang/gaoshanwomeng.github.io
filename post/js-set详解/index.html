@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js Set详解</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.99.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js Set详解" />
   <meta name="keywords" itemprop="keywords"
@@ -39,7 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.237f48f1ad467a34432f017d0d520acd9ff9a85f8654f0fb9e3e2ae4fe54ab7959272945b11c0af4995c60fa199f7f7b1c39e943ecc9fb7062c315e869b676ed.css" integrity="sha512-I39I8a1GejRDLwF9DVIKzZ/5qF&#43;GVPD7nj4q5P5Uq3lZJylFsRwK9JlcYPoZn397HDnpQ&#43;zJ&#43;3BiwxXoabZ27Q==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -87,7 +87,7 @@
           <div class="info">
             <span>发布于2021-08-12</span>
             <span>更新于2022-05-17</span>
-            <span>共655字</span>
+            <span>共654字</span>
             <span>阅读2分钟</span>
 
           </div>
@@ -103,63 +103,62 @@
 <li>undefined 与 undefined 是恒等的，所以不重复；</li>
 <li>NaN 与 NaN 是不恒等的，但是在 Set 中只能存一个，不重复。</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span style="color:#8be9fd;font-style:italic">let</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span> 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>mySet.add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// Set(1) {1}
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5}
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5} 这里体现了值的唯一性
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>mySet.add(<span style="color:#f1fa8c">&#34;some text&#34;</span>); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">// Set(3) {1, 5, &#34;some text&#34;} 这里体现了类型的多样性
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> o <span style="color:#ff79c6">=</span> {a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}; 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>mySet.add(o);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>mySet.add({a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">// Set(5) {1, 5, &#34;some text&#34;, {…}, {…}} 
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4">// 这里体现了对象之间引用不同不恒等，即使值相同，Set 也能存储
-</span></code></pre></div><h2 id="3-构造-set-实例">3. 构造 Set 实例</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span> <span style="color:#6272a4">//声明一个 set
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> s <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span style="color:#8be9fd;font-style:italic">let</span> s2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#39;大事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>,<span style="color:#f1fa8c">&#39;好事儿&#39;</span>,<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span style="color:#6272a4">//元素个数
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span style="color:#6272a4"></span>console.log(s2.size);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span style="color:#6272a4">//添加新的元素
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span style="color:#6272a4"></span>s2.add(<span style="color:#f1fa8c">&#39;喜事儿&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span style="color:#6272a4">//删除元素
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span style="color:#6272a4"></span>s2.<span style="color:#ff79c6">delete</span>(<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span style="color:#6272a4">//检测
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span style="color:#6272a4"></span>console.log(s2.has(<span style="color:#f1fa8c">&#39;糟心事&#39;</span>));
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span style="color:#6272a4">//清空
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span style="color:#6272a4"></span>s2.clear();
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span>console.log(s2);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span>
-</code></pre></div><h2 id="4-set-类型转换">4. Set 类型转换</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">let</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span> 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>mySet.add(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// Set(1) {1}
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5}
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#6272a4"></span>mySet.add(<span style="color:#bd93f9">5</span>); <span style="color:#6272a4">// Set(2) {1, 5} 这里体现了值的唯一性
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#6272a4"></span>mySet.add(<span style="color:#f1fa8c">&#34;some text&#34;</span>); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#6272a4">// Set(3) {1, 5, &#34;some text&#34;} 这里体现了类型的多样性
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> o <span style="color:#ff79c6">=</span> {a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}; 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>mySet.add(o);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>mySet.add({a<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">1</span>, b<span style="color:#ff79c6">:</span> <span style="color:#bd93f9">2</span>}); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4">// Set(5) {1, 5, &#34;some text&#34;, {…}, {…}} 
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#6272a4">// 这里体现了对象之间引用不同不恒等，即使值相同，Set 也能存储
+</span></span></span></code></pre></div><h2 id="3-构造-set-实例">3. 构造 Set 实例</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span> <span style="color:#6272a4">//声明一个 set
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">let</span> s <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#8be9fd;font-style:italic">let</span> s2 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#39;大事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>,<span style="color:#f1fa8c">&#39;好事儿&#39;</span>,<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>,<span style="color:#f1fa8c">&#39;小事儿&#39;</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#6272a4">//元素个数
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#6272a4"></span>console.log(s2.size);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#6272a4">//添加新的元素
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span><span style="color:#6272a4"></span>s2.add(<span style="color:#f1fa8c">&#39;喜事儿&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#6272a4">//删除元素
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#6272a4"></span>s2.<span style="color:#ff79c6">delete</span>(<span style="color:#f1fa8c">&#39;坏事儿&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4">//检测
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#6272a4"></span>console.log(s2.has(<span style="color:#f1fa8c">&#39;糟心事&#39;</span>));
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#6272a4">//清空
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#6272a4"></span>s2.clear();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>console.log(s2);
+</span></span></code></pre></div><h2 id="4-set-类型转换">4. Set 类型转换</h2>
 <h3 id="1-array">1. Array</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#6272a4">// Array 转 Set
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#34;value1&#34;</span>, <span style="color:#f1fa8c">&#34;value2&#34;</span>, <span style="color:#f1fa8c">&#34;value3&#34;</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// 用...操作符，将 Set 转 Array
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> myArray <span style="color:#ff79c6">=</span> [...mySet];
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#8be9fd;font-style:italic">String</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// String 转 Set
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set(<span style="color:#f1fa8c">&#39;hello&#39;</span>);  <span style="color:#6272a4">// Set(4) {&#34;h&#34;, &#34;e&#34;, &#34;l&#34;, &#34;o&#34;}
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// 注：Set 中 toString 方法是不能将 Set 转换成 String
-</span></code></pre></div><h2 id="5-set-妙用">5. Set 妙用</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4">// Array 转 Set
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#f1fa8c">&#34;value1&#34;</span>, <span style="color:#f1fa8c">&#34;value2&#34;</span>, <span style="color:#f1fa8c">&#34;value3&#34;</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#6272a4">// 用...操作符，将 Set 转 Array
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> myArray <span style="color:#ff79c6">=</span> [...mySet];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#8be9fd;font-style:italic">String</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// String 转 Set
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set(<span style="color:#f1fa8c">&#39;hello&#39;</span>);  <span style="color:#6272a4">// Set(4) {&#34;h&#34;, &#34;e&#34;, &#34;l&#34;, &#34;o&#34;}
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#6272a4">// 注：Set 中 toString 方法是不能将 Set 转换成 String
+</span></span></span></code></pre></div><h2 id="5-set-妙用">5. Set 妙用</h2>
 <h3 id="1-数组去重">1. 数组去重</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>[...mySet]; <span style="color:#6272a4">// [1, 2, 3, 4]
-</span></code></pre></div><h3 id="2-并集">2. 并集</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> union <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a, ...b]); <span style="color:#6272a4">// {1, 2, 3, 4}
-</span></code></pre></div><h3 id="3-交集">3. 交集</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> intersect <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; b.has(x))); <span style="color:#6272a4">// {2, 3}
-</span></code></pre></div><h3 id="4-差集">4. 差集</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#8be9fd;font-style:italic">var</span> difference <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; <span style="color:#ff79c6">!</span>b.has(x))); <span style="color:#6272a4">// {1}
-</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> mySet <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">4</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>[...mySet]; <span style="color:#6272a4">// [1, 2, 3, 4]
+</span></span></span></code></pre></div><h3 id="2-并集">2. 并集</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#8be9fd;font-style:italic">var</span> union <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a, ...b]); <span style="color:#6272a4">// {1, 2, 3, 4}
+</span></span></span></code></pre></div><h3 id="3-交集">3. 交集</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#8be9fd;font-style:italic">var</span> intersect <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; b.has(x))); <span style="color:#6272a4">// {2, 3}
+</span></span></span></code></pre></div><h3 id="4-差集">4. 差集</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">3</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> b <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([<span style="color:#bd93f9">4</span>, <span style="color:#bd93f9">3</span>, <span style="color:#bd93f9">2</span>]);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#8be9fd;font-style:italic">var</span> difference <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Set([...a].filter(x =&gt; <span style="color:#ff79c6">!</span>b.has(x))); <span style="color:#6272a4">// {1}
+</span></span></span></code></pre></div>
       </div>
       <div class="footer">
         <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
@@ -191,7 +190,7 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/js-symbol%E8%AF%A6%E8%A7%A3/" data-tooltip="js Symbol详解">
+        <a class="" href="https://tomtomyoung.top/post/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5%E8%AF%A6%E8%A7%A3/" data-tooltip="浏览器 同源策略详解">
             <i class="iconfont icon-right item-btn"></i>
             
         </a>
@@ -215,5 +214,4 @@
 
 
 
-
-<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>

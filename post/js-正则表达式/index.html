@@ -4,7 +4,7 @@
   <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
   <meta name="baidu-site-verification" content="iPC3wUcQLL" />
   <title>js 正则表达式</title>
-  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.91.2" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.99.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
   <meta name="description" itemprop="description"
     content="js 正则表达式" />
   <meta name="keywords" itemprop="keywords"
@@ -39,7 +39,7 @@
   
   
   
-  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.eb5d9b3799d951ca7af56a866e8f3cdbe43c1c8a5bd6defd3ed919da23dafb5795341cfc273fa6eab0aa41bd039a42815095aa6e867dd0e4e643cfbc195e4261.css" integrity="sha512-612bN5nZUcp69WqGbo882&#43;Q8HIpb1t79PtkZ2iPa&#43;1eVNBz8Jz&#43;m6rCqQb0DmkKBUJWqboZ90OTmQ8&#43;8GV5CYQ==" type="text/css" />
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.237f48f1ad467a34432f017d0d520acd9ff9a85f8654f0fb9e3e2ae4fe54ab7959272945b11c0af4995c60fa199f7f7b1c39e943ecc9fb7062c315e869b676ed.css" integrity="sha512-I39I8a1GejRDLwF9DVIKzZ/5qF&#43;GVPD7nj4q5P5Uq3lZJylFsRwK9JlcYPoZn397HDnpQ&#43;zJ&#43;3BiwxXoabZ27Q==" type="text/css" />
 </head><body>
 <div class="main"><div class="percentage_container">
     <div class="percentage" id="percentage"></div>
@@ -125,28 +125,28 @@
       <div class="content markdown-body">
         <h3 id="1-两种模糊匹配">1 两种模糊匹配</h3>
 <p>如果正则只有精确匹配是没多大意义的，比如/hello/，也只能匹配字符串中的&quot;hello&quot;这个子串。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/hello/</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;hello&#34;</span>) );
-</code></pre></div><p>正则表达式之所以强大，是因为其能实现模糊匹配。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/hello/</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;hello&#34;</span>) );
+</span></span></code></pre></div><p>正则表达式之所以强大，是因为其能实现模糊匹配。</p>
 <p>而模糊匹配，有两个方向上的“模糊”：横向模糊和纵向模糊。</p>
 <h4 id="11-横向模糊匹配">1.1 横向模糊匹配</h4>
 <p>横向模糊指的是，一个正则可匹配的字符串的长度不是固定的，可以是多种情况的。</p>
 <p>其实现的方式是使用量词。譬如<code>{m,n}</code>，表示连续出现最少m次，最多n次。</p>
 <p>比如/ab{2,5}c/表示匹配这样一个字符串：第一个字符是“a”，接下来是2到5个字符“b”，最后是字符“c”。测试如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/ab{2,5}c/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;abc abbc abbbc abbbbc abbbbbc abbbbbbc&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;abbc&#34;, &#34;abbbc&#34;, &#34;abbbbc&#34;, &#34;abbbbbc&#34;]
-</span></code></pre></div><p>注意：案例中用的正则是<code>/ab{2,5}c/g</code>，后面多了g，它是正则的一个修饰符。表示全局匹配，即在目标字符串中按顺序找到满足匹配模式的所有子串，强调的是“所有”，而不只是“第一个”。g是单词global的首字母。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/ab{2,5}c/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;abc abbc abbbc abbbbc abbbbbc abbbbbbc&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;abbc&#34;, &#34;abbbc&#34;, &#34;abbbbc&#34;, &#34;abbbbbc&#34;]
+</span></span></span></code></pre></div><p>注意：案例中用的正则是<code>/ab{2,5}c/g</code>，后面多了g，它是正则的一个修饰符。表示全局匹配，即在目标字符串中按顺序找到满足匹配模式的所有子串，强调的是“所有”，而不只是“第一个”。g是单词global的首字母。</p>
 <h4 id="12-纵向模糊匹配">1.2 纵向模糊匹配</h4>
 <p>纵向模糊指的是，一个正则匹配的字符串，具体到某一位字符时，它可以不是某个确定的字符，可以有多种可能。</p>
 <p>其实现的方式是使用字符组。譬如<code>[abc]</code>，表示该字符是可以字符“a”、“b”、“c”中的任何一个。</p>
 <p>比如<code>/a[123]b/</code>可以匹配如下三种字符串：&ldquo;a1b&rdquo;、&ldquo;a2b&rdquo;、&ldquo;a3b&rdquo;。测试如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/a[123]b/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;a0b a1b a2b a3b a4b&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;a1b&#34;, &#34;a2b&#34;, &#34;a3b&#34;]
-</span></code></pre></div><p>以上就是本章讲的主体内容，只要掌握横向和纵向模糊匹配，就能解决很大部分正则匹配问题。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/a[123]b/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;a0b a1b a2b a3b a4b&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;a1b&#34;, &#34;a2b&#34;, &#34;a3b&#34;]
+</span></span></span></code></pre></div><p>以上就是本章讲的主体内容，只要掌握横向和纵向模糊匹配，就能解决很大部分正则匹配问题。</p>
 <p>接下来的内容就是展开说了，如果对此都比较熟悉的话，可以跳过，直接看本章案例那节。</p>
 <h3 id="2-字符组">2. 字符组</h3>
 <p>需要强调的是，虽叫字符组（字符类），但只是其中一个字符。例如[abc]，表示匹配一个字符，它可以是“a”、“b”、“c”之一。</p>
@@ -179,18 +179,18 @@
 <p><code>*</code> 等价于<code>{0,}</code>，表示出现任意次，有可能不出现。记忆方式：看看天上的星星，可能一颗没有，可能零散有几颗，可能数也数不过来。</p>
 <h4 id="32-贪婪匹配和惰性匹配">3.2 贪婪匹配和惰性匹配</h4>
 <p>看如下的例子：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/\d{2,5}/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;123 1234 12345 123456&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;123&#34;, &#34;1234&#34;, &#34;12345&#34;, &#34;12345&#34;]
-</span></code></pre></div><p>其中正则/\d{2,5}/，表示数字连续出现2到5次。会匹配2位、3位、4位、5位连续数字。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/\d{2,5}/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;123 1234 12345 123456&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;123&#34;, &#34;1234&#34;, &#34;12345&#34;, &#34;12345&#34;]
+</span></span></span></code></pre></div><p>其中正则/\d{2,5}/，表示数字连续出现2到5次。会匹配2位、3位、4位、5位连续数字。</p>
 <p>但是其是贪婪的，它会尽可能多的匹配。你能给我6个，我就要5个。你能给我3个，我就3要个。反正只要在能力范围内，越多越好。</p>
 <p>我们知道有时贪婪不是一件好事（请看文章最后一个例子）。而惰性匹配，就是尽可能少的匹配：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/\d{2,5}?/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;123 1234 12345 123456&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;12&#34;, &#34;12&#34;, &#34;34&#34;, &#34;12&#34;, &#34;34&#34;, &#34;12&#34;, &#34;34&#34;, &#34;56&#34;]
-</span></code></pre></div><p>其中<code>/\d{2,5}?/</code>表示，虽然2到5次都行，当2个就够的时候，就不在往下尝试了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/\d{2,5}?/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;123 1234 12345 123456&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;12&#34;, &#34;12&#34;, &#34;34&#34;, &#34;12&#34;, &#34;34&#34;, &#34;12&#34;, &#34;34&#34;, &#34;56&#34;]
+</span></span></span></code></pre></div><p>其中<code>/\d{2,5}?/</code>表示，虽然2到5次都行，当2个就够的时候，就不在往下尝试了。</p>
 <p>通过在量词后面加个问号就能实现惰性匹配，因此所有惰性匹配情形如下：</p>
 <p><code>{m,n}?</code>
 <code>{m,}?</code>
@@ -202,21 +202,21 @@
 <p>一个模式可以实现横向和纵向模糊匹配。而多选分支可以支持多个子模式任选其一。</p>
 <p>具体形式如下：(p1|p2|p3)，其中p1、p2和p3是子模式，用|（管道符）分隔，表示其中任何之一。</p>
 <p>例如要匹配&quot;good&quot;和&quot;nice&quot;可以使用<code>/good|nice/</code>。测试如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/good|nice/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;good idea, nice try.&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;good&#34;, &#34;nice&#34;]
-</span></code></pre></div><p>但有个事实我们应该注意，比如我用<code>/good|goodbye/</code>，去匹配&quot;goodbye&quot;字符串时，结果是&quot;good&rdquo;：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/good|goodbye/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;goodbye&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;good&#34;]复制代码
-</span></code></pre></div><p>而把正则改成<code>/goodbye|good/</code>，结果是：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/goodbye|good/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;goodbye&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;goodbye&#34;]复制代码
-</span></code></pre></div><p>也就是说，分支结构也是惰性的，即当前面的匹配上了，后面的就不再尝试了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/good|nice/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;good idea, nice try.&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;good&#34;, &#34;nice&#34;]
+</span></span></span></code></pre></div><p>但有个事实我们应该注意，比如我用<code>/good|goodbye/</code>，去匹配&quot;goodbye&quot;字符串时，结果是&quot;good&rdquo;：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/good|goodbye/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;goodbye&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;good&#34;]复制代码
+</span></span></span></code></pre></div><p>而把正则改成<code>/goodbye|good/</code>，结果是：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/goodbye|good/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;goodbye&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;goodbye&#34;]复制代码
+</span></span></span></code></pre></div><p>也就是说，分支结构也是惰性的，即当前面的匹配上了，后面的就不再尝试了。</p>
 <h3 id="5-案例分析">5. 案例分析</h3>
 <p>匹配字符，无非就是字符组、量词和分支结构的组合使用罢了。</p>
 <p>下面找几个例子演练一下（其中，每个正则并不是只有唯一写法）：</p>
@@ -231,11 +231,11 @@
 <p>其中字符可以出现3或6次，需要是用量词和分支结构。</p>
 <p>使用分支结构时，需要注意顺序。</p>
 <p><strong>正则如下：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})/g</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;#ffbbad #Fc01DF #FFF #ffE&#34;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( string.match(regex) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; [&#34;#ffbbad&#34;, &#34;#Fc01DF&#34;, &#34;#FFF&#34;, &#34;#ffE&#34;]
-</span></code></pre></div><h4 id="52-匹配时间">5.2 匹配时间</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})/g</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;#ffbbad #Fc01DF #FFF #ffE&#34;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( string.match(regex) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; [&#34;#ffbbad&#34;, &#34;#Fc01DF&#34;, &#34;#FFF&#34;, &#34;#ffE&#34;]
+</span></span></span></code></pre></div><h4 id="52-匹配时间">5.2 匹配时间</h4>
 <p>以24小时制为例。</p>
 <p><strong>要求匹配：</strong></p>
 <p>23:59</p>
@@ -245,21 +245,21 @@
 <p>当第1位为2时，第2位可以为[0-3]，其他情况时，第2位为[0-9]。</p>
 <p>第3位数字为[0-5]，第4位为[0-9]</p>
 <p><strong>正则如下：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^([01][0-9]|[2][0-3]):[0-5][0-9]$/</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;23:59&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;02:07&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// =&gt; true
-</span></code></pre></div><p>如果也要求匹配7:9，也就是说时分前面的0可以省略。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^([01][0-9]|[2][0-3]):[0-5][0-9]$/</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;23:59&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;02:07&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span></code></pre></div><p>如果也要求匹配7:9，也就是说时分前面的0可以省略。</p>
 <p>此时正则变成：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^(0?[0-9]|1[0-9]|[2][0-3]):(0?[0-9]|[1-5][0-9])$/</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;23:59&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;02:07&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;7:9&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// =&gt; true
-</span></code></pre></div><h4 id="53-匹配日期">5.3 匹配日期</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^(0?[0-9]|1[0-9]|[2][0-3]):(0?[0-9]|[1-5][0-9])$/</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;23:59&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;02:07&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;7:9&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span></code></pre></div><h4 id="53-匹配日期">5.3 匹配日期</h4>
 <p>比如yyyy-mm-dd格式为例。</p>
 <p><strong>要求匹配：</strong></p>
 <p>2017-06-10</p>
@@ -268,10 +268,10 @@
 <p>月，共12个月，分两种情况01、02、……、09和10、11、12，可用(0[1-9]|1[0-2])。</p>
 <p>日，最大31天，可用(0[1-9]|[12][0-9]|3[01])。</p>
 <p><strong>正则如下：</strong></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;2017-06-10&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span style="color:#6272a4">// =&gt; true
-</span></code></pre></div><h4 id="54-window操作系统文件路径">5.4 window操作系统文件路径</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;2017-06-10&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span></code></pre></div><h4 id="54-window操作系统文件路径">5.4 window操作系统文件路径</h4>
 <p><strong>要求匹配：</strong></p>
 <p>F:\study\javascript\regex\regular expression.pdf</p>
 <p>F:\study\javascript\regex\</p>
@@ -284,37 +284,37 @@
 <p>另外“文件夹\”，可以出现任意次。也就是<code>([^\\:*&lt;&gt;|&quot;?\r\n/]+\\)*</code>。其中括号提供子表达式。</p>
 <p>路径的最后一部分可以是“文件夹”，没有\，因此需要添加<code>([^\\:*&lt;&gt;|&quot;?\r\n/]+)?</code>。</p>
 <p>最后拼接成了一个看起来比较复杂的正则：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^[a-zA-Z]:\\([^\\:*&lt;&gt;|&#34;?\r\n/]+\\)*([^\\:*&lt;&gt;|&#34;?\r\n/]+)?$/</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript\\regex\\regular expression.pdf&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript\\regex\\&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\&#34;</span>) ); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span style="color:#6272a4">// =&gt; true
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span style="color:#6272a4">// =&gt; true
-</span></code></pre></div><p>其中，JS中字符串表示\时，也要转义。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/^[a-zA-Z]:\\([^\\:*&lt;&gt;|&#34;?\r\n/]+\\)*([^\\:*&lt;&gt;|&#34;?\r\n/]+)?$/</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript\\regex\\regular expression.pdf&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript\\regex\\&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\study\\javascript&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>console.log( regex.test(<span style="color:#f1fa8c">&#34;F:\\&#34;</span>) ); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#6272a4">// =&gt; true
+</span></span></span></code></pre></div><p>其中，JS中字符串表示\时，也要转义。</p>
 <h4 id="55-匹配id">5.5 匹配id</h4>
 <p>要求从</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;container&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;main&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
-</code></pre></div><p>提取出id=&ldquo;container&rdquo;。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>&lt;<span style="color:#ff79c6">div</span> <span style="color:#50fa7b">id</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;container&#34;</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;main&#34;</span>&gt;&lt;/<span style="color:#ff79c6">div</span>&gt;
+</span></span></code></pre></div><p>提取出id=&ldquo;container&rdquo;。</p>
 <p>可能最开始想到的正则是：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;.*&#34;/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; id=&#34;container&#34; class=&#34;main&#34;
-</span></code></pre></div><p>因为.是通配符，本身就匹配双引号的，而量词*又是贪婪的，当遇到container后面双引号时，不会停下来，会继续匹配，直到遇到最后一个双引号为止。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;.*&#34;/</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; id=&#34;container&#34; class=&#34;main&#34;
+</span></span></span></code></pre></div><p>因为.是通配符，本身就匹配双引号的，而量词*又是贪婪的，当遇到container后面双引号时，不会停下来，会继续匹配，直到遇到最后一个双引号为止。</p>
 <p>解决之道，可以使用惰性匹配：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;.*?&#34;/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; id=&#34;container&#34;
-</span></code></pre></div><p>当然，这样也会有个问题。效率比较低，因为其匹配原理会涉及到“回溯”这个概念（这里也只是顺便提一下，第四章会详细说明）。可以优化如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;[^&#34;]*&#34;/</span>
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
-<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span style="color:#6272a4">// =&gt; id=&#34;container&#34;复制代码
-</span></code></pre></div><h3 id="6小结">6.小结</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;.*?&#34;/</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; id=&#34;container&#34;
+</span></span></span></code></pre></div><p>当然，这样也会有个问题。效率比较低，因为其匹配原理会涉及到“回溯”这个概念（这里也只是顺便提一下，第四章会详细说明）。可以优化如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> regex <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">/id=&#34;[^&#34;]*&#34;/</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#8be9fd;font-style:italic">var</span> string <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;&lt;div id=&#34;container&#34; class=&#34;main&#34;&gt;&lt;/div&gt;&#39;</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>console.log(string.match(regex)[<span style="color:#bd93f9">0</span>]); 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4">// =&gt; id=&#34;container&#34;复制代码
+</span></span></span></code></pre></div><h3 id="6小结">6.小结</h3>
 <p>字符匹配相关的案例，挺多的，不一而足。</p>
 <p>掌握字符组和量词就能解决大部分常见的情形，也就是说，当你会了这二者，JS正则算是入门了。</p>
 
@@ -373,5 +373,4 @@
 
 
 
-
-<script src="https://tomtomyoung.top/js/util.min.2ea0e3959611ea2c1ef11201db182f5c68c5a2622d81cd9a5ac6a9875d5ea81adc0a661d9c9bf3a923c691782b20b3a001704936a69f97b968f9947cac0f6395.js" integrity="sha512-LqDjlZYR6iwe8RIB2xgvXGjFomItgc2aWsaph11eqBrcCmYdnJvzqSPGkXgrILOgAXBJNqafl7lo&#43;ZR8rA9jlQ=="></script></html>
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>

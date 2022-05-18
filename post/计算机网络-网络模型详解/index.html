@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+  <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+  <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+  <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+  <title>计算机网络 网络模型详解</title>
+  <meta charset="utf-8" /><meta name="generator" content="Hugo 0.99.0" /><meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1" />
+  <meta name="description" itemprop="description"
+    content="计算机网络 网络模型详解" />
+  <meta name="keywords" itemprop="keywords"
+    content="[TCP IP]" />
+  <base href="https://tomtomyoung.top/" />
+  <link rel="canonical" href="https://tomtomyoung.top/post/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E8%AF%A6%E8%A7%A3/" />
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload prefetch" as="style" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif+SC&display=swap" media="print"
+    onload="this.media='all'">
+
+  
+  <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png" />
+  <link rel="mask-icon" href="https://tomtomyoung.top/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tomtomyoung.top/favicons/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <meta name="msapplication-TileImage" content="https://tomtomyoung.top/favicons/mstile-144x144.png">
+  <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+
+  
+  <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_5vzvggza71i.css" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.237f48f1ad467a34432f017d0d520acd9ff9a85f8654f0fb9e3e2ae4fe54ab7959272945b11c0af4995c60fa199f7f7b1c39e943ecc9fb7062c315e869b676ed.css" integrity="sha512-I39I8a1GejRDLwF9DVIKzZ/5qF&#43;GVPD7nj4q5P5Uq3lZJylFsRwK9JlcYPoZn397HDnpQ&#43;zJ&#43;3BiwxXoabZ27Q==" type="text/css" />
+</head><body>
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header animated fadeInDown">
+        <span>目录</span>
+    </div><ul class="toc-h4 animated fadeInDown"><li>
+                <span class="toc-link">1.2 五层模型各层的作用和协议</span>
+            </li>
+            <li>
+                <span class="toc-link">1.3 七层模型中会话层和表示层的作用</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post animated fadeInDown">
+      <div class="header">
+        <span class="title">计算机网络 网络模型详解</span>
+        
+          <div class="info">
+            <span>发布于2021-09-10</span>
+            <span>更新于2022-05-17</span>
+            <span>共727字</span>
+            <span>阅读2分钟</span>
+
+          </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <blockquote>
+<p>参考：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/33889997">TCP/IP协议详解</a></p>
+</blockquote>
+<p>OSI七层模型：</p>
+<ol>
+<li>应用层</li>
+<li>表示层</li>
+<li>会话层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ol>
+<p>TCP/IP四层模型</p>
+<ol>
+<li>应用层</li>
+<li>运输层</li>
+<li>网际层</li>
+<li>网络接口层</li>
+</ol>
+<p>折中的五层模型</p>
+<ol>
+<li>应用层</li>
+<li>传输层</li>
+<li>网络层</li>
+<li>数据链路层</li>
+<li>物理层</li>
+</ol>
+<h4 id="12-五层模型各层的作用和协议">1.2 五层模型各层的作用和协议</h4>
+<p><strong>1. 物理层</strong></p>
+<ul>
+<li>物理层上传输数据的单位是比特（bit），就是0/1二进制电信号；</li>
+<li>规定了物理设备的标准，比如网线的接口类型、光纤的接口类型。</li>
+</ul>
+<p><strong>2. 数据链路层</strong></p>
+<ul>
+<li>发送数据时，数据链路层将网络层传下来的IP数据组装成帧，每一帧包括了数据和必要的控制信息；</li>
+<li>接受数据时，帧中的控制信息可以确定信息的开始位置和结束位置，数据链路层就可以提取出信息，上交给网络层；</li>
+<li>数据链路层还提供检错和纠错的功能，如果接收到的帧有差错，就丢弃这个帧。</li>
+</ul>
+<p><strong>3. 网络层 （IP ICMP）</strong></p>
+<ul>
+<li>网络层给处于不同位置的两台主机提供连接；</li>
+<li>网络层使用IP协议，对传输层产生的报文进行分包，因此分完的包也被叫做IP数据报。</li>
+</ul>
+<p><strong>4. 传输层（TCP UDP）</strong></p>
+<ul>
+<li>传输层向处于不同位置的两台主机之间的通信提供通用的数据传输服务，使用的方法就是规定不同的进程使用不同的端口；</li>
+<li>这里的通用是指，数据传输服务不针对某个应用，而是多个应用可以使用同一个传输层服务；</li>
+<li>传输层有分用和复用功能：复用是多个应用同时使用传输层服务；分用是传输层接收到的数据分别交付给上面的应用。</li>
+</ul>
+<p><strong>5. 应用层（DNS、http、ftp、smtp）</strong></p>
+<ul>
+<li>应用层的任务是通过进程间的交互来完成特定的网络应用；</li>
+<li>应用层的协议定义了应用进程间通信和交互的规则；</li>
+<li>不同的网络应用需要不同的协议：域名系统DNS、支持万维网应用的协议http、支持邮件系统的SMTP。</li>
+</ul>
+<h4 id="13-七层模型中会话层和表示层的作用">1.3 七层模型中会话层和表示层的作用</h4>
+<ol>
+<li>表示层：让不同应用之间的信息可以相互识别和读取；</li>
+<li>会话层：负责建立节点间的会话，让不同应用之间传输信息。</li>
+</ol>
+<p><img src="https://pic3.zhimg.com/80/v2-4fe0b5f06fc89af2f98ebd2690bc87ea_720w.jpg" alt="img"></p>
+<p><img src="https://pic1.zhimg.com/80/v2-4f0d5f94dbc6103b807da5dc1bb23478_720w.jpg" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-68c6c874e5e2547bbb0bc23fe572c7a6_720w.jpg" alt="img"></p>
+<p><img src="https://img-blog.csdn.net/20170402135409282" alt="img"></p>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/tcp/">TCP</a><a class="tag" href="https://tomtomyoung.top/tags/ip/">IP</a></span>
+      </div>
+
+      
+    </div><ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-%E6%97%B6%E9%97%B4%E5%88%87%E7%89%87%E4%B8%8Erequestidlecallback%E8%AF%A6%E8%A7%A3/" data-tooltip="react 时间切片与requestIdleCallback详解">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/react-%E6%89%8B%E5%86%99react16.x%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93/" data-tooltip="react 手写react16.x组件渲染">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul></div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>
