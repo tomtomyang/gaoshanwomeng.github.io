@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-cn" data-theme="light"><head>
+  <meta charset="utf-8" />
+  <meta name="google-site-verification" content="kw1N-Xm6qEr1c9PGuRd0U_T6DXkw_EHsLyz5LpuDDv8" />
+  <meta name="msvalidate.01" content="EE98205D30806C22C519683EFC53E9BA" />
+  <meta name="baidu-site-verification" content="iPC3wUcQLL" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5" /><meta name="generator" content="Hugo 0.99.0" /><title>nodejs中的事件循环</title>
+  <meta name="description" itemprop="description"
+    content="nodejs中的事件循环" />
+  <meta name="keywords" itemprop="keywords"
+    content="[nodejs]" />
+  <base href="https://tomtomyoung.top/" />
+  <link rel="canonical" href="https://tomtomyoung.top/post/nodejs%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" />
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.font.im" crossorigin />
+  <link rel="preload prefetch" as="style" href="https://fonts.font.im/css?family=Noto+Serif+SC&display=swap" />
+  <link rel="stylesheet" href="https://fonts.font.im/css?family=Noto+Serif+SC&display=swap" media="print"
+    onload="this.media='all'">
+
+  
+  <link rel="shortcut icon" href="https://tomtomyoung.top/favicons//favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://tomtomyoung.top/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://tomtomyoung.top/favicons/favicon-16x16.png" />
+  <link rel="mask-icon" href="https://tomtomyoung.top/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://tomtomyoung.top/favicons/apple-touch-icon.png">
+  <meta name="msapplication-TileColor" content="#00aba9">
+  <meta name="msapplication-TileImage" content="https://tomtomyoung.top/favicons/mstile-144x144.png">
+  <meta name="theme-color" content="#00aba9"/>
+  <link rel="manifest" href="https://tomtomyoung.top/manifest.json">
+
+  
+  <link rel="stylesheet" type="text/css" href="https://at.alicdn.com/t/font_2450869_5vzvggza71i.css" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://tomtomyoung.top/css/style.min.a1a2e5ea92359058f40f9b78f8b9164f149aba1b291bc7e4b9a38ebcc9fa6f3b923942331ecc09d94cc56cd7a8f4374efaeeb36ab34d99f87c88e32469de4227.css" integrity="sha512-oaLl6pI1kFj0D5t4&#43;LkWTxSauhspG8fkuaOOvMn6bzuSOUIzHswJ2UzFbNeo9DdO&#43;u6zarNNmfh8iOMkad5CJw=="
+    type="text/css" />
+</head><body>
+<div class="main"><div class="percentage_container">
+    <div class="percentage" id="percentage"></div>
+</div><div class="toc sub-container">
+    <div class="toc-header animated fadeInDown">
+        <span>目录</span>
+    </div><ul class="toc-h2 animated fadeInDown"><li>
+                <span class="toc-link">事件循环机制解析</span>
+            </li>
+            <li>
+                <span class="toc-link">阶段概述</span>
+            </li>
+            <li>
+                <span class="toc-link">阶段的详细概述</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">定时器</span>
+            </li>
+            <li>
+                <span class="toc-link">挂起的回调函数</span>
+            </li>
+            <li>
+                <span class="toc-link">轮询</span>
+            </li>
+            <li>
+                <span class="toc-link">检查阶段</span>
+            </li>
+            <li>
+                <span class="toc-link">关闭的回调函数</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">setImmediate() 对比 setTimeout()</span>
+            </li>
+            <li>
+                <span class="toc-link">process.nextTick()</span>
+            </li>
+            
+                    <ul class="toc-h3"><li>
+                <span class="toc-link">理解 process.nextTick()</span>
+            </li>
+            <li>
+                <span class="toc-link">为什么会允许这样？</span>
+            </li>
+            
+                    </ul><li>
+                <span class="toc-link">process.nextTick() 对比 setImmediate()</span>
+            </li>
+            <li>
+                <span class="toc-link">为什么要使用 process.nextTick()?</span>
+            </li>
+            </div><div class="single-post container">
+    <div class="post animated fadeInDown">
+      <div class="header">
+        <span class="title">nodejs中的事件循环</span>
+        
+          <div class="info">
+	        	
+            <a href="https://tomtomyoung.top/">Tomtom Young</a>
+            <span>发布于2021-06-20</span>
+            <span>更新于2022-06-16</span>
+            <span>共4584字</span>
+            <span>阅读10分钟</span>
+          </div>
+        
+      </div>
+      <div class="content markdown-body">
+        <h2 id="事件循环机制解析">事件循环机制解析</h2>
+<p>当 Node.js 启动后，它会初始化事件循环，处理已提供的输入脚本（或丢入 <a href="https://nodejs.org/api/repl.html#repl_repl">REPL</a>，本文不涉及到），它可能会调用一些异步的 API、调度定时器，或者调用 <code>process.nextTick()</code>，然后开始处理事件循环。</p>
+<p>下面的图表展示了事件循环操作顺序的简化概览。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>   ┌───────────────────────────┐
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>┌─&gt;│           timers          │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>│  └─────────────┬─────────────┘
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>│  ┌─────────────┴─────────────┐
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>│  │     pending callbacks     │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>│  └─────────────┬─────────────┘
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>│  ┌─────────────┴─────────────┐
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>│  │       idle, prepare       │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>│  └─────────────┬─────────────┘      ┌───────────────┐
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>│  ┌─────────────┴─────────────┐      │   incoming:   │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>│  │           poll            │&lt;─────┤  connections, │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>│  └─────────────┬─────────────┘      │   data, etc.  │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>│  ┌─────────────┴─────────────┐      └───────────────┘
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>│  │           check           │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>│  └─────────────┬─────────────┘
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>│  ┌─────────────┴─────────────┐
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>└──┤      close callbacks      │
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>   └───────────────────────────┘
+</span></span></code></pre></div><p><em>注意：每个框被称为事件循环机制的一个阶段。</em></p>
+<p>每个阶段都有一个 FIFO 队列来执行回调。虽然每个阶段都是特殊的，但通常情况下，当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行。当该队列已用尽或达到回调限制，事件循环将移动到下一阶段，等等。</p>
+<p>由于这些操作中的任何一个都可能调度 <em>更多的</em> 操作和由内核排列在<strong>轮询</strong>阶段被处理的新事件， 且在处理轮询中的事件时，轮询事件可以排队。因此，长时间运行的回调可以允许轮询阶段运行长于计时器的阈值时间。有关详细信息，请参阅 <a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#timers"><strong>计时器</strong></a> 和 <a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#poll"><strong>轮询</strong></a> 部分。</p>
+<p><em><strong>注意：</strong> 在 Windows 和 Unix/Linux 实现之间存在细微的差异，但这对演示来说并不重要。最重要的部分在这里。实际上有七或八个步骤，但我们关心的是 Node.js 实际上使用以上的某些步骤。</em></p>
+<h2 id="阶段概述">阶段概述</h2>
+<ul>
+<li><strong>定时器</strong>：本阶段执行已经被 <code>setTimeout()</code> 和 <code>setInterval()</code> 的调度回调函数。</li>
+<li><strong>待定回调</strong>：执行延迟到下一个循环迭代的 I/O 回调。</li>
+<li><strong>idle, prepare</strong>：仅系统内部使用。</li>
+<li><strong>轮询</strong>：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，那些由计时器和 <code>setImmediate()</code> 调度的之外），其余情况 node 将在适当的时候在此阻塞。</li>
+<li><strong>检测</strong>：<code>setImmediate()</code> 回调函数在这里执行。</li>
+<li><strong>关闭的回调函数</strong>：一些关闭的回调函数，如：<code>socket.on('close', ...)</code>。</li>
+</ul>
+<p>在每次运行的事件循环之间，Node.js 检查它是否在等待任何异步 I/O 或计时器，如果没有的话，则完全关闭。</p>
+<h2 id="阶段的详细概述">阶段的详细概述</h2>
+<h3 id="定时器">定时器</h3>
+<p>计时器指定 <em>可以执行所提供回调</em> 的 <strong>阈值</strong>，而不是用户希望其执行的确切时间。在指定的一段时间间隔后， 计时器回调将被尽可能早地运行。但是，操作系统调度或其它正在运行的回调可能会延迟它们。</p>
+<p><em><strong>注意</strong>：<a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#poll"><strong>轮询</strong> 阶段</a> 控制何时定时器执行。</em></p>
+<p>例如，假设您调度了一个在 100 毫秒后超时的定时器，然后您的脚本开始异步读取会耗费 95 毫秒的文件:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;fs&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#8be9fd;font-style:italic">function</span> someAsyncOperation(callback) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>  <span style="color:#6272a4">// Assume this takes 95ms to complete
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span><span style="color:#6272a4"></span>  fs.readFile(<span style="color:#f1fa8c">&#39;/path/to/file&#39;</span>, callback);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span><span style="color:#ff79c6">const</span> timeoutScheduled <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>setTimeout(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>  <span style="color:#ff79c6">const</span> delay <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> timeoutScheduled;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>  console.log(<span style="color:#f1fa8c">`</span><span style="color:#f1fa8c">${</span>delay<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">ms have passed since I was scheduled`</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>}, <span style="color:#bd93f9">100</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span><span style="color:#6272a4">// do someAsyncOperation which takes 95 ms to complete
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span><span style="color:#6272a4"></span>someAsyncOperation(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>  <span style="color:#ff79c6">const</span> startCallback <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>  <span style="color:#6272a4">// do something that will take 10ms...
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">while</span> (<span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> startCallback <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">10</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    <span style="color:#6272a4">// do nothing
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#6272a4"></span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>});
+</span></span></code></pre></div><p>当事件循环进入 <strong>轮询</strong> 阶段时，它有一个空队列（此时 <code>fs.readFile()</code> 尚未完成），因此它将等待剩下的毫秒数，直到达到最快的一个计时器阈值为止。当它等待 95 毫秒过后时，<code>fs.readFile()</code> 完成读取文件，它的那个需要 10 毫秒才能完成的回调，将被添加到 <strong>轮询</strong> 队列中并执行。当回调完成时，队列中不再有回调，因此事件循环机制将查看最快到达阈值的计时器，然后将回到 <strong>计时器</strong> 阶段，以执行定时器的回调。在本示例中，您将看到调度计时器到它的回调被执行之间的总延迟将为 105 毫秒。</p>
+<p>注意：为了防止 <strong>轮询</strong> 阶段饿死事件循环，<a href="https://libuv.org/">libuv</a>（实现 Node.js 事件循环和平台的所有异步行为的 C 函数库），在停止轮询以获得更多事件之前，还有一个硬性最大值（依赖于系统）。</p>
+<h3 id="挂起的回调函数">挂起的回调函数</h3>
+<p>此阶段对某些系统操作（如 TCP 错误类型）执行回调。例如，如果 TCP 套接字在尝试连接时接收到 <code>ECONNREFUSED</code>，则某些 *nix 的系统希望等待报告错误。这将被排队以在 <strong>挂起的回调</strong> 阶段执行。</p>
+<h3 id="轮询">轮询</h3>
+<p><strong>轮询</strong> 阶段有两个重要的功能：</p>
+<ol>
+<li>计算应该阻塞和轮询 I/O 的时间。</li>
+<li>然后，处理 <strong>轮询</strong> 队列里的事件。</li>
+</ol>
+<p>当事件循环进入 <strong>轮询</strong> 阶段且 <em>没有被调度的计时器时</em> ，将发生以下两种情况之一：</p>
+<ul>
+<li><em>如果 <strong>轮询</strong> 队列 <strong>不是空的</strong></em> ，事件循环将循环访问回调队列并同步执行它们，直到队列已用尽，或者达到了与系统相关的硬性限制。</li>
+<li><em>如果 <strong>轮询</strong> 队列 <strong>是空的</strong></em> ，还有两件事发生：
+<ul>
+<li>如果脚本被 <code>setImmediate()</code> 调度，则事件循环将结束 <strong>轮询</strong> 阶段，并继续 <strong>检查</strong> 阶段以执行那些被调度的脚本。</li>
+<li>如果脚本 <strong>未被</strong> <code>setImmediate()</code>调度，则事件循环将等待回调被添加到队列中，然后立即执行。</li>
+</ul>
+</li>
+</ul>
+<p>一旦 <strong>轮询</strong> 队列为空，事件循环将检查 <em>已达到时间阈值的计时器</em>。如果一个或多个计时器已准备就绪，则事件循环将绕回计时器阶段以执行这些计时器的回调。</p>
+<h3 id="检查阶段">检查阶段</h3>
+<p>此阶段允许人员在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用 <code>setImmediate()</code> 后被排列在队列中，则事件循环可能继续到 <strong>检查</strong> 阶段而不是等待。</p>
+<p><code>setImmediate()</code> 实际上是一个在事件循环的单独阶段运行的特殊计时器。它使用一个 libuv API 来安排回调在 <strong>轮询</strong> 阶段完成后执行。</p>
+<p>通常，在执行代码时，事件循环最终会命中轮询阶段，在那等待传入连接、请求等。但是，如果回调已使用 <code>setImmediate()</code>调度过，并且轮询阶段变为空闲状态，则它将结束此阶段，并继续到检查阶段而不是继续等待轮询事件。</p>
+<h3 id="关闭的回调函数">关闭的回调函数</h3>
+<p>如果套接字或处理函数突然关闭（例如 <code>socket.destroy()</code>），则<code>'close'</code> 事件将在这个阶段发出。否则它将通过 <code>process.nextTick()</code> 发出。</p>
+<h2 id="setimmediate-对比-settimeout"><code>setImmediate()</code> 对比 <code>setTimeout()</code></h2>
+<p><code>setImmediate()</code> 和 <code>setTimeout()</code> 很类似，但是基于被调用的时机，他们也有不同表现。</p>
+<ul>
+<li><code>setImmediate()</code> 设计为一旦在当前 <strong>轮询</strong> 阶段完成， 就执行脚本。</li>
+<li><code>setTimeout()</code> 在最小阈值（ms 单位）过后运行脚本。</li>
+</ul>
+<p>执行计时器的顺序将根据调用它们的上下文而异。如果二者都从主模块内调用，则计时器将受进程性能的约束（这可能会受到计算机上其他正在运行应用程序的影响）。</p>
+<p>例如，如果运行以下不在 I/O 周期（即主模块）内的脚本，则执行两个计时器的顺序是非确定性的，因为它受进程性能的约束：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">// timeout_vs_immediate.js
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4"></span>setTimeout(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>  console.log(<span style="color:#f1fa8c">&#39;timeout&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>}, <span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>setImmediate(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>  console.log(<span style="color:#f1fa8c">&#39;immediate&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>});
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>$ node timeout_vs_immediate.js
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>timeout
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>immediate
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>$ node timeout_vs_immediate.js
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>immediate
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>timeout
+</span></span></code></pre></div><p>但是，如果你把这两个函数放入一个 I/O 循环内调用，setImmediate 总是被优先调用：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">// timeout_vs_immediate.js
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4"></span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;fs&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>fs.readFile(__filename, () =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>  setTimeout(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    console.log(<span style="color:#f1fa8c">&#39;timeout&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>  }, <span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>  setImmediate(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    console.log(<span style="color:#f1fa8c">&#39;immediate&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>  });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>});
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>$ node timeout_vs_immediate.js
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>immediate
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>timeout
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>$ node timeout_vs_immediate.js
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>immediate
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>timeout
+</span></span></code></pre></div><p>使用 <code>setImmediate()</code> 相对于<code>setTimeout()</code> 的主要优势是，如果<code>setImmediate()</code>是在 I/O 周期内被调度的，那它将会在其中任何的定时器之前执行，跟这里存在多少个定时器无关</p>
+<h2 id="processnexttick"><code>process.nextTick()</code></h2>
+<h3 id="理解-processnexttick">理解 <code>process.nextTick()</code></h3>
+<p>您可能已经注意到 <code>process.nextTick()</code> 在图示中没有显示，即使它是异步 API 的一部分。这是因为 <code>process.nextTick()</code> 从技术上讲不是事件循环的一部分。相反，它都将在当前操作完成后处理 <code>nextTickQueue</code>， 而不管事件循环的当前阶段如何。这里的一个<em>操作</em>被视作为一个从底层 C/C++ 处理器开始过渡，并且处理需要执行的 JavaScript 代码。</p>
+<p>回顾我们的图示，任何时候在给定的阶段中调用 <code>process.nextTick()</code>，所有传递到 <code>process.nextTick()</code> 的回调将在事件循环继续之前解析。这可能会造成一些糟糕的情况，因为<strong>它允许您通过递归 <code>process.nextTick()</code>调用来“饿死”您的 I/O</strong>，阻止事件循环到达 <strong>轮询</strong> 阶段。</p>
+<h3 id="为什么会允许这样">为什么会允许这样？</h3>
+<p>为什么这样的事情会包含在 Node.js 中？它的一部分是一个设计理念，其中 API 应该始终是异步的，即使它不必是。以此代码段为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> apiCall(arg, callback) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#ff79c6">if</span> (<span style="color:#ff79c6">typeof</span> arg <span style="color:#ff79c6">!==</span> <span style="color:#f1fa8c">&#39;string&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    <span style="color:#ff79c6">return</span> process.nextTick(callback,
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>                            <span style="color:#ff79c6">new</span> TypeError(<span style="color:#f1fa8c">&#39;argument should be string&#39;</span>));
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>}
+</span></span></code></pre></div><p>代码段进行参数检查。如果不正确，则会将错误传递给回调函数。最近对 API 进行了更新，允许传递参数给 <code>process.nextTick()</code>，这将允许它接受任何在回调函数位置之后的参数，并将参数传递给回调函数作为回调函数的参数，这样您就不必嵌套函数了。</p>
+<p>我们正在做的是将错误传回给用户，但仅在执行用户的其余代码之后。通过使用<code>process.nextTick()</code>，我们保证 <code>apiCall()</code> 始终在用户代码的其余部分<em>之后</em>和在让事件循环继续进行<em>之前</em>，执行其回调函数。为了实现这一点，JS 调用栈被允许展开，然后立即执行提供的回调，允许进行递归调用 <code>process.nextTick()</code>，而不触碰 <code>RangeError: 超过 V8 的最大调用堆栈大小</code> 限制。</p>
+<p>这种设计原理可能会导致一些潜在的问题。 以此代码段为例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">let</span> bar;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#6272a4">// this has an asynchronous signature, but calls callback synchronously
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> someAsyncApiCall(callback) { callback(); }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span><span style="color:#6272a4">// the callback is called before `someAsyncApiCall` completes.
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#6272a4"></span>someAsyncApiCall(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>  <span style="color:#6272a4">// since someAsyncApiCall has completed, bar hasn&#39;t been assigned any value
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#6272a4"></span>  console.log(<span style="color:#f1fa8c">&#39;bar&#39;</span>, bar); <span style="color:#6272a4">// undefined
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#6272a4"></span>});
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>bar <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span></code></pre></div><p>用户将 <code>someAsyncApiCall()</code> 定义为具有异步签名，但实际上它是同步运行的。当调用它时，提供给 <code>someAsyncApiCall()</code> 的回调是在事件循环的同一阶段内被调用，因为 <code>someAsyncApiCall()</code> 实际上并没有异步执行任何事情。结果，回调函数在尝试引用 <code>bar</code>，但作用域中可能还没有该变量，因为脚本尚未运行完成。</p>
+<p>通过将回调置于 <code>process.nextTick()</code> 中，脚本仍具有运行完成的能力，允许在调用回调之前初始化所有的变量、函数等。它还具有不让事件循环继续的优点，适用于让事件循环继续之前，警告用户发生错误的情况。下面是上一个使用 <code>process.nextTick()</code> 的示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">let</span> bar;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#8be9fd;font-style:italic">function</span> someAsyncApiCall(callback) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>  process.nextTick(callback);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>someAsyncApiCall(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>  console.log(<span style="color:#f1fa8c">&#39;bar&#39;</span>, bar); <span style="color:#6272a4">// 1
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#6272a4"></span>});
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>bar <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+</span></span></code></pre></div><p>这又是另外一个真实的例子：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#ff79c6">const</span> server <span style="color:#ff79c6">=</span> net.createServer(() =&gt; {}).listen(<span style="color:#bd93f9">8080</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>server.on(<span style="color:#f1fa8c">&#39;listening&#39;</span>, () =&gt; {});
+</span></span></code></pre></div><p>只有传递端口时，端口才会立即被绑定。因此，可以立即调用 <code>'listening'</code> 回调。问题是 <code>.on('listening')</code> 的回调在那个时间点尚未被设置。</p>
+<p>为了绕过这个问题，<code>'listening'</code> 事件被排在 <code>nextTick()</code> 中，以允许脚本运行完成。这让用户设置所想设置的任何事件处理器。</p>
+<h2 id="processnexttick-对比-setimmediate"><code>process.nextTick()</code> 对比 <code>setImmediate()</code></h2>
+<p>就用户而言，我们有两个类似的调用，但它们的名称令人费解。</p>
+<ul>
+<li><code>process.nextTick()</code> 在同一个阶段立即执行。</li>
+<li><code>setImmediate()</code> 在事件循环的接下来的迭代或 &rsquo;tick&rsquo; 上触发。</li>
+</ul>
+<p>实质上，这两个名称应该交换，因为 <code>process.nextTick()</code> 比 <code>setImmediate()</code> 触发得更快，但这是过去遗留问题，因此不太可能改变。如果贸然进行名称交换，将破坏 npm 上的大部分软件包。每天都有更多新的模块在增加，这意味着我们要多等待每一天，则更多潜在破坏会发生。尽管这些名称使人感到困惑，但它们本身名字不会改变。</p>
+<p><em>我们建议开发人员在所有情况下都使用 <code>setImmediate()</code>，因为它更容易理解。</em></p>
+<h2 id="为什么要使用-processnexttick">为什么要使用 <code>process.nextTick()</code>?</h2>
+<p>有两个主要原因：</p>
+<ol>
+<li>允许用户处理错误，清理任何不需要的资源，或者在事件循环继续之前重试请求。</li>
+<li>有时有让回调在栈展开后，但在事件循环继续之前运行的必要。</li>
+</ol>
+<p>以下是一个符合用户预期的简单示例：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#ff79c6">const</span> server <span style="color:#ff79c6">=</span> net.createServer();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>server.on(<span style="color:#f1fa8c">&#39;connection&#39;</span>, (conn) =&gt; { });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>server.listen(<span style="color:#bd93f9">8080</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>server.on(<span style="color:#f1fa8c">&#39;listening&#39;</span>, () =&gt; { });
+</span></span></code></pre></div><p>假设 <code>listen()</code> 在事件循环开始时运行，但 listening 的回调被放置在 <code>setImmediate()</code> 中。除非传递过主机名，才会立即绑定到端口。为使事件循环继续进行，它必须命中 <strong>轮询</strong> 阶段，这意味着有可能已经接收了一个连接，并在侦听事件之前触发了连接事件。</p>
+<p>另一个示例运行的函数构造函数是从 <code>EventEmitter</code> 继承的，它想调用构造函数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> EventEmitter <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;events&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#8be9fd;font-style:italic">function</span> MyEmitter() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>  EventEmitter.call(<span style="color:#ff79c6">this</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>  <span style="color:#ff79c6">this</span>.emit(<span style="color:#f1fa8c">&#39;event&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>util.inherits(MyEmitter, EventEmitter);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#ff79c6">const</span> myEmitter <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> MyEmitter();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>myEmitter.on(<span style="color:#f1fa8c">&#39;event&#39;</span>, () =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>  console.log(<span style="color:#f1fa8c">&#39;an event occurred!&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>});
+</span></span></code></pre></div><p>你不能立即从构造函数中触发事件，因为脚本尚未处理到用户为该事件分配回调函数的地方。因此，在构造函数本身中可以使用 <code>process.nextTick()</code> 来设置回调，以便在构造函数完成后发出该事件，这是预期的结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> EventEmitter <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;events&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#ff79c6">const</span> util <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;util&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#8be9fd;font-style:italic">function</span> MyEmitter() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>  EventEmitter.call(<span style="color:#ff79c6">this</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>  <span style="color:#6272a4">// use nextTick to emit the event once a handler is assigned
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span><span style="color:#6272a4"></span>  process.nextTick(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#ff79c6">this</span>.emit(<span style="color:#f1fa8c">&#39;event&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>  });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>util.inherits(MyEmitter, EventEmitter);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#ff79c6">const</span> myEmitter <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> MyEmitter();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>myEmitter.on(<span style="color:#f1fa8c">&#39;event&#39;</span>, () =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>  console.log(<span style="color:#f1fa8c">&#39;an event occurred!&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>});
+</span></span></code></pre></div><blockquote>
+<p>参考：</p>
+<p><a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/">Node.js event_loop</a></p>
+</blockquote>
+
+      </div>
+      <div class="footer">
+        <span><a class="category" href="https://tomtomyoung.top/categories/%E5%89%8D%E7%AB%AF/">前端</a></span>
+        <span><a class="tag" href="https://tomtomyoung.top/tags/nodejs/">nodejs</a></span>
+      </div>
+
+      
+    </div><ul class="menu">
+    <li class="menu-item">
+        <i class="iconfont icon-top item-btn" id="back_top_btn"></i>
+    </li>
+    <li class="menu-item">
+        <a href="https://tomtomyoung.top/" id="back-btn">
+            <i class="iconfont icon-home item-btn"></i>
+        </a>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-switch item-btn" id="switch_btn"></i>
+    </li>
+    <li class="menu-item">
+        <i class="iconfont icon-search item-btn" id="search_btn"></i>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/git-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6/" data-tooltip="git 分支的新建与合并">
+            <i class="iconfont icon-left item-btn"></i>
+            
+        </a>
+    </li>
+    <li class="menu-item">
+        
+        <a class="" href="https://tomtomyoung.top/post/git-husky%E7%AE%80%E4%BB%8B/" data-tooltip="git husky简介">
+            <i class="iconfont icon-right item-btn"></i>
+            
+        </a>
+    </li>
+</ul></div>
+</div>
+
+<div class="cover" id="cover">
+        <div class="search-container">
+    <input type="search" class="docsearch-input search-input" placeholder="搜索关键词" />
+    
+</div>
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+<script src="https://tomtomyoung.top/js/util.min.a70038ab05da1df3866044f8f79f2214979ec3ab1adaf797133847e92d21e0115be0d90c61bd5252245349bffdef8599e879cb1f993f947cccf14e28c562d8d8.js" integrity="sha512-pwA4qwXaHfOGYET4958iFJeew6sa2veXEzhH6S0h4BFb4NkMYb1SUiRTSb/974WZ6HnLH5k/lHzM8U4oxWLY2A=="></script></html>
