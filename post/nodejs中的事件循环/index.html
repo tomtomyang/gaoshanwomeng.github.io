@@ -103,15 +103,15 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-06-20</span>
-            <span>更新于2022-06-16</span>
-            <span>共4584字</span>
-            <span>阅读10分钟</span>
+            <span>更新于2022-06-27</span>
+            <span>共4504字</span>
+            <span>阅读9分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
         <h2 id="事件循环机制解析">事件循环机制解析</h2>
-<p>当 Node.js 启动后，它会初始化事件循环，处理已提供的输入脚本（或丢入 <a href="https://nodejs.org/api/repl.html#repl_repl">REPL</a>，本文不涉及到），它可能会调用一些异步的 API、调度定时器，或者调用 <code>process.nextTick()</code>，然后开始处理事件循环。</p>
+<p>当 Node.js 启动后，它会初始化事件循环，处理已提供的输入脚本（或丢入 <a href="https://nodejs.org/api/repl.html#repl_repl">REPL</a> ，本文不涉及到），它可能会调用一些异步的 API、调度定时器，或者调用 <code>process.nextTick()</code>，然后开始处理事件循环。</p>
 <p>下面的图表展示了事件循环操作顺序的简化概览。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>   ┌───────────────────────────┐
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>┌─&gt;│           timers          │
@@ -148,7 +148,7 @@
 <h2 id="阶段的详细概述">阶段的详细概述</h2>
 <h3 id="定时器">定时器</h3>
 <p>计时器指定 <em>可以执行所提供回调</em> 的 <strong>阈值</strong>，而不是用户希望其执行的确切时间。在指定的一段时间间隔后， 计时器回调将被尽可能早地运行。但是，操作系统调度或其它正在运行的回调可能会延迟它们。</p>
-<p><em><strong>注意</strong>：<a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#poll"><strong>轮询</strong> 阶段</a> 控制何时定时器执行。</em></p>
+<p><em><strong>注意</strong>： <a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#poll"><strong>轮询</strong> 阶段</a> 控制何时定时器执行。</em></p>
 <p>例如，假设您调度了一个在 100 毫秒后超时的定时器，然后您的脚本开始异步读取会耗费 95 毫秒的文件:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> fs <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;fs&#39;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
@@ -175,7 +175,7 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#6272a4"></span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>});
 </span></span></code></pre></div><p>当事件循环进入 <strong>轮询</strong> 阶段时，它有一个空队列（此时 <code>fs.readFile()</code> 尚未完成），因此它将等待剩下的毫秒数，直到达到最快的一个计时器阈值为止。当它等待 95 毫秒过后时，<code>fs.readFile()</code> 完成读取文件，它的那个需要 10 毫秒才能完成的回调，将被添加到 <strong>轮询</strong> 队列中并执行。当回调完成时，队列中不再有回调，因此事件循环机制将查看最快到达阈值的计时器，然后将回到 <strong>计时器</strong> 阶段，以执行定时器的回调。在本示例中，您将看到调度计时器到它的回调被执行之间的总延迟将为 105 毫秒。</p>
-<p>注意：为了防止 <strong>轮询</strong> 阶段饿死事件循环，<a href="https://libuv.org/">libuv</a>（实现 Node.js 事件循环和平台的所有异步行为的 C 函数库），在停止轮询以获得更多事件之前，还有一个硬性最大值（依赖于系统）。</p>
+<p>注意：为了防止 <strong>轮询</strong> 阶段饿死事件循环， <a href="https://libuv.org/">libuv</a> （实现 Node.js 事件循环和平台的所有异步行为的 C 函数库），在停止轮询以获得更多事件之前，还有一个硬性最大值（依赖于系统）。</p>
 <h3 id="挂起的回调函数">挂起的回调函数</h3>
 <p>此阶段对某些系统操作（如 TCP 错误类型）执行回调。例如，如果 TCP 套接字在尝试连接时接收到 <code>ECONNREFUSED</code>，则某些 *nix 的系统希望等待报告错误。这将被排队以在 <strong>挂起的回调</strong> 阶段执行。</p>
 <h3 id="轮询">轮询</h3>
@@ -190,7 +190,7 @@
 <li><em>如果 <strong>轮询</strong> 队列 <strong>是空的</strong></em> ，还有两件事发生：
 <ul>
 <li>如果脚本被 <code>setImmediate()</code> 调度，则事件循环将结束 <strong>轮询</strong> 阶段，并继续 <strong>检查</strong> 阶段以执行那些被调度的脚本。</li>
-<li>如果脚本 <strong>未被</strong> <code>setImmediate()</code>调度，则事件循环将等待回调被添加到队列中，然后立即执行。</li>
+<li>如果脚本 <strong>未被</strong> <code>setImmediate()</code> 调度，则事件循环将等待回调被添加到队列中，然后立即执行。</li>
 </ul>
 </li>
 </ul>
@@ -198,9 +198,9 @@
 <h3 id="检查阶段">检查阶段</h3>
 <p>此阶段允许人员在轮询阶段完成后立即执行回调。如果轮询阶段变为空闲状态，并且脚本使用 <code>setImmediate()</code> 后被排列在队列中，则事件循环可能继续到 <strong>检查</strong> 阶段而不是等待。</p>
 <p><code>setImmediate()</code> 实际上是一个在事件循环的单独阶段运行的特殊计时器。它使用一个 libuv API 来安排回调在 <strong>轮询</strong> 阶段完成后执行。</p>
-<p>通常，在执行代码时，事件循环最终会命中轮询阶段，在那等待传入连接、请求等。但是，如果回调已使用 <code>setImmediate()</code>调度过，并且轮询阶段变为空闲状态，则它将结束此阶段，并继续到检查阶段而不是继续等待轮询事件。</p>
+<p>通常，在执行代码时，事件循环最终会命中轮询阶段，在那等待传入连接、请求等。但是，如果回调已使用 <code>setImmediate()</code> 调度过，并且轮询阶段变为空闲状态，则它将结束此阶段，并继续到检查阶段而不是继续等待轮询事件。</p>
 <h3 id="关闭的回调函数">关闭的回调函数</h3>
-<p>如果套接字或处理函数突然关闭（例如 <code>socket.destroy()</code>），则<code>'close'</code> 事件将在这个阶段发出。否则它将通过 <code>process.nextTick()</code> 发出。</p>
+<p>如果套接字或处理函数突然关闭（例如 <code>socket.destroy()</code>），则 <code>'close'</code> 事件将在这个阶段发出。否则它将通过 <code>process.nextTick()</code> 发出。</p>
 <h2 id="setimmediate-对比-settimeout"><code>setImmediate()</code> 对比 <code>setTimeout()</code></h2>
 <p><code>setImmediate()</code> 和 <code>setTimeout()</code> 很类似，但是基于被调用的时机，他们也有不同表现。</p>
 <ul>
@@ -243,11 +243,11 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>$ node timeout_vs_immediate.js
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>immediate
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>timeout
-</span></span></code></pre></div><p>使用 <code>setImmediate()</code> 相对于<code>setTimeout()</code> 的主要优势是，如果<code>setImmediate()</code>是在 I/O 周期内被调度的，那它将会在其中任何的定时器之前执行，跟这里存在多少个定时器无关</p>
+</span></span></code></pre></div><p>使用 <code>setImmediate()</code> 相对于 <code>setTimeout()</code> 的主要优势是，如果 <code>setImmediate()</code> 是在 I/O 周期内被调度的，那它将会在其中任何的定时器之前执行，跟这里存在多少个定时器无关</p>
 <h2 id="processnexttick"><code>process.nextTick()</code></h2>
 <h3 id="理解-processnexttick">理解 <code>process.nextTick()</code></h3>
 <p>您可能已经注意到 <code>process.nextTick()</code> 在图示中没有显示，即使它是异步 API 的一部分。这是因为 <code>process.nextTick()</code> 从技术上讲不是事件循环的一部分。相反，它都将在当前操作完成后处理 <code>nextTickQueue</code>， 而不管事件循环的当前阶段如何。这里的一个<em>操作</em>被视作为一个从底层 C/C++ 处理器开始过渡，并且处理需要执行的 JavaScript 代码。</p>
-<p>回顾我们的图示，任何时候在给定的阶段中调用 <code>process.nextTick()</code>，所有传递到 <code>process.nextTick()</code> 的回调将在事件循环继续之前解析。这可能会造成一些糟糕的情况，因为<strong>它允许您通过递归 <code>process.nextTick()</code>调用来“饿死”您的 I/O</strong>，阻止事件循环到达 <strong>轮询</strong> 阶段。</p>
+<p>回顾我们的图示，任何时候在给定的阶段中调用 <code>process.nextTick()</code>，所有传递到 <code>process.nextTick()</code> 的回调将在事件循环继续之前解析。这可能会造成一些糟糕的情况，因为<strong>它允许您通过递归 <code>process.nextTick()</code> 调用来“饿死”您的 I/O</strong>，阻止事件循环到达 <strong>轮询</strong> 阶段。</p>
 <h3 id="为什么会允许这样">为什么会允许这样？</h3>
 <p>为什么这样的事情会包含在 Node.js 中？它的一部分是一个设计理念，其中 API 应该始终是异步的，即使它不必是。以此代码段为例：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> apiCall(arg, callback) {
@@ -256,7 +256,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>                            <span style="color:#ff79c6">new</span> TypeError(<span style="color:#f1fa8c">&#39;argument should be string&#39;</span>));
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>}
 </span></span></code></pre></div><p>代码段进行参数检查。如果不正确，则会将错误传递给回调函数。最近对 API 进行了更新，允许传递参数给 <code>process.nextTick()</code>，这将允许它接受任何在回调函数位置之后的参数，并将参数传递给回调函数作为回调函数的参数，这样您就不必嵌套函数了。</p>
-<p>我们正在做的是将错误传回给用户，但仅在执行用户的其余代码之后。通过使用<code>process.nextTick()</code>，我们保证 <code>apiCall()</code> 始终在用户代码的其余部分<em>之后</em>和在让事件循环继续进行<em>之前</em>，执行其回调函数。为了实现这一点，JS 调用栈被允许展开，然后立即执行提供的回调，允许进行递归调用 <code>process.nextTick()</code>，而不触碰 <code>RangeError: 超过 V8 的最大调用堆栈大小</code> 限制。</p>
+<p>我们正在做的是将错误传回给用户，但仅在执行用户的其余代码之后。通过使用 <code>process.nextTick()</code>，我们保证 <code>apiCall()</code> 始终在用户代码的其余部分<em>之后</em>和在让事件循环继续进行<em>之前</em>，执行其回调函数。为了实现这一点，JS 调用栈被允许展开，然后立即执行提供的回调，允许进行递归调用 <code>process.nextTick()</code>，而不触碰 <code>RangeError: 超过 V8 的最大调用堆栈大小 </code> 限制。</p>
 <p>这种设计原理可能会导致一些潜在的问题。 以此代码段为例：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">let</span> bar;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
@@ -371,7 +371,7 @@
     </li>
     <li class="menu-item">
         
-        <a class="" href="https://tomtomyoung.top/post/git-%E5%88%86%E6%94%AF%E7%9A%84%E6%96%B0%E5%BB%BA%E4%B8%8E%E5%90%88%E5%B9%B6/" data-tooltip="git 分支的新建与合并">
+        <a class="" href="https://tomtomyoung.top/post/nodejs%E4%B8%8Ejs%E7%9A%84%E5%85%B3%E7%B3%BB/" data-tooltip="nodejs与js的关系">
             <i class="iconfont icon-left item-btn"></i>
             
         </a>

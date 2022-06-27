@@ -49,10 +49,10 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h3 animated fadeInDown"><li>
-                <span class="toc-link">1.偏差bias</span>
+                <span class="toc-link">1.偏差 bias</span>
             </li>
             <li>
-                <span class="toc-link">2.方差variance</span>
+                <span class="toc-link">2.方差 variance</span>
             </li>
             <li>
                 <span class="toc-link">3.方差与偏差</span>
@@ -69,49 +69,47 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2020-06-23</span>
-            <span>更新于2022-05-17</span>
-            <span>共976字</span>
+            <span>更新于2022-06-27</span>
+            <span>共887字</span>
             <span>阅读2分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
         <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_183610.png" alt=""></p>
-<h3 id="1偏差bias">1.偏差bias</h3>
+<h3 id="1偏差-bias">1.偏差 bias</h3>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185618.png" alt=""></p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185907.png" alt=""></p>
-<p>bias描述的是根据样本拟合出的模型的输出预测结果的期望与样本真实结果的差距。</p>
-<p>简单讲，就是在样本上拟合的好不好。要想在bias上表现好，low bias，就得复杂化模型，增加模型的参数，但这样容易过拟合 (overfitting)，过拟合对应上图是high variance，点很分散。low bias对应就是点都打在靶心附近，所以瞄的是准的，但手不一定稳。</p>
-<h3 id="2方差variance">2.方差variance</h3>
+<p>bias 描述的是根据样本拟合出的模型的输出预测结果的期望与样本真实结果的差距。</p>
+<p>简单讲，就是在样本上拟合的好不好。要想在 bias 上表现好，low bias，就得复杂化模型，增加模型的参数，但这样容易过拟合 (overfitting)，过拟合对应上图是 high variance，点很分散。low bias 对应就是点都打在靶心附近，所以瞄的是准的，但手不一定稳。</p>
+<h3 id="2方差-variance">2.方差 variance</h3>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_185113.png" alt=""></p>
-<p>varience描述的是样本上训练出来的模型在测试集上的表现。</p>
-<p>要想在variance上表现好，low varience，就要简化模型，减少模型的参数，但这样容易欠拟合(unfitting)，欠拟合对应上图是high bias，点偏离中心。low variance对应就是点都打的很集中，但不一定是靶心附近，手很稳，但是瞄的不准。</p>
+<p>varience 描述的是样本上训练出来的模型在测试集上的表现。</p>
+<p>要想在 variance 上表现好，low varience，就要简化模型，减少模型的参数，但这样容易欠拟合(unfitting)，欠拟合对应上图是 high bias，点偏离中心。low variance 对应就是点都打的很集中，但不一定是靶心附近，手很稳，但是瞄的不准。</p>
 <h3 id="3方差与偏差">3.方差与偏差</h3>
-<p>对于一个简单的model，偏差会比较大，方差会比较小。</p>
-<p>对于一个复杂的model，偏差会比较小，方差会比较大。</p>
-<p>我们训练一个模型的最终目的，是为了让这个模型在测试数据上拟合效果好，也就是Error(test)比较小，但在实际问题中，test data我们是拿不到的，也根本不知道test data的内在规律（如果知道了，还machine learning个啥 ），所以我们通过什么策略来减小Error(test)呢？</p>
+<p>对于一个简单的 model，偏差会比较大，方差会比较小。</p>
+<p>对于一个复杂的 model，偏差会比较小，方差会比较大。</p>
+<p>我们训练一个模型的最终目的，是为了让这个模型在测试数据上拟合效果好，也就是 Error(test)比较小，但在实际问题中，test data 我们是拿不到的，也根本不知道 test data 的内在规律（如果知道了，还 machine learning 个啥 ），所以我们通过什么策略来减小 Error(test)呢？</p>
 <p>分两步：</p>
 <ol>
-<li>让Error(train)尽可能小</li>
-<li>让Error(train)尽可能等于Error(test)</li>
+<li>让 Error(train)尽可能小</li>
+<li>让 Error(train)尽可能等于 Error(test)</li>
 </ol>
-<p>三段论，因为A小，而且A=B，这样B就小。</p>
-<p>那么怎么让Error(train)尽可能小呢？——&gt;把模型复杂化，把参数搞得多多的，这个好理解，十元线性回归，肯定error要比二元线性回归低啊。——&gt;low bias</p>
-<p>然后怎么让Error(train)尽可能等于Error(test)呢？——&gt;把模型简单化，把参数搞得少少的。什么叫Error(train)=Error(test)？就是模型没有偏见，对train test一视同仁。那么怎样的模型更容易有这这种一视同仁的特性，换句话说，更有『通用性』，对局部数据不敏感？那就是简单的模型。——&gt;low variance</p>
+<p>三段论，因为 A 小，而且 A=B，这样 B 就小。</p>
+<p>那么怎么让 Error(train)尽可能小呢？——&gt;把模型复杂化，把参数搞得多多的，这个好理解，十元线性回归，肯定 error 要比二元线性回归低啊。——&gt;low bias</p>
+<p>然后怎么让 Error(train)尽可能等于 Error(test)呢？——&gt;把模型简单化，把参数搞得少少的。什么叫 Error(train)=Error(test)？就是模型没有偏见，对 train test 一视同仁。那么怎样的模型更容易有这这种一视同仁的特性，换句话说，更有『通用性』，对局部数据不敏感？那就是简单的模型。——&gt;low variance</p>
 <h3 id="4方差与偏差的优化">4.方差与偏差的优化</h3>
 <p>在方差与偏差之间找一个相对的平衡的方法一般有两种方法：</p>
 <ol>
-<li>
-<p>more data</p>
+<li>more data</li>
+</ol>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_204118.png" alt=""></p>
 <p>选用更多的数据，使模型的拟合程度更高。</p>
-</li>
-<li>
-<p>Regularization</p>
+<ol start="2">
+<li>Regularization</li>
+</ol>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Screenshot_20200623_204147.png" alt=""></p>
 <p>使用正则化。正则化可以使图像变得平滑。</p>
-</li>
-</ol>
 <p>参考：</p>
 <p><a href="https://www.zhihu.com/question/27068705">https://www.zhihu.com/question/27068705</a></p>
 

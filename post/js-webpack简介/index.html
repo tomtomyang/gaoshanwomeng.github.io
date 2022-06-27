@@ -49,7 +49,7 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h3 animated fadeInDown"><li>
-                <span class="toc-link">1. 为什么使用webpack</span>
+                <span class="toc-link">1. 为什么使用 webpack</span>
             </li>
             
                     <ul class="toc-h4"><li>
@@ -59,7 +59,7 @@
                 <span class="toc-link">2. 立即调用函数表达式阶段</span>
             </li>
             <li>
-                <span class="toc-link">3. node.js模块化&#43;commonJS</span>
+                <span class="toc-link">3. node.js 模块化&#43;commonJS</span>
             </li>
             <li>
                 <span class="toc-link">4. ECMAScript 模块</span>
@@ -112,7 +112,7 @@
                 <span class="toc-link">5. html-webpack-plugin</span>
             </li>
             <li>
-                <span class="toc-link">6. webpack与bable</span>
+                <span class="toc-link">6. webpack 与 bable</span>
             </li>
             
                     <ul class="toc-h4"><li>
@@ -125,7 +125,7 @@
                 <span class="toc-link">3. 三者的关系</span>
             </li>
             <li>
-                <span class="toc-link">4. 在webpack中使用bable</span>
+                <span class="toc-link">4. 在 webpack 中使用 bable</span>
             </li>
             
                     <ul class="toc-h5"><li>
@@ -152,14 +152,14 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-05-15</span>
-            <span>更新于2022-05-17</span>
-            <span>共4360字</span>
+            <span>更新于2022-06-27</span>
+            <span>共4141字</span>
             <span>阅读9分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
-        <h3 id="1-为什么使用webpack">1. 为什么使用webpack</h3>
+        <h3 id="1-为什么使用-webpack">1. 为什么使用 webpack</h3>
 <h4 id="1-远古阶段">1. 远古阶段</h4>
 <blockquote>
 <p>在打包工具出现之前，我们是如何在 web 中使用 JavaScript 的？</p>
@@ -177,7 +177,7 @@
 <p>但是，修改一个文件意味着必须重新构建整个文件。拼接可以做到很容易地跨文件重用脚本，但是却使构建结果的优化变得更加困难。如何判断代码是否实际被使用？</p>
 <p>即使你只用到 lodash 中的某个函数，也必须在构建结果中加入整个库，然后将它们压缩在一起。如何 treeshake 代码依赖？难以大规模地实现延迟加载代码块，这需要开发人员手动地进行大量工作。</p>
 </blockquote>
-<h4 id="3-nodejs模块化commonjs">3. node.js模块化+commonJS</h4>
+<h4 id="3-nodejs-模块化commonjs">3. node.js 模块化+commonJS</h4>
 <p>Node.js 是一个 JavaScript 运行时环境，可以在浏览器环境之外的计算机和服务器中使用。webpack 运行在 Node.js 中。</p>
 <p>既然不是在浏览器中运行 JavaScript，现在已经没有了可以添加到浏览器中的 html 文件和 script 标签。那么 Node.js 应用程序要如何加载新的代码 chunk 呢？</p>
 <p>CommonJS 问世并引入了 <code>require</code> 机制，它允许你在当前文件中加载和使用某个模块。导入需要的每个模块，这一开箱即用的功能，帮助我们解决了作用域问题。</p>
@@ -187,17 +187,17 @@
 <p>是否可以有一种方式，不仅可以让我们编写模块，而且还支持任何模块格式（至少在我们到达 ESM 之前），并且可以同时处理资源和资产？</p>
 <p>这就是 webpack 存在的原因。它是一个工具，可以打包你的 JavaScript 应用程序（支持 ESM 和 CommonJS），可以扩展为支持许多不同的静态资源，例如：images, fonts 和 stylesheets。</p>
 <h4 id="6-vite">6. vite</h4>
-<p>Vite是Vue的作者尤雨溪开发的Web开发构建工具，它是一个基于浏览器原生ES模块导入的开发服务器，在开发环境下，利用浏览器去解析import，在服务器端按需编译返回，完全跳过了打包这个概念，服务器随启随用。</p>
+<p>Vite 是 Vue 的作者尤雨溪开发的 Web 开发构建工具，它是一个基于浏览器原生 ES 模块导入的开发服务器，在开发环境下，利用浏览器去解析 import，在服务器端按需编译返回，完全跳过了打包这个概念，服务器随启随用。</p>
 <h3 id="2-webpack">2. webpack</h3>
 <blockquote>
 <p>本质上，<strong>webpack</strong> 是一个用于现代 JavaScript 应用程序的 <em>静态模块打包工具</em>。当 webpack 处理应用程序时，它会在内部构建一个 依赖图(dependency graph），此依赖图对应映射到项目所需的每个模块，并生成一个或多个 <em>bundle</em>。</p>
 </blockquote>
 <p>根据官网的介绍我们可以知道这几点信息：</p>
 <ol>
-<li>webpack是一个模块打包工具</li>
-<li>webpack是用来打包js文件的</li>
-<li>webpack是通过构建一个依赖图，来明确模块之间的关系的</li>
-<li>webpack最终会生成一个或多个文件</li>
+<li>webpack 是一个模块打包工具</li>
+<li>webpack 是用来打包 js 文件的</li>
+<li>webpack 是通过构建一个依赖图，来明确模块之间的关系的</li>
+<li>webpack 最终会生成一个或多个文件</li>
 </ol>
 <h4 id="1-模块modules">1. 模块（Modules）</h4>
 <ul>
@@ -206,14 +206,14 @@
 <li>Node.js 从一开始就支持模块化编程。 web 的 <em>模块化</em> 正在缓慢支持中。</li>
 <li>在 web 界存在多种支持 JavaScript 模块化的工具，这些工具各有优势和限制。 webpack 从这些系统中汲取了经验和教训，并将 <em>模块</em> 的概念应用到项目的任何文件中。</li>
 </ul>
-<p><strong>webpack模块</strong></p>
+<p><strong>webpack 模块</strong></p>
 <p>webpack 天生支持如下模块类型：</p>
 <ul>
 <li>ECMAScript 模块</li>
 <li>CommonJS 模块</li>
 <li>AMD 模块</li>
 </ul>
-<p>通过 loader可以使 webpack 支持多种语言和预处理器语法编写的模块。loader向 webpack 描述了如何处理非原生<em>模块</em>，并将相关依赖引入到你的 bundles中。webpack 社区已经为各种流行的语言和预处理器创建了 <em>loader</em>，其中包括：</p>
+<p>通过 loader 可以使 webpack 支持多种语言和预处理器语法编写的模块。loader 向 webpack 描述了如何处理非原生<em>模块</em>，并将相关依赖引入到你的 bundles 中。webpack 社区已经为各种流行的语言和预处理器创建了 <em>loader</em>，其中包括：</p>
 <ul>
 <li>CoffeeScript</li>
 <li>TypeScript</li>
@@ -242,7 +242,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>};
 </span></span></code></pre></div><h4 id="2-输出output">2. 输出（output）</h4>
 <blockquote>
-<p>output告诉 webpack 在哪里输出它所创建的 <em>bundle</em>，以及如何命名这些文件。主要输出文件的默认值是 <code>./dist/main.js</code>，其他生成文件默认放置在 <code>./dist</code> 文件夹中。</p>
+<p>output 告诉 webpack 在哪里输出它所创建的 <em>bundle</em>，以及如何命名这些文件。主要输出文件的默认值是 <code>./dist/main.js</code>，其他生成文件默认放置在 <code>./dist</code> 文件夹中。</p>
 <p>可以通过在配置中指定一个 <code>output</code> 字段，来配置这些处理过程。</p>
 </blockquote>
 <p><strong>webpack.config.js</strong></p>
@@ -257,7 +257,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span>};
 </span></span></code></pre></div><p>示例中，通过 <code>output.filename</code> 和 <code>output.path</code> 属性，来告诉 webpack bundle 的名称，以及我们想要 bundle 生成到哪里。</p>
 <blockquote>
-<p>可能你想要了解在代码最上面导入的 path 模块是什么，它是一个 <a href="https://nodejs.org/api/modules.html">Node.js 核心模块</a>，用于操作文件路径。</p>
+<p>可能你想要了解在代码最上面导入的 path 模块是什么，它是一个 <a href="https://nodejs.org/api/modules.html">Node.js 核心模块</a> ，用于操作文件路径。</p>
 </blockquote>
 <h4 id="3-加载loader-">3. 加载（loader ）</h4>
 <blockquote>
@@ -325,7 +325,7 @@
 <ul>
 <li>通过 <code>require(...)</code> 引入其他文件</li>
 <li>通过 <code>require(...)</code> 使用 npm 下载的工具函数</li>
-<li>使用 JavaScript 控制流表达式，例如 <code>?:</code> 操作符</li>
+<li>使用 JavaScript 控制流表达式，例如 <code>?: </code> 操作符</li>
 <li>对 value 使用常量或变量赋值</li>
 <li>编写并执行函数，生成部分配置</li>
 </ul>
@@ -354,13 +354,13 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>];
 </span></span></code></pre></div><h3 id="4-webpack-dev-server">4. webpack-dev-server</h3>
 <blockquote>
-<p>webpack-dev-server是一个小型的<code>Node.js Express</code>服务器,它使用<code>webpack-dev-middleware</code>来服务于webpack的包,除此自外，它还有一个通过<a href="http://sockjs.org/">Sock.js</a>来连接到服务器的微型运行时。</p>
-<p>有一点需要注意的是:webpack-dev-server生成的包并没有放在你的真实目录中,而是放在了内存中。</p>
+<p>webpack-dev-server 是一个小型的 <code>Node.js Express</code> 服务器,它使用 <code>webpack-dev-middleware</code> 来服务于 webpack 的包,除此自外，它还有一个通过 <a href="http://sockjs.org/">Sock.js</a> 来连接到服务器的微型运行时。</p>
+<p>有一点需要注意的是: webpack-dev-server 生成的包并没有放在你的真实目录中,而是放在了内存中。</p>
 </blockquote>
 <h3 id="5-html-webpack-plugin">5. html-webpack-plugin</h3>
 <blockquote>
 <p><a href="https://github.com/jantimon/html-webpack-plugin"><code>HtmlWebpackPlugin</code></a> 简化了 HTML 文件的创建，以便为你的 webpack 包提供服务。</p>
-<p>你可以让该插件为你生成一个 HTML 文件，使用 <a href="https://lodash.com/docs#template">lodash 模板</a>提供模板，或者使用你自己的 <a href="https://webpack.docschina.org/loaders">loader</a>。</p>
+<p>你可以让该插件为你生成一个 HTML 文件，使用 <a href="https://lodash.com/docs#template">lodash 模板</a> 提供模板，或者使用你自己的 <a href="https://webpack.docschina.org/loaders">loader</a> 。</p>
 </blockquote>
 <p>该插件将为你生成一个 HTML5 文件， 在 body 中使用 <code>script</code> 标签引入你所有 webpack 生成的 bundle。 只需添加该插件到你的 webpack 配置中，如下所示：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>);
@@ -385,30 +385,30 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    &lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index_bundle.js&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>  &lt;/<span style="color:#ff79c6">body</span>&gt;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>&lt;/<span style="color:#ff79c6">html</span>&gt;
-</span></span></code></pre></div><h3 id="6-webpack与bable">6. webpack与bable</h3>
+</span></span></code></pre></div><h3 id="6-webpack-与-bable">6. webpack 与 bable</h3>
 <h4 id="1-babel">1. babel</h4>
 <p>babel 是一个 JavaScript 编译器。（把浏览器不认识的语法，编译成浏览器认识的语法。）</p>
 <h4 id="2-babel-loader">2. babel-loader</h4>
-<p>用来连接webpack使用babel的加载器</p>
+<p>用来连接 webpack 使用 babel 的加载器</p>
 <h4 id="3-三者的关系">3. 三者的关系</h4>
-<p>webpack 通过 babel-loader 使用 babel ，使用到了Bable的如下内容：</p>
+<p>webpack 通过 babel-loader 使用 babel ，使用到了 Bable 的如下内容：</p>
 <blockquote>
 <ul>
 <li>
 <p>@babel/cli</p>
-<p>Babel附带了一个内置的CLI，可用于从命令行编译文件。</p>
+<p>Babel 附带了一个内置的 CLI，可用于从命令行编译文件。</p>
 </li>
 <li>
 <p>@babel/core</p>
-<p>bable核心库</p>
+<p>bable 核心库</p>
 </li>
 <li>
 <p>@babel/preset-env</p>
-<p>编译最新版本JavaScript</p>
+<p>编译最新版本 JavaScript</p>
 </li>
 <li>
 <p>@babel/preset-react</p>
-<p>编译react</p>
+<p>编译 react</p>
 </li>
 <li>
 <p>@babel/polyfill</p>
@@ -420,7 +420,7 @@
 </li>
 </ul>
 </blockquote>
-<h4 id="4-在webpack中使用bable">4. 在webpack中使用bable</h4>
+<h4 id="4-在-webpack-中使用-bable">4. 在 webpack 中使用 bable</h4>
 <h5 id="1-初始化">1. 初始化</h5>
 <p>新建项目</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>mkdir babel-in-webpack
@@ -439,12 +439,12 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  ],
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  <span style="color:#ff79c6">&#34;plugins&#34;</span>: []
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
-</span></span></code></pre></div><p>新建文件夹 <code>src</code>，<code>src</code> 内新建文件 <code>test.js</code>，随便写点啥es6语法。</p>
+</span></span></code></pre></div><p>新建文件夹 <code>src</code>，<code>src</code> 内新建文件 <code>test.js</code>，随便写点啥 es6 语法。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fbea1000f3" alt="img"></p>
 <p>使用下面命令编译</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>./node_modules/.bin/babel src --out-dir lib
 </span></span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fbeade14d6" alt="img"></p>
-<p>编译完会新增目录<code>lib</code>, 里面放着编译好的文件</p>
+<p>编译完会新增目录 <code>lib</code>, 里面放着编译好的文件</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fbead1a5b8" alt="img"></p>
 <h5 id="3-配置-react">3. 配置 React</h5>
 <p>安装 <code>Babel</code> 编译 <code>React</code> 的依赖</p>
@@ -469,7 +469,7 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fbeb4d6b7b" alt="img"></p>
 <p>看起来编译很成功, 我们在 <code>lib</code> 下面新建一个 html 引入 <code>main.js</code> 看看效果</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fbefcf3ea3" alt="img"></p>
-<p>报错，浏览器不认识require，继续往下看。</p>
+<p>报错，浏览器不认识 require，继续往下看。</p>
 <h5 id="4-配置-webpack">4. 配置 webpack</h5>
 <p>安装 <code>webpack</code> 依赖</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm install --save-dev webpack webpack-cli
@@ -501,10 +501,10 @@
 </span></span></code></pre></div><p>运行命令</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm run build
 </span></span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fc1cc5e5e3" alt="img"></p>
-<p>会看到 <code>dist/main.js</code>, 写个html引入试试</p>
+<p>会看到 <code>dist/main.js</code>, 写个 html 引入试试</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/170f87fc1f474c1d" alt="img"></p>
 <h5 id="5-两种编译结果对比">5. 两种编译结果对比</h5>
-<p>我们来看 <code>Babel</code> 编译结果 <code>lib/main.js</code> 和 <code>webpack</code> 编译结果 <code>dist/main.js</code>，发现 <code>Babel</code> 仅仅是将 <code>src/main.js</code> 的react语法编译成了js语法，而 <code>webpack</code> 将 <code>src/main.js</code> 和引入的 <code>node_modules</code> 融合后用 <code>Babel</code> 编译。</p>
+<p>我们来看 <code>Babel</code> 编译结果 <code>lib/main.js</code> 和 <code>webpack</code> 编译结果 <code>dist/main.js</code>，发现 <code>Babel</code> 仅仅是将 <code>src/main.js</code> 的 react 语法编译成了 js 语法，而 <code>webpack</code> 将 <code>src/main.js</code> 和引入的 <code>node_modules</code> 融合后用 <code>Babel</code> 编译。</p>
 <p>浏览器不认识 <code>require</code>，<code>webpack</code> 实现了一套浏览器认识的 <code>require</code>。</p>
 
       </div>

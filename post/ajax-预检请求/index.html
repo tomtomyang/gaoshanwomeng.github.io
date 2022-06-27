@@ -66,38 +66,38 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2020-11-17</span>
-            <span>更新于2022-05-17</span>
-            <span>共1086字</span>
+            <span>更新于2022-06-27</span>
+            <span>共1037字</span>
             <span>阅读3分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
         <h3 id="1什么是预检请求">1.什么是预检请求</h3>
-<p>定义：预检请求（Preflighted requests ）是浏览器发起跨域请求时，通过OPTIONS方法询问服务器对跨域请求的支持情况（支持的包含请求方法、请求头、数据类型）。</p>
+<p>定义：预检请求（Preflighted requests ）是浏览器发起跨域请求时，通过 OPTIONS 方法询问服务器对跨域请求的支持情况（支持的包含请求方法、请求头、数据类型）。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/12110248_r3t7.png" alt="img"></p>
 <h3 id="2什么时候会触发预检请求">2.什么时候会触发预检请求</h3>
 <p>请求会划分为简单请求和非简单请求，简单请求是：</p>
 <ol>
-<li>请求方法只能为GET、HEAD、POST</li>
+<li>请求方法只能为 GET、HEAD、POST</li>
 <li>请求头中无自定义头</li>
-<li>Content-Type必须为text/plain、multipart/form-data、application/x-www-form-urlencoded</li>
+<li>Content-Type 必须为 text/plain、multipart/form-data、application/x-www-form-urlencoded</li>
 </ol>
 <p>符合以上条件的为简单请求，否则为非简单请求，也就是说当存在下面情况时，判定为非简单请求，浏览器会默认发送两条请求。</p>
 <ol>
-<li>默认情况下，跨域请求只支持GET,HEAD,POST方法，如果不是这三个请求方法（比如：PUT、DELETE、CONNECT、OPTIONS、TRACE和PATCH），那么将触发预检请求</li>
-<li>默认情况下，浏览器跨域请求时，会自动添加的请求头（HOST,Referer,Connection、Accept、User-Agent,Accept-Languange,Accept-Encoding,Accept-Charset和Content-Type）,这些请求中还有其他请求头时，那么将触发预检请求。</li>
-<li>如1、2所说的情况排除在外的条件下，跨域请求是，浏览器支持的Content-Type值为application/x-www-form-urlencoded，multipart/form-data和text/plain。如果是其他数据类型(如application/json,text/xml&hellip;)，那么将触发预检请求。</li>
+<li>默认情况下，跨域请求只支持 GET,HEAD,POST 方法，如果不是这三个请求方法（比如：PUT、DELETE、CONNECT、OPTIONS、TRACE 和 PATCH），那么将触发预检请求</li>
+<li>默认情况下，浏览器跨域请求时，会自动添加的请求头（HOST,Referer,Connection、Accept、User-Agent,Accept-Languange,Accept-Encoding,Accept-Charset 和 Content-Type）,这些请求中还有其他请求头时，那么将触发预检请求。</li>
+<li>如 1、2 所说的情况排除在外的条件下，跨域请求是，浏览器支持的 Content-Type 值为 application/x-www-form-urlencoded，multipart/form-data 和 text/plain。如果是其他数据类型(如 application/json,text/xml&hellip;)，那么将触发预检请求。</li>
 </ol>
 <h3 id="3存在预检请求时如何解决">3.存在预检请求时，如何解决</h3>
-<p>如果存在预检请求，浏览器会发送向同一地址发送两次请求，第一次是预检请求，第二次是真正的ajax请求。在前后端分离开发时，会发生的一种情况是，对于后端的接口，前端发送的第一次预检请求直接进到方法中，导致各种出错。</p>
+<p>如果存在预检请求，浏览器会发送向同一地址发送两次请求，第一次是预检请求，第二次是真正的 ajax 请求。在前后端分离开发时，会发生的一种情况是，对于后端的接口，前端发送的第一次预检请求直接进到方法中，导致各种出错。</p>
 <p>那么要解决预检请求这一问题，我就想到了两种思路：</p>
 <ol>
 <li>将非简单请求改为简单请求，避免出发预检请求。</li>
-<li>在后端代码中对预检请求进行拦截，只接收真正的ajax请求。</li>
+<li>在后端代码中对预检请求进行拦截，只接收真正的 ajax 请求。</li>
 </ol>
 <p>因此，需要在后端进行配置，将第一次发送的预检请求进行拦截。</p>
-<p><code>php</code>代码：</p>
+<p><code>php</code> 代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-php" data-lang="php"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">// 设置能访问的域名
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4"></span><span style="color:#ff79c6">static</span> <span style="color:#ff79c6">public</span> <span style="color:#8be9fd;font-style:italic">$originarr</span> <span style="color:#ff79c6">=</span> [
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>   <span style="color:#f1fa8c">&#39;https://test1.com&#39;</span>,
@@ -122,13 +122,13 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span><span style="color:#6272a4"></span>      header(<span style="color:#f1fa8c">&#39;Access-Control-Allow-Headers:x-requested-with,Content-Type,X-CSRF-Token&#39;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>   }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>} 
-</span></span></code></pre></div><p><code>go</code>代码：</p>
+</span></span></code></pre></div><p><code>go</code> 代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">crossOrigin</span>( w http.ResponseWriter, req <span style="color:#ff79c6">*</span>http.Request ) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#ff79c6">if</span> origin <span style="color:#ff79c6">:=</span> req.Header.<span style="color:#50fa7b">Get</span>(<span style="color:#f1fa8c">&#34;Orgin&#34;</span>); origin <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#34;&#34;</span> {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Origin&#34;</span>, origin)
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Methods&#34;</span>, <span style="color:#f1fa8c">&#34;POST, GET, HEAD&#34;</span>)
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>        w.<span style="color:#50fa7b">Header</span>().<span style="color:#50fa7b">Set</span>(<span style="color:#f1fa8c">&#34;Access-Control-Allow-Headers&#34;</span>, <span style="color:#f1fa8c">&#34;x-requested-with,content-type,token&#34;</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>	}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#ff79c6">if</span> req.Method <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;OPTIONS&#34;</span> {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        result = <span style="color:#bd93f9">0</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    }

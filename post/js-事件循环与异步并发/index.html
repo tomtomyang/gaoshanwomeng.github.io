@@ -49,19 +49,19 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h3 animated fadeInDown"><li>
-                <span class="toc-link">1. JS事件</span>
+                <span class="toc-link">1. JS 事件</span>
             </li>
             <li>
-                <span class="toc-link">2. JS事件的组织形式</span>
+                <span class="toc-link">2. JS 事件的组织形式</span>
             </li>
             <li>
-                <span class="toc-link">3. JS事件循环</span>
+                <span class="toc-link">3. JS 事件循环</span>
             </li>
             <li>
                 <span class="toc-link">4. 宏任务和微任务</span>
             </li>
             <li>
-                <span class="toc-link">5. async和await</span>
+                <span class="toc-link">5. async 和 await</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -72,9 +72,9 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-06-25</span>
-            <span>更新于2022-05-17</span>
-            <span>共6376字</span>
-            <span>阅读13分钟</span>
+            <span>更新于2022-06-27</span>
+            <span>共5970字</span>
+            <span>阅读12分钟</span>
           </div>
         
       </div>
@@ -87,22 +87,22 @@
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide/In_depth">MDN_深入：微任务和 JavaScript 运行时环境</a></p>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_DOM_API/Microtask_guide">MDN_在 JavaScript 中通过 queueMicrotask() 使用微任务</a></p>
 <p><a href="https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/#what-is-the-event-loop">Node.js_event_loop</a></p>
-<p><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">WHATWG规范_event_loop</a></p>
+<p><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loops">WHATWG 规范_event_loop</a></p>
 <p><a href="https://javascript.info/event-loop">JavaScript Info_event-loop</a></p>
 <p><a href="https://cloud.tencent.com/developer/article/1701427">宏任务和微任务到底是什么？</a></p>
-<p><a href="http://www.ruanyifeng.com/blog/2014/10/event-loop.html">JavaScript 运行机制详解：再谈Event Loop</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2014/10/event-loop.html">JavaScript 运行机制详解：再谈 Event Loop</a></p>
 <p><a href="https://zh.javascript.info/event-loop">事件循环：微任务和宏任务</a></p>
 <p><a href="https://www.cnblogs.com/wxcbg/p/11040362.html">浏览器事件循环机制（event loop）</a></p>
 </blockquote>
-<h3 id="1-js事件">1. JS事件</h3>
+<h3 id="1-js-事件">1. JS 事件</h3>
 <blockquote>
 <p>The event loop is the secret behind JavaScript’s asynchronous programming. JS executes all operations on a single thread, but using a few smart data structures, gives us the illusion of multi-threading. The asynchronous behavior is not part of the JavaScript language itself, rather it is built on top of the core JavaScript language in the browser (or the programming environment) and accessed through the browser APIs.</p>
 </blockquote>
-<p>事件循环是JavaScript异步编程背后的秘密。JS在一个线程上执行所有的操作，但是使用一些特别的数据结构，进行一些特殊的操作，给我们一种多线程的错觉。异步行为不是JavaScript语言本身的一部分，而是构建在浏览器(或编程环境)的核心JavaScript语言之上，并通过浏览器api进行访问。</p>
+<p>事件循环是 JavaScript 异步编程背后的秘密。JS 在一个线程上执行所有的操作，但是使用一些特别的数据结构，进行一些特殊的操作，给我们一种多线程的错觉。异步行为不是 JavaScript 语言本身的一部分，而是构建在浏览器(或编程环境)的核心 JavaScript 语言之上，并通过浏览器 api 进行访问。</p>
 <blockquote>
 <p>Browser JavaScript execution flow, as well as in Node.js, is based on an <em>event loop</em>. The <em>event loop</em> concept is very simple. There’s an endless loop, where the JavaScript engine waits for tasks, executes them, and then sleeps, waiting for more tasks.</p>
 </blockquote>
-<p>JS引擎大多数时间都处于空闲状态，只有当脚本、事件处理函数、事务发生时，JS引擎才开始工作。</p>
+<p>JS 引擎大多数时间都处于空闲状态，只有当脚本、事件处理函数、事务发生时，JS 引擎才开始工作。</p>
 <blockquote>
 <p>Examples of tasks:</p>
 <ul>
@@ -114,28 +114,28 @@
 </blockquote>
 <p>比如：</p>
 <ul>
-<li>当外部脚本通过<code>script</code>标签进行加载时，脚本将会作为一个任务被执行，</li>
+<li>当外部脚本通过 <code>script</code> 标签进行加载时，脚本将会作为一个任务被执行，</li>
 <li>当网页上的事件发生并且有一个事件监听器绑定在该事件上时，比如，当使用者在网页上移动鼠标，就会派生出 <code>mousemove</code> 事件，那么这个事件的处理函数（handler）就会作为一个任务被执行。（如果只触发了事件，但是没有事件监听器，没有绑定事件处理函数，那就不会发生任何事）。</li>
-<li>当<code>setTimeout</code>计划的时间到期，定义的回调函数就会作为一个任务被执行。</li>
+<li>当 <code>setTimeout</code> 计划的时间到期，定义的回调函数就会作为一个任务被执行。</li>
 <li>诸如此类&hellip;</li>
 </ul>
-<h3 id="2-js事件的组织形式">2. JS事件的组织形式</h3>
-<p>按照上面的说法，任务的来源多种多样，而且，同时可能会有好几个任务需要被执行，但是JS是单线程的，同一时间只能执行一个任务，那么就需要一个特定的机制和一块特定的空间来记录这些需要被执行的任务，同时，给这些任务排队，这就是JS的并发模型（浏览器引擎的实现和Node.js并不相同，这里介绍浏览器引擎的实现方式）。</p>
+<h3 id="2-js-事件的组织形式">2. JS 事件的组织形式</h3>
+<p>按照上面的说法，任务的来源多种多样，而且，同时可能会有好几个任务需要被执行，但是 JS 是单线程的，同一时间只能执行一个任务，那么就需要一个特定的机制和一块特定的空间来记录这些需要被执行的任务，同时，给这些任务排队，这就是 JS 的并发模型（浏览器引擎的实现和 Node.js 并不相同，这里介绍浏览器引擎的实现方式）。</p>
 <p>关于并发模型，有两种图示结构，两种结构都包含了：堆、栈、队列：</p>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*MnRk2ZVl5acI5BFmmw7IRg.png" alt="img" style="zoom:50%;" />
 <blockquote>
 <ul>
 <li><strong>Memory Heap</strong> : Objects are allocated in a heap which is just a name to denote a large mostly unstructured region of memory.</li>
 </ul>
-<p>内存堆：JS中的对象被分配在堆（Heap）中，该堆仅是一个名称，用来表示一大块（通常是非结构化的）内存区域</p>
+<p>内存堆：JS 中的对象被分配在堆（Heap）中，该堆仅是一个名称，用来表示一大块（通常是非结构化的）内存区域</p>
 <ul>
 <li><strong>Call Stack</strong> : This represents the single thread provided for JavaScript code execution. Function calls form a stack of frames. It is responsible for keeping track of all the operations in line to be executed. Whenever a function is finished, it is popped from the stack. It is a <strong>LIFO queue</strong> (Last In, First Out).</li>
 </ul>
-<p>调用栈：这就是JavaScript代码单线程执行的表现。 每一个函数调用会形成一个帧，帧负责跟踪所有要执行的操作。 每当函数完成时，对应的帧会从堆栈中弹出，然后执行下一个，这是一个后进先出结构。</p>
+<p>调用栈：这就是 JavaScript 代码单线程执行的表现。 每一个函数调用会形成一个帧，帧负责跟踪所有要执行的操作。 每当函数完成时，对应的帧会从堆栈中弹出，然后执行下一个，这是一个后进先出结构。</p>
 <ul>
 <li><strong>Browser or Web APIs</strong> : They are built into your web browser and are able to expose data from the browser and surrounding computer environment and do useful complex things with it. They are not part of the JavaScript language itself, rather they are built on top of the core JavaScript language, providing you with extra superpowers to use in your JavaScript code.</li>
 </ul>
-<p>WEB API：它们内置在你的网络浏览器中，能将浏览器和计算机操作系统中的部分数据开放出来，开发者可以使用这些数据做一些有用的复杂的事。它们不是JavaScript语言本身的一部分，而是构建在JavaScript语言核心之上，在编写JavaScript代码时提供额外的、强力的帮助。</p>
+<p>WEB API：它们内置在你的网络浏览器中，能将浏览器和计算机操作系统中的部分数据开放出来，开发者可以使用这些数据做一些有用的复杂的事。它们不是 JavaScript 语言本身的一部分，而是构建在 JavaScript 语言核心之上，在编写 JavaScript 代码时提供额外的、强力的帮助。</p>
 <ul>
 <li><strong>Event or Callback Queue</strong> : It is responsible for sending new functions to the track for processing. It follows the queue data structure to maintain the correct sequence in which all operations should be sent for execution.</li>
 </ul>
@@ -148,7 +148,7 @@
 <ul>
 <li>所有同步任务都在主线程上执行，形成一个执行栈（execution context stack）。</li>
 <li>栈（Stack） 由 函数调用形成的若干帧（Frame，在很多地方也被叫做执行上下文，execution context） 组成。</li>
-<li>Frame会包含一些当前函数的参数、局部变量之类的信息；</li>
+<li>Frame 会包含一些当前函数的参数、局部变量之类的信息；</li>
 </ul>
 </li>
 <li><strong>队列（任务队列）</strong>
@@ -167,9 +167,9 @@
 </li>
 </ul>
 </blockquote>
-<p>从上面的表述可以知道，JS运行时会存在一个用于处理多任务并发的模型，这个模型大概包括了执行栈，任务队列，存储堆三种结构，执行栈是用来执行函数调用形成的帧的。任务队列是用来暂存要执行的任务，并给任务排队的。存储堆是用来存储对象的。</p>
-<h3 id="3-js事件循环">3. JS事件循环</h3>
-<p>了解了JS的并发模型，那么这个模型是如何工作的？根据所查资料，当并发模型按照既定工作方式进行运作时，就形成了JS的事件循环机制，或者说并发模型就是按照事件循环机制进行工作的。</p>
+<p>从上面的表述可以知道，JS 运行时会存在一个用于处理多任务并发的模型，这个模型大概包括了执行栈，任务队列，存储堆三种结构，执行栈是用来执行函数调用形成的帧的。任务队列是用来暂存要执行的任务，并给任务排队的。存储堆是用来存储对象的。</p>
+<h3 id="3-js-事件循环">3. JS 事件循环</h3>
+<p>了解了 JS 的并发模型，那么这个模型是如何工作的？根据所查资料，当并发模型按照既定工作方式进行运作时，就形成了 JS 的事件循环机制，或者说并发模型就是按照事件循环机制进行工作的。</p>
 <p>执行栈的工作模式：</p>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*yE9mbYWzwZGpc1jUcUw69Q.png" alt="img" style="zoom:50%;" />
 <p>任务队列的工作模式：</p>
@@ -192,9 +192,9 @@
 </span></span></span></code></pre></div><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*7coLKNPemPd9o40PmUvuvQ.gif" alt="img"  />
 <ol>
 <li>当开始执行 JS 代码时，首先会执行一个 <code>main</code> 函数，然后执行我们的代码；</li>
-<li>bar函数被调用，形成函数调用帧，压入执行栈；</li>
-<li>bar函数使用了setTimeout API，并指定了回调函数，回调函数进入处理setTimeout的浏览器线程进行等待；</li>
-<li>setTimeout等待时间到了之后，回调函数被放入任务队列中；</li>
+<li>bar 函数被调用，形成函数调用帧，压入执行栈；</li>
+<li>bar 函数使用了 setTimeout API，并指定了回调函数，回调函数进入处理 setTimeout 的浏览器线程进行等待；</li>
+<li>setTimeout 等待时间到了之后，回调函数被放入任务队列中；</li>
 <li>这时候看执行栈中有没有在执行的函数，如果有则等待，如果没有则出队列入栈，执行回调函数；</li>
 </ol>
 <blockquote>
@@ -225,15 +225,15 @@
 </span></span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210705143824688.png" alt="image-20210705143824688"></p>
 </blockquote>
 <h3 id="4-宏任务和微任务">4. 宏任务和微任务</h3>
-<p>根据上面的事件循环机制，可以知道的是，setTimeout作为一个调用浏览器API的异步事件，它的回调函数会在某一个时刻，被加入到任务队列中，等待进入执行栈。</p>
-<p>而另一种异步事件像Promise，没有调用浏览器或Web API，是由JS本身来控制的异步事件，这种事件该如何处理，怎么加入队列等待被执行，如果同时出现了浏览器控制的异步事件和JS本身控制的异步事件，应该怎么处理，怎么放入队列，谁先执行？</p>
+<p>根据上面的事件循环机制，可以知道的是，setTimeout 作为一个调用浏览器 API 的异步事件，它的回调函数会在某一个时刻，被加入到任务队列中，等待进入执行栈。</p>
+<p>而另一种异步事件像 Promise，没有调用浏览器或 Web API，是由 JS 本身来控制的异步事件，这种事件该如何处理，怎么加入队列等待被执行，如果同时出现了浏览器控制的异步事件和 JS 本身控制的异步事件，应该怎么处理，怎么放入队列，谁先执行？</p>
 <p>这就引出了宏任务和微任务的概念：</p>
 <blockquote>
 <p><strong>Micro-tasks within an event loop:</strong></p>
 <ul>
 <li>
 <p>A micro-task is said to be a function that is executed after the function or program which created it exits and only if the JavaScript execution stack is empty, but before returning control to the event loop being used by the user agent to drive the script’s execution environment. A Micro-task is also capable of en-queuing other micro-tasks.</p>
-<p>微任务 是 在创建它的函数或程序执行完成后 执行的函数或程序，并且只有在JS执行栈为空、在使用用户代理控制事件循环来驱动脚本之前执行。微任务需要排队执行。</p>
+<p>微任务 是 在创建它的函数或程序执行完成后 执行的函数或程序，并且只有在 JS 执行栈为空、在使用用户代理控制事件循环来驱动脚本之前执行。微任务需要排队执行。</p>
 </li>
 <li>
 <p>Micro-tasks are often scheduled for things that are required to be completed immediately after the execution of the current script. <strong>On completion of one macro-task, the event loop moves on to the micro-task queue</strong>. The event loop does not move to the next task outside of the micro-task queue until all the tasks inside the micro-task queue are completed. This implies that the <strong>micro-task queue has a higher priority</strong>.</p>
@@ -241,7 +241,7 @@
 </li>
 <li>
 <p>Once all the tasks inside the micro-task queue are finished, only then does the event loop shift back to the macro-task queue. The primary reason for prioritizing the micro-task queue is to <strong>improve the user experience</strong>. The micro-task queue is processed after callbacks given that any other JavaScript is not under mid-execution. Micro-tasks include <strong>mutation observer callbacks</strong> as well as <strong>promise callbacks</strong>.</p>
-<p>只有微任务队列内的所有任务都完成后，事件循环才会继续关注宏任务队列。 优先考虑微任务队列的主要原因是提高用户体验。 如果执行栈中没有任何JS任务在执行，就立即处理微任务队列中的回调函数。 微任务包括<strong>mutation observer callbacks</strong>以及<strong>promise callbacks</strong>。</p>
+<p>只有微任务队列内的所有任务都完成后，事件循环才会继续关注宏任务队列。 优先考虑微任务队列的主要原因是提高用户体验。 如果执行栈中没有任何 JS 任务在执行，就立即处理微任务队列中的回调函数。 微任务包括<strong>mutation observer callbacks <strong>以及</strong>promise callbacks</strong>。</p>
 </li>
 <li>
 <p>In such a case wherein new micro-tasks are being added to the queue, these additional micro-tasks are added at the end of the micro-queue and these are also processed. This is because the event loop will keep on calling micro-tasks until there are no more micro-tasks left in the queue, even if new tasks keep getting added. Another important reason for using micro-tasks is to ensure consistent ordering of tasks as well as simultaneously reducing the risk of delays caused by users.</p>
@@ -256,15 +256,15 @@
 </li>
 <li>
 <p>In JavaScript, no code is allowed to execute until an event has occurred. It is worth mentioning that the <strong>execution of a JavaScript code execution is itself a macro-task</strong>. The event is queued as a macro-task. When a (macro) task, present in the macro-task queue is being executed, new events may be registered and in turn, created and added to the queue.</p>
-<p>在JavaScript中，在事件发生之前不会执行任何代码。 值得一提的是，JavaScript代码执行本身就是一个宏任务。 该事件被排队为宏任务。 <del>当宏任务队列中存在的宏任务时，可以在创建并添加到队列中的新事件</del>。</p>
+<p>在 JavaScript 中，在事件发生之前不会执行任何代码。 值得一提的是，JavaScript 代码执行本身就是一个宏任务。 该事件被排队为宏任务。 <del>当宏任务队列中存在的宏任务时，可以在创建并添加到队列中的新事件</del>。</p>
 </li>
 <li>
 <p>Upon initialization, the JavaScript engine first pulls off the first task in the macro-task queue and executes the callback handler. The JavaScript engine then sends these asynchronous functions to the API module, and the module pushes them to the macro-task queue at the right time. Once inside the macro-task queue, each macro-task is required to wait for the next round of the event loop. In this way, the code is executed.</p>
-<p>初始化后，JavaScript引擎首先从宏任务队列中的第一个任务中取出任务并执行回调处理函数。 然后，JavaScript引擎将这些异步函数发送到API模块，模块（在特定时间）将它们推向正确时间的宏任务队列。 在宏任务队列中，每个宏任务都需要等待下一轮事件循环。 以这种方式，执行代码。</p>
+<p>初始化后，JavaScript 引擎首先从宏任务队列中的第一个任务中取出任务并执行回调处理函数。 然后，JavaScript 引擎将这些异步函数发送到 API 模块，模块（在特定时间）将它们推向正确时间的宏任务队列。 在宏任务队列中，每个宏任务都需要等待下一轮事件循环。 以这种方式，执行代码。</p>
 </li>
 <li>
 <p>All micro-tasks logged are processed in one fell swoop in a single macro-task execution cycle. In comparison, the <strong>macro-task queue has a lower priority</strong>. Macro-tasks include parsing HTML, generating DOM, executing main thread JavaScript code, and other events such as page loading, input, network events, timer events, etc.</p>
-<p>所有微任务队列中的微任务都在单个宏任务执行周期中一次性处理。 相比之下，宏任务队列的优先级较低。 宏任务包括解析HTML，生成DOM，执行主线程JavaScript代码和其他事件，例如页面加载，输入，网络事件，计时器事件等。</p>
+<p>所有微任务队列中的微任务都在单个宏任务执行周期中一次性处理。 相比之下，宏任务队列的优先级较低。 宏任务包括解析 HTML，生成 DOM，执行主线程 JavaScript 代码和其他事件，例如页面加载，输入，网络事件，计时器事件等。</p>
 </li>
 </ul>
 </blockquote>
@@ -272,16 +272,16 @@
 <ul>
 <li>
 <p>ES6 规范中，微任务 称为 <code>jobs</code>，宏任务 称为 <code>task</code> ；</p>
-<p>来源：<a href="https://262.ecma-international.org/6.0/#sec-jobs-and-job-queues">ES6_Jobs and Job Queues</a></p>
+<p>来源： <a href="https://262.ecma-international.org/6.0/#sec-jobs-and-job-queues">ES6_Jobs and Job Queues</a></p>
 </li>
 <li>
-<p>宏任务是由宿主（浏览器/Node.js）发起的，而微任务由JavaScript自身发起；</p>
+<p>宏任务是由宿主（浏览器/Node.js）发起的，而微任务由 JavaScript 自身发起；</p>
 </li>
 <li>
-<p>在ES以前的版本中，JavaScript本身没有处理异步的能力，也就没有微任务的存在；</p>
+<p>在 ES 以前的版本中，JavaScript 本身没有处理异步的能力，也就没有微任务的存在；</p>
 </li>
 <li>
-<p>JavaScript引入<code>Promise</code>之后，不需要浏览器及其他外部环境，JavaScript引擎自身也能够发起异步任务了。</p>
+<p>JavaScript 引入 <code>Promise</code> 之后，不需要浏览器及其他外部环境，JavaScript 引擎自身也能够发起异步任务了。</p>
 </li>
 </ul>
 </blockquote>
@@ -297,12 +297,12 @@
 <tr>
 <td style="text-align:left">谁发起的</td>
 <td style="text-align:left">宿主（Node.js、浏览器）</td>
-<td style="text-align:left">JS引擎（JS自身）</td>
+<td style="text-align:left">JS 引擎（JS 自身）</td>
 </tr>
 <tr>
 <td style="text-align:left">具体事件</td>
-<td style="text-align:left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
-<td style="text-align:left">1. Promise<br/>2. MutaionObserver（监听DOM树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
+<td style="text-align:left">1. script (可以理解为外层同步代码)<br>2. setTimeout/setInterval<br/>3. UI rendering/UI 事件<br/>4. postMessage/MessageChannel<br/>5. setImmediate/I/O（Node.js）<br/></td>
+<td style="text-align:left">1. Promise<br/>2. MutaionObserver（监听 DOM 树变化）<br/>3. Object.observe（异步地监视一个对象的修改，已废弃）<br/>4. process.nextTick（Node.js）</td>
 </tr>
 <tr>
 <td style="text-align:left">谁先运行</td>
@@ -310,7 +310,7 @@
 <td style="text-align:left">先运行</td>
 </tr>
 <tr>
-<td style="text-align:left">会触发新一轮Tick吗</td>
+<td style="text-align:left">会触发新一轮 Tick 吗</td>
 <td style="text-align:left">会</td>
 <td style="text-align:left">不会</td>
 </tr>
@@ -331,69 +331,69 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>console.log(<span style="color:#f1fa8c">&#39;Start!&#39;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>setTimeout(() =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>	console.log(<span style="color:#f1fa8c">&#39;Timeout!&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    console.log(<span style="color:#f1fa8c">&#39;Timeout!&#39;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>}, <span style="color:#bd93f9">0</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span><span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(<span style="color:#f1fa8c">&#39;Promise!&#39;</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	.then((res) =&gt; { console.log(res) })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    .then((res) =&gt; { console.log(res) })
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>console.log(<span style="color:#f1fa8c">&#39;End!&#39;</span>);
 </span></span></code></pre></div><ol>
-<li>在第一行，JS引擎遇到<code>console.log()</code>方法。 它被添加到执行栈，之后会将指定内容输出到控制台。 该方法弹出执行栈，JS引擎继续；</li>
+<li>在第一行，JS 引擎遇到 <code>console.log()</code> 方法。 它被添加到执行栈，之后会将指定内容输出到控制台。 该方法弹出执行栈，JS 引擎继续；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*5K5JL9jhX10Yt2iArGVv4w.gif" alt="img" style="zoom:80%;" />
 <ol start="2">
-<li>该发动机遇到了<code>setTimeout</code>方法，该方法添加到执行栈中。 <code>setTimeout</code>方法浏览器提供的API，所以将在JS外部进行执行，其回调函数<code>() =&gt; { console.log('Timeout!'); }</code>将被添加到Web API，直到定时器完成，之后回调函数被添加到宏任务队列；</li>
+<li>该发动机遇到了 <code>setTimeout</code> 方法，该方法添加到执行栈中。 <code>setTimeout</code> 方法浏览器提供的 API，所以将在 JS 外部进行执行，其回调函数 <code>() =&gt; { console.log('Timeout!'); }</code> 将被添加到 Web API，直到定时器完成，之后回调函数被添加到宏任务队列；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*a_X8_BfQGJ6oHR-XmuPGRQ.gif" alt="img" style="zoom:80%;" />
 <ol start="3">
-<li>JS引擎继续向下执行，遇到<code>Promise.resolve()</code>方法， 这个方法将添加到执行栈中，当完成<code>resolve</code>之后，<code>.then</code>中指定的回调函数被添加到微任务队列中；</li>
+<li>JS 引擎继续向下执行，遇到 <code>Promise.resolve()</code> 方法， 这个方法将添加到执行栈中，当完成 <code>resolve</code> 之后，<code>.then</code> 中指定的回调函数被添加到微任务队列中；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Q5xtSx914wUAo_msjNk8qQ.gif" alt="img" style="zoom:80%;" />
 <ol start="4">
-<li>JS引擎继续执行，遇到<code>console.log()</code>方法。 添加到执行栈中，之后会将指定内容输出到控制台，执行完成弹出执行栈，JS引擎继续向下执行；</li>
+<li>JS 引擎继续执行，遇到 <code>console.log()</code> 方法。 添加到执行栈中，之后会将指定内容输出到控制台，执行完成弹出执行栈，JS 引擎继续向下执行；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*H2QP7Ry7XCXDaD2dHkQYMw.gif" alt="img" style="zoom:80%;" />
 <ol start="5">
-<li>第一轮宏任务至此完成，JS引擎发现执行栈是空的，它将检查微任务队列中是否存在排队任务，<code>Promise.then</code>的回调函数正在等待，它会压入执行栈，之后会打印输出<code>Promise!</code>；</li>
+<li>第一轮宏任务至此完成，JS 引擎发现执行栈是空的，它将检查微任务队列中是否存在排队任务，<code>Promise.then</code> 的回调函数正在等待，它会压入执行栈，之后会打印输出 <code>Promise!</code>；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*PfxpUO9FJYm05lzA792CrQ.gif" alt="img" style="zoom:80%;" />
 <ol start="6">
-<li>JS引擎检查执行栈为空，再次检查微任务队列，微任务队列也为空。 现在应该检查宏任务队列，发现<code>setTimeout</code>的回调函数正在等待，回调函数将压入调用栈， 打印输出<code>Timeout!</code>，执行完成后出栈；</li>
+<li>JS 引擎检查执行栈为空，再次检查微任务队列，微任务队列也为空。 现在应该检查宏任务队列，发现 <code>setTimeout</code> 的回调函数正在等待，回调函数将压入调用栈， 打印输出 <code>Timeout!</code>，执行完成后出栈；</li>
 </ol>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*Eg9EkLzLfO0nZTpqNq9WCQ.gif" alt="img" style="zoom:80%;" />
-<h3 id="5-async和await">5. async和await</h3>
-<p>首先我们要知道，<code>async</code>和<code>await</code>是异步微任务的另一种实现方式，解决了在<code>Promise</code>中不能进行异常捕获的问题，关于<code>async</code>和<code>await</code>的详细讲解，在另一篇文章《js async与await详解》。</p>
+<h3 id="5-async-和-await">5. async 和 await</h3>
+<p>首先我们要知道，<code>async</code> 和 <code>await</code> 是异步微任务的另一种实现方式，解决了在 <code>Promise</code> 中不能进行异常捕获的问题，关于 <code>async</code> 和 <code>await</code> 的详细讲解，在另一篇文章《js async 与 await 详解》。</p>
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1*lw0nQ2U3x91SONIb6NsEwA.gif" alt="img" style="zoom:80%;" />
 <blockquote>
 <ol>
 <li>
 <p>First, the engine encounters a <code>console.log</code>. It gets popped onto the call stack, after which <code>Before function!</code> gets logged.</p>
-<p>首先，JS引擎遇到<code>console.log</code>。 它会进入执行栈，输出<code>Before function!</code>；</p>
+<p>首先，JS 引擎遇到 <code>console.log</code>。 它会进入执行栈，输出 <code>Before function!</code>；</p>
 </li>
 <li>
 <p>Then, we invoke the async function <code>myFunc()</code>, after which the function body <code>myFunc</code> runs. On the very first line within the function body, we call another <code>console.log</code>, this time with the string <code>In function!</code>. The <code>console.log</code> gets added to the call stack, logs the value, and gets popped off.</p>
-<p>然后，调用了async函数<code>myfunc()</code>，<code>myfunc</code>运行。 在函数体内的第一行，我们输出了<code>In function!</code>。同样是入栈和出栈的过程；</p>
+<p>然后，调用了 async 函数 <code>myfunc()</code>，<code>myfunc</code> 运行。 在函数体内的第一行，我们输出了 <code>In function!</code>。同样是入栈和出栈的过程；</p>
 </li>
 <li>
 <p>The function body keeps on being executed, which gets us to the second line. Finally, we see a <code>await</code> keyword! 🎉 The first thing that happens is that the value that gets awaited gets executed: the function <code>one</code> in this case. It gets popped onto the call stack, and eventually returns a resolved promise. Once the promise has resolved and <code>one</code> returned a value, the engine encounters the <code>await</code> keyword.</p>
-<p>JS引擎继续，来到函数体内第二行，看到了await关键词，我们需要等待函数<code>one</code>执行完成后获取一个值，函数<code>one</code>会压入到执行栈，最终返回<code>resolve</code>状态的<code>promise</code>，<code>one</code>执行完成，出栈；</p>
+<p>JS 引擎继续，来到函数体内第二行，看到了 await 关键词，我们需要等待函数 <code>one</code> 执行完成后获取一个值，函数 <code>one</code> 会压入到执行栈，最终返回 <code>resolve</code> 状态的 <code>promise</code>，<code>one</code> 执行完成，出栈；</p>
 </li>
 <li>
 <p>When encountering an <code>await</code> keyword, the <code>async</code> function gets <em>suspended</em>. ✋🏼 The execution of the function body gets paused, and the rest of the async function gets to run in a <em>microtask</em> instead of a regular task!</p>
-<p>遇到<code>await</code>关键字时，<code>async</code>函数会被暂停， 函数正文的执行暂停，其余的异步代码则在<code>await</code>后面的语句执行完后，加入微任务队列中，而不再是常规任务！</p>
+<p>遇到 <code>await</code> 关键字时，<code>async</code> 函数会被暂停， 函数正文的执行暂停，其余的异步代码则在 <code>await</code> 后面的语句执行完后，加入微任务队列中，而不再是常规任务！</p>
 </li>
 <li>
 <p>Now that the async function <code>myFunc</code> is suspended as it encountered the <code>await</code> keyword, the engine jumps out of the async function and continues executing the code in the execution context in which the async function got called: the global execution context in this case! 🏃🏽‍♀️</p>
-<p>既然异步函数<code>myfunc</code>被暂停，因为它遇到了<code>await</code>关键字，引擎跳出函数，<code>myfunc</code>函数出栈，并继续向下执行（下面就是输出<code>After function</code>）；</p>
+<p>既然异步函数 <code>myfunc</code> 被暂停，因为它遇到了 <code>await</code> 关键字，引擎跳出函数，<code>myfunc</code> 函数出栈，并继续向下执行（下面就是输出 <code>After function</code>）；</p>
 </li>
 <li>
 <p>Finally, there are no more tasks to run in the global execution context! The event loop checks to see if there are any microtasks queued up: and there are! The async <code>myFunc</code> function is queued up after resolving the valued of <code>one</code>. <code>myFunc</code> gets popped back onto the call stack, and continues running where it previously left off.</p>
-<p>最后，全局执行上下文中运行不再有任务，事件循环检查微任务队列，在获得一个值后，<code>async myfunc</code>函数将排进入微任务队列。 <code>myFunc</code>将回到执行栈，并以前离开的位置继续执行；</p>
+<p>最后，全局执行上下文中运行不再有任务，事件循环检查微任务队列，在获得一个值后，<code>async myfunc</code> 函数将排进入微任务队列。 <code>myFunc</code> 将回到执行栈，并以前离开的位置继续执行；</p>
 </li>
 <li>
 <p>The variable <code>res</code> finally gets its value, namely the value of the resolved promise that <code>one</code> returned! We invoke <code>console.log</code> with the value of <code>res</code>: the string <code>One!</code> in this case. <code>One!</code> gets logged to the console and gets popped off the call stack! 😊</p>
-<p>变量res最终获得值，即<code>promise resolve</code>的值， 调用<code>console.log</code>，进行输出；</p>
+<p>变量 res 最终获得值，即 <code>promise resolve</code> 的值， 调用 <code>console.log</code>，进行输出；</p>
 </li>
 </ol>
 </blockquote>

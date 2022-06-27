@@ -69,7 +69,7 @@
                 <span class="toc-link">4. render</span>
             </li>
             <li>
-                <span class="toc-link">5. 时间切片与Fiber</span>
+                <span class="toc-link">5. 时间切片与 Fiber</span>
             </li>
             <li>
                 <span class="toc-link">6. 总结</span>
@@ -83,33 +83,33 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-09-10</span>
-            <span>更新于2022-05-17</span>
-            <span>共3127字</span>
-            <span>阅读7分钟</span>
+            <span>更新于2022-06-27</span>
+            <span>共2728字</span>
+            <span>阅读6分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
         <blockquote>
 <p>参考：</p>
-<p><a href="https://cdmana.com/2021/08/20210825153526307k.html">8月更文挑战｜react手写实现渲染JSX普通版</a></p>
+<p><a href="https://cdmana.com/2021/08/20210825153526307k.html">8 月更文挑战｜react 手写实现渲染 JSX 普通版</a></p>
 <p><a href="https://jelly.jd.com/article/60aceb6b27393b0169c85231">手写一个简单的 React</a></p>
-<p><a href="https://juejin.cn/post/6854573219682942983">手写一个react系列（一）：实现react和react-dom</a></p>
+<p><a href="https://juejin.cn/post/6854573219682942983">手写一个 react 系列（一）：实现 react 和 react-dom</a></p>
 <p><a href="https://github.com/YuetTusi/my-react">手写 react 核心源码</a></p>
-<p><a href="https://www.bilibili.com/video/BV1qt4y1Y77R?from=search&amp;seid=8422079651592355486&amp;spm_id_from=333.337.0.0">面试装不了逼？当场手写个react16.x框架给他看看</a></p>
+<p><a href="https://www.bilibili.com/video/BV1qt4y1Y77R?from=search&amp;seid=8422079651592355486&amp;spm_id_from=333.337.0.0">面试装不了逼？当场手写个 react16.x 框架给他看看</a></p>
 </blockquote>
 <h2 id="1-搭建项目">1. 搭建项目</h2>
 <h3 id="1-初始化项目">1. 初始化项目</h3>
-<p>我们需要初始化一个空的webpack项目，用来编写我们自己的 React ，一次执行下面的命令：</p>
+<p>我们需要初始化一个空的 webpack 项目，用来编写我们自己的 React ，一次执行下面的命令：</p>
 <p>初始化项目</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm init
-</span></span></code></pre></div><p>安装webpack和webpack-dev-server，如果这里很陌生，可以看另一篇文章：《js webpack简介》</p>
+</span></span></code></pre></div><p>安装 webpack 和 webpack-dev-server，如果这里很陌生，可以看另一篇文章：《js webpack 简介》</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm i webpack webpack-cli webpack-dev-server
-</span></span></code></pre></div><p>安装html-webpack-plugin，用来指定静态页面<code>index.html</code></p>
+</span></span></code></pre></div><p>安装 html-webpack-plugin，用来指定静态页面 <code>index.html</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm i html-webpack-plugin
-</span></span></code></pre></div><p>安装babel各种插件，用来支持JSX语法，这里如果不理解，可以看另一篇文章：《react JSX详解》</p>
+</span></span></code></pre></div><p>安装 babel 各种插件，用来支持 JSX 语法，这里如果不理解，可以看另一篇文章：《react JSX 详解》</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>npm i @babel/core @babel/plugin-transform-react-jsx babel-loader
-</span></span></code></pre></div><p>最终<code>package.json</code>，大概长这样：</p>
+</span></span></code></pre></div><p>最终 <code>package.json</code>，大概长这样：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#ff79c6">&#34;name&#34;</span>: <span style="color:#f1fa8c">&#34;my-react&#34;</span>,
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>  <span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;1.0.0&#34;</span>,
@@ -133,7 +133,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    <span style="color:#ff79c6">&#34;webpack-cli&#34;</span>: <span style="color:#f1fa8c">&#34;^3.3.12&#34;</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>}
-</span></span></code></pre></div><p>配置webpack：</p>
+</span></span></code></pre></div><p>配置 webpack：</p>
 <p><code>webpack.config.js</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> path <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;path&#39;</span>),
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>      HtmlWebpackPlugin <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#39;html-webpack-plugin&#39;</span>);
@@ -167,7 +167,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>    open<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>}
-</span></span></code></pre></div><p>配置babel：</p>
+</span></span></code></pre></div><p>配置 babel：</p>
 <p><code>.babelrc</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    <span style="color:#f1fa8c">&#34;plugins&#34;</span><span style="color:#ff79c6">:</span> [<span style="color:#f1fa8c">&#34;@babel/plugin-transform-react-jsx&#34;</span>]
@@ -175,9 +175,9 @@
 </span></span></code></pre></div><h3 id="2-定义目录结构">2. 定义目录结构</h3>
 <p>我们需要整理目录结构，形成这样的目录结构：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20210906221953.jpg" alt=""></p>
-<p>其中的<code>src/index.js</code>、<code>src/react</code>、<code>src/react-dom</code>就是我们主要的工作目录。</p>
+<p>其中的 <code>src/index.js</code>、<code>src/react</code>、<code>src/react-dom</code> 就是我们主要的工作目录。</p>
 <h2 id="2-indexjs">2. index.js</h2>
-<p>我们先在<code>index.js</code>中写一些我们常用的React代码：</p>
+<p>我们先在 <code>index.js</code> 中写一些我们常用的 React 代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> ReactDOM <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;./react-dom&#34;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#ff79c6">const</span> React <span style="color:#ff79c6">=</span> require(<span style="color:#f1fa8c">&#34;./react&#34;</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>
@@ -230,29 +230,26 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>ReactDOM.render(&lt;<span style="color:#ff79c6">Counter</span>/&gt;, <span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#34;root&#34;</span>));
-</span></span></code></pre></div><p>我们在<code>index.js</code>中做了这么几件事：</p>
+</span></span></code></pre></div><p>我们在 <code>index.js</code> 中做了这么几件事：</p>
 <ol>
-<li>我们导入了<code>react</code>和<code>react-dom</code>，并且使用了<code>ReactDom.render</code>和<code>React.creatElement</code>方法，那么我们就必须在对应的位置定义好；</li>
-<li>我们定义了一个类式组件，继承了<code>React.Component</code>类，并且使用<code>&lt;Counter/&gt;</code>初始化了一个组件实例；</li>
+<li>我们导入了 <code>react</code> 和 <code>react-dom</code>，并且使用了 <code>ReactDom.render</code> 和 <code>React.creatElement</code> 方法，那么我们就必须在对应的位置定义好；</li>
+<li>我们定义了一个类式组件，继承了 <code>React.Component</code> 类，并且使用 <code>&lt;Counter/&gt;</code> 初始化了一个组件实例；</li>
 </ol>
 <blockquote>
-<p>这里<code>&lt;Counter/&gt;</code>经过Babel对JSX的处理，会转换为<code>React.createElement(Counter, null)</code>；</p>
+<p>这里 <code>&lt;Counter/&gt;</code> 经过 Babel 对 JSX 的处理，会转换为 <code>React.createElement(Counter, null)</code>；</p>
 </blockquote>
 <p>根据我们的操作我们来构想一下，我们需要实现哪些功能：</p>
 <ol>
-<li><code>ReactDom.render</code>函数，这个函数需要接受两个参数，第一个参数是根组件，第二个参数是根组件挂载的节点；</li>
-<li><code>React.creatElement</code>函数，这个函数接受至少两个参数，第一个参数是节点类型，可能是字符串也可能是一个构造函数或类，第二个参数是节点的属性，是一个对象，其余参数是节点的子节点，大概有如下几种情况：
-<ol>
+<li><code>ReactDom.render</code> 函数，这个函数需要接受两个参数，第一个参数是根组件，第二个参数是根组件挂载的节点；</li>
+<li><code>React.creatElement</code> 函数，这个函数接受至少两个参数，第一个参数是节点类型，可能是字符串也可能是一个构造函数或类，第二个参数是节点的属性，是一个对象，其余参数是节点的子节点，大概有如下几种情况：</li>
 <li><code>React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;)</code>，节点类型是一个字符串，没有参数，子节点就是里面包裹的内容；</li>
-<li><code>React.createElement(&quot;h1&quot;, { id: 'container' }, &quot;hello, react&quot;)</code>，节点上有属性<code>id</code>；</li>
-<li><code>React.createElement(Counter, null)</code>，节点类型是一个构造函数或者类，需要new；</li>
+<li><code>React.createElement(&quot;h1&quot;, { id: 'container' }, &quot;hello, react&quot;)</code>，节点上有属性 <code>id</code>；</li>
+<li><code>React.createElement(Counter, null)</code>，节点类型是一个构造函数或者类，需要 new；</li>
 <li><code>React.createElement(&quot;h1&quot;, null, React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;))</code>，节点有一个子节点；</li>
 <li><code>React.createElement(&quot;h1&quot;, null, React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;), React.createElement(&quot;h1&quot;, null, &quot;hello, react&quot;))</code>，节点有多个子节点；</li>
 </ol>
-</li>
-</ol>
 <h2 id="3-createelement">3. createElement</h2>
-<p>对于React对象，我们直接先来实现最基础的<code>createElement</code>函数。</p>
+<p>对于 React 对象，我们直接先来实现最基础的 <code>createElement</code> 函数。</p>
 <p><code>react/element.js</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">/**
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4"> * @description 创建vDOM
@@ -284,19 +281,19 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> createElement;
-</span></span></code></pre></div><p>这个说实话没有什么好说的，只是初步定义了节点的格式，包括<code>type</code>、<code>props</code>、<code>children</code>，这是使用JSX带来的必然要求，或者说我们书写的 JSX 其实本质就是一个一个的element对象，我们需要通过定义<code>createElement</code>来定义element的格式。</p>
-<p>另外要注意的的是，自定义组件的对象还没有实例化，组件的<code>render</code>函数也没有调用，因此在这个阶段，自定义组件的 element 对象与组件内部<code>render</code>返回的的 JSX element 对象是没有关联的，这么说可能不好理解，我们看一下就明白了：</p>
+</span></span></code></pre></div><p>这个说实话没有什么好说的，只是初步定义了节点的格式，包括 <code>type</code>、<code>props</code>、<code>children</code>，这是使用 JSX 带来的必然要求，或者说我们书写的 JSX 其实本质就是一个一个的 element 对象，我们需要通过定义 <code>createElement</code> 来定义 element 的格式。</p>
+<p>另外要注意的的是，自定义组件的对象还没有实例化，组件的 <code>render</code> 函数也没有调用，因此在这个阶段，自定义组件的 element 对象与组件内部 <code>render</code> 返回的的 JSX element 对象是没有关联的，这么说可能不好理解，我们看一下就明白了：</p>
 <p><code>index.js</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-jsx" data-lang="jsx"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>console.log(&lt;<span style="color:#ff79c6">Counter</span>/&gt;);
-</span></span></code></pre></div><p>对于这样的组件，我们打印<code>&lt;Counter/&gt;</code>：</p>
+</span></span></code></pre></div><p>对于这样的组件，我们打印 <code>&lt;Counter/&gt;</code>：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210907210744684.png" alt="image-20210907210744684"></p>
-<p>可以看到这里并没有<code>children</code>，但是<code>render</code>函数内部的<code>div</code>和其子节点<code>h1</code>等其实是有关系的，这是因为<code>Counter</code>是一个类式组件，传入<code>&lt;Counter/&gt;</code>会被Babel编译成<code>React.createElement(Counter, null)</code>，必须实例化并且调用render函数，才能拿到里面的JSX元素。但是这些处理不是现在执行的。</p>
-<p>这里我们定义的<code>createElement</code>函数明显不是给我们自己用的，而是给 JSX 使用的，因此只负责处理数据格式，而不进行其他操作，这里的 element 节点是 JSX 标签的真实面貌，也是 React 中大名鼎鼎的 VirtualDOM 。</p>
+<p>可以看到这里并没有 <code>children</code>，但是 <code>render</code> 函数内部的 <code>div</code> 和其子节点 <code>h1</code> 等其实是有关系的，这是因为 <code>Counter</code> 是一个类式组件，传入 <code>&lt;Counter/&gt;</code> 会被 Babel 编译成 <code>React.createElement(Counter, null)</code>，必须实例化并且调用 render 函数，才能拿到里面的 JSX 元素。但是这些处理不是现在执行的。</p>
+<p>这里我们定义的 <code>createElement</code> 函数明显不是给我们自己用的，而是给 JSX 使用的，因此只负责处理数据格式，而不进行其他操作，这里的 element 节点是 JSX 标签的真实面貌，也是 React 中大名鼎鼎的 VirtualDOM 。</p>
 <p>element 的结构是如下图所示：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112211371.png" alt="image-20210909112211371"></p>
 <p>目前我们的 VirtualDOM 树存在两个问题：</p>
 <ol>
-<li>上图中有颜色的节点，是自定义组件的节点，需要调用render函数，才能形成下面的节点；</li>
+<li>上图中有颜色的节点，是自定义组件的节点，需要调用 render 函数，才能形成下面的节点；</li>
 <li>每个节点都是虚拟节点，没有与之对应的真实 dom 节点一一对应；</li>
 </ol>
 <h2 id="4-render">4. render</h2>
@@ -358,16 +355,16 @@
 </span></span></code></pre></div><p>在 render 中，我们进行了很简单的操作：</p>
 <ol>
 <li>将根 element 递归的创建和挂载 dom （递归的深度优先遍历）；</li>
-<li>将根 element 的dom元素，挂载到容器上；</li>
+<li>将根 element 的 dom 元素，挂载到容器上；</li>
 </ol>
 <p>至此，我们的 element 元素就可以在页面上看到了：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909110501558.png" alt="image-20210909110501558"></p>
 <p>经过这一层操作，上面的 VirtualDOM 树变成了这样：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112935483.png" alt="image-20210909112935483"></p>
-<p>这样会存在一个问题，再 render 中，我们采用递归的深度优先遍历，一次完成了dom的创建和挂载，如果节点很多，<code>createDOM</code>函数就会花费很多时间</p>
-<h2 id="5-时间切片与fiber">5. 时间切片与Fiber</h2>
-<p>关于什么是时间切片，为什么使用时间切片思想，在《react 时间切片与requestIdleCallback详解》中有详细介绍。</p>
-<p>关于什么是Fiber，为什么使用Fiber，以及Fiber的结构，在《react Fiber详解》中有详细介绍。</p>
+<p>这样会存在一个问题，再 render 中，我们采用递归的深度优先遍历，一次完成了 dom 的创建和挂载，如果节点很多，<code>createDOM</code> 函数就会花费很多时间</p>
+<h2 id="5-时间切片与-fiber">5. 时间切片与 Fiber</h2>
+<p>关于什么是时间切片，为什么使用时间切片思想，在《react 时间切片与 requestIdleCallback 详解》中有详细介绍。</p>
+<p>关于什么是 Fiber，为什么使用 Fiber，以及 Fiber 的结构，在《react Fiber 详解》中有详细介绍。</p>
 <p>这里我们只关注如何用代码实现时间切片机制，以及如何将 element 转换为 Fiber 进行工作。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">import</span> Component from <span style="color:#f1fa8c">&#34;../react/component&#34;</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
@@ -467,7 +464,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
 </span></span></code></pre></div><h2 id="6-总结">6. 总结</h2>
-<p>至此，我们简单的实现了 React 16.x 在引入 Fiber 架构后，进行组件渲染的过程，关于组件的更新流程，以及setState等的实现，需要有时间再写几篇文章进行研究。</p>
+<p>至此，我们简单的实现了 React 16.x 在引入 Fiber 架构后，进行组件渲染的过程，关于组件的更新流程，以及 setState 等的实现，需要有时间再写几篇文章进行研究。</p>
 
       </div>
       <div class="footer">

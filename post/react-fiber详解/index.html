@@ -94,8 +94,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-09-10</span>
-            <span>更新于2022-05-17</span>
-            <span>共2944字</span>
+            <span>更新于2022-06-27</span>
+            <span>共2826字</span>
             <span>阅读6分钟</span>
           </div>
         
@@ -103,33 +103,31 @@
       <div class="content markdown-body">
         <blockquote>
 <p>参考：</p>
-<p><a href="https://juejin.cn/post/6943896410987659277">走进React Fiber的世界</a></p>
-<p><a href="https://juejin.cn/post/6844904197008130062">手写React的Fiber架构，深入理解其原理</a></p>
+<p><a href="https://juejin.cn/post/6943896410987659277">走进 React Fiber 的世界</a></p>
+<p><a href="https://juejin.cn/post/6844904197008130062">手写 React 的 Fiber 架构，深入理解其原理</a></p>
 </blockquote>
 <h2 id="1-背景">1. 背景</h2>
-<p>在之前的《react react 时间切片与requestIdleCallback详解》中，我们了解到 React 为了解决浏览器性能瓶颈，提出了时间切片的机制，将大任务拆分为小任务分别执行。</p>
+<p>在之前的《react react 时间切片与 requestIdleCallback 详解》中，我们了解到 React 为了解决浏览器性能瓶颈，提出了时间切片的机制，将大任务拆分为小任务分别执行。</p>
 <p>那么我们就不得不再思考几个问题：</p>
 <ol>
-<li>
-<p>需要我们划分的大任务是什么？</p>
-<p>将 VirtualDOM 树转换为真实 DOM 并挂载到容器上；</p>
-</li>
-<li>
-<p>我们应该按照什么标准划分小任务？</p>
-<p>已经显而易见了，按照节点，每一个节点就是一个小任务；</p>
-</li>
-<li>
-<p>我们按照什么顺序执行小任务？</p>
-<p>对于树形结构，最好的顺序是深度优先，同时必须是非递归的，只有非递归才能拆分任务；</p>
-</li>
-<li>
-<p>我们如何确保每一个小任务都按照既定顺序执行？</p>
-<p>将树形结构转换为链式结构，就可以保证顺序；</p>
-</li>
+<li>需要我们划分的大任务是什么？</li>
 </ol>
+<p>将 VirtualDOM 树转换为真实 DOM 并挂载到容器上；</p>
+<ol start="2">
+<li>我们应该按照什么标准划分小任务？</li>
+</ol>
+<p>已经显而易见了，按照节点，每一个节点就是一个小任务；</p>
+<ol start="3">
+<li>我们按照什么顺序执行小任务？</li>
+</ol>
+<p>对于树形结构，最好的顺序是深度优先，同时必须是非递归的，只有非递归才能拆分任务；</p>
+<ol start="4">
+<li>我们如何确保每一个小任务都按照既定顺序执行？</li>
+</ol>
+<p>将树形结构转换为链式结构，就可以保证顺序；</p>
 <h2 id="2-尝试">2. 尝试</h2>
 <p>这里我们先按照上面几个问题的答案，试着自己去拆分一下我们的大任务吧！</p>
-<p>首先来看看大任务是什么，这里要结合《react 手写react16.x》的代码来看，我们在<code>render</code>里执行了一个函数<code>createDOM</code>：</p>
+<p>首先来看看大任务是什么，这里要结合《react 手写 react16.x》的代码来看，我们在 <code>render</code> 里执行了一个函数 <code>createDOM</code>：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM <span style="color:#ff79c6">=</span> createDOM(element);
@@ -137,7 +135,7 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#6272a4"></span>    container.append(eleWithDOM.dom);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>}
-</span></span></code></pre></div><p><code>createDOM</code>中，递归的对 element 树进行深度优先遍历，对每个 element 节点添加dom属性，存储对应的真实 dom，这差不多也是 React 15的 render 方式：</p>
+</span></span></code></pre></div><p><code>createDOM</code> 中，递归的对 element 树进行深度优先遍历，对每个 element 节点添加 dom 属性，存储对应的真实 dom，这差不多也是 React 15 的 render 方式：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> eleWithDOM;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>  <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>){
@@ -178,7 +176,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>  <span style="color:#ff79c6">return</span> eleWithDOM;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>}
-</span></span></code></pre></div><p>关于切分小任务，然后划分时间切片去执行，需要用到我们在《react 时间切片与requestIdleCallback详解》中介绍的基础架构：</p>
+</span></span></code></pre></div><p>关于切分小任务，然后划分时间切片去执行，需要用到我们在《react 时间切片与 requestIdleCallback 详解》中介绍的基础架构：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">let</span> taskQueue <span style="color:#ff79c6">=</span> [
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  () =&gt; {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    console.log(<span style="color:#f1fa8c">&#39;task1 start&#39;</span>)
@@ -212,7 +210,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>requestIdleCallback(workloop)
-</span></span></code></pre></div><p>里面的<code>performUnitWork</code>就是小任务，我们就需要将<code>createDOM</code>拆解，然后把每个小任务放入<code>performUnitWork</code>中，但是<code>createDOM</code>是递归实现的，递归不受控制，不可拆分，那么我们就要考虑树的深度优先遍历的另一种方式——迭代，用一个栈来实现深度优先遍历，每次出战入栈就是一个小任务：</p>
+</span></span></code></pre></div><p>里面的 <code>performUnitWork</code> 就是小任务，我们就需要将 <code>createDOM</code> 拆解，然后把每个小任务放入 <code>performUnitWork</code> 中，但是 <code>createDOM</code> 是递归实现的，递归不受控制，不可拆分，那么我们就要考虑树的深度优先遍历的另一种方式——迭代，用一个栈来实现深度优先遍历，每次出战入栈就是一个小任务：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> handleClassElement(element) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#ff79c6">if</span>(element.type.__proto__ <span style="color:#ff79c6">==</span> Component){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleConstructor <span style="color:#ff79c6">=</span> element.type;
@@ -225,82 +223,81 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>    } <span style="color:#ff79c6">else</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>    <span style="color:#6272a4">// 挂载属性
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>      })
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    <span style="color:#ff79c6">return</span> dom;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>    
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> topItem <span style="color:#ff79c6">=</span> taskStack.pop();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topItem);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>  topItem.dom <span style="color:#ff79c6">=</span> createDOM(topItem);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>  topItem.parent.dom.append(topItem.dom);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> children  <span style="color:#ff79c6">=</span> topItem.children;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>    children.reverse().forEach((child, index) =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>      taskStack.push({
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>        ...handleClassElement(child), 
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>        parent<span style="color:#ff79c6">:</span> topItem, 
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>        sibling<span style="color:#ff79c6">:</span> children[index<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">null</span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>        });
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>    })
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>    performUnitWork();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>    <span style="color:#6272a4">// renderDom();
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span><span style="color:#6272a4"></span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span>    requestIdleCallback(workloop)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span><span>requestIdleCallback(workloop);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span><span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span><span>  <span style="color:#6272a4">// element的格式参见 createElement
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span><span>    taskStack.push({
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span><span>      ...handleClassElement(element), 
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span><span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container }, 
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span><span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span><span>    });
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span><span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span><span>  render
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span><span>};
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    <span style="color:#6272a4">// 挂载属性
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>      })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    <span style="color:#ff79c6">return</span> dom;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> topItem <span style="color:#ff79c6">=</span> taskStack.pop();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topItem);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>  topItem.dom <span style="color:#ff79c6">=</span> createDOM(topItem);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>  topItem.parent.dom.append(topItem.dom);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> children  <span style="color:#ff79c6">=</span> topItem.children;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>    children.reverse().forEach((child, index) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>      taskStack.push({
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>        ...handleClassElement(child), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span>        parent<span style="color:#ff79c6">:</span> topItem, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>        sibling<span style="color:#ff79c6">:</span> children[index<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>] <span style="color:#ff79c6">||</span> <span style="color:#ff79c6">null</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>        });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>    })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>    performUnitWork();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>    <span style="color:#6272a4">// renderDom();
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span><span style="color:#6272a4"></span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span>    requestIdleCallback(workloop)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span>requestIdleCallback(workloop);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span><span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span>    taskStack.push({
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span><span>      ...handleClassElement(element), 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span><span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container }, 
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span><span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span><span>    });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span><span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span><span>  render
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span><span>};
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
 </span></span></code></pre></div><p>这里我们实现了，将大任务，拆分为小任务，如果每个任务占用时间很高的话，我们的页面会这样被渲染：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/Video_2021-09-10_103917.gif" alt=""></p>
 <p>控制台输出如下：</p>
@@ -308,106 +305,105 @@
 <p>这样我们就实现了时间切片，通过一个栈结构，实现了非递归深度优先遍历，同时我们形成了一个有效的数据结构，因为我们在对树节点遍历的同时，创建了 dom ，同时给每个节点添加了 parent 、sibling 属性，让节点可以同级查找，向上查找。</p>
 <p>但是我们一直在 element 上操作，感觉就很麻烦，而且不方便后续的更新等操作，那么我们是不是可以在对节点进行处理时，生成另外一种数据格式，想要实现这件事，就不是那么容易了。</p>
 <p>我们很难迭代的更改数据结构，绝对是我们算法出现了以下问题，限制了我们的操作，因此必须想一想别的办法，我们得换一种思路来实现非递归深度优先遍历了。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1</span><span><span style="color:#8be9fd;font-style:italic">function</span> handleClassElement(element) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2</span><span>  <span style="color:#ff79c6">if</span>(element.type.__proto__ <span style="color:#ff79c6">==</span> Component){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleConstructor <span style="color:#ff79c6">=</span> element.type;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> eleConstructor();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5</span><span>    <span style="color:#ff79c6">return</span> eleObj.render();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6</span><span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7</span><span>    <span style="color:#ff79c6">return</span> element.type();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8</span><span>  } <span style="color:#ff79c6">else</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9</span><span>    <span style="color:#ff79c6">return</span> element;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14</span><span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16</span><span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18</span><span>    } <span style="color:#ff79c6">else</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20</span><span>    }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21</span><span>    <span style="color:#6272a4">// 挂载属性
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22</span><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23</span><span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24</span><span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25</span><span>      })
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26</span><span>    }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27</span><span>    <span style="color:#ff79c6">return</span> dom;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28</span><span>    
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31</span><span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33</span><span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34</span><span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37</span><span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> topFiber <span style="color:#ff79c6">=</span> taskStack.pop();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40</span><span>  topFiber.dom <span style="color:#ff79c6">=</span> createDOM(topFiber.element);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41</span><span>  
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42</span><span>  topFiber.parent.dom.append(topFiber.dom);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> topFiber.element.children;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46</span><span>  <span style="color:#6272a4">// sleep(30);
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47</span><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> preFiber <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50</span><span>    children.reverse().forEach((child, index) =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51</span><span>      <span style="color:#8be9fd;font-style:italic">let</span> newFiber <span style="color:#ff79c6">=</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52</span><span>        element<span style="color:#ff79c6">:</span> handleClassElement(child),
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53</span><span>        parent<span style="color:#ff79c6">:</span> topFiber,
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54</span><span>        sibling<span style="color:#ff79c6">:</span> preFiber
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55</span><span>      }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56</span><span>      preFiber <span style="color:#ff79c6">=</span> newFiber;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57</span><span>      <span style="color:#ff79c6">if</span>(index <span style="color:#ff79c6">==</span> children.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58</span><span>        topFiber.child <span style="color:#ff79c6">=</span> newFiber;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59</span><span>      }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60</span><span>      taskStack.push(newFiber);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61</span><span>    })
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63</span><span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topFiber);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66</span><span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67</span><span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69</span><span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70</span><span>    performUnitWork();
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74</span><span>    <span style="color:#6272a4">// renderDom();
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75</span><span><span style="color:#6272a4"></span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77</span><span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79</span><span>    requestIdleCallback(workloop)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83</span><span>requestIdleCallback(workloop);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85</span><span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86</span><span>  <span style="color:#6272a4">// element的格式参见 createElement
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88</span><span>    taskStack.push({
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89</span><span>      element<span style="color:#ff79c6">:</span> handleClassElement(element),
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90</span><span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container },
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91</span><span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92</span><span>    });
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93</span><span>  }
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94</span><span>}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96</span><span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97</span><span>  render
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98</span><span>};
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> handleClassElement(element) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#ff79c6">if</span>(element.type.__proto__ <span style="color:#ff79c6">==</span> Component){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleConstructor <span style="color:#ff79c6">=</span> element.type;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> eleObj <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> eleConstructor();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#ff79c6">return</span> eleObj.render();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>  } <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (element.type <span style="color:#ff79c6">instanceof</span> <span style="color:#8be9fd;font-style:italic">Function</span>) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    <span style="color:#ff79c6">return</span> element.type();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>  } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#ff79c6">return</span> element;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#8be9fd;font-style:italic">function</span> createDOM(element){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> dom;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    <span style="color:#ff79c6">if</span>(element.type <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;TEXT_ELEMENT&#39;</span>){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createTextNode(<span style="color:#f1fa8c">&#39;&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    } <span style="color:#ff79c6">else</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>      dom <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.createElement(element.type)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>    <span style="color:#6272a4">// 挂载属性
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element.props){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>      <span style="color:#8be9fd;font-style:italic">Object</span>.keys(element.props).forEach(prop =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span>        dom[prop] <span style="color:#ff79c6">=</span> element.props[prop];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span>      })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span>    <span style="color:#ff79c6">return</span> dom;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27</span><span>    
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span><span style="color:#8be9fd;font-style:italic">let</span> taskStack <span style="color:#ff79c6">=</span> [];
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span><span style="color:#ff79c6">const</span> sleep <span style="color:#ff79c6">=</span> delay =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33</span><span>  <span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> start <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">Date</span>.now(); <span style="color:#8be9fd;font-style:italic">Date</span>.now() <span style="color:#ff79c6">-</span> start <span style="color:#ff79c6">&lt;=</span> delay;) {}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span><span style="color:#8be9fd;font-style:italic">function</span> performUnitWork () {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> topFiber <span style="color:#ff79c6">=</span> taskStack.pop();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>  topFiber.dom <span style="color:#ff79c6">=</span> createDOM(topFiber.element);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span>  
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span>  topFiber.parent.dom.append(topFiber.dom);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">43</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> children <span style="color:#ff79c6">=</span> topFiber.element.children;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">44</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">45</span><span>  <span style="color:#6272a4">// sleep(30);
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">46</span><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">47</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>children <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>children.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> preFiber <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">null</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span>    children.reverse().forEach((child, index) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>      <span style="color:#8be9fd;font-style:italic">let</span> newFiber <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">51</span><span>        element<span style="color:#ff79c6">:</span> handleClassElement(child),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">52</span><span>        parent<span style="color:#ff79c6">:</span> topFiber,
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">53</span><span>        sibling<span style="color:#ff79c6">:</span> preFiber
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">54</span><span>      }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">55</span><span>      preFiber <span style="color:#ff79c6">=</span> newFiber;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>      <span style="color:#ff79c6">if</span>(index <span style="color:#ff79c6">==</span> children.length <span style="color:#ff79c6">-</span> <span style="color:#bd93f9">1</span>){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>        topFiber.child <span style="color:#ff79c6">=</span> newFiber;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">58</span><span>      }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">59</span><span>      taskStack.push(newFiber);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>    })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>  console.log(<span style="color:#f1fa8c">&#39;渲染了&#39;</span>, topFiber);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">63</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">64</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">65</span><span><span style="color:#8be9fd;font-style:italic">function</span> workloop (deadline) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">66</span><span>  console.log(<span style="color:#f1fa8c">`此帧的剩余时间为: </span><span style="color:#f1fa8c">${</span>deadline.timeRemaining()<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">67</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">68</span><span>  <span style="color:#ff79c6">while</span>(deadline.timeRemaining() <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>taskStack.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">69</span><span>    performUnitWork();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">70</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">71</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">72</span><span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!</span>taskStack.length) {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">73</span><span>    <span style="color:#6272a4">// renderDom();
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">74</span><span><span style="color:#6272a4"></span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">75</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">76</span><span>  <span style="color:#6272a4">// 如果还有未完成的任务，继续调用requestIdleCallback申请下一个时间片
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">77</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>taskStack.length){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">78</span><span>    requestIdleCallback(workloop)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">79</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">80</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">81</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">82</span><span>requestIdleCallback(workloop);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">83</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">84</span><span><span style="color:#8be9fd;font-style:italic">function</span> render(element, container){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">85</span><span>  <span style="color:#6272a4">// element的格式参见 createElement
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">86</span><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span>(<span style="color:#ff79c6">!!</span>element <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!!</span>container){
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">87</span><span>    taskStack.push({
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">88</span><span>      element<span style="color:#ff79c6">:</span> handleClassElement(element),
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">89</span><span>      parent<span style="color:#ff79c6">:</span> { dom<span style="color:#ff79c6">:</span> container },
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span><span>      sibling<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">null</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91</span><span>    });
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92</span><span>  }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93</span><span>}
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">94</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">95</span><span><span style="color:#8be9fd;font-style:italic">let</span> ReactDOM <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">96</span><span>  render
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span>};
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99</span><span><span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> ReactDOM;
 </span></span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210910185443282.png" alt="image-20210910185443282"></p>
 <p>这样我们在不改变 element 的同时生成一串新的数据结构，这种结构大概就是下面我们要讲的 Fiber，为什么我们要废这么大力气去生成 Fiber 呢，因为有了 Fiber 之后，我们的各种操作都变得简单了。</p>
 <p>现在我们就维护了两种数据结构：</p>
@@ -446,7 +442,7 @@
 </span></span></code></pre></div><p>首次渲染时，我们主要关注 Fiber 的 return sibling child</p>
 <p>看到了节点的数据格式，可以清楚的理解 Virtual DOM 节点是面向数据的，Fiber 节点是面向操作的。</p>
 <h3 id="2-fiber-链表">2. Fiber 链表</h3>
-<p>Fiber包括了 child（第一个子节点）、sibling（兄弟节点）、return（父节点）等属性，通过这些属性，离散的 Fiber 节点串成了链表结构，我们再来对比以下 Virtual DOM 树 Fiber 链表的区别：</p>
+<p>Fiber 包括了 child（第一个子节点）、sibling（兄弟节点）、return（父节点）等属性，通过这些属性，离散的 Fiber 节点串成了链表结构，我们再来对比以下 Virtual DOM 树 Fiber 链表的区别：</p>
 <p>Virtual DOM 树：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/image-20210909112211371.png" alt="image-20210909112211371"></p>
 <p>Fiber 链表：</p>

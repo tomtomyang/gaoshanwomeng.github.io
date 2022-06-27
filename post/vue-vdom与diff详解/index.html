@@ -67,7 +67,7 @@
                 <span class="toc-link">6. updateChildren</span>
             </li>
             <li>
-                <span class="toc-link">7. DOM操作</span>
+                <span class="toc-link">7. DOM 操作</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -78,9 +78,9 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-09-03</span>
-            <span>更新于2022-05-17</span>
-            <span>共7546字</span>
-            <span>阅读16分钟</span>
+            <span>更新于2022-06-27</span>
+            <span>共6675字</span>
+            <span>阅读14分钟</span>
           </div>
         
       </div>
@@ -90,15 +90,15 @@
 <p><a href="https://xiaozhuanlan.com/topic/5970683214">VirtualDOM 与 diff( Vue 实现)</a></p>
 </blockquote>
 <h2 id="1-vnode">1. VNode</h2>
-<p>在刀耕火种的年代，我们需要在各个事件方法中直接操作DOM来达到修改视图的目的。但是当应用一大就会变得难以维护。</p>
-<p>那我们是不是可以把真实DOM树抽象成一棵以JavaScript对象构成的抽象树，在修改抽象树数据后将抽象树转化成真实DOM重绘到页面上呢？</p>
-<p>所以Vue.js将DOM树抽象成一个以JavaScript对象为节点的虚拟DOM树，以VNode节点模拟真实DOM节点，可以对这颗抽象树进行创建节点、删除节点以及修改节点等操作，在这过程中都不需要操作真实DOM，只需要操作JavaScript对象，大大提升了性能。</p>
-<p>但是这样的JavaScript操作DOM进行重绘整个视图是相当消耗性能的，我们是不是可以每次只更新它的修改呢？</p>
-<p>在对VNode树进行修改后，经过diff算法得出一些需要修改的最小单位，再将这些小单位的视图进行更新。这样做减少了很多不需要的DOM操作，大大提高了性能。</p>
-<p>Vue就使用了这样的抽象节点VNode，它是对真实DOM的一层抽象，而不依赖某个平台，它可以是浏览器平台，也可以是weex，甚至是node平台也可以对这样一棵抽象DOM树进行创建删除修改等操作，这也为前后端同构提供了可能。</p>
+<p>在刀耕火种的年代，我们需要在各个事件方法中直接操作 DOM 来达到修改视图的目的。但是当应用一大就会变得难以维护。</p>
+<p>那我们是不是可以把真实 DOM 树抽象成一棵以 JavaScript 对象构成的抽象树，在修改抽象树数据后将抽象树转化成真实 DOM 重绘到页面上呢？</p>
+<p>所以 Vue.js 将 DOM 树抽象成一个以 JavaScript 对象为节点的虚拟 DOM 树，以 VNode 节点模拟真实 DOM 节点，可以对这颗抽象树进行创建节点、删除节点以及修改节点等操作，在这过程中都不需要操作真实 DOM，只需要操作 JavaScript 对象，大大提升了性能。</p>
+<p>但是这样的 JavaScript 操作 DOM 进行重绘整个视图是相当消耗性能的，我们是不是可以每次只更新它的修改呢？</p>
+<p>在对 VNode 树进行修改后，经过 diff 算法得出一些需要修改的最小单位，再将这些小单位的视图进行更新。这样做减少了很多不需要的 DOM 操作，大大提高了性能。</p>
+<p>Vue 就使用了这样的抽象节点 VNode，它是对真实 DOM 的一层抽象，而不依赖某个平台，它可以是浏览器平台，也可以是 weex，甚至是 node 平台也可以对这样一棵抽象 DOM 树进行创建删除修改等操作，这也为前后端同构提供了可能。</p>
 <h2 id="2-修改视图">2. 修改视图</h2>
-<p>众所周知，Vue通过数据绑定来修改视图，当某个数据被修改的时候，set方法会让闭包中的Dep调用notify通知所有订阅者Watcher，Watcher通过get方法执行<code>vm._update(vm._render(), hydrating)</code>。</p>
-<p>这里看一下_update方法：</p>
+<p>众所周知，Vue 通过数据绑定来修改视图，当某个数据被修改的时候，set 方法会让闭包中的 Dep 调用 notify 通知所有订阅者 Watcher，Watcher 通过 get 方法执行 <code>vm._update(vm._render(), hydrating)</code>。</p>
+<p>这里看一下_update 方法：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.prototype._update <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> (vnode<span style="color:#ff79c6">:</span> VNode, hydrating<span style="color:#ff79c6">?:</span> <span style="color:#ff79c6">boolean</span>) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#ff79c6">const</span> vm<span style="color:#ff79c6">:</span> Component <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">this</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#6272a4">/*如果已经该组件已经挂载过了则代表进入这个步骤是个更新的过程，触发beforeUpdate钩子*/</span>
@@ -140,15 +140,15 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39</span><span>    <span style="color:#6272a4">// updated hook is called by the scheduler to ensure that children are
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span><span style="color:#6272a4"></span>    <span style="color:#6272a4">// updated in a parent&#39;s updated hook.
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span><span style="color:#6272a4"></span>  }
-</span></span></code></pre></div><p>_update方法的第一个参数是一个VNode对象，在内部会将该VNode对象与之前旧的VNode对象进行<code>__patch__</code>。</p>
+</span></span></code></pre></div><p>_update 方法的第一个参数是一个 VNode 对象，在内部会将该 VNode 对象与之前旧的 VNode 对象进行 <code>__patch__</code>。</p>
 <h2 id="3-__patch__">3. <strong>patch</strong></h2>
-<p>patch将新老VNode节点进行比对，然后将根据两者的比较结果进行最小单位地修改视图，而不是将整个视图根据新的VNode重绘。patch的核心在于diff算法，这套算法可以高效地比较virtual DOM的变更，得出变化以修改视图。</p>
-<p>那么patch如何工作的呢？</p>
-<p>首先说一下patch的核心diff算法，diff算法是通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，所以时间复杂度只有O(n)，是一种相当高效的算法。</p>
+<p>patch 将新老 VNode 节点进行比对，然后将根据两者的比较结果进行最小单位地修改视图，而不是将整个视图根据新的 VNode 重绘。patch 的核心在于 diff 算法，这套算法可以高效地比较 virtual DOM 的变更，得出变化以修改视图。</p>
+<p>那么 patch 如何工作的呢？</p>
+<p>首先说一下 patch 的核心 diff 算法，diff 算法是通过同层的树节点进行比较而非对树进行逐层搜索遍历的方式，所以时间复杂度只有 O(n)，是一种相当高效的算法。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/db00c818c1da8f0dcc7919eb3577e37b.png" alt="img"></p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/f09aa38b6efcaf90698d60c0d7cda10f.png" alt="img"></p>
-<p>这两张图代表旧的VNode与新VNode进行patch的过程，他们只是在同层级的VNode之间进行比较得到变化（第二张图中相同颜色的方块代表互相进行比较的VNode节点），然后修改变化的视图，所以十分高效。</p>
-<p>让我们看一下patch的代码。</p>
+<p>这两张图代表旧的 VNode 与新 VNode 进行 patch 的过程，他们只是在同层级的 VNode 之间进行比较得到变化（第二张图中相同颜色的方块代表互相进行比较的 VNode 节点），然后修改变化的视图，所以十分高效。</p>
+<p>让我们看一下 patch 的代码。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>  <span style="color:#6272a4">/*createPatchFunction的返回值，一个patch函数*/</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span> patch (oldVnode, vnode, hydrating, removeOnly, parentElm, refElm) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#6272a4">/*vnode不存在则直接调用销毁钩子*/</span>
@@ -248,10 +248,10 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span>    invokeInsertHook(vnode, insertedVnodeQueue, isInitialPatch)
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98</span><span>    <span style="color:#ff79c6">return</span> vnode.elm
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99</span><span>  }
-</span></span></code></pre></div><p>从代码中不难发现，当oldVnode与vnode在sameVnode的时候才会进行patchVnode，也就是新旧VNode节点判定为同一节点的时候才会进行patchVnode这个过程，否则就是创建新的DOM，移除旧的DOM。</p>
-<p>怎么样的节点算sameVnode呢？</p>
+</span></span></code></pre></div><p>从代码中不难发现，当 oldVnode 与 vnode 在 sameVnode 的时候才会进行 patchVnode，也就是新旧 VNode 节点判定为同一节点的时候才会进行 patchVnode 这个过程，否则就是创建新的 DOM，移除旧的 DOM。</p>
+<p>怎么样的节点算 sameVnode 呢？</p>
 <h2 id="4-samevnode">4. sameVnode</h2>
-<p>我们来看一下sameVnode的实现。</p>
+<p>我们来看一下 sameVnode 的实现。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">/*
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span><span style="color:#6272a4">  判断两个VNode节点是否是同一个节点，需要满足以下条件
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#6272a4">  key相同
@@ -283,9 +283,9 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>  <span style="color:#ff79c6">const</span> typeB <span style="color:#ff79c6">=</span> isDef(i <span style="color:#ff79c6">=</span> b.data) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.attrs) <span style="color:#ff79c6">&amp;&amp;</span> i.type
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30</span><span>  <span style="color:#ff79c6">return</span> typeA <span style="color:#ff79c6">===</span> typeB
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span>}
-</span></span></code></pre></div><p>当两个VNode的tag、key、isComment都相同，并且同时定义或未定义data的时候，且如果标签为input则type必须相同。这时候这两个VNode则算sameVnode，可以直接进行patchVnode操作。</p>
+</span></span></code></pre></div><p>当两个 VNode 的 tag、key、isComment 都相同，并且同时定义或未定义 data 的时候，且如果标签为 input 则 type 必须相同。这时候这两个 VNode 则算 sameVnode，可以直接进行 patchVnode 操作。</p>
 <h2 id="5-patchvnode">5. patchVnode</h2>
-<p>还是先来看一下patchVnode的代码。</p>
+<p>还是先来看一下 patchVnode 的代码。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>  <span style="color:#6272a4">/*patch VNode节点*/</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#8be9fd;font-style:italic">function</span> patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#6272a4">/*两个VNode节点相同则直接返回*/</span>
@@ -348,11 +348,11 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">60</span><span>      <span style="color:#ff79c6">if</span> (isDef(i <span style="color:#ff79c6">=</span> data.hook) <span style="color:#ff79c6">&amp;&amp;</span> isDef(i <span style="color:#ff79c6">=</span> i.postpatch)) i(oldVnode, vnode)
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">61</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">62</span><span>  }
-</span></span></code></pre></div><p>patchVnode的规则是这样的：</p>
-<p>1.如果新旧VNode都是静态的，同时它们的key相同（代表同一节点），并且新的VNode是clone或者是标记了once（标记v-once属性，只渲染一次），那么只需要替换elm以及componentInstance即可。</p>
-<p>2.新老节点均有children子节点，则对子节点进行diff操作，调用updateChildren，这个updateChildren也是diff的核心。</p>
-<p>3.如果老节点没有子节点而新节点存在子节点，先清空老节点DOM的文本内容，然后为当前DOM节点加入子节点。</p>
-<p>4.当新节点没有子节点而老节点有子节点的时候，则移除该DOM节点的所有子节点。</p>
+</span></span></code></pre></div><p>patchVnode 的规则是这样的：</p>
+<p>1.如果新旧 VNode 都是静态的，同时它们的 key 相同（代表同一节点），并且新的 VNode 是 clone 或者是标记了 once（标记 v-once 属性，只渲染一次），那么只需要替换 elm 以及 componentInstance 即可。</p>
+<p>2.新老节点均有 children 子节点，则对子节点进行 diff 操作，调用 updateChildren，这个 updateChildren 也是 diff 的核心。</p>
+<p>3.如果老节点没有子节点而新节点存在子节点，先清空老节点 DOM 的文本内容，然后为当前 DOM 节点加入子节点。</p>
+<p>4.当新节点没有子节点而老节点有子节点的时候，则移除该 DOM 节点的所有子节点。</p>
 <p>5.当新老节点都无子节点的时候，只是文本的替换。</p>
 <h2 id="6-updatechildren">6. updateChildren</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>  <span style="color:#8be9fd;font-style:italic">function</span> updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
@@ -447,36 +447,36 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">90</span><span>  }
 </span></span></code></pre></div><p>直接看源码可能比较难以捋清其中的关系，我们通过图来看一下。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/188d83e446bc03254b29bb0b270d2b6b.png" alt="img"></p>
-<p>首先，在新老两个VNode节点的左右头尾两侧都有一个变量标记，在遍历过程中这几个变量都会向中间靠拢。当oldStartIdx &lt;= oldEndIdx或者newStartIdx &lt;= newEndIdx时结束循环。</p>
-<p>索引与VNode节点的对应关系：
+<p>首先，在新老两个 VNode 节点的左右头尾两侧都有一个变量标记，在遍历过程中这几个变量都会向中间靠拢。当 oldStartIdx &lt;= oldEndIdx 或者 newStartIdx &lt;= newEndIdx 时结束循环。</p>
+<p>索引与 VNode 节点的对应关系：
 oldStartIdx =&gt; oldStartVnode
 oldEndIdx =&gt; oldEndVnode
 newStartIdx =&gt; newStartVnode
 newEndIdx =&gt; newEndVnode</p>
-<p>在遍历中，如果存在key，并且满足sameVnode，会将该DOM节点进行复用，否则则会创建一个新的DOM节点。</p>
-<p>首先，oldStartVnode、oldEndVnode与newStartVnode、newEndVnode两两比较一共有2*2=4种比较方法。</p>
-<p>当新老VNode节点的start或者end满足sameVnode时，也就是sameVnode(oldStartVnode, newStartVnode)或者sameVnode(oldEndVnode, newEndVnode)，直接将该VNode节点进行patchVnode即可。</p>
+<p>在遍历中，如果存在 key，并且满足 sameVnode，会将该 DOM 节点进行复用，否则则会创建一个新的 DOM 节点。</p>
+<p>首先，oldStartVnode、oldEndVnode 与 newStartVnode、newEndVnode 两两比较一共有 2*2=4 种比较方法。</p>
+<p>当新老 VNode 节点的 start 或者 end 满足 sameVnode 时，也就是 sameVnode(oldStartVnode, newStartVnode)或者 sameVnode(oldEndVnode, newEndVnode)，直接将该 VNode 节点进行 patchVnode 即可。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/3869f4b9618807f6aed3f86be8d3f4e0.png" alt="img"></p>
-<p>如果oldStartVnode与newEndVnode满足sameVnode，即sameVnode(oldStartVnode, newEndVnode)。</p>
-<p>这时候说明oldStartVnode已经跑到了oldEndVnode后面去了，进行patchVnode的同时还需要将真实DOM节点移动到oldEndVnode的后面。</p>
+<p>如果 oldStartVnode 与 newEndVnode 满足 sameVnode，即 sameVnode(oldStartVnode, newEndVnode)。</p>
+<p>这时候说明 oldStartVnode 已经跑到了 oldEndVnode 后面去了，进行 patchVnode 的同时还需要将真实 DOM 节点移动到 oldEndVnode 的后面。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/946b676fd6381f038aa7b9aafb3f9645.png" alt="img"></p>
-<p>如果oldEndVnode与newStartVnode满足sameVnode，即sameVnode(oldEndVnode, newStartVnode)。</p>
-<p>这说明oldEndVnode跑到了oldStartVnode的前面，进行patchVnode的同时真实的DOM节点移动到了oldStartVnode的前面。</p>
+<p>如果 oldEndVnode 与 newStartVnode 满足 sameVnode，即 sameVnode(oldEndVnode, newStartVnode)。</p>
+<p>这说明 oldEndVnode 跑到了 oldStartVnode 的前面，进行 patchVnode 的同时真实的 DOM 节点移动到了 oldStartVnode 的前面。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/3c4084a19e082136dadde6d8657ced0e.png" alt="img"></p>
-<p>如果以上情况均不符合，则通过createKeyToOldIdx会得到一个oldKeyToIdx，里面存放了一个key为旧的VNode，value为对应index序列的哈希表。从这个哈希表中可以找到是否有与newStartVnode一致key的旧的VNode节点，如果同时满足sameVnode，patchVnode的同时会将这个真实DOM（elmToMove）移动到oldStartVnode对应的真实DOM的前面。</p>
+<p>如果以上情况均不符合，则通过 createKeyToOldIdx 会得到一个 oldKeyToIdx，里面存放了一个 key 为旧的 VNode，value 为对应 index 序列的哈希表。从这个哈希表中可以找到是否有与 newStartVnode 一致 key 的旧的 VNode 节点，如果同时满足 sameVnode，patchVnode 的同时会将这个真实 DOM（elmToMove）移动到 oldStartVnode 对应的真实 DOM 的前面。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/7c78d8449d4d9c3525d548aa04c16f95.png" alt="img"></p>
-<p>当然也有可能newStartVnode在旧的VNode节点找不到一致的key，或者是即便key相同却不是sameVnode，这个时候会调用createElm创建一个新的DOM节点。</p>
+<p>当然也有可能 newStartVnode 在旧的 VNode 节点找不到一致的 key，或者是即便 key 相同却不是 sameVnode，这个时候会调用 createElm 创建一个新的 DOM 节点。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/49d060d1863619e5efae4e74656c15fd.png" alt="img"></p>
-<p>到这里循环已经结束了，那么剩下我们还需要处理多余或者不够的真实DOM节点。</p>
-<p>1.当结束时oldStartIdx &gt; oldEndIdx，这个时候老的VNode节点已经遍历完了，但是新的节点还没有。说明了新的VNode节点实际上比老的VNode节点多，也就是比真实DOM多，需要将剩下的（也就是新增的）VNode节点插入到真实DOM节点中去，此时调用addVnodes（批量调用createElm的接口将这些节点加入到真实DOM中去）。</p>
+<p>到这里循环已经结束了，那么剩下我们还需要处理多余或者不够的真实 DOM 节点。</p>
+<p>1.当结束时 oldStartIdx &gt; oldEndIdx，这个时候老的 VNode 节点已经遍历完了，但是新的节点还没有。说明了新的 VNode 节点实际上比老的 VNode 节点多，也就是比真实 DOM 多，需要将剩下的（也就是新增的）VNode 节点插入到真实 DOM 节点中去，此时调用 addVnodes（批量调用 createElm 的接口将这些节点加入到真实 DOM 中去）。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/f7c9290b5c9912e033372be205004842.png" alt="img"></p>
-<p>2。同理，当newStartIdx &gt; newEndIdx时，新的VNode节点已经遍历完了，但是老的节点还有剩余，说明真实DOM节点多余了，需要从文档中删除，这时候调用removeVnodes将这些多余的真实DOM删除。</p>
+<p>2。同理，当 newStartIdx &gt; newEndIdx 时，新的 VNode 节点已经遍历完了，但是老的节点还有剩余，说明真实 DOM 节点多余了，需要从文档中删除，这时候调用 removeVnodes 将这些多余的真实 DOM 删除。</p>
 <p><img src="https://images.xiaozhuanlan.com/photo/2017/dfc41a99701946feb12a0f50c88e5381.png" alt="img"></p>
-<h2 id="7-dom操作">7. DOM操作</h2>
-<p>由于Vue使用了虚拟DOM，所以虚拟DOM可以在任何支持JavaScript语言的平台上操作，譬如说目前Vue支持的浏览器平台或是weex，在虚拟DOM的实现上是一致的。那么最后虚拟DOM如何映射到真实的DOM节点上呢？</p>
-<p>Vue为平台做了一层适配层。不同平台之间通过适配层对外提供相同的接口，虚拟DOM进行操作真实DOM节点的时候，只需要调用这些适配层的接口即可，而内部实现则不需要关心，它会根据平台的改变而改变。</p>
-<p>现在又出现了一个问题，我们只是将虚拟DOM映射成了真实的DOM。那如何给这些DOM加入attr、class、style等DOM属性呢？</p>
-<p>这要依赖于虚拟DOM的生命钩子。虚拟DOM提供了如下的钩子函数，分别在不同的时期会进行调用。</p>
+<h2 id="7-dom-操作">7. DOM 操作</h2>
+<p>由于 Vue 使用了虚拟 DOM，所以虚拟 DOM 可以在任何支持 JavaScript 语言的平台上操作，譬如说目前 Vue 支持的浏览器平台或是 weex，在虚拟 DOM 的实现上是一致的。那么最后虚拟 DOM 如何映射到真实的 DOM 节点上呢？</p>
+<p>Vue 为平台做了一层适配层。不同平台之间通过适配层对外提供相同的接口，虚拟 DOM 进行操作真实 DOM 节点的时候，只需要调用这些适配层的接口即可，而内部实现则不需要关心，它会根据平台的改变而改变。</p>
+<p>现在又出现了一个问题，我们只是将虚拟 DOM 映射成了真实的 DOM。那如何给这些 DOM 加入 attr、class、style 等 DOM 属性呢？</p>
+<p>这要依赖于虚拟 DOM 的生命钩子。虚拟 DOM 提供了如下的钩子函数，分别在不同的时期会进行调用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">const</span> hooks <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#39;create&#39;</span>, <span style="color:#f1fa8c">&#39;activate&#39;</span>, <span style="color:#f1fa8c">&#39;update&#39;</span>, <span style="color:#f1fa8c">&#39;remove&#39;</span>, <span style="color:#f1fa8c">&#39;destroy&#39;</span>]
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#6272a4">/*构建cbs回调函数，web平台上见/platforms/web/runtime/modules*/</span>
@@ -488,8 +488,8 @@ newEndIdx =&gt; newEndVnode</p>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>      }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>  }
-</span></span></code></pre></div><p>同理，也会根据不同平台有自己不同的实现，我们这里以Web平台为例。里面有对attr、class、props、events、style以及transition（过渡状态）的DOM属性进行操作。</p>
-<p>以attr为例，代码很简单。</p>
+</span></span></code></pre></div><p>同理，也会根据不同平台有自己不同的实现，我们这里以 Web 平台为例。里面有对 attr、class、props、events、style 以及 transition（过渡状态）的 DOM 属性进行操作。</p>
+<p>以 attr 为例，代码很简单。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#6272a4">/* @flow */</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#ff79c6">import</span> { isIE9 } from <span style="color:#f1fa8c">&#39;core/util/env&#39;</span>
@@ -583,7 +583,7 @@ newEndIdx =&gt; newEndVnode</p>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">91</span><span>  create<span style="color:#ff79c6">:</span> updateAttrs,
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">92</span><span>  update<span style="color:#ff79c6">:</span> updateAttrs
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">93</span><span>}
-</span></span></code></pre></div><p>attr只需要在create以及update钩子被调用时更新DOM的attr属性即可。</p>
+</span></span></code></pre></div><p>attr 只需要在 create 以及 update 钩子被调用时更新 DOM 的 attr 属性即可。</p>
 
       </div>
       <div class="footer">

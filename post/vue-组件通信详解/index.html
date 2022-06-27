@@ -49,22 +49,22 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h2 animated fadeInDown"><li>
-                <span class="toc-link">1. props和$emit</span>
+                <span class="toc-link">1. props 和$emit</span>
             </li>
             <li>
-                <span class="toc-link">2. $attrs和$listeners</span>
+                <span class="toc-link">2. $attrs 和$listeners</span>
             </li>
             <li>
                 <span class="toc-link">3. bus(中央事件总线)</span>
             </li>
             <li>
-                <span class="toc-link">4. provide和inject</span>
+                <span class="toc-link">4. provide 和 inject</span>
             </li>
             <li>
                 <span class="toc-link">5. v-model</span>
             </li>
             <li>
-                <span class="toc-link">6. $parent和$​children</span>
+                <span class="toc-link">6. $parent 和$​children</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -75,15 +75,15 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-04-12</span>
-            <span>更新于2022-05-17</span>
-            <span>共2055字</span>
-            <span>阅读5分钟</span>
+            <span>更新于2022-06-27</span>
+            <span>共1885字</span>
+            <span>阅读4分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
-        <h2 id="1-props和emit">1. props和$emit</h2>
-<p>父组件向子组件传递数据是通过prop传递的，子组件传递数据给父组件是通过$emit触发事件来做到的.</p>
+        <h2 id="1-props-和emit">1. props 和$emit</h2>
+<p>父组件向子组件传递数据是通过 prop 传递的，子组件传递数据给父组件是通过$emit 触发事件来做到的.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    data(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>      <span style="color:#ff79c6">return</span> {
@@ -93,7 +93,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    template<span style="color:#ff79c6">:</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    <span style="color:#f1fa8c">`&lt;div&gt;
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @input=&#34;passData(mymessage)&#34;&gt;
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#f1fa8c">	 &lt;/div&gt;`</span>,
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#f1fa8c">     &lt;/div&gt;`</span>,
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>    props<span style="color:#ff79c6">:</span>[<span style="color:#f1fa8c">&#39;message&#39;</span>],<span style="color:#6272a4">//设置props属性值，得到父组件传递过来的数据
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#6272a4"></span>    methods<span style="color:#ff79c6">:</span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>      passData(val){
@@ -121,12 +121,12 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35</span><span>      }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37</span><span>  })
-</span></span></code></pre></div><p>在上面的例子中，有父组件parent和子组件child。</p>
-<p>　　1. 父组件传递了message数据给子组件，并且通过v-on绑定了一个getChildData事件来监听子组件的触发事件；
-　　2. 子组件通过props得到相关的message数据,最后通过this.$emit触发了getChildData事件</p>
-<h2 id="2-attrs和listeners">2. $attrs和$listeners</h2>
+</span></span></code></pre></div><p>在上面的例子中，有父组件 parent 和子组件 child。</p>
+<p>　　1.  父组件传递了 message 数据给子组件，并且通过 v-on 绑定了一个 getChildData 事件来监听子组件的触发事件；
+　　2.  子组件通过 props 得到相关的 message 数据,最后通过 this.$emit 触发了 getChildData 事件</p>
+<h2 id="2-attrs-和listeners">2. $attrs 和$listeners</h2>
 <p>第一种方式处理父子组件之间的数据传输有一个问题：</p>
-<p>如果父组件A下面有子组件B，组件B下面有组件C，这时如果组件A想传递数据给组件C怎么办呢？ 如果采用第一种方法，我们必须让组件A通过prop传递消息给组件B，组件B在通过prop传递消息给组件C；要是组件A和组件C之间有更多的组件，那采用这种方式就很复杂了。Vue 2.4开始提供了<code>$attrs</code>和<code>$listeners</code>来解决这个问题，能够让组件A之间传递消息给组件C。</p>
+<p>如果父组件 A 下面有子组件 B，组件 B 下面有组件 C，这时如果组件 A 想传递数据给组件 C 怎么办呢？ 如果采用第一种方法，我们必须让组件 A 通过 prop 传递消息给组件 B，组件 B 在通过 prop 传递消息给组件 C；要是组件 A 和组件 C 之间有更多的组件，那采用这种方式就很复杂了。Vue 2.4 开始提供了 <code>$attrs</code> 和 <code>$listeners</code> 来解决这个问题，能够让组件 A 之间传递消息给组件 C。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;C&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#f1fa8c">      &lt;div&gt;
@@ -185,7 +185,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">56</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">57</span><span>  })
 </span></span></code></pre></div><h2 id="3-bus中央事件总线">3. bus(中央事件总线)</h2>
-<p>上面两种方式处理的都是父子组件之间的数据传递，而如果两个组件不是父子关系呢？这种情况下可以使用中央事件总线的方式。新建一个Vue事件bus对象，然后通过<code>bus.$emit</code>触发事件，<code>bus.$on</code>监听触发的事件。</p>
+<p>上面两种方式处理的都是父子组件之间的数据传递，而如果两个组件不是父子关系呢？这种情况下可以使用中央事件总线的方式。新建一个 Vue 事件 bus 对象，然后通过 <code>bus.$emit</code> 触发事件，<code>bus.$on</code> 监听触发的事件。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;brother1&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    data(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>      <span style="color:#ff79c6">return</span> {
@@ -236,9 +236,9 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">48</span><span><span style="color:#f1fa8c">      &lt;/div&gt;
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">49</span><span><span style="color:#f1fa8c">    `</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">50</span><span>  })
-</span></span></code></pre></div><h2 id="4-provide和inject">4. provide和inject</h2>
+</span></span></code></pre></div><h2 id="4-provide-和-inject">4. provide 和 inject</h2>
 <p>在 Vue.js 的 <code>2.2.0+</code> 版本中添加加了 provide 和 inject 选项。他们成对出现，用于父级组件向下传递数据。</p>
-<p>父组件中通过provider来提供变量，然后在子组件中通过inject来注入变量。不论子组件有多深，只要调用了inject那么就可以注入provider中的数据。而不是局限于只能从当前父组件的prop属性来获取数据，只要在父组件的生命周期内，子组件都可以调用。</p>
+<p>父组件中通过 provider 来提供变量，然后在子组件中通过 inject 来注入变量。不论子组件有多深，只要调用了 inject 那么就可以注入 provider 中的数据。而不是局限于只能从当前父组件的 prop 属性来获取数据，只要在父组件的生命周期内，子组件都可以调用。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    inject<span style="color:#ff79c6">:</span>[<span style="color:#f1fa8c">&#39;for&#39;</span>],<span style="color:#6272a4">//得到父组件传递过来的数据
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#6272a4"></span>    data(){
@@ -269,7 +269,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29</span><span>  })
 </span></span></code></pre></div><h2 id="5-v-model">5. v-model</h2>
-<p>父组件通过v-model传递值给子组件时，会自动传递一个value的prop属性，在子组件中通过this.$emit(‘input&rsquo;,val)自动修改v-model绑定的值</p>
+<p>父组件通过 v-model 传递值给子组件时，会自动传递一个 value 的 prop 属性，在子组件中通过 this.$emit(‘input&rsquo;,val)自动修改 v-model 绑定的值</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    props<span style="color:#ff79c6">:</span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>      value<span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">String</span>, <span style="color:#6272a4">//v-model会自动传递一个字段为value的prop属性
@@ -288,7 +288,7 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span><span style="color:#f1fa8c">      &lt;div&gt;
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span><span style="color:#f1fa8c">        &lt;input type=&#34;text&#34; v-model=&#34;mymessage&#34; @change=&#34;changeValue&#34;&gt;
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span><span style="color:#f1fa8c">      &lt;/div&gt;
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span><span style="color:#f1fa8c">	`</span>
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span><span style="color:#f1fa8c">    `</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>  })
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>  Vue.component(<span style="color:#f1fa8c">&#39;parent&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span>    template<span style="color:#ff79c6">:</span><span style="color:#f1fa8c">`
@@ -312,8 +312,8 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40</span><span><span style="color:#f1fa8c">      &lt;/div&gt;
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">41</span><span><span style="color:#f1fa8c">    `</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">42</span><span>  })
-</span></span></code></pre></div><h2 id="6-parent和children">6. $parent和$​children</h2>
-<p>在组件内部可以直接通过子组件<code>$parent</code>对父组件进行操作，父组件通过<code>$​children</code>对子组件进行操作.</p>
+</span></span></code></pre></div><h2 id="6-parent-和children">6. $parent 和$​children</h2>
+<p>在组件内部可以直接通过子组件 <code>$parent</code> 对父组件进行操作，父组件通过 <code>$​children</code> 对子组件进行操作.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span>Vue.component(<span style="color:#f1fa8c">&#39;child&#39;</span>,{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    props<span style="color:#ff79c6">:</span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>      value<span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">String</span>, <span style="color:#6272a4">//v-model会自动传递一个字段为value的prop属性

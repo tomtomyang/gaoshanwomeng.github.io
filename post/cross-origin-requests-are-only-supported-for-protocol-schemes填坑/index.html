@@ -52,10 +52,10 @@
                 <span class="toc-link">1.增加目标选项</span>
             </li>
             <li>
-                <span class="toc-link">3.放到tomcat上运行</span>
+                <span class="toc-link">3.放到 tomcat 上运行</span>
             </li>
             <li>
-                <span class="toc-link">3.使用anywhere/live server插件</span>
+                <span class="toc-link">3.使用 anywhere/live server 插件</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -66,14 +66,14 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-03-17</span>
-            <span>更新于2022-05-17</span>
-            <span>共934字</span>
+            <span>更新于2022-06-27</span>
+            <span>共847字</span>
             <span>阅读2分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
-        <p>今天在写了一个简单的H5页面，项目结构如下图所示：</p>
+        <p>今天在写了一个简单的 H5 页面，项目结构如下图所示：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20200713150046838.png" alt="在这里插入图片描述"></p>
 <p>然后在运行的时候突然报错</p>
 <blockquote>
@@ -83,29 +83,29 @@ from origin ‘null’ has been blocked by CORS policy: Cross origin
 requests are only supported for protocol schemes: http, data, chrome,
 chrome-extension, https.</p>
 </blockquote>
-<p>我想来想去都没有相同怎么回事，后来发现是由于我在一个js文件里面倒入其他js文件的时候在标签里面加入了type=“module”</p>
+<p>我想来想去都没有相同怎么回事，后来发现是由于我在一个 js 文件里面倒入其他 js 文件的时候在标签里面加入了 type=“module”</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>&lt;<span style="color:#ff79c6">script</span> <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;module&#34;</span> <span style="color:#50fa7b">src</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./js/main.js&#34;</span>  <span style="color:#50fa7b">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;text/javascript&#34;</span> <span style="color:#50fa7b">charset</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;utf-8&#34;</span>&gt;&lt;/<span style="color:#ff79c6">script</span>&gt;
-</span></span></code></pre></div><p>但是这样做本身是没什么问题的啊，使用es6语法，在其中一个js文件里面导入其他文件的内容是用的import …from…</p>
-<p>后来再经过研究终于发现了问题所在，其实问题就是浏览器在访问本地js文件的时候遇到了跨域的问题，我们这种引入方式属于file协议，但是上面的报错信息提示是：</p>
+</span></span></code></pre></div><p>但是这样做本身是没什么问题的啊，使用 es6 语法，在其中一个 js 文件里面导入其他文件的内容是用的 import …from…</p>
+<p>后来再经过研究终于发现了问题所在，其实问题就是浏览器在访问本地 js 文件的时候遇到了跨域的问题，我们这种引入方式属于 file 协议，但是上面的报错信息提示是：</p>
 <blockquote>
 <p>Cross origin
 requests are only supported for protocol schemes: http, data, chrome,
 chrome-extension, https.</p>
 </blockquote>
-<p>其实翻译成人话就是，本地跨域仅支持ajax跨域只支持这些协议框架：http,https,data,chrome（Chrome浏览器）,chrome-extension（Chrome扩展插件），chrome-extension-resource（Chrome扩展资源），就是没有file协议!用了jsonp这种跨域json数据交互协议也没有，人家ajax就只支持那几个协议，并且jsonp交互协议也非官方正式的。</p>
+<p>其实翻译成人话就是，本地跨域仅支持 ajax 跨域只支持这些协议框架：http,https,data,chrome（Chrome 浏览器）,chrome-extension（Chrome 扩展插件），chrome-extension-resource（Chrome 扩展资源），就是没有 file 协议!用了 jsonp 这种跨域 json 数据交互协议也没有，人家 ajax 就只支持那几个协议，并且 jsonp 交互协议也非官方正式的。</p>
 <p>所以我们只要顺着这个思路解决就好了，目前的解决办法有两个</p>
 <h2 id="1增加目标选项">1.增加目标选项</h2>
-<p>对于windows来说，找到chrome的快捷方式，在属性–&gt;目标里面添加–allow-file-access-from-files就可以了，
+<p>对于 windows 来说，找到 chrome 的快捷方式，在属性–&gt;目标里面添加–allow-file-access-from-files 就可以了，
 <img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/20200713151158513.png" alt="在这里插入图片描述">
-mac的话网上说在终端进行这个操作，但是我的黑果上行不通，这里就不给大家指歪路了。</p>
-<h2 id="3放到tomcat上运行">3.放到tomcat上运行</h2>
+mac 的话网上说在终端进行这个操作，但是我的黑果上行不通，这里就不给大家指歪路了。</p>
+<h2 id="3放到-tomcat-上运行">3.放到 tomcat 上运行</h2>
 <p>既然本地跑不通，我们就放在服务器程序上，然后通过访问服务器接口理论上是可以的</p>
-<h2 id="3使用anywherelive-server插件">3.使用anywhere/live server插件</h2>
-<p>其实这个和tomcat的思路差不多，就是这个是一个npm的插件，会比tomcat方便一些，
-可以使用npm安装</p>
+<h2 id="3使用-anywherelive-server-插件">3.使用 anywhere/live server 插件</h2>
+<p>其实这个和 tomcat 的思路差不多，就是这个是一个 npm 的插件，会比 tomcat 方便一些，
+可以使用 npm 安装</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>$ npm install anywhere -g 
 </span></span></code></pre></div><p>最好是全局安装，这样以后用也方便
-然后切换到html文件所在的文件夹，运行</p>
+然后切换到 html 文件所在的文件夹，运行</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>$ anywhere 
 </span></span></code></pre></div><p>运行后一般会自动跳转到浏览器上，终端上会显示一个运行的网址，你也可以在其他地方调试。</p>
 

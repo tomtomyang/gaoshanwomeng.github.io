@@ -66,8 +66,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-01-30</span>
-            <span>更新于2022-05-17</span>
-            <span>共334字</span>
+            <span>更新于2022-06-27</span>
+            <span>共272字</span>
             <span>阅读1分钟</span>
           </div>
         
@@ -75,16 +75,16 @@
       <div class="content markdown-body">
         <h3 id="1-代码背景">1. 代码背景</h3>
 <ul>
-<li>用vuex管理数据状态，state中有定义 <code>expressTemplate: false</code>；</li>
-<li>vue的cart页面有使用vant的标签, 提示报错 <code>Computed property “expressTemplate” was assigned to but it has no setter</code>；</li>
+<li>用 vuex 管理数据状态，state 中有定义 <code>expressTemplate: false</code>；</li>
+<li>vue 的 cart 页面有使用 vant 的标签, 提示报错 <code>Computed property “expressTemplate” was assigned to but it has no setter</code>；</li>
 </ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>&lt;<span style="color:#ff79c6">el-radio-group</span>  <span style="color:#50fa7b">v-model</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;expressTemplate&#34;</span>&gt;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>   &lt;<span style="color:#ff79c6">el-radio</span> <span style="color:#50fa7b">v-for</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;( item, index ) in expressList&#34;</span> <span style="color:#50fa7b">:key</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;index&#34;</span> <span style="color:#50fa7b">:label</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;item.id&#34;</span>&gt;{{item.name}}&lt;/<span style="color:#ff79c6">el-radio</span>&gt;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>&lt;/<span style="color:#ff79c6">el-radio-group</span>&gt;
 </span></span></code></pre></div><h3 id="2-错误分析">2. 错误分析</h3>
-<p>搜索一番，了解 组件中v-model=“XXX”，而XXX是vuex state中的某个变量，html中 expressTemplate 是由v-model绑定 ，vuex中是单项流，v-model是双向绑定，但是在computed中只通过get获取参数值 没有set无法改变参数值，因此增加set的方法 。</p>
+<p>搜索一番，了解 组件中 v-model=“XXX”，而 XXX 是 vuex state 中的某个变量，html 中 expressTemplate 是由 v-model 绑定 ，vuex 中是单项流，v-model 是双向绑定，但是在 computed 中只通过 get 获取参数值 没有 set 无法改变参数值，因此增加 set 的方法 。</p>
 <h3 id="3-解决方案">3. 解决方案</h3>
-<p>computed下增加set方法，set中根据具体业务写出要更改的值即可，我这里是调用vuex中mutations.js的一个方法。</p>
+<p>computed 下增加 set 方法，set 中根据具体业务写出要更改的值即可，我这里是调用 vuex 中 mutations.js 的一个方法。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span> isAllChecked<span style="color:#ff79c6">:</span> {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>       get() {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>.$store.state.batchprint.expressTemplate;

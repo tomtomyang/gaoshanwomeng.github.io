@@ -49,33 +49,33 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h2 animated fadeInDown"><li>
-                <span class="toc-link">1. 简易版Promise</span>
+                <span class="toc-link">1. 简易版 Promise</span>
             </li>
             
                     <ul class="toc-h3"><li>
-                <span class="toc-link">1. 实现executor</span>
+                <span class="toc-link">1. 实现 executor</span>
             </li>
             <li>
                 <span class="toc-link">2. 实现状态机制</span>
             </li>
             <li>
-                <span class="toc-link">3. 实现then</span>
+                <span class="toc-link">3. 实现 then</span>
             </li>
             <li>
                 <span class="toc-link">4. 实现链式调用</span>
             </li>
             <li>
-                <span class="toc-link">5. 实现catch/finally</span>
+                <span class="toc-link">5. 实现 catch/finally</span>
             </li>
             <li>
-                <span class="toc-link">7. 实现Promise.resolve/reject</span>
+                <span class="toc-link">7. 实现 Promise.resolve/reject</span>
             </li>
             <li>
-                <span class="toc-link">8. 实现Promise.all/race</span>
+                <span class="toc-link">8. 实现 Promise.all/race</span>
             </li>
             
                     </ul><li>
-                <span class="toc-link">2. Promise源码</span>
+                <span class="toc-link">2. Promise 源码</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -86,22 +86,22 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-08-05</span>
-            <span>更新于2022-06-16</span>
-            <span>共3995字</span>
+            <span>更新于2022-06-27</span>
+            <span>共3519字</span>
             <span>阅读8分钟</span>
           </div>
         
       </div>
       <div class="content markdown-body">
-        <h2 id="1-简易版promise">1. 简易版Promise</h2>
-<h3 id="1-实现executor">1. 实现executor</h3>
-<p>比如我们实例化一个Promise对象时，会这样写：</p>
+        <h2 id="1-简易版-promise">1. 简易版 Promise</h2>
+<h3 id="1-实现-executor">1. 实现 executor</h3>
+<p>比如我们实例化一个 Promise 对象时，会这样写：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">let</span> p1 <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((resolve, reject) =&gt; {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    resolve(<span style="color:#bd93f9">12345</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>})
 </span></span></code></pre></div><p>这里要注意的是：</p>
 <ol>
-<li>constructor接收一个函数作为参数；</li>
+<li>constructor 接收一个函数作为参数；</li>
 <li>这个传入的函数会在实例化时（执行构造函数时）立即执行；</li>
 <li>传入的函数接收两个函数（resolve， reject）作为参数；</li>
 </ol>
@@ -111,7 +111,7 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span><span style="color:#6272a4"></span>        executor(<span style="color:#ff79c6">this</span>._resolve, <span style="color:#ff79c6">this</span>._reject);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>    
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>	_resolve <span style="color:#ff79c6">=</span> value =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    _resolve <span style="color:#ff79c6">=</span> value =&gt; {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>        console.log(<span style="color:#f1fa8c">&#39;resolve -----&#39;</span>, value);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>
@@ -132,8 +132,8 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4">// reject ----- 12345
 </span></span></span></code></pre></div><h3 id="2-实现状态机制">2. 实现状态机制</h3>
-<p><strong>在传入的函数中执行resolve表示成功，执行reject表示失败，传入的值会传给then方法的回调函数</strong></p>
-<p>Promise A+规范规定了Promise的三种状态，也规定了不同状态直接转换的机制：</p>
+<p><strong>在传入的函数中执行 resolve 表示成功，执行 reject 表示失败，传入的值会传给 then 方法的回调函数</strong></p>
+<p>Promise A+规范规定了 Promise 的三种状态，也规定了不同状态直接转换的机制：</p>
 <blockquote>
 <p>A promise must be in one of three states: pending, fulfilled, or rejected.</p>
 <ol>
@@ -155,11 +155,11 @@
 </ol>
 </li>
 </ol>
-<p>一个promise必须处于三种状态之一：pending, fulfilled, rejected</p>
+<p>一个 promise 必须处于三种状态之一：pending, fulfilled, rejected</p>
 <ol>
-<li>当处于pending状态时，可能转换为fulfilled或者rejected状态</li>
-<li>当处于fulfilled状态时，不能再转换为其他状态，必须有一个被赋予一个不可更改的值</li>
-<li>当处于rejected状态时，不能再转换为其他状态，必须指定一个不可改变的原因</li>
+<li>当处于 pending 状态时，可能转换为 fulfilled 或者 rejected 状态</li>
+<li>当处于 fulfilled 状态时，不能再转换为其他状态，必须有一个被赋予一个不可更改的值</li>
+<li>当处于 rejected 状态时，不能再转换为其他状态，必须指定一个不可改变的原因</li>
 </ol>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">class</span> myPromise {
@@ -188,9 +188,9 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// reject ----- 12345
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#6272a4">// myPromise {status: &#34;rejected&#34;, _resolve: ƒ, _reject: ƒ}
-</span></span></span></code></pre></div><h3 id="3-实现then">3. 实现then</h3>
-<p><strong>Promise的每个实例上都有一个叫做then的方法，该方法有两个参数，第一个参数是成功之后执行的回调函数，第二个参数是失败之后执行的回调函数。then方法在resolve或者reject执行之后才会执行，并且then方法中的值是传给resolve或reject的参数</strong></p>
-<p>我们在使用Promise时，最常用的就是then方法：</p>
+</span></span></span></code></pre></div><h3 id="3-实现-then">3. 实现 then</h3>
+<p><strong>Promise 的每个实例上都有一个叫做 then 的方法，该方法有两个参数，第一个参数是成功之后执行的回调函数，第二个参数是失败之后执行的回调函数。then 方法在 resolve 或者 reject 执行之后才会执行，并且 then 方法中的值是传给 resolve 或 reject 的参数</strong></p>
+<p>我们在使用 Promise 时，最常用的就是 then 方法：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>p1.then( res =&gt; {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    console.log(res);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}, err =&gt; {
@@ -198,14 +198,14 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>})
 </span></span></code></pre></div><p>这里要注意的是：</p>
 <ol>
-<li>then函数接收两个函数作为参数；</li>
-<li>第一个函数在resolve函数执行后，status值变为fulfilled之后执行；</li>
-<li>第二个函数在reject函数执行后，status值变为rejected之后执行；</li>
+<li>then 函数接收两个函数作为参数；</li>
+<li>第一个函数在 resolve 函数执行后，status 值变为 fulfilled 之后执行；</li>
+<li>第二个函数在 reject 函数执行后，status 值变为 rejected 之后执行；</li>
 </ol>
 <p>还有区分两种情况：</p>
 <ol>
-<li>then函数执行，传入两个函数之前，resolve/reject已经执行了，promise的状态已经变为终态了；</li>
-<li>then函数执行，传入两个函数之前，resolve/reject没有执行，promise的状态还处于pending状态；</li>
+<li>then 函数执行，传入两个函数之前，resolve/reject 已经执行了，promise 的状态已经变为终态了；</li>
+<li>then 函数执行，传入两个函数之前，resolve/reject 没有执行，promise 的状态还处于 pending 状态；</li>
 </ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">class</span> myPromise {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    constructor(executor) {
@@ -279,29 +279,29 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31</span><span><span style="color:#6272a4">// 2秒后输出
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32</span><span><span style="color:#6272a4">// then reject reason ----- 12345
 </span></span></span></code></pre></div><h3 id="4-实现链式调用">4. 实现链式调用</h3>
-<p>Promise.prototype.then()的返回值也是一个Promise对象，因此可以实现链式调用，同时会出现以下几种情况：</p>
+<p>Promise.prototype.then()的返回值也是一个 Promise 对象，因此可以实现链式调用，同时会出现以下几种情况：</p>
 <blockquote>
-<p>then函数的返回值依据以下规则，如果 <code>then</code> 中的回调函数：</p>
+<p>then 函数的返回值依据以下规则，如果 <code>then</code> 中的回调函数：</p>
 <ul>
 <li>
-<p>return了一个值</p>
-<p>那么 <code>then</code> 返回的 Promise 将会成为fulfilled状态，并且将返回的值作为接受状态的回调函数的参数值。</p>
+<p>return 了一个值</p>
+<p>那么 <code>then</code> 返回的 Promise 将会成为 fulfilled 状态，并且将返回的值作为接受状态的回调函数的参数值。</p>
 </li>
 <li>
-<p>没有return任何值</p>
-<p>那么 <code>then</code> 返回的 Promise 将会成为fulfilled状态，并且该接受状态的回调函数的参数值为 <code>undefined</code>。</p>
+<p>没有 return 任何值</p>
+<p>那么 <code>then</code> 返回的 Promise 将会成为 fulfilled 状态，并且该接受状态的回调函数的参数值为 <code>undefined</code>。</p>
 </li>
 <li>
 <p>抛出一个错误</p>
-<p>那么 <code>then</code> 返回的 Promise 将会成为rejected状态，并且将抛出的错误作为拒绝状态的回调函数的参数值。</p>
+<p>那么 <code>then</code> 返回的 Promise 将会成为 rejected 状态，并且将抛出的错误作为拒绝状态的回调函数的参数值。</p>
 </li>
 <li>
-<p>返回一个已经是fulfilled状态的 Promise</p>
-<p>那么 <code>then</code> 返回的 Promise 也会成为fulfilled状态，并且将那个 Promise 的fulfilled状态的回调函数的参数值作为该被返回的Promise的fulfilled状态回调函数的参数值。</p>
+<p>返回一个已经是 fulfilled 状态的 Promise</p>
+<p>那么 <code>then</code> 返回的 Promise 也会成为 fulfilled 状态，并且将那个 Promise 的 fulfilled 状态的回调函数的参数值作为该被返回的 Promise 的 fulfilled 状态回调函数的参数值。</p>
 </li>
 <li>
-<p>返回一个已经是rejected状态的 Promise</p>
-<p>那么 <code>then</code> 返回的 Promise 也会成为rejected状态，并且将那个 Promise 的rejected状态的回调函数的参数值作为该被返回的Promise的rejected状态回调函数的参数值。</p>
+<p>返回一个已经是 rejected 状态的 Promise</p>
+<p>那么 <code>then</code> 返回的 Promise 也会成为 rejected 状态，并且将那个 Promise 的 rejected 状态的回调函数的参数值作为该被返回的 Promise 的 rejected 状态回调函数的参数值。</p>
 </li>
 <li>
 <p>返回一个未定状态（<code>pending</code>）的 Promise</p>
@@ -309,7 +309,7 @@
 </li>
 </ul>
 </blockquote>
-<p>根据上面这种说明，我们可以明确一个思路，每个then函数都返回一个新的Promise，分为以下几个情况：</p>
+<p>根据上面这种说明，我们可以明确一个思路，每个 then 函数都返回一个新的 Promise，分为以下几个情况：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span> <span style="color:#ff79c6">class</span> myPromise {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    constructor(executor) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        executor(<span style="color:#ff79c6">this</span>._resolve, <span style="color:#ff79c6">this</span>._reject);
@@ -405,8 +405,8 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#6272a4">// #origin 12345#
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#6272a4">// #then 12345#
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26</span><span><span style="color:#6272a4">// Error: #then then error
-</span></span></span></code></pre></div><h3 id="5-实现catchfinally">5. 实现catch/finally</h3>
-<p>catch和finally可以看成是阉割版的then，都可以直接用then来实现那么就直接写代码吧：</p>
+</span></span></span></code></pre></div><h3 id="5-实现-catchfinally">5. 实现 catch/finally</h3>
+<p>catch 和 finally 可以看成是阉割版的 then，都可以直接用 then 来实现那么就直接写代码吧：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span> <span style="color:#ff79c6">class</span> myPromise {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    constructor(executor) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>        executor(<span style="color:#ff79c6">this</span>._resolve, <span style="color:#ff79c6">this</span>._reject);
@@ -490,26 +490,25 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    }, <span style="color:#bd93f9">2000</span>)
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>})
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>p1.then(value =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    console.log(value);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject) =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>        setTimeout(() =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>            resolve(<span style="color:#f1fa8c">&#39;then 12345&#39;</span>);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>        }, <span style="color:#bd93f9">5000</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>    })
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>}).then(value =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    console.log(value);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;then then reject 12345&#39;</span>)
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>}).<span style="color:#ff79c6">catch</span>(reason =&gt; {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>    console.log(reason);
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>})
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span><span style="color:#6272a4">// console output
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#6272a4">// 12345
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#6272a4">// then 12345
-</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25</span><span><span style="color:#6272a4">// Error: then then reject 12345
-</span></span></span></code></pre></div><h3 id="7-实现promiseresolvereject">7. 实现Promise.resolve/reject</h3>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>p1.then(value =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    console.log(value);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> myPromise((resolve, reject) =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>        setTimeout(() =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>            resolve(<span style="color:#f1fa8c">&#39;then 12345&#39;</span>);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>        }, <span style="color:#bd93f9">5000</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>    })
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>}).then(value =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>    console.log(value);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16</span><span>    <span style="color:#ff79c6">throw</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Error</span>(<span style="color:#f1fa8c">&#39;then then reject 12345&#39;</span>)
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>}).<span style="color:#ff79c6">catch</span>(reason =&gt; {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>    console.log(reason);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>})
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20</span><span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21</span><span><span style="color:#6272a4">// console output
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22</span><span><span style="color:#6272a4">// 12345
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23</span><span><span style="color:#6272a4">// then 12345
+</span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24</span><span><span style="color:#6272a4">// Error: then then reject 12345
+</span></span></span></code></pre></div><h3 id="7-实现-promiseresolvereject">7. 实现 Promise.resolve/reject</h3>
 <blockquote>
 <p><strong>语法</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">Promise</span>.resolve(value);
@@ -518,13 +517,13 @@
 <ul>
 <li>
 <p>value/reason</p>
-<p>被<code>Promise</code>对象解析的参数，可以是数据类型，也可以是一个<code>Promise</code>对象，或者是一个thenable。</p>
+<p>被 <code>Promise</code> 对象解析的参数，可以是数据类型，也可以是一个 <code>Promise</code> 对象，或者是一个 thenable。</p>
 </li>
 </ul>
 <p><strong>返回</strong></p>
 <ul>
-<li>如果参数为普通数据类型，返回一个带着给定值状态为fulfilled/rejected的<code>Promise</code>对象</li>
-<li>如果参数本身就是一个<code>Promise</code>对象，则直接返回这个<code>Promise</code>对象，状态和值都是传入的这个<code>promise</code>。</li>
+<li>如果参数为普通数据类型，返回一个带着给定值状态为 fulfilled/rejected 的 <code>Promise</code> 对象</li>
+<li>如果参数本身就是一个 <code>Promise</code> 对象，则直接返回这个 <code>Promise</code> 对象，状态和值都是传入的这个 <code>promise</code>。</li>
 </ul>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">class</span> myPromise {
@@ -626,7 +625,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">97</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">98</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">99</span><span>}
-</span></span></code></pre></div><h3 id="8-实现promiseallrace">8. 实现Promise.all/race</h3>
+</span></span></code></pre></div><h3 id="8-实现-promiseallrace">8. 实现 Promise.all/race</h3>
 <blockquote>
 <p><strong>语法</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">Promise</span>.all(iterable);
@@ -634,15 +633,15 @@
 <ul>
 <li>
 <p>iterable</p>
-<p>一个可迭代对象，如 <code>Array</code>或 <code>String</code>。</p>
+<p>一个可迭代对象，如 <code>Array</code> 或 <code>String</code>。</p>
 </li>
 </ul>
 <p><strong>返回</strong></p>
 <ul>
-<li>如果没有传入参数时，返回一个rejected状态的<code>Promise</code>。</li>
-<li>如果传入的参数是一个空的可迭代对象，则返回一个fulfilled状态的 <code>Promise</code>。</li>
-<li>如果传入的参数不包含任何 <code>promise</code>，则返回一个fulfilled状态的<code>Promise</code>。</li>
-<li>其它情况下返回一个pending状态的<code>Promise</code>。这个返回的 <code>promise</code> 之后会在所有的 <code>promise</code> 都完成或有一个 <code>promise</code> 失败时变为完成或失败。</li>
+<li>如果没有传入参数时，返回一个 rejected 状态的 <code>Promise</code>。</li>
+<li>如果传入的参数是一个空的可迭代对象，则返回一个 fulfilled 状态的 <code>Promise</code>。</li>
+<li>如果传入的参数不包含任何 <code>promise</code>，则返回一个 fulfilled 状态的 <code>Promise</code>。</li>
+<li>其它情况下返回一个 pending 状态的 <code>Promise</code>。这个返回的 <code>promise</code> 之后会在所有的 <code>promise</code> 都完成或有一个 <code>promise</code> 失败时变为完成或失败。</li>
 </ul>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span> <span style="color:#ff79c6">static</span> all <span style="color:#ff79c6">=</span> promises =&gt; {
@@ -674,15 +673,15 @@
 <ul>
 <li>
 <p>iterable</p>
-<p>一个可迭代的对象，例如<code>Array</code>，其中每个成员都是<code>Promise</code>。</p>
+<p>一个可迭代的对象，例如 <code>Array</code>，其中每个成员都是 <code>Promise</code>。</p>
 </li>
 </ul>
 <p><strong>返回</strong></p>
-<p>一个待定的<code>Promise</code>，只要给定的一组promise中的一个变为终态，就采用第一个promise的值作为它的值，异步地resolve或reject。</p>
+<p>一个待定的 <code>Promise</code>，只要给定的一组 promise 中的一个变为终态，就采用第一个 promise 的值作为它的值，异步地 resolve 或 reject。</p>
 <ul>
 <li><code>race</code> 函数返回一个 <code>Promise</code>，它将与第一个传递的 promise 相同的完成方式被完成。它可以是完成（ resolves），也可以是失败（rejects），这要取决于第一个完成的方式是两个中的哪个。</li>
 <li>如果传的迭代是空的，则返回的 promise 将永远等待。</li>
-<li>如果迭代包含一个或多个非promise或是已经处于终态的Promise，则<code> Promise.race</code> 将解析为迭代中找到的第一个值。</li>
+<li>如果迭代包含一个或多个非 promise 或是已经处于终态的 Promise，则 <code> Promise.race</code> 将解析为迭代中找到的第一个值。</li>
 </ul>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">static</span> race <span style="color:#ff79c6">=</span> promises =&gt; {
@@ -704,11 +703,11 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17</span><span>        })
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18</span><span>    })
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span>}
-</span></span></code></pre></div><h2 id="2-promise源码">2. Promise源码</h2>
+</span></span></code></pre></div><h2 id="2-promise-源码">2. Promise 源码</h2>
 <blockquote>
 <p><a href="https://github.com/then/promise">https://github.com/then/promise</a></p>
 </blockquote>
-<p>本文是js 异步编程详解的第2篇文章，下一篇是《js Generator详解》。</p>
+<p>本文是 js 异步编程详解的第 2 篇文章，下一篇是《js Generator 详解》。</p>
 
       </div>
       <div class="footer">

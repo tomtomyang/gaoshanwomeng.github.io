@@ -49,20 +49,20 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h2 animated fadeInDown"><li>
-                <span class="toc-link">1. 定义this</span>
+                <span class="toc-link">1. 定义 this</span>
             </li>
             <li>
-                <span class="toc-link">2. 不断变化的this</span>
+                <span class="toc-link">2. 不断变化的 this</span>
             </li>
             
                     <ul class="toc-h3"><li>
-                <span class="toc-link">1. 全局作用域中的this</span>
+                <span class="toc-link">1. 全局作用域中的 this</span>
             </li>
             <li>
                 <span class="toc-link">2. 函数作用域</span>
             </li>
             <li>
-                <span class="toc-link">3. 函数作用域中的this</span>
+                <span class="toc-link">3. 函数作用域中的 this</span>
             </li>
             
                     <ul class="toc-h4"><li>
@@ -76,11 +76,11 @@
             </li>
             
                     </ul><li>
-                <span class="toc-link">4. 构造函数中的this</span>
+                <span class="toc-link">4. 构造函数中的 this</span>
             </li>
             
                     </ul><li>
-                <span class="toc-link">3. this从何而来</span>
+                <span class="toc-link">3. this 从何而来</span>
             </li>
             
                     <ul class="toc-h3"><li>
@@ -101,8 +101,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-08-25</span>
-            <span>更新于2022-05-17</span>
-            <span>共2297字</span>
+            <span>更新于2022-06-27</span>
+            <span>共2179字</span>
             <span>阅读5分钟</span>
           </div>
         
@@ -112,18 +112,18 @@
 <p>参考：</p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this">MDN_this</a></p>
 <p><a href="http://www.ruanyifeng.com/blog/2018/06/javascript-this.html">JavaScript 的 this 原理</a></p>
-<p><a href="https://www.cnblogs.com/pssp/p/5216085.html">彻底理解js中this的指向，不必硬背。</a></p>
+<p><a href="https://www.cnblogs.com/pssp/p/5216085.html">彻底理解 js 中 this 的指向，不必硬背。</a></p>
 </blockquote>
-<h2 id="1-定义this">1. 定义this</h2>
+<h2 id="1-定义-this">1. 定义 this</h2>
 <blockquote>
-<p>与其他语言相比，函数的 <code>this</code> 关键字在 JavaScript 中的表现略有不同，此外，在<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">严格模式</a>和非严格模式之间也会有一些差别。</p>
+<p>与其他语言相比，函数的 <code>this</code> 关键字在 JavaScript 中的表现略有不同，此外，在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode">严格模式</a> 和非严格模式之间也会有一些差别。</p>
 <p>在绝大多数情况下，函数的调用方式决定了 <code>this</code> 的值（运行时绑定）。</p>
 <p><code>this</code> 不能在执行期间被赋值，并且在每次函数被调用时 <code>this</code> 的值也可能会不同。</p>
 <p>ES5 引入了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">bind</a> 方法来设置函数的 <code>this</code> 值，而不用考虑函数如何被调用的。</p>
-<p>ES2015 引入了<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions">箭头函数</a>，箭头函数不提供自身的 this 绑定（<code>this</code> 的值将保持为闭合词法上下文的值）。</p>
+<p>ES2015 引入了 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions">箭头函数</a> ，箭头函数不提供自身的 this 绑定（<code>this</code> 的值将保持为闭合词法上下文的值）。</p>
 </blockquote>
-<h2 id="2-不断变化的this">2. 不断变化的this</h2>
-<h3 id="1-全局作用域中的this">1. 全局作用域中的this</h3>
+<h2 id="2-不断变化的-this">2. 不断变化的 this</h2>
+<h3 id="1-全局作用域中的-this">1. 全局作用域中的 this</h3>
 <p>无论是否在严格模式下，在全局执行环境中（在任何函数体外部）<code>this</code> 都指向全局对象。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#6272a4">// 在浏览器中, window 对象同时也是全局对象：
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#6272a4"></span>console.log(<span style="color:#ff79c6">this</span> <span style="color:#ff79c6">===</span> <span style="color:#8be9fd;font-style:italic">window</span>); <span style="color:#6272a4">// true
@@ -141,8 +141,8 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span><span style="color:#6272a4"></span>Window {<span style="color:#bd93f9">0</span><span style="color:#ff79c6">:</span> global, <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> Window, <span style="color:#8be9fd;font-style:italic">window</span><span style="color:#ff79c6">:</span> Window, self<span style="color:#ff79c6">:</span> Window, <span style="color:#8be9fd;font-style:italic">document</span><span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">document</span>, name<span style="color:#ff79c6">:</span> <span style="color:#f1fa8c">&#34;&#34;</span>, location<span style="color:#ff79c6">:</span> Location, …}
 </span></span></code></pre></div></blockquote>
 <h3 id="2-函数作用域">2. 函数作用域</h3>
-<p>在函数内部，<code>this</code>的值取决于函数被调用的方式。</p>
-<p>非严格模式下，下面代码中<code>f1()</code>在全局中被调用，没有某个对象对象调用<code>f1()</code>，所以 <code>this</code> 的值默认指向全局对象，浏览器中就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window"><code>window</code></a>。</p>
+<p>在函数内部，<code>this</code> 的值取决于函数被调用的方式。</p>
+<p>非严格模式下，下面代码中 <code>f1()</code> 在全局中被调用，没有某个对象对象调用 <code>f1()</code>，所以 <code>this</code> 的值默认指向全局对象，浏览器中就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window"><code>window</code></a> 。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> f1(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">this</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
@@ -158,18 +158,18 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>f2() <span style="color:#ff79c6">===</span> <span style="color:#ff79c6">undefined</span>; <span style="color:#6272a4">// true
-</span></span></span></code></pre></div><h3 id="3-函数作用域中的this">3. 函数作用域中的this</h3>
-<p>在函数内部，<code>this</code>的值取决于函数被调用的方式。</p>
-<p>this的指向在函数创建的时候是决定不了的，在调用的时候才能决定，谁调用的就指向谁，一定要搞清楚这个。</p>
+</span></span></span></code></pre></div><h3 id="3-函数作用域中的-this">3. 函数作用域中的 this</h3>
+<p>在函数内部，<code>this</code> 的值取决于函数被调用的方式。</p>
+<p>this 的指向在函数创建的时候是决定不了的，在调用的时候才能决定，谁调用的就指向谁，一定要搞清楚这个。</p>
 <h4 id="1-全局调用函数">1. 全局调用函数</h4>
-<p>下面代码中<code>f1()</code>在全局中被调用，没有某个对象对象调用<code>f1()</code>，所以 <code>this</code> 的值默认指向全局对象，浏览器中就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window"><code>window</code></a>。</p>
+<p>下面代码中 <code>f1()</code> 在全局中被调用，没有某个对象对象调用 <code>f1()</code>，所以 <code>this</code> 的值默认指向全局对象，浏览器中就是 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window"><code>window</code></a> 。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> f1(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  console.log(<span style="color:#ff79c6">this</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>f1();
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// Window {0: global, window: Window, self: Window, document: document, name: &#34;&#34;, location: Location, …}
-</span></span></span></code></pre></div><p>或者可以这样解释，我们在全局作用域定义了一个函数，那么这个函数同时也成为了全局对象的window的一个方法，我们执行函数，其实也就是执行了window对象的方法：</p>
+</span></span></span></code></pre></div><p>或者可以这样解释，我们在全局作用域定义了一个函数，那么这个函数同时也成为了全局对象的 window 的一个方法，我们执行函数，其实也就是执行了 window 对象的方法：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> f1(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    console.log(<span style="color:#ff79c6">this</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
@@ -177,7 +177,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// Window {0: global, window: Window, self: Window, document: document, name: &#34;&#34;, location: Location, …}
 </span></span></span></code></pre></div><h4 id="2-对象调用函数">2. 对象调用函数</h4>
-<p>同样的，如果函数本身就一个对象的方法，那this就指向了调用函数的对象：</p>
+<p>同样的，如果函数本身就一个对象的方法，那 this 就指向了调用函数的对象：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> obj1 <span style="color:#ff79c6">=</span> {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    objFunc<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span>(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>        console.log(<span style="color:#ff79c6">this</span>);
@@ -227,9 +227,9 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#6272a4">// undefined
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#6272a4">// window
-</span></span></span></code></pre></div><p>这里this指向的是window，是不是有些蒙了？其实是因为你没有理解一句话，这句话同样至关重要。</p>
-<p>this永远指向的是最后调用它的对象，也就是看它执行的时候是谁调用的，上面这种情况虽然函数fn是被对象b所引用，但是在将fn赋值给变量j的时候并没有执行所以最终指向的是window，这和第二种情况是不一样的，第二种情况是直接执行了fn。</p>
-<h3 id="4-构造函数中的this">4. 构造函数中的this</h3>
+</span></span></span></code></pre></div><p>这里 this 指向的是 window，是不是有些蒙了？其实是因为你没有理解一句话，这句话同样至关重要。</p>
+<p>this 永远指向的是最后调用它的对象，也就是看它执行的时候是谁调用的，上面这种情况虽然函数 fn 是被对象 b 所引用，但是在将 fn 赋值给变量 j 的时候并没有执行所以最终指向的是 window，这和第二种情况是不一样的，第二种情况是直接执行了 fn。</p>
+<h3 id="4-构造函数中的-this">4. 构造函数中的 this</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> Fn(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    <span style="color:#ff79c6">this</span>.user <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;hh&#34;</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
@@ -237,17 +237,17 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>console.log(a.user); 
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// hh
-</span></span></span></code></pre></div><p>这里之所以对象a可以点出函数Fn里面的user是因为new关键字可以改变this的指向，将这个this指向对象a。</p>
-<p>为什么我说a是对象，因为用了new关键字就是创建一个对象实例，我们这里用变量a创建了一个Fn的实例（相当于复制了一份Fn到对象a里面），此时仅仅只是创建，并没有执行，而调用这个函数Fn的是对象a，那么this指向的自然是对象a，那么为什么对象a中会有user，因为调用Fn的时候就执行了a.user = &lsquo;hh&rsquo;。</p>
-<p>这里具体的细节，可以在另一篇文章《js new与构造函数详解》中查看。</p>
-<h2 id="3-this从何而来">3. this从何而来</h2>
+</span></span></span></code></pre></div><p>这里之所以对象 a 可以点出函数 Fn 里面的 user 是因为 new 关键字可以改变 this 的指向，将这个 this 指向对象 a。</p>
+<p>为什么我说 a 是对象，因为用了 new 关键字就是创建一个对象实例，我们这里用变量 a 创建了一个 Fn 的实例（相当于复制了一份 Fn 到对象 a 里面），此时仅仅只是创建，并没有执行，而调用这个函数 Fn 的是对象 a，那么 this 指向的自然是对象 a，那么为什么对象 a 中会有 user，因为调用 Fn 的时候就执行了 a.user = &lsquo;hh&rsquo;。</p>
+<p>这里具体的细节，可以在另一篇文章《js new 与构造函数详解》中查看。</p>
+<h2 id="3-this-从何而来">3. this 从何而来</h2>
 <h3 id="1-内存中的对象">1. 内存中的对象</h3>
-<p>JavaScript 语言之所以有<code>this</code>的设计，跟内存里面的数据结构有关系。</p>
+<p>JavaScript 语言之所以有 <code>this</code> 的设计，跟内存里面的数据结构有关系。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> { foo<span style="color:#ff79c6">:</span>  <span style="color:#bd93f9">5</span> };
-</span></span></code></pre></div><p>上面的代码将一个对象赋值给变量<code>obj</code>。JavaScript 引擎会先在内存里面，生成一个对象<code>{ foo: 5 }</code>，然后把这个对象的内存地址赋值给变量<code>obj</code>。</p>
+</span></span></code></pre></div><p>上面的代码将一个对象赋值给变量 <code>obj</code>。JavaScript 引擎会先在内存里面，生成一个对象 <code>{ foo: 5 }</code>，然后把这个对象的内存地址赋值给变量 <code>obj</code>。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2018061801.png" alt="img"></p>
-<p>也就是说，变量<code>obj</code>是一个地址（reference）。后面如果要读取<code>obj.foo</code>，引擎先从<code>obj</code>拿到内存地址，然后再从该地址读出原始的对象，返回它的<code>foo</code>属性。</p>
-<p>原始的对象以字典结构保存，每一个属性名都对应一个属性描述对象。举例来说，上面例子的<code>foo</code>属性，实际上是以下面的形式保存的。</p>
+<p>也就是说，变量 <code>obj</code> 是一个地址（reference）。后面如果要读取 <code>obj.foo</code>，引擎先从 <code>obj</code> 拿到内存地址，然后再从该地址读出原始的对象，返回它的 <code>foo</code> 属性。</p>
+<p>原始的对象以字典结构保存，每一个属性名都对应一个属性描述对象。举例来说，上面例子的 <code>foo</code> 属性，实际上是以下面的形式保存的。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2018061802.png" alt="img"></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  foo<span style="color:#ff79c6">:</span> {
@@ -257,11 +257,11 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>    [[configurable]]<span style="color:#ff79c6">:</span> <span style="color:#ff79c6">true</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>  }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span>}
-</span></span></code></pre></div><p>注意，<code>foo</code>属性的值保存在属性描述对象的<code>value</code>属性里面。</p>
+</span></span></code></pre></div><p>注意，<code>foo</code> 属性的值保存在属性描述对象的 <code>value</code> 属性里面。</p>
 <h3 id="2-内存中的函数">2. 内存中的函数</h3>
 <p>这样的结构是很清晰的，问题在于属性的值可能是一个函数。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> obj <span style="color:#ff79c6">=</span> { foo<span style="color:#ff79c6">:</span> <span style="color:#8be9fd;font-style:italic">function</span> () {} };
-</span></span></code></pre></div><p>这时，引擎会将函数单独保存在内存中，然后再将函数的地址赋值给<code>foo</code>属性的<code>value</code>属性。</p>
+</span></span></code></pre></div><p>这时，引擎会将函数单独保存在内存中，然后再将函数的地址赋值给 <code>foo</code> 属性的 <code>value</code> 属性。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2018061803.png" alt="img"></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>{
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  foo<span style="color:#ff79c6">:</span> {
@@ -283,12 +283,12 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> f <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  console.log(x);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>};
-</span></span></code></pre></div><p>上面代码中，函数体里面使用了变量<code>x</code>。该变量由运行环境提供。</p>
-<p>现在问题就来了，由于函数可以在不同的运行环境执行，所以需要有一种机制，能够在函数体内部获得当前的运行环境（context）。所以，<code>this</code>就出现了，它的设计目的就是在函数体内部，指代函数当前的运行环境。</p>
+</span></span></code></pre></div><p>上面代码中，函数体里面使用了变量 <code>x</code>。该变量由运行环境提供。</p>
+<p>现在问题就来了，由于函数可以在不同的运行环境执行，所以需要有一种机制，能够在函数体内部获得当前的运行环境（context）。所以，<code>this</code> 就出现了，它的设计目的就是在函数体内部，指代函数当前的运行环境。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> f <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>  console.log(<span style="color:#ff79c6">this</span>.x);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>}
-</span></span></code></pre></div><p>上面代码中，函数体里面的<code>this.x</code>就是指当前运行环境的<code>x</code>。</p>
+</span></span></code></pre></div><p>上面代码中，函数体里面的 <code>this.x</code> 就是指当前运行环境的 <code>x</code>。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">var</span> f <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">function</span> () {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  console.log(<span style="color:#ff79c6">this</span>.x);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>}
@@ -304,9 +304,9 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span><span style="color:#6272a4"></span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span><span style="color:#6272a4">// obj 环境执行
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span><span style="color:#6272a4"></span>obj.f() <span style="color:#6272a4">// 2
-</span></span></span></code></pre></div><p>上面代码中，函数<code>f</code>在全局环境执行，<code>this.x</code>指向全局环境的<code>x</code>。</p>
+</span></span></span></code></pre></div><p>上面代码中，函数 <code>f</code> 在全局环境执行，<code>this.x</code> 指向全局环境的 <code>x</code>。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2018061804.png" alt="img"></p>
-<p>在<code>obj</code>环境执行，<code>this.x</code>指向<code>obj.x</code>。</p>
+<p>在 <code>obj</code> 环境执行，<code>this.x</code> 指向 <code>obj.x</code>。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/bg2018061805.png" alt="img"></p>
 
       </div>

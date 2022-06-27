@@ -75,7 +75,7 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-09-01</span>
-            <span>更新于2022-05-17</span>
+            <span>更新于2022-06-27</span>
             <span>共2718字</span>
             <span>阅读6分钟</span>
           </div>
@@ -110,23 +110,21 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>&lt;/<span style="color:#ff79c6">html</span>&gt;
 </span></span></code></pre></div><p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/full-process.png" alt="DOM 构建流程"></p>
 <ol>
-<li>
-<p>转换:</p>
-<p>浏览器从磁盘或网络读取 HTML 的原始字节，并根据文件的指定编码（例如 UTF-8）将它们转换成各个字符。</p>
-</li>
-<li>
-<p>令牌化:</p>
-<p>浏览器将字符串转换成 <a href="http://www.w3.org/TR/html5/">W3C HTML5 标准</a>规定的各种令牌，例如，<code>&lt;html&gt;</code>、<code>&lt;body&gt;</code>，以及其他尖括号内的字符串。每个令牌都具有特殊含义和一组规则。</p>
-</li>
-<li>
-<p>词法分析:</p>
-<p>发出的令牌转换成定义其属性和规则的“对象”。</p>
-</li>
-<li>
-<p>DOM 构建:</p>
-<p>最后，由于 HTML 标记定义不同标记之间的关系（一些标记包含在其他标记内），创建的对象链接在一个树数据结构内，此结构也会捕获原始标记中定义的父项-子项关系: <em>HTML</em> 对象是 <em>body</em> 对象的父项，<em>body</em> 是 <em>paragraph</em> 对象的父项，依此类推。</p>
-</li>
+<li>转换:</li>
 </ol>
+<p>浏览器从磁盘或网络读取 HTML 的原始字节，并根据文件的指定编码（例如 UTF-8）将它们转换成各个字符。</p>
+<ol start="2">
+<li>令牌化:</li>
+</ol>
+<p>浏览器将字符串转换成 <a href="http://www.w3.org/TR/html5/">W3C HTML5 标准</a> 规定的各种令牌，例如，<code>&lt;html&gt;</code>、<code>&lt;body&gt;</code>，以及其他尖括号内的字符串。每个令牌都具有特殊含义和一组规则。</p>
+<ol start="3">
+<li>词法分析:</li>
+</ol>
+<p>发出的令牌转换成定义其属性和规则的“对象”。</p>
+<ol start="4">
+<li>DOM 构建:</li>
+</ol>
+<p>最后，由于 HTML 标记定义不同标记之间的关系（一些标记包含在其他标记内），创建的对象链接在一个树数据结构内，此结构也会捕获原始标记中定义的父项-子项关系: <em>HTML</em> 对象是 <em>body</em> 对象的父项，<em>body</em> 是 <em>paragraph</em> 对象的父项，依此类推。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/dom-tree.png" alt="DOM 树"></p>
 <p><strong>整个流程的最终输出是我们这个简单页面的文档对象模型 (DOM)，浏览器对页面进行的所有进一步处理都会用到它。</strong></p>
 <p>浏览器每次处理 HTML 标记时，都会完成以上所有步骤：</p>
@@ -159,12 +157,13 @@
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/render-tree-construction.png" alt="将 DOM 与 CSSOM 合并以形成渲染树"></p>
 <p>为构建渲染树，浏览器大体上完成了下列工作:</p>
 <ol>
-<li>从 DOM 树的根节点开始遍历每个可见节点。
+<li>从 DOM 树的根节点开始遍历每个可见节点。</li>
+</ol>
 <ul>
 <li>某些节点不可见（例如脚本标记、元标记等），因为它们不会体现在渲染输出中，所以会被忽略。</li>
 <li>某些节点通过 CSS 隐藏，因此在渲染树中也会被忽略，例如，上例中的 span 节点&mdash;不会出现在渲染树中，&mdash;因为有一个显式规则在该节点上设置了“display: none”属性。</li>
 </ul>
-</li>
+<ol start="2">
 <li>对于每个可见节点，为其找到适配的 CSSOM 规则并应用它们。</li>
 <li>发射可见节点，连同其内容和计算的样式。</li>
 </ol>
@@ -173,7 +172,7 @@
 <p>请注意 <code>visibility: hidden</code> 与 <code>display: none</code> 是不一样的。前者隐藏元素，但元素仍占据着布局空间（即将其渲染成一个空框），而后者 (<code>display: none</code>) 将元素从渲染树中完全移除，元素既不可见，也不是布局的组成部分。</p>
 </blockquote>
 <p>最终输出的渲染同时包含了屏幕上的所有可见内容及其样式信息。有了渲染树，我们就可以进入“布局”阶段。</p>
-<p>到目前为止，我们计算了哪些节点应该是可见的以及它们的计算样式，但我们尚未计算它们在设备<a href="https://developers.google.cn/web/fundamentals/design-and-ux/responsive?hl=zh-cn#set-the-viewport">视口</a>内的确切位置和大小，这就是“布局”阶段，也称为“自动重排”。</p>
+<p>到目前为止，我们计算了哪些节点应该是可见的以及它们的计算样式，但我们尚未计算它们在设备 <a href="https://developers.google.cn/web/fundamentals/design-and-ux/responsive?hl=zh-cn#set-the-viewport">视口</a> 内的确切位置和大小，这就是“布局”阶段，也称为“自动重排”。</p>
 <h2 id="4-布局layout">4. 布局(Layout)</h2>
 <p>为弄清每个对象在网页上的确切大小和位置，浏览器从渲染树的根节点开始进行遍历。让我们考虑下面这样一个简单的实例：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#ff79c6">&lt;!DOCTYPE html&gt;</span>

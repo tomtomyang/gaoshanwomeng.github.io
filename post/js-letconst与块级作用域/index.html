@@ -49,27 +49,27 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h2 animated fadeInDown"><li>
-                <span class="toc-link">1. 作用域对var的处理</span>
+                <span class="toc-link">1. 作用域对 var 的处理</span>
             </li>
             <li>
-                <span class="toc-link">2. let&amp;const和var的区别</span>
+                <span class="toc-link">2. let&amp;const 和 var 的区别</span>
             </li>
             
                     <ul class="toc-h3"><li>
                 <span class="toc-link">1. 暂时性死区</span>
             </li>
             <li>
-                <span class="toc-link">2. 不为window设置属性</span>
+                <span class="toc-link">2. 不为 window 设置属性</span>
             </li>
             <li>
                 <span class="toc-link">3. 不能重复声明</span>
             </li>
             
                     </ul><li>
-                <span class="toc-link">3. for循环中的let和var</span>
+                <span class="toc-link">3. for 循环中的 let 和 var</span>
             </li>
             <li>
-                <span class="toc-link">4. let存不存在变量提升</span>
+                <span class="toc-link">4. let 存不存在变量提升</span>
             </li>
             </div><div class="single-post container">
     <div class="post animated fadeInDown">
@@ -80,8 +80,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-08-23</span>
-            <span>更新于2022-05-17</span>
-            <span>共2911字</span>
+            <span>更新于2022-06-27</span>
+            <span>共2707字</span>
             <span>阅读6分钟</span>
           </div>
         
@@ -91,13 +91,13 @@
 <p>参考：</p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/let">MDN_let</a></p>
 <p><a href="https://stackoverflow.com/questions/37916940/why-was-the-name-let-chosen-for-block-scoped-variable-declarations-in-javascri">为什么在 JavaScript 中为块范围变量声明选择名称“let”？</a></p>
-<p><a href="https://www.jianshu.com/p/0f49c88cf169">let深入理解&mdash;let存在变量提升吗？</a></p>
+<p><a href="https://www.jianshu.com/p/0f49c88cf169">let 深入理解&mdash;let 存在变量提升吗？</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/28140450">我用了两个月的时间才理解 let</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/28117094">JS变量封禁大法：薛定谔的X</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/28117094">JS 变量封禁大法：薛定谔的 X</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/27558914">let 声明会提升（hoist）吗？</a></p>
 </blockquote>
-<h2 id="1-作用域对var的处理">1. 作用域对var的处理</h2>
-<p>先通过一段代码，明确一下作用域机制和js代码的解释执行：</p>
+<h2 id="1-作用域对-var-的处理">1. 作用域对 var 的处理</h2>
+<p>先通过一段代码，明确一下作用域机制和 js 代码的解释执行：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> changeA(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>   <span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>   console.log(a);
@@ -111,29 +111,29 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4">// 1
 </span></span></span></code></pre></div><p>模拟解释执行过程：</p>
 <ol>
-<li>全局作用域中，解释器提升<code>var a</code>，将变量<code>a</code>存入全局作用域维护的变量表中，没有赋值；</li>
-<li>全局作用域中，解释器看到函数的声明，将函数<code>changeA</code>存入当前作用域维护的变量表中，并给函数赋值；</li>
-<li>引擎执行<code>a = 1</code>，在全局作用域维护的变量表中查找<code>a</code>的容器，找到了，在容器中存入1；</li>
-<li>引擎执行<code>changeA()</code>，在全局作用域中查找<code>changeA</code>，找到了，执行函数，进入函数作用域；</li>
-<li>函数作用域中，解释器提升<code>var a</code>，将将变量<code>a</code>存入全局作用域维护的变量表中，没有赋值；</li>
-<li>引擎执行<code>a = 2</code>，在函数作用域维护的变量表中查找<code>a</code>的容器，找到了，在容器中存入2；</li>
-<li>引擎执行<code>console.log(a)</code>，在函数作用域维护的变量表中查找<code>a</code>的值，找到了2，交给<code>log()</code>执行；</li>
+<li>全局作用域中，解释器提升 <code>var a</code>，将变量 <code>a</code> 存入全局作用域维护的变量表中，没有赋值；</li>
+<li>全局作用域中，解释器看到函数的声明，将函数 <code>changeA</code> 存入当前作用域维护的变量表中，并给函数赋值；</li>
+<li>引擎执行 <code>a = 1</code>，在全局作用域维护的变量表中查找 <code>a</code> 的容器，找到了，在容器中存入 1；</li>
+<li>引擎执行 <code>changeA()</code>，在全局作用域中查找 <code>changeA</code>，找到了，执行函数，进入函数作用域；</li>
+<li>函数作用域中，解释器提升 <code>var a</code>，将将变量 <code>a</code> 存入全局作用域维护的变量表中，没有赋值；</li>
+<li>引擎执行 <code>a = 2</code>，在函数作用域维护的变量表中查找 <code>a</code> 的容器，找到了，在容器中存入 2；</li>
+<li>引擎执行 <code>console.log(a)</code>，在函数作用域维护的变量表中查找 <code>a</code> 的值，找到了 2，交给 <code>log()</code> 执行；</li>
 <li>函数执行结束；</li>
-<li>引擎执行<code>console.log(a)</code>，在全局作用域维护的变量表中查找<code>a</code>的值，找到了1，交给<code>log()</code>执行；</li>
+<li>引擎执行 <code>console.log(a)</code>，在全局作用域维护的变量表中查找 <code>a</code> 的值，找到了 1，交给 <code>log()</code> 执行；</li>
 </ol>
-<h2 id="2-letconst和var的区别">2. let&amp;const和var的区别</h2>
-<p>我们可以从无数个资料中查到，let&amp;canst和var具有如下几点不同：</p>
+<h2 id="2-letconst-和-var-的区别">2. let&amp;const 和 var 的区别</h2>
+<p>我们可以从无数个资料中查到，let&amp;canst 和 var 具有如下几点不同：</p>
 <ul>
-<li><code>let/const</code>存在暂时性死区；</li>
-<li><code>let/const</code>不会为全局变量<code>window</code>设置属性；</li>
-<li><code>let/const</code>不能重复声明，如果重复声明，在代码编译阶段就会报错；</li>
-<li><code>let/var</code>声明的变量可以重新赋值(更改指针的指向)，而<code>const</code>声明的变量不可以重新赋值(不可以更改指针的指向)；</li>
+<li><code>let/const</code> 存在暂时性死区；</li>
+<li><code>let/const</code> 不会为全局变量 <code>window</code> 设置属性；</li>
+<li><code>let/const</code> 不能重复声明，如果重复声明，在代码编译阶段就会报错；</li>
+<li><code>let/var</code> 声明的变量可以重新赋值(更改指针的指向)，而 <code>const</code> 声明的变量不可以重新赋值(不可以更改指针的指向)；</li>
 </ul>
-<p>究其原因，是作用域或者说解释器对var和let/const的处理方式不同，导致了let&amp;const与const具有不同的特性。</p>
-<p>下面我们就分别来看，是怎样的机制导致了let&amp;const与var的不同，因为let和const只有细微的不同，下面我们只讨论let和var的区别。</p>
+<p>究其原因，是作用域或者说解释器对 var 和 let/const 的处理方式不同，导致了 let&amp;const 与 const 具有不同的特性。</p>
+<p>下面我们就分别来看，是怎样的机制导致了 let&amp;const 与 var 的不同，因为 let 和 const 只有细微的不同，下面我们只讨论 let 和 var 的区别。</p>
 <h3 id="1-暂时性死区">1. 暂时性死区</h3>
 <blockquote>
-<p>**<code>let</code>**允许你声明一个作用域被限制在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/block"><code>块</code></a>级中的变量、语句或者表达式。与 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 关键字不同的是， <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a>声明的变量只能是全局或者整个函数块的。 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 和 <code>let</code> 的不同之处在于后者是在编译时才初始化。</p>
+<p>**<code>let</code> **允许你声明一个作用域被限制在 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/block"><code>块</code></a> 级中的变量、语句或者表达式。与 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 关键字不同的是， <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 声明的变量只能是全局或者整个函数块的。 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/var"><code>var</code></a> 和 <code>let</code> 的不同之处在于后者是在编译时才初始化。</p>
 <p>与通过  <code>var</code> 声明的有初始化值 <code>undefined</code> 的变量不同，通过 <code>let</code> 声明的变量直到它们的定义被执行时才初始化。在变量初始化前访问该变量会导致 <code>ReferenceError</code>。该变量处在一个自块顶部到初始化处理的“暂存死区”中。</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">function</span> do_something() {
@@ -142,11 +142,11 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span><span style="color:#6272a4"></span>  <span style="color:#8be9fd;font-style:italic">var</span> bar <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  <span style="color:#8be9fd;font-style:italic">let</span> foo <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
-</span></span></code></pre></div><p>那么我们是不是可以说，解释器进入作用域后，不会对let声明的变量进行提升，其实这种说法不准确，更准确的说法是，let声明的变量的声明被提升了，但是初始化和赋值没有被提升，通俗的说是，已经在内存中开辟了一块空间，但是没有给这块空间起名字，所以你找不到，更没有向这片空间里存储内容。</p>
+</span></span></code></pre></div><p>那么我们是不是可以说，解释器进入作用域后，不会对 let 声明的变量进行提升，其实这种说法不准确，更准确的说法是，let 声明的变量的声明被提升了，但是初始化和赋值没有被提升，通俗的说是，已经在内存中开辟了一块空间，但是没有给这块空间起名字，所以你找不到，更没有向这片空间里存储内容。</p>
 <p>暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</p>
-<h3 id="2-不为window设置属性">2. 不为window设置属性</h3>
-<p>我们知道，因为存在变量的遮蔽问题，所以我们在全局作用域使用var声明变量时，会给window对象设置与变量名相同的属性以及值。</p>
-<p>而使用let声明的变量不会这样做，那在全局作用域中使用let声明的变量会出现在哪里？</p>
+<h3 id="2-不为-window-设置属性">2. 不为 window 设置属性</h3>
+<p>我们知道，因为存在变量的遮蔽问题，所以我们在全局作用域使用 var 声明变量时，会给 window 对象设置与变量名相同的属性以及值。</p>
+<p>而使用 let 声明的变量不会这样做，那在全局作用域中使用 let 声明的变量会出现在哪里？</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/7fa20f469f0065511b996fbf64b5f60d_1105x379.png" alt="img"></p>
 <p>通过上图也可以看到，在全局作用域中，用 let 和 const 声明的全局变量并没有在全局对象中，只是一个块级作用域（Script）中。</p>
 <h3 id="3-不能重复声明">3. 不能重复声明</h3>
@@ -161,7 +161,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>        <span style="color:#8be9fd;font-style:italic">let</span> x <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    }
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
-</span></span></code></pre></div><h2 id="3-for循环中的let和var">3. for循环中的let和var</h2>
+</span></span></code></pre></div><h2 id="3-for-循环中的-let-和-var">3. for 循环中的 let 和 var</h2>
 <p>带着上面的知识，我们来分析一段代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">var</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    setTimeout(() =&gt; {
@@ -177,7 +177,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span><span style="color:#6272a4">// 0 1 2 3 4
 </span></span></span></code></pre></div><p>这种区别是为什么？来试着分析一下：</p>
-<p>首先，根据网络上的一个说法是for循环可以理解成这样的状态：</p>
+<p>首先，根据网络上的一个说法是 for 循环可以理解成这样的状态：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">var</span> i;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span><span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    setTimeout(() =&gt; {
@@ -196,9 +196,9 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// 循环时 i的值从1变到5
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#6272a4">// 点击时 引擎去查找i的引用，在全局作用域下找到，值为5
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#6272a4">// 因此全是5
-</span></span></span></code></pre></div><p>这样分析与结果不符啊，但是按照我们已有的知识，let就是在全局作用域下的，执行点击时，i的值肯定会是5啊！</p>
-<p>而事实上，我们运行上面的代码，结果真的是都是5。</p>
-<p>既然事实没错，我们对let的理解没错，那就说明事实上的<code>let i; for(i)</code>和<code>for(let i)</code>并不一样，那不一样的点肯定就在<code>let i</code>的位置不在外层作用域，那有没有可能在块级作用域内？</p>
+</span></span></span></code></pre></div><p>这样分析与结果不符啊，但是按照我们已有的知识，let 就是在全局作用域下的，执行点击时，i 的值肯定会是 5 啊！</p>
+<p>而事实上，我们运行上面的代码，结果真的是都是 5。</p>
+<p>既然事实没错，我们对 let 的理解没错，那就说明事实上的 <code>let i; for(i)</code> 和 <code>for(let i)</code> 并不一样，那不一样的点肯定就在 <code>let i</code> 的位置不在外层作用域，那有没有可能在块级作用域内？</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#ff79c6">for</span> (i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    <span style="color:#8be9fd;font-style:italic">let</span> i;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>    setTimeout(() =&gt; {
@@ -206,21 +206,21 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>    }, <span style="color:#bd93f9">1000</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span><span style="color:#6272a4">// undefinrd x 5
-</span></span></span></code></pre></div><p>看来<code>let i</code>也不是定义在块级作用域内部啊，那它在哪？</p>
+</span></span></span></code></pre></div><p>看来 <code>let i</code> 也不是定义在块级作用域内部啊，那它在哪？</p>
 <blockquote>
 <p>于是我去看 MDN 的例子，发现鸡贼的 MDN 巧妙地避开了这个问题，它的例子是这样的：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/v2-e2db72f8ad3358e0b89bad2f2e86ef6f_720w.png" alt="img"></p>
-<p>你看 MDN 的例子，在每次循环的时候用 let j 保留的 i 的值，所以在 i 变化的时候，j 并不会变化。而console.log 的是 j，所以不会出现 5 个 5。</p>
+<p>你看 MDN 的例子，在每次循环的时候用 let j 保留的 i 的值，所以在 i 变化的时候，j 并不会变化。而 console.log 的是 j，所以不会出现 5 个 5。</p>
 <p>为什么 MDN 要故意声明一个 j 呢，为什么不直接用 i 呢？我猜测 MDN 为了简化知识，隐瞒了什么。</p>
 <p>于是我去看了看 ES 文档，其中的 <a href="https://link.zhihu.com/?target=http%3A//www.ecma-international.org/ecma-262/6.0/%23sec-for-statement-runtime-semantics-labelledevaluation">13.7.4.7 章节</a> 清楚地说明了个中缘由，但是由于说得太清楚了，很多人都看不下去，不信你可以试试。</p>
 <p>我说一下我的理解：</p>
 <ol>
 <li><code>for( let i = 0; i&lt; 5; i++)</code> 这句话的圆括号之间，有一个隐藏的作用域</li>
-<li><code>for( let i = 0; i&lt; 5; i++) { 循环体 } </code>在每次执行循环体之前，JS 引擎会把 i 在循环体的上下文中重新声明及初始化一次。</li>
+<li><code>for( let i = 0; i&lt; 5; i++) { 循环体 }</code> 在每次执行循环体之前，JS 引擎会把 i 在循环体的上下文中重新声明及初始化一次。</li>
 <li>其他细节就不说了，太细碎了</li>
 </ol>
 </blockquote>
-<p>也就是说，在<code>for</code>设置循环变量的地方存在一个父作用域，循环体<code>{}</code>中是一个子作用域，那么刚才这段代码：</p>
+<p>也就是说，在 <code>for</code> 设置循环变量的地方存在一个父作用域，循环体 <code>{}</code> 中是一个子作用域，那么刚才这段代码：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#ff79c6">for</span> (<span style="color:#8be9fd;font-style:italic">let</span> i <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>; i <span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">5</span>; i<span style="color:#ff79c6">++</span>) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>    setTimeout(() =&gt; {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>        console.log(i)
@@ -234,7 +234,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  }, <span style="color:#bd93f9">1000</span>);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
 </span></span></code></pre></div><p>这样才能把一切解释通。</p>
-<h2 id="4-let存不存在变量提升">4. let存不存在变量提升</h2>
+<h2 id="4-let-存不存在变量提升">4. let 存不存在变量提升</h2>
 <p>先看第一段代码</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>{
@@ -247,22 +247,22 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#6272a4">// 2
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span><span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>{
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>  	a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>  	<span style="color:#8be9fd;font-style:italic">let</span> a;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>  	console.log(a);
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3</span><span>      a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4</span><span>      <span style="color:#8be9fd;font-style:italic">let</span> a;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5</span><span>      console.log(a);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7</span><span>console.log(a);
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9</span><span><span style="color:#6272a4">// ReferenceError: Cannot access &#39;a&#39; before initialization
-</span></span></span></code></pre></div><p>这个报错是最新版的报错，原本的报错是<code>Uncaught ReferenceError: a is not defined</code>，无论是哪种报错，按照没有提升的思路来分析，外层a的值应该被修改为2，但是没有，而且新版的报错更加清晰的指出了：<code>Cannot access 'a' before initialization</code>，在a被初始化之前，不能获取a，但实际上是存在变量提升的。</p>
+</span></span></span></code></pre></div><p>这个报错是最新版的报错，原本的报错是 <code>Uncaught ReferenceError: a is not defined</code>，无论是哪种报错，按照没有提升的思路来分析，外层 a 的值应该被修改为 2，但是没有，而且新版的报错更加清晰的指出了：<code>Cannot access 'a' before initialization</code>，在 a 被初始化之前，不能获取 a，但实际上是存在变量提升的。</p>
 <blockquote>
 <ol>
-<li>MDN 关于 let 是否存在提升的章节，被编辑了两次，第一次说存在提升，第二次说不存在提升（参考 <a href="https://link.zhihu.com/?target=https%3A//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let%24compare%3Flocale%3Den-US%26to%3D1242757%26from%3D1242229">2017 年 3 月 10 号的变更记录</a>）。也就是说 MDN 的维护者都在这个问题上产生过分歧，更何况我们了。</li>
+<li>MDN 关于 let 是否存在提升的章节，被编辑了两次，第一次说存在提升，第二次说不存在提升（参考 <a href="https://link.zhihu.com/?target=https%3A//developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let%24compare%3Flocale%3Den-US%26to%3D1242757%26from%3D1242229">2017 年 3 月 10 号的变更记录</a> ）。也就是说 MDN 的维护者都在这个问题上产生过分歧，更何况我们了。</li>
 <li>ES 文档里出现了「var/let hoisting」字样。</li>
 </ol>
 <p>鉴于此，我认为应该尊重 ES 文档，认为 let 确实存在提升。只不过由于暂时死区的限制，你不能在 let x 之前使用 let。</p>
 </blockquote>
-<p>本文是js执行机制的第3篇，下一篇是《js 闭包详解》。</p>
+<p>本文是 js 执行机制的第 3 篇，下一篇是《js 闭包详解》。</p>
 
       </div>
       <div class="footer">

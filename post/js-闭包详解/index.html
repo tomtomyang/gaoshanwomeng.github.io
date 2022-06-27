@@ -79,8 +79,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-08-24</span>
-            <span>更新于2022-05-17</span>
-            <span>共2295字</span>
+            <span>更新于2022-06-27</span>
+            <span>共2088字</span>
             <span>阅读5分钟</span>
           </div>
         
@@ -89,8 +89,8 @@
         <blockquote>
 <p>参考：</p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures">MDN_闭包</a></p>
-<p><a href="https://www.kancloud.cn/kancloud/you-dont-know-js-scope-closures/516609">你不懂JS：作用域与闭包</a></p>
-<p><a href="https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html">学习Javascript闭包（Closure）</a></p>
+<p><a href="https://www.kancloud.cn/kancloud/you-dont-know-js-scope-closures/516609">你不懂 JS：作用域与闭包</a></p>
+<p><a href="https://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html">学习 Javascript 闭包（Closure）</a></p>
 </blockquote>
 <p>在 JavaScript 中闭包无所不在，你必须识别并接纳它。</p>
 <p>闭包是词法作用域导致的结果。闭包在你的代码中一直在被创建和使用，你在毫无意识的状态下就使用了闭包。</p>
@@ -112,8 +112,8 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>init();
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#6272a4">// Mozilla
-</span></span></span></code></pre></div><p>在上面的代码中，引擎执行<code>alert(name)</code>时，会进行RHS，在当前作用域中查找<code>name</code>，没有找到，则沿着作用域链，向上一层<code>init</code>的作用域查找，找到了<code>name</code>的值为<code>Mozilla</code>，则交给<code>alert</code>执行。</p>
-<p>这是我们已经知道的知识，是作用域和作用域链、LHS和RHS的工作方式。那么换一种情况：</p>
+</span></span></span></code></pre></div><p>在上面的代码中，引擎执行 <code>alert(name)</code> 时，会进行 RHS，在当前作用域中查找 <code>name</code>，没有找到，则沿着作用域链，向上一层 <code>init</code> 的作用域查找，找到了 <code>name</code> 的值为 <code>Mozilla</code>，则交给 <code>alert</code> 执行。</p>
+<p>这是我们已经知道的知识，是作用域和作用域链、LHS 和 RHS 的工作方式。那么换一种情况：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;Mozilla&#34;</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#8be9fd;font-style:italic">function</span> displayName() {
@@ -126,11 +126,11 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>myFunc();
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4">// console output
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#6272a4">// Mozilla
-</span></span></span></code></pre></div><p>这里是将<code>makeFunc</code>函数执行的返回值赋值给<code>myFunc</code>，也就是<code>displayName</code>，那么在执行<code>myFunc</code>时，实际执行的是<code>displayName</code>。</p>
-<p>引擎进入<code>displayName</code>中执行<code>alert(name)</code>，在函数作用域中查找<code>name</code>，没有找到，那么应该去外层作用域查找，但是这就是问题关键，此时<code>displayName</code>已经被return出来了，存入了<code>myFunc</code>中，那么上一层作用域应该是哪个呢？是<code>dispalyName</code>外面的<code>makeFunc</code>的函数作用域，还是<code>myFunc</code>外面的全局作用域？</p>
+</span></span></span></code></pre></div><p>这里是将 <code>makeFunc</code> 函数执行的返回值赋值给 <code>myFunc</code>，也就是 <code>displayName</code>，那么在执行 <code>myFunc</code> 时，实际执行的是 <code>displayName</code>。</p>
+<p>引擎进入 <code>displayName</code> 中执行 <code>alert(name)</code>，在函数作用域中查找 <code>name</code>，没有找到，那么应该去外层作用域查找，但是这就是问题关键，此时 <code>displayName</code> 已经被 return 出来了，存入了 <code>myFunc</code> 中，那么上一层作用域应该是哪个呢？是 <code>dispalyName</code> 外面的 <code>makeFunc</code> 的函数作用域，还是 <code>myFunc</code> 外面的全局作用域？</p>
 <p>要解决这种场景产生的问题，就需要一个机制来告诉我们或者引擎，外层作用域是哪个？这就是闭包的作用。</p>
-<p>从实际的代码运行情况看，很明显外层的作用于是<code>dispalyName</code>外面的<code>makeFunc</code>的函数作用域，因为在全局作用于下是没有<code>name</code>的，会输出<code>空</code>。</p>
-<p>这是不是就说明，<code>displayName</code>是作为一个闭包，携带着外层的作用域环境，被return出来的，也就是MDN给闭包的定义：</p>
+<p>从实际的代码运行情况看，很明显外层的作用于是 <code>dispalyName</code> 外面的 <code>makeFunc</code> 的函数作用域，因为在全局作用于下是没有 <code>name</code> 的，会输出 <code>空</code>。</p>
+<p>这是不是就说明，<code>displayName</code> 是作为一个闭包，携带着外层的作用域环境，被 return 出来的，也就是 MDN 给闭包的定义：</p>
 <blockquote>
 <p>一个函数和对其周围状态（词法作用域）捆绑在一起（或者说函数被作用域包围），这样的组合就是闭包（closure）。也就是说，闭包让你可以在一个内层函数中访问到其外层函数的作用域。</p>
 <p>在 JavaScript 中，每当创建一个函数，闭包就会在函数创建的同时被创建出来。</p>
@@ -149,15 +149,15 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span>console.log(add10(<span style="color:#bd93f9">2</span>));
 </span></span></code></pre></div><p>首先看赋值部分：</p>
 <ol>
-<li><code>add5</code>的值为<code>makeAdder(5)</code>的返回值，<code>makeAdder(5)</code>的返回值是一个闭包，包括了一个匿名函数已经函数外层的作用域环境，在这个环境中<code>x=5</code>；</li>
-<li><code>add10</code>的值为<code>makeAdder(10)</code>的返回值，<code>makeAdder(10)</code>的返回值是一个闭包，包括了一个匿名函数已经函数外层的作用域环境，在这个环境中<code>x=10</code>；</li>
+<li><code>add5</code> 的值为 <code>makeAdder(5)</code> 的返回值，<code>makeAdder(5)</code> 的返回值是一个闭包，包括了一个匿名函数已经函数外层的作用域环境，在这个环境中 <code>x=5</code>；</li>
+<li><code>add10</code> 的值为 <code>makeAdder(10)</code> 的返回值，<code>makeAdder(10)</code> 的返回值是一个闭包，包括了一个匿名函数已经函数外层的作用域环境，在这个环境中 <code>x=10</code>；</li>
 </ol>
 <p>再看执行部分：</p>
 <ol>
-<li><code>add5(2)</code>的入参为2，进入<code>function(y){ return x + y }</code>内部，执行return，查找<code>x</code>和<code>y</code>的值，<code>x</code>在当前作用域中没有找到，找上层作用域，在闭包中的上层作用域中<code>x = 5</code>，<code>y</code>在当前作用域中存在，<code>y = 2</code>，因此返回值为<code>5 + 2 = 7</code>；</li>
-<li><code>add10(2)</code>的入参为2，进入<code>function(y){ return x + y }</code>内部，执行return，查找<code>x</code>和<code>y</code>的值，<code>x</code>在当前作用域中没有找到，找上层作用域，在闭包中的上层作用域中<code>x = 10</code>，<code>y</code>在当前作用域中存在，<code>y = 2</code>，因此返回值为<code>10 + 2 = 12</code>；</li>
+<li><code>add5(2)</code> 的入参为 2，进入 <code>function(y){ return x + y }</code> 内部，执行 return，查找 <code>x</code> 和 <code>y</code> 的值，<code>x</code> 在当前作用域中没有找到，找上层作用域，在闭包中的上层作用域中 <code>x = 5</code>，<code>y</code> 在当前作用域中存在，<code>y = 2</code>，因此返回值为 <code>5 + 2 = 7</code>；</li>
+<li><code>add10(2)</code> 的入参为 2，进入 <code>function(y){ return x + y }</code> 内部，执行 return，查找 <code>x</code> 和 <code>y</code> 的值，<code>x</code> 在当前作用域中没有找到，找上层作用域，在闭包中的上层作用域中 <code>x = 10</code>，<code>y</code> 在当前作用域中存在，<code>y = 2</code>，因此返回值为 <code>10 + 2 = 12</code>；</li>
 </ol>
-<p>到这里我们已经可以体会到闭包的一些功能了，但是有一个问题，MDN定义描述的有些模糊，就是闭包里保存的作用域，是单层作用域还是一个作用域链，我们再通过一段代码来分析：</p>
+<p>到这里我们已经可以体会到闭包的一些功能了，但是有一个问题，MDN 定义描述的有些模糊，就是闭包里保存的作用域，是单层作用域还是一个作用域链，我们再通过一段代码来分析：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> makeFunc() {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#8be9fd;font-style:italic">function</span> f1() {
@@ -178,15 +178,15 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">var</span> fn;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span><span style="color:#8be9fd;font-style:italic">function</span> foo() {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>	<span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>	<span style="color:#8be9fd;font-style:italic">function</span> baz() {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>		console.log( a );
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>	}
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>	fn <span style="color:#ff79c6">=</span> baz;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span><span>    <span style="color:#8be9fd;font-style:italic">var</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>;
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span><span>    <span style="color:#8be9fd;font-style:italic">function</span> baz() {
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span><span>        console.log( a );
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span><span>    }
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span><span>    fn <span style="color:#ff79c6">=</span> baz;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#8be9fd;font-style:italic">function</span> bar() {
-</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>	fn();
+</span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>    fn();
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13</span><span>}
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14</span><span>
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15</span><span>foo();
@@ -196,14 +196,14 @@
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19</span><span><span style="color:#6272a4">// 2
 </span></span></span></code></pre></div><p>我们来分析这里的代码执行：</p>
 <ol>
-<li>执行<code>foo()</code>，<code>foo</code>函数作用域内，声明并赋值了<code>a = 2</code>和<code>baz()</code>，执行<code>fn = baz</code>，对<code>fn</code>进行LHS查找，当前作用域没有，在全局作用域下找到<code>a</code>，对<code>baz</code>进行RHS查找，在当前作用域中找到，赋值给<code>fn</code>，这里是闭包，带有作用域；</li>
-<li>执行<code>bar()</code>，<code>bar</code>函数作用域内，查找<code>fn</code>，没有找到，在全局作用域中找到了，执行<code>fn()</code>，也就是<code>baz</code>的闭包，打印输出2；</li>
+<li>执行 <code>foo()</code>，<code>foo</code> 函数作用域内，声明并赋值了 <code>a = 2</code> 和 <code>baz()</code>，执行 <code>fn = baz</code>，对 <code>fn</code> 进行 LHS 查找，当前作用域没有，在全局作用域下找到 <code>a</code>，对 <code>baz</code> 进行 RHS 查找，在当前作用域中找到，赋值给 <code>fn</code>，这里是闭包，带有作用域；</li>
+<li>执行 <code>bar()</code>，<code>bar</code> 函数作用域内，查找 <code>fn</code>，没有找到，在全局作用域中找到了，执行 <code>fn()</code>，也就是 <code>baz</code> 的闭包，打印输出 2；</li>
 </ol>
 <h2 id="4-使用闭包">4. 使用闭包</h2>
 <p>知道了闭包可以解决什么问题，或者说，知道了闭包的机制，那么我们可以利用闭包这种特性，来做点什么呢？</p>
 <h3 id="1-存储变量的临时值">1. 存储变量的临时值</h3>
 <p>在 Web 开发中，你想要这样做的情况特别常见。</p>
-<p>大部分我们所写的 JavaScript 代码都是基于事件的，我们会将这个事件绑定到dom元素上（比如click、change）。我们的代码通常作为回调，为响应事件而执行。</p>
+<p>大部分我们所写的 JavaScript 代码都是基于事件的，我们会将这个事件绑定到 dom 元素上（比如 click、change）。我们的代码通常作为回调，为响应事件而执行。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> makeSizer(size) {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">function</span>() {
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span><span>    <span style="color:#8be9fd;font-style:italic">document</span>.body.style.fontSize <span style="color:#ff79c6">=</span> size <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#39;px&#39;</span>;
@@ -216,9 +216,9 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span><span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;size-12&#39;</span>).onclick <span style="color:#ff79c6">=</span> size12;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;size-14&#39;</span>).onclick <span style="color:#ff79c6">=</span> size14;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span><span style="color:#8be9fd;font-style:italic">document</span>.getElementById(<span style="color:#f1fa8c">&#39;size-16&#39;</span>).onclick <span style="color:#ff79c6">=</span> size16;
-</span></span></code></pre></div><p>上面这段代码中，我们可以感受到，12、14、16这些形参，这些可以改变的值，都被固定到了函数的闭包中。</p>
+</span></span></code></pre></div><p>上面这段代码中，我们可以感受到，12、14、16 这些形参，这些可以改变的值，都被固定到了函数的闭包中。</p>
 <h3 id="2-立即执行函数表达式">2. 立即执行函数表达式</h3>
-<p>这一部分有专门的文章介绍《js IIFE简介》。</p>
+<p>这一部分有专门的文章介绍《js IIFE 简介》。</p>
 <h3 id="3-模拟类的私有变量">3. 模拟类的私有变量</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span><span><span style="color:#8be9fd;font-style:italic">function</span> Person(){
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span><span>    <span style="color:#8be9fd;font-style:italic">var</span> name <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;default&#39;</span>;
@@ -232,7 +232,7 @@
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span><span>console.log(Person.getName())<span style="color:#6272a4">//default
 </span></span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span><span><span style="color:#6272a4"></span>console.log(Person.setName(<span style="color:#f1fa8c">&#39;mike&#39;</span>))
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span><span>console.log(Person.getName())<span style="color:#6272a4">//mike
-</span></span></span></code></pre></div><p>本文是js执行机制的第4篇，下一篇是《js this详解》。</p>
+</span></span></span></code></pre></div><p>本文是 js 执行机制的第 4 篇，下一篇是《js this 详解》。</p>
 
       </div>
       <div class="footer">

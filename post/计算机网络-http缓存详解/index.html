@@ -49,10 +49,10 @@
     <div class="toc-header animated fadeInDown">
         <span>目录</span>
     </div><ul class="toc-h2 animated fadeInDown"><li>
-                <span class="toc-link">1. 什么是HTTP缓存</span>
+                <span class="toc-link">1. 什么是 HTTP 缓存</span>
             </li>
             <li>
-                <span class="toc-link">2. HTTP缓存分类</span>
+                <span class="toc-link">2. HTTP 缓存分类</span>
             </li>
             
                     <ul class="toc-h3"><li>
@@ -63,7 +63,7 @@
             </li>
             
                     </ul><li>
-                <span class="toc-link">3. HTTP缓存控制</span>
+                <span class="toc-link">3. HTTP 缓存控制</span>
             </li>
             
                     <ul class="toc-h3"><li>
@@ -91,7 +91,7 @@
             </li>
             
                     </ul><li>
-                <span class="toc-link">3. HTTP缓存机制</span>
+                <span class="toc-link">3. HTTP 缓存机制</span>
             </li>
             
                     <ul class="toc-h3"><li>
@@ -129,8 +129,8 @@
 	        	
             <a href="https://tomtomyoung.top/">Tomtom Young</a>
             <span>发布于2021-08-12</span>
-            <span>更新于2022-05-17</span>
-            <span>共3461字</span>
+            <span>更新于2022-06-27</span>
+            <span>共3175字</span>
             <span>阅读7分钟</span>
           </div>
         
@@ -143,21 +143,21 @@
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Expires">MDN Expires</a></p>
 <p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag">MDN ETag</a></p>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match">MDN If-None-Match</a></p>
-<p><a href="https://www.cnblogs.com/chenqf/p/6386163.html">彻底弄懂HTTP缓存机制及原理</a></p>
-<p><a href="https://segmentfault.com/a/1190000021716418">5分钟看懂系列：HTTP缓存机制详解</a></p>
+<p><a href="https://www.cnblogs.com/chenqf/p/6386163.html">彻底弄懂 HTTP 缓存机制及原理</a></p>
+<p><a href="https://segmentfault.com/a/1190000021716418">5 分钟看懂系列：HTTP 缓存机制详解</a></p>
 </blockquote>
-<h2 id="1-什么是http缓存">1. 什么是HTTP缓存</h2>
+<h2 id="1-什么是-http-缓存">1. 什么是 HTTP 缓存</h2>
 <ul>
 <li>通过复用以前获取的资源，可以显著提高网站和应用程序的性能。</li>
 <li>HTTP 缓存减少了等待时间和网络流量，因此减少了显示资源表示形式所需的时间。</li>
-<li>缓存机制依靠HTTP报文的缓存标识。</li>
+<li>缓存机制依靠 HTTP 报文的缓存标识。</li>
 </ul>
 <p>当 web 缓存发现请求的资源已经被存储，它会拦截请求，返回该资源的拷贝，而不会去源服务器重新下载。这样带来的好处有：缓解服务器端压力，提升性能(获取资源的耗时更短了)。</p>
 <p>对于网站来说，缓存是达到高性能的重要组成部分。</p>
 <p>缓存需要合理配置，因为并不是所有资源都是永久不变的：重要的是对一个资源的缓存应截止到其下一次发生改变（即不能缓存过期的资源）。</p>
 <p>本文将主要介绍浏览器与代理缓存，除此之外还有网关缓存、CDN、反向代理缓存和负载均衡器等部署在服务器上的缓存方式，为站点和 web 应用提供更好的稳定性、性能和扩展性。</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/HTTPCachtType.png" alt="What a cache provide, advantages/disadvantages of shared/private caches."></p>
-<h2 id="2-http缓存分类">2. HTTP缓存分类</h2>
+<h2 id="2-http-缓存分类">2. HTTP 缓存分类</h2>
 <p>缓存的种类有很多，其大致可归为两类：私有与共享缓存。</p>
 <p>共享缓存存储的响应能够被多个用户使用。私有缓存只能用于单独用户。</p>
 <h3 id="1-私有缓存">1. 私有缓存</h3>
@@ -167,10 +167,10 @@
 <h3 id="2-共享缓存">2. 共享缓存</h3>
 <p>共享缓存可以被多个用户使用。</p>
 <p>例如，ISP（互联网服务提供商） 或你所在的公司可能会架设一个 web 代理来作为本地网络基础的一部分提供给用户。这样热门的资源就会被重复使用，减少网络拥堵与延迟。</p>
-<h2 id="3-http缓存控制">3. HTTP缓存控制</h2>
-<p><strong>HTTP/1.1</strong>定义的 <code>Cache-Control</code>头用来区分对缓存机制的支持情况， 请求头和响应头都支持这个属性。</p>
+<h2 id="3-http-缓存控制">3. HTTP 缓存控制</h2>
+<p>**HTTP/1.1 **定义的 <code>Cache-Control</code> 头用来区分对缓存机制的支持情况， 请求头和响应头都支持这个属性。</p>
 <p>通过它提供的不同的值来定义缓存策略。</p>
-<p>请求头和响应头中可以添加多个<code>Cache-Control</code>。</p>
+<p>请求头和响应头中可以添加多个 <code>Cache-Control</code>。</p>
 <p><strong>缓存请求指令</strong></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>Cache-Control: max-stale[=&lt;<span style="color:#ff79c6">seconds</span>&gt;]
@@ -195,63 +195,63 @@
 </span></span></code></pre></div><p>缓存中不得存储任何关于客户端请求和服务端响应的内容。每次由客户端发起的请求都会下载完整的响应内容。</p>
 <h4 id="2-缓存但需要验证">2. 缓存但需要验证</h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: no-cache
-</span></span></code></pre></div><p>每次有请求发出时，缓存会将此请求发到服务器（译者注：该请求应该会带有与本地缓存相关的验证字段），服务器端会验证请求中所描述的缓存是否过期，若未过期（注：实际就是返回304），则缓存才使用本地缓存副本。</p>
+</span></span></code></pre></div><p>每次有请求发出时，缓存会将此请求发到服务器（译者注：该请求应该会带有与本地缓存相关的验证字段），服务器端会验证请求中所描述的缓存是否过期，若未过期（注：实际就是返回 304），则缓存才使用本地缓存副本。</p>
 <h4 id="3-私有和公共缓存">3. 私有和公共缓存</h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: private
 </span></span><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2</span><span>Cache-Control: public
-</span></span></code></pre></div><p>&ldquo;public&rdquo; 指令表示该响应可以被任何中间人（比如中间代理、CDN等）缓存。若指定了&quot;public&quot;，则一些通常不被中间人缓存的页面（因为默认是private）（比如 带有HTTP验证信息（帐号密码）的页面 或 某些特定状态码的页面），将会被其缓存。</p>
+</span></span></code></pre></div><p>&ldquo;public&rdquo; 指令表示该响应可以被任何中间人（比如中间代理、CDN 等）缓存。若指定了&quot;public&quot;，则一些通常不被中间人缓存的页面（因为默认是 private）（比如 带有 HTTP 验证信息（帐号密码）的页面 或 某些特定状态码的页面），将会被其缓存。</p>
 <p>&ldquo;private&rdquo; 则表示该响应是专用于某单个用户的，中间人不能缓存此响应，该响应只能应用于浏览器私有缓存中。</p>
 <h3 id="2-到期">2. 到期</h3>
 <p>前两个比较重要，后面的看啊可能就好：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: max-age=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</span></span></code></pre></div><p>设置缓存存储的最大周期，超过这个时间缓存被认为过期(单位秒)。与<code>Expires</code>相反，时间是相对于请求的时间。</p>
+</span></span></code></pre></div><p>设置缓存存储的最大周期，超过这个时间缓存被认为过期(单位秒)。与 <code>Expires</code> 相反，时间是相对于请求的时间。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: s-maxage=&lt;<span style="color:#ff79c6">seconds</span>&gt;
-</span></span></code></pre></div><p>覆盖<code>max-age</code>或者<code>Expires</code>头，但是仅适用于共享缓存(比如各个代理)，私有缓存会忽略它。</p>
+</span></span></code></pre></div><p>覆盖 <code>max-age</code> 或者 <code>Expires</code> 头，但是仅适用于共享缓存(比如各个代理)，私有缓存会忽略它。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: max-stale=&lt;<span style="color:#ff79c6">seconds</span>&gt;
 </span></span></code></pre></div><p>表明客户端愿意接收一个已经过期的资源。可以设置一个可选的秒数，表示响应不能已经过时超过该给定的时间。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: min-fresh=&lt;<span style="color:#ff79c6">seconds</span>&gt;
 </span></span></code></pre></div><p>表示客户端希望获取一个能在指定的秒数内保持其最新状态的响应。</p>
 <h3 id="3-重新验证和重新加载">3. 重新验证和重新加载</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: must-revalidate
-</span></span></code></pre></div><p>一旦资源过期（比如已经超过<code>max-age</code>），在成功向原始服务器验证之前，缓存不能用该资源响应后续请求。</p>
+</span></span></code></pre></div><p>一旦资源过期（比如已经超过 <code>max-age</code>），在成功向原始服务器验证之前，缓存不能用该资源响应后续请求。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: proxy-revalidate
-</span></span></code></pre></div><p>与must-revalidate作用相同，但它仅适用于共享缓存（例如代理），并被私有缓存忽略。</p>
+</span></span></code></pre></div><p>与 must-revalidate 作用相同，但它仅适用于共享缓存（例如代理），并被私有缓存忽略。</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Cache-Control: immutable
-</span></span></code></pre></div><p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如<code>If-None-Match</code>或I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。</p>
+</span></span></code></pre></div><p>表示响应正文不会随时间而改变。资源（如果未过期）在服务器上不发生改变，因此客户端不应发送重新验证请求头（例如 <code>If-None-Match</code> 或 I<code>f-Modified-Since</code>）来检查更新，即使用户显式地刷新页面。</p>
 <h3 id="4-expires">4. expires</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>Expires: Wed, 21 Oct 2015 07:28:00 GMT
 </span></span></code></pre></div><p><code>Expires</code> 响应头包含日期/时间， 即在此时候之后，响应过期。</p>
 <p>无效的日期，比如 0, 代表着过去的日期，即该资源已经过期。</p>
-<p>如果在响应头<code>Cache-Control</code>设置了 &ldquo;max-age&rdquo; 或者 &ldquo;s-max-age&rdquo; 指令，那么 <code>Expires</code> 头会被忽略。</p>
-<h2 id="3-http缓存机制">3. HTTP缓存机制</h2>
+<p>如果在响应头 <code>Cache-Control</code> 设置了 &ldquo;max-age&rdquo; 或者 &ldquo;s-max-age&rdquo; 指令，那么 <code>Expires</code> 头会被忽略。</p>
+<h2 id="3-http-缓存机制">3. HTTP 缓存机制</h2>
 <h3 id="1-缓存条件">1. 缓存条件</h3>
 <p>HTTP 缓存不是必须的，但重用缓存的资源通常是必要的。</p>
-<p>常见的 HTTP 缓存只能缓存 <code>GET</code>请求的数据，对于其他类型的响应则无能为力。</p>
+<p>常见的 HTTP 缓存只能缓存 <code>GET</code> 请求的数据，对于其他类型的响应则无能为力。</p>
 <h3 id="2-缓存寿命的计算">2. 缓存寿命的计算</h3>
 <p>对于含有特定头信息的请求，会去计算缓存寿命。</p>
 <ul>
-<li>响应头部有<code>Cache-control: max-age=N</code>，相应的缓存的寿命就是<code>N</code>。</li>
-<li>响应头部没有<code>Cache-control: max-age=N</code>，查看是否包含<code>Expires</code>，通过比较<code>Expires</code>的值和头里面<code>Date</code>的值来判断是否缓存还有效。</li>
-<li>如果<code>Cache-control: max-age=N</code>和<code>Expires</code>属性都没有，查找<code>Last-Modified</code>。如果有，缓存的寿命就等于<code>Date</code>的值减去<code>Last-Modified</code>的值除以10（注：根据rfc2626其实也就是乘以10%）。</li>
+<li>响应头部有 <code>Cache-control: max-age=N</code>，相应的缓存的寿命就是 <code>N</code>。</li>
+<li>响应头部没有 <code>Cache-control: max-age=N</code>，查看是否包含 <code>Expires</code>，通过比较 <code>Expires</code> 的值和头里面 <code>Date</code> 的值来判断是否缓存还有效。</li>
+<li>如果 <code>Cache-control: max-age=N</code> 和 <code>Expires</code> 属性都没有，查找 <code>Last-Modified</code>。如果有，缓存的寿命就等于 <code>Date</code> 的值减去 <code>Last-Modified</code> 的值除以 10（注：根据 rfc2626 其实也就是乘以 10%）。</li>
 </ul>
 <blockquote>
 <p>举个例子：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/632130-20170210141836104-1513192908.png" alt="img"></p>
-<p>图中Cache-Control仅指定了max-age，所以默认为private，缓存时间为31536000秒（365天）。</p>
-<p>也就是说，在365天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
+<p>图中 Cache-Control 仅指定了 max-age，所以默认为 private，缓存时间为 31536000 秒（365 天）。</p>
+<p>也就是说，在 365 天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
 </blockquote>
 <h3 id="3-缓存驱逐">3. 缓存驱逐</h3>
 <p>理论上来讲，当一个资源被缓存存储后，该资源应该可以被永久存储在缓存中。</p>
 <p>由于缓存只有有限的空间用于存储资源副本，所以缓存会定期地将一些副本删除，这个过程叫做缓存驱逐。</p>
-<p>另一方面，当服务器上面的资源进行了更新，那么缓存中的对应资源也应该被更新，由于HTTP是C/S模式的协议，服务器更新一个资源时，不可能直接通知客户端更新缓存，所以双方必须为该资源约定一个过期时间，在该过期时间之前，该资源（缓存副本）就是新鲜的，当过了过期时间后，该资源（缓存副本）则变为陈旧的*。*</p>
+<p>另一方面，当服务器上面的资源进行了更新，那么缓存中的对应资源也应该被更新，由于 HTTP 是 C/S 模式的协议，服务器更新一个资源时，不可能直接通知客户端更新缓存，所以双方必须为该资源约定一个过期时间，在该过期时间之前，该资源（缓存副本）就是新鲜的，当过了过期时间后，该资源（缓存副本）则变为陈旧的*。*</p>
 <p>驱逐算法用于将陈旧的资源（缓存副本）替换为新鲜的，注意，一个陈旧的资源（缓存副本）是不会直接被清除或忽略的，还是会被保留的。</p>
-<p>当客户端发起一个请求时，缓存检索到已有一个对应的陈旧资源（缓存副本），则缓存会先将此请求附加一个<code>If-None-Match</code>头，然后发给目标服务器，以此来检查该资源副本是否是依然还是算新鲜的，若服务器返回了 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304"><code>304</code></a> (Not Modified)（该响应不会有带有实体信息），则表示此资源副本是新鲜的，这样一来，可以节省一些带宽。若服务器通过 If-None-Match 或 If-Modified-Since判断后发现已过期，那么会带有该资源的实体内容返回。</p>
+<p>当客户端发起一个请求时，缓存检索到已有一个对应的陈旧资源（缓存副本），则缓存会先将此请求附加一个 <code>If-None-Match</code> 头，然后发给目标服务器，以此来检查该资源副本是否是依然还是算新鲜的，若服务器返回了 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304"><code>304</code></a> (Not Modified)（该响应不会有带有实体信息），则表示此资源副本是新鲜的，这样一来，可以节省一些带宽。若服务器通过 If-None-Match 或 If-Modified-Since判断后发现已过期，那么会带有该资源的实体内容返回。</p>
 <h3 id="4-缓存验证">4. 缓存验证</h3>
 <p>当缓存的文档过期后，需要进行缓存验证或者重新获取资源。只有在服务器返回强校验器或者弱校验器时才会进行验证。</p>
 <blockquote>
-<p><strong>强校验器</strong> 响应ETag/请求If-None-Match</p>
-<p><code>ETags</code>作为缓存的一种强校验器，<code>ETag</code> 响应头是一个对用户代理(User Agent, 下面简称UA)不透明的值（译者注：UA 无需理解，只需要按规定使用即可）。对于像浏览器这样的HTTP UA，不知道ETag代表什么，不能预测它的值是多少。如果资源请求的响应头里含有ETag, 客户端可以在后续的请求的头中带上 <code>If-None-Match</code>头来验证缓存。</p>
-<p><strong>弱校验器</strong> 响应Last-Modified/请求If-Modified-Since</p>
+<p><strong>强校验器</strong> 响应 ETag/请求 If-None-Match</p>
+<p><code>ETags</code> 作为缓存的一种强校验器，<code>ETag</code> 响应头是一个对用户代理(User Agent, 下面简称 UA)不透明的值（译者注：UA 无需理解，只需要按规定使用即可）。对于像浏览器这样的 HTTP UA，不知道 ETag 代表什么，不能预测它的值是多少。如果资源请求的响应头里含有 ETag, 客户端可以在后续的请求的头中带上 <code>If-None-Match</code> 头来验证缓存。</p>
+<p><strong>弱校验器</strong> 响应 Last-Modified/请求 If-Modified-Since</p>
 <p><code>Last-Modified</code> 响应头可以作为一种弱校验器。说它弱是因为它只能精确到一秒。如果响应头里含有这个信息，客户端可以在后续的请求中带上 <code>If-Modified-Since</code> 来验证缓存。</p>
 <p>当向服务端发起缓存校验的请求时，服务端会返回 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/200"><code>200</code></a> ok表示返回正常的结果或者 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status/304"><code>304</code></a> Not Modified(不返回body)表示浏览器可以使用本地缓存文件。304的响应头也可以同时更新缓存文档的过期时间。</p>
 </blockquote>
@@ -269,10 +269,10 @@
 <blockquote>
 <p>举个例子：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1</span><span>cache-control: public, max-age=31536000
-</span></span></code></pre></div><p>那么这个资源会被缓存31536000秒（365天），在365天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
+</span></span></code></pre></div><p>那么这个资源会被缓存 31536000 秒（365 天），在 365 天内再次请求这条数据，都会直接获取缓存数据库中的数据，直接使用。</p>
 <p>我们试试再次访问资源，会有以下的响应：</p>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/1601280277-5e40f5a32b32e_articlex" alt="img"></p>
-<p>HTTP状态码是200，Size这个字段显示：disk cache，说明HTTP响应报文大小是0，浏览器确实走了强制缓存，没有再跟浏览器交互。</p>
+<p>HTTP 状态码是 200，Size 这个字段显示：disk cache，说明 HTTP 响应报文大小是 0，浏览器确实走了强制缓存，没有再跟浏览器交互。</p>
 </blockquote>
 <h4 id="2-协商缓存">2. 协商缓存</h4>
 <p><img src="https://blogimg-1302307650.cos.ap-shanghai.myqcloud.com/548182949-5adfe1970b276_articlex" alt="img"></p>
